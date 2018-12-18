@@ -1,6 +1,6 @@
 {
   "name": "@monorepo-lint/expect-file-contents",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "build/expectFileContents.js",
   "typings": "build/expectFileContents.d.ts",
   "author": "Eric Anderson",
