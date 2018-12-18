@@ -11,7 +11,11 @@
     "@monorepo-lint/utils": "^0.1.6"
   },
   "scripts": {
-    "lint": "tslint --config ../../tslint.json --project ."
+    "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
+    "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
+    "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
+    "test": "../../node_modules/.bin/jest --config ../../jest.config.js --colors",
+    "test:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --colors --watch"
   },
   "publishConfig": {
     "access": "public"

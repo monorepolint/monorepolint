@@ -7,7 +7,7 @@
 
 import { PackageJson } from "@monorepo-lint/utils";
 import { WorkspaceContext } from "./WorkspaceContext";
-export interface FailureOptions {
+export interface Failure {
   message: string;
   file?: string;
   longMessage?: string;
@@ -24,8 +24,8 @@ export interface Context {
   getPackageJsonPath(): string;
 
   getPackageJson(): PackageJson;
-  addWarning(opts: FailureOptions): void;
-  addError(opts: FailureOptions): void;
+  addWarning(opts: Failure): void;
+  addError(opts: Failure): void;
 
   isFailure(): boolean;
 

@@ -31,10 +31,10 @@
       "path": "../expect-file-contents"
     },
     {
-      "path": "../expect-standard-tsconfig"
+      "path": "../expect-package-script"
     },
     {
-      "path": "../expect-package-script"
+      "path": "../expect-standard-tsconfig"
     },
     {
       "path": "../utils"

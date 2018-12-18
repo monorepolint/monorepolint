@@ -8,7 +8,8 @@
     "build": "cd packages/all; tsc --build",
     "build:watch": "cd packages/all; tsc --build --watch",
     "prettier:all": "prettier 'packages/*/src/**/*.{ts,tsx,less}' --write",
-    "prettier:check": "prettier 'packages/*/src/**/*.{ts,tsx,less}' -l"
+    "prettier:check": "prettier 'packages/*/src/**/*.{ts,tsx,less}' -l",
+    "test": "lerna run test"
   },
   "husky": {
     "hooks": {
@@ -28,11 +29,16 @@
     ]
   },
   "devDependencies": {
+    "@types/jest": "^23.3.10",
+    "@types/mock-fs": "^3.6.30",
     "@types/node": "^10.12.15",
     "husky": "^1.2.1",
+    "jest": "^23.6.0",
     "lerna": "^3.6.0",
     "lint-staged": "^8.1.0",
+    "mock-fs": "^4.7.0",
     "prettier": "~1.15.2",
+    "ts-jest": "^23.10.5",
     "ts-node": "^7.0.1",
     "tslint": "^5.12.0",
     "typescript": "^3.2.2"

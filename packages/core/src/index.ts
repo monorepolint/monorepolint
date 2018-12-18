@@ -5,7 +5,7 @@
  *
  */
 
-export { Context } from "./Context";
+export { Context, Failure } from "./Context";
 export { MonorepoLintConfig } from "./MonorepoLintConfig";
 export { check, Checker } from "./check";
 
