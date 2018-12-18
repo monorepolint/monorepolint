@@ -1,16 +1,16 @@
 {
   "name": "@monorepo-lint/all",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "build/index.js",
   "typings": "build/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@monorepo-lint/cli": "^0.1.0",
-    "@monorepo-lint/core": "^0.1.0",
-    "@monorepo-lint/expect-file-contents": "^0.1.0",
-    "@monorepo-lint/expect-package-script": "^0.1.0",
-    "@monorepo-lint/expect-standard-tsconfig": "^0.1.0",
-    "@monorepo-lint/utils": "^0.1.0"
+    "@monorepo-lint/cli": "^0.1.1",
+    "@monorepo-lint/core": "^0.1.1",
+    "@monorepo-lint/expect-file-contents": "^0.1.1",
+    "@monorepo-lint/expect-package-script": "^0.1.1",
+    "@monorepo-lint/expect-standard-tsconfig": "^0.1.1",
+    "@monorepo-lint/utils": "^0.1.1"
   },
   "private": true,
   "scripts": {
