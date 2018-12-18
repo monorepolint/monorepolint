@@ -1,14 +1,14 @@
 {
   "name": "@monorepo-lint/all",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "license": "MIT",
   "dependencies": {
-    "@monorepo-lint/cli": "^0.1.3",
-    "@monorepo-lint/core": "^0.1.3",
-    "@monorepo-lint/expect-file-contents": "^0.1.3",
-    "@monorepo-lint/expect-package-script": "^0.1.3",
-    "@monorepo-lint/expect-standard-tsconfig": "^0.1.3",
-    "@monorepo-lint/utils": "^0.1.3"
+    "@monorepo-lint/cli": "^0.1.4",
+    "@monorepo-lint/core": "^0.1.4",
+    "@monorepo-lint/expect-file-contents": "^0.1.4",
+    "@monorepo-lint/expect-package-script": "^0.1.4",
+    "@monorepo-lint/expect-standard-tsconfig": "^0.1.4",
+    "@monorepo-lint/utils": "^0.1.4"
   },
   "scripts": {
     "lint": "tslint --config ../../tslint.json --project ."

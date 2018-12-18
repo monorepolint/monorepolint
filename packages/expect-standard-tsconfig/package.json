@@ -1,6 +1,6 @@
 {
   "name": "@monorepo-lint/expect-standard-tsconfig",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "main": "build/expectStandardTsconfig.js",
   "typings": "build/expectStandardTsconfig.d.ts",
   "author": "Eric Anderson",
