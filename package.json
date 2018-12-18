@@ -1,8 +1,8 @@
 {
   "name": "monorepo-lint",
   "version": "0.1.0",
-  "main": "index.js",
   "author": "Eric L Anderson",
+  "url": "https://github.com/monorepo-lint/monorepo-lint",
   "license": "MIT",
   "private": true,
   "scripts": {

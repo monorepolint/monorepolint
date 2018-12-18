@@ -1,5 +1,5 @@
 {
-  "name": "@monorepo-lint/capper",
+  "name": "@monorepo-lint/all",
   "version": "0.1.0",
   "main": "build/index.js",
   "typings": "build/index.d.ts",
