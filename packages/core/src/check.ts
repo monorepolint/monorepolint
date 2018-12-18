@@ -15,10 +15,10 @@ export function check(opts: MonorepoLintConfig, cwd = process.cwd()): boolean {
   const workspaceContext = new WorkspaceContext(workspaceDir, opts);
 
   if (workspaceDir === cwd) {
+    checkPackage(opts, workspaceContext);
     for (const packageDir of workspaceContext.getWorkspacePackageDirs()) {
       checkPackage(opts, workspaceContext.createChildContext(packageDir));
     }
-    checkPackage(opts, workspaceContext);
   } else {
     checkPackage(opts, workspaceContext.createChildContext(cwd));
   }
@@ -30,7 +30,7 @@ function checkPackage(opts: MonorepoLintConfig, context: Context) {
   const workspaceContext = context.getWorkspaceContext();
 
   for (const c of opts.checks) {
-    if (c.exclude.indexOf(context.getName()) !== -1) {
+    if (c.exclude && c.exclude.indexOf(context.getName()) !== -1) {
       continue;
     }
     const checker = resolveChecker(c.type, workspaceContext);
