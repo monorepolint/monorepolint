@@ -9,5 +9,8 @@
   "scripts": {
     "lint": "tslint --config ../../tslint.json --project ."
   },
-  "gitHead": "abac7379e15a693f72356c23ed664e7f31166850"
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "33f740167f2d7cc4f4ddf85a64addc8a73de0dcd"
 }
