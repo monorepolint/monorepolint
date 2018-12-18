@@ -1,0 +1,13 @@
+{
+  "name": "monorepo-lint",
+  "version": "0.1.0",
+  "main": "index.js",
+  "author": "Eric L Anderson",
+  "license": "MIT",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  }
+}
