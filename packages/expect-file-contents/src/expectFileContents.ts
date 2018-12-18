@@ -1,3 +1,10 @@
+/*!
+ * Copyright (c) 2018 Eric L Anderson (http://monorepo-lint.com). All Right Reserved.
+ *
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ *
+ */
+
 import { Context } from "@monorepo-lint/core";
 import * as fs from "fs";
 import diff from "jest-diff";

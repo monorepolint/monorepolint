@@ -2,6 +2,8 @@
   "name": "@monorepo-lint/core",
   "version": "0.1.0",
   "main": "build/index.js",
+  "author": "Eric Anderson",
+  "url": "https://github.com/monorepo-lint/monorepo-lint",
   "typings": "build/index.d.ts",
   "license": "MIT",
   "scripts": {

@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "main": "build/index.js",
   "typings": "build/index.d.ts",
+  "author": "Eric Anderson",
+  "url": "https://github.com/monorepo-lint/monorepo-lint",
   "license": "MIT",
   "dependencies": {
     "glob": "^7.1.3"

@@ -1,16 +1,21 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
-    ],
-    "jsRules": {},
-    "rules": {
-        "interface-name": false,
-        "object-literal-sort-keys": false,
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended"],
+  "jsRules": {},
+  "rules": {
+    "file-header": [true, [
+      "Copyright (c) 2018 Eric L Anderson (http://monorepo-lint.com). All Right Reserved.\n\nLicensed under the MIT license. See LICENSE file in the project root for details.\n"
+    ], [
+      "Copyright (c) 2018 Eric L Anderson (http://monorepo-lint.com). All Right Reserved.\n\nLicensed under the MIT license. See LICENSE file in the project root for details.\n"
+    ]],
 
-        // prettier handles these
-        "trailing-comma": false,
-        "arrow-parens": false
-    },
-    "rulesDirectory": []
+    // Disable recommended rules
+    "interface-name": false,
+    "object-literal-sort-keys": false,
+
+    // prettier handles these
+    "trailing-comma": false,
+    "arrow-parens": false
+  },
+  "rulesDirectory": []
 }

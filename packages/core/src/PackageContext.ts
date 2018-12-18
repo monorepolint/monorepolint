@@ -1,3 +1,10 @@
+/*!
+ * Copyright (c) 2018 Eric L Anderson (http://monorepo-lint.com). All Right Reserved.
+ *
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ *
+ */
+
 import { PackageJson, readJson } from "@monorepo-lint/utils";
 import chalk from "chalk";
 import * as path from "path";

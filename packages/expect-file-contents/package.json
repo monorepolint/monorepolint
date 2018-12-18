@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "main": "build/expectFileContents.js",
   "typings": "build/expectFileContents.d.ts",
+  "author": "Eric Anderson",
+  "url": "https://github.com/monorepo-lint/monorepo-lint",
   "license": "MIT",
   "dependencies": {
     "jest-diff": "^23.6.0"
