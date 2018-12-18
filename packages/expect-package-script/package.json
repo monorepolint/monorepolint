@@ -1,0 +1,16 @@
+{
+  "name": "@monorepo-lint/expect-package-script",
+  "version": "0.1.0",
+  "main": "build/expectPackageScript.js",
+  "typings": "build/expectPackageScript.d.ts",
+  "license": "MIT",
+  "dependencies": {
+    "jest-diff": "^23.6.0"
+  },
+  "devDependencies": {
+    "@types/jest-diff": "^20.0.0"
+  },
+  "scripts": {
+    "lint": "tslint --config ../../tslint.json --project ."
+  }
+}
