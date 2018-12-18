@@ -1,3 +1,5 @@
+import { Context } from "@monorepo-lint/core";
+
 module.exports = {
   checks: [
     {
@@ -28,10 +30,37 @@ module.exports = {
       exclude: ["monorepo-lint"]
     },
     {
+      type: "@monorepo-lint/expect-file-contents",
+      args: {
+        file: "jest.config.js",
+        templateFile: "./templates/jest.config.js"
+      },
+      exclude: ["monorepo-lint"]
+    },
+    {
       type: "@monorepo-lint/expect-package-script",
       args: {
         name: "lint",
-        value: "tslint --config ../../tslint.json --project ."
+        value:
+          "../../node_modules/.bin/tslint --config ../../tslint.json --project ."
+      },
+      exclude: ["monorepo-lint"]
+    },
+    {
+      type: "@monorepo-lint/expect-package-script",
+      args: {
+        name: "test",
+        value:
+          "../../node_modules/.bin/jest --config ../../jest.config.js --colors"
+      },
+      exclude: ["monorepo-lint"]
+    },
+    {
+      type: "@monorepo-lint/expect-package-script",
+      args: {
+        name: "test:watch",
+        value:
+          "../../node_modules/.bin/jest --config ../../jest.config.js --colors --watch"
       },
       exclude: ["monorepo-lint"]
     }
