@@ -1,23 +1,23 @@
 {
   "name": "@monorepo-lint/expect-standard-tsconfig",
   "version": "0.1.6",
-  "main": "build/expectStandardTsconfig.js",
-  "typings": "build/expectStandardTsconfig.d.ts",
   "author": "Eric Anderson",
   "url": "https://github.com/monorepo-lint/monorepo-lint",
   "license": "MIT",
-  "dependencies": {
-    "jest-diff": "^23.6.0"
-  },
-  "devDependencies": {
-    "@types/jest-diff": "^20.0.0"
-  },
+  "main": "build/expectStandardTsconfig.js",
+  "typings": "build/expectStandardTsconfig.d.ts",
   "scripts": {
     "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
     "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
     "test": "../../node_modules/.bin/jest --config ../../jest.config.js --colors",
     "test:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --colors --watch"
+  },
+  "dependencies": {
+    "jest-diff": "^23.6.0"
+  },
+  "devDependencies": {
+    "@types/jest-diff": "^20.0.0"
   },
   "publishConfig": {
     "access": "public"

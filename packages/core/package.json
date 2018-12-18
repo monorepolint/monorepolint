@@ -1,11 +1,11 @@
 {
   "name": "@monorepo-lint/core",
   "version": "0.1.6",
-  "main": "build/index.js",
   "author": "Eric Anderson",
   "url": "https://github.com/monorepo-lint/monorepo-lint",
-  "typings": "build/index.d.ts",
   "license": "MIT",
+  "main": "build/index.js",
+  "typings": "build/index.d.ts",
   "scripts": {
     "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",

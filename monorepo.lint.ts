@@ -63,6 +63,33 @@ module.exports = {
           "../../node_modules/.bin/jest --config ../../jest.config.js --colors --watch"
       },
       exclude: ["monorepo-lint"]
+    },
+    {
+      type: "@monorepo-lint/expect-package-order",
+      args: {
+        order: [
+          "name",
+          "version",
+          "author",
+          "url",
+          "license",
+          "private",
+          "main",
+          "typings",
+          "style",
+          "sideEffects",
+          "workspaces",
+          "husky",
+          "lint-staged",
+          "scripts",
+          "dependencies",
+          "peerDependencies",
+          "devDependencies",
+          "publishConfig",
+          "gitHead"
+        ]
+      },
+      exclude: [],
     }
   ]
 };

@@ -2,20 +2,21 @@
   "name": "@monorepo-lint/all",
   "version": "0.1.6",
   "license": "MIT",
-  "dependencies": {
-    "@monorepo-lint/cli": "^0.1.6",
-    "@monorepo-lint/core": "^0.1.6",
-    "@monorepo-lint/expect-file-contents": "^0.1.6",
-    "@monorepo-lint/expect-package-script": "^0.1.6",
-    "@monorepo-lint/expect-standard-tsconfig": "^0.1.6",
-    "@monorepo-lint/utils": "^0.1.6"
-  },
   "scripts": {
     "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
     "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
     "test": "../../node_modules/.bin/jest --config ../../jest.config.js --colors",
     "test:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --colors --watch"
+  },
+  "dependencies": {
+    "@monorepo-lint/cli": "^0.1.6",
+    "@monorepo-lint/core": "^0.1.6",
+    "@monorepo-lint/expect-file-contents": "^0.1.6",
+    "@monorepo-lint/expect-package-script": "^0.1.6",
+    "@monorepo-lint/expect-standard-tsconfig": "^0.1.6",
+    "@monorepo-lint/expect-package-order": "^0.1.6",
+    "@monorepo-lint/utils": "^0.1.6"
   },
   "publishConfig": {
     "access": "public"
