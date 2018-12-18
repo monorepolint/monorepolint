@@ -29,20 +29,13 @@ export function check(opts: MonorepoLintConfig, cwd = process.cwd()): boolean {
 }
 
 function checkPackage(opts: MonorepoLintConfig, context: Context) {
-  const workspaceContext = getWorkspaceContext(context);
+  const workspaceContext = context.getWorkspaceContext();
 
   for (const check of opts.checks) {
     const checker = resolveChecker(check.type, workspaceContext);
     checker(context, check.args);
   }
   context.finish();
-}
-
-function getWorkspaceContext(context: Context) {
-  while (context.parent !== undefined) {
-    context = context.parent;
-  }
-  return context as WorkspaceContext;
 }
 
 function resolveChecker(type: string, context: WorkspaceContext) {

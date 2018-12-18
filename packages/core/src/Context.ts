@@ -1,4 +1,5 @@
 import { PackageJson } from "@monorepo-lint/utils";
+import { WorkspaceContext } from './WorkspaceContext';
 export interface FailureOptions {
   message: string;
   file?: string;
@@ -24,4 +25,7 @@ export interface Context {
   finish(): void;
 
   setFailed(): void;
+
+  getWorkspaceContext(): WorkspaceContext;
+  
 }

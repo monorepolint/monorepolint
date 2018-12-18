@@ -1,0 +1,13 @@
+{
+  "name": "@monorepo-lint/expect-standard-tsconfig",
+  "version": "0.1.0",
+  "main": "build/expectStandardTsconfig.js",
+  "typings": "build/expectStandardTsconfig.d.ts",
+  "license": "MIT",
+  "dependencies": {
+    "jest-diff": "^23.6.0"
+  },
+  "devDependencies": {
+    "@types/jest-diff": "^20.0.0"
+  }
+}

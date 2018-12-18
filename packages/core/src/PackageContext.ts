@@ -3,6 +3,7 @@ import * as path from "path";
 import { PackageJson, readJson } from "@monorepo-lint/utils";
 import { MonorepoLintConfig } from "./MonorepoLintConfig";
 import { Context } from "./Context";
+import { WorkspaceContext } from "./WorkspaceContext";
 
 interface FailureOptions {
   file: string;
@@ -96,6 +97,14 @@ export class PackageContext implements Context {
     }
 
     return this.parent!.setFailed();
+  }
+
+  public getWorkspaceContext(): WorkspaceContext {
+    let context: Context = this;
+    while (context.parent !== undefined) {
+      context = context.parent;
+    }
+    return context as WorkspaceContext;
   }
 
   private print(str: string, depth: number = this.depth + 1) {
