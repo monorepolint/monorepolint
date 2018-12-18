@@ -10,14 +10,26 @@ import * as fs from "fs";
 import diff from "jest-diff";
 import * as path from "path";
 
-export interface Opts {
+interface BaseOpts {
   file: string;
   generator: (context: Context) => string;
+  template: string;
+  templateFile: string;
 }
+
+type Limit<T, Q extends keyof T> = {
+  [P in keyof T]: P extends Q ? T[P] : undefined
+};
+
+export type Opts =
+  | Limit<BaseOpts, "file" | "generator">
+  | Limit<BaseOpts, "file" | "template">
+  | Limit<BaseOpts, "file" | "templateFile">;
 
 export default function expectFileContents(context: Context, opts: Opts) {
   const fullPath = path.join(context.packageDir, opts.file);
-  const expectedContent = opts.generator(context);
+  const generator = getGenerator(context, opts);
+  const expectedContent = generator(context);
 
   const actualContent = fs.existsSync(fullPath)
     ? fs.readFileSync(fullPath, "utf-8")
@@ -37,4 +49,27 @@ export default function expectFileContents(context: Context, opts: Opts) {
       }
     });
   }
+}
+
+function getGenerator(context: Context, opts: Opts) {
+  if (opts.generator) {
+    return opts.generator;
+  } else if (opts.templateFile) {
+    const { packageDir: workspacePackageDir } = context.getWorkspaceContext();
+    const fullPath = path.resolve(workspacePackageDir, opts.templateFile);
+    const template = fs.readFileSync(fullPath, "utf-8");
+
+    return makeGenerator(template);
+  } else if (opts.template) {
+    return makeGenerator(opts.template);
+  } else {
+    throw new Error("Unable to make generator");
+  }
+}
+
+function makeGenerator(template: string) {
+  // tslint:disable-next-line:variable-name
+  return function generator(_context: Context) {
+    return template;
+  };
 }
