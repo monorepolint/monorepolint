@@ -15,4 +15,5 @@ export interface PackageJson {
         nohoist?: string[];
       }
     | string[];
+  [otherKey: string]: any;
 }
