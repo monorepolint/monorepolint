@@ -27,6 +27,14 @@ module.exports = {
         },
       },
       exclude: ["monorepo-lint"]
+    },
+    {
+      type:"@monorepo-lint/expect-package-script",
+      args: {
+        name: "lint",
+        value: "tslint --config ../../tslint.json --project ."
+      },
+      exclude: ["monorepo-lint"]
     }
   ]
 };

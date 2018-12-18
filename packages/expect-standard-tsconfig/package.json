@@ -9,5 +9,8 @@
   },
   "devDependencies": {
     "@types/jest-diff": "^20.0.0"
+  },
+  "scripts": {
+    "lint": "tslint --config ../../tslint.json --project ."
   }
 }

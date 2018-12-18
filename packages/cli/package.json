@@ -13,5 +13,8 @@
   "dependencies": {
     "yargs": "^12.0.5",
     "@monorepo-lint/utils": "0.1.0"
+  },
+  "scripts": {
+    "lint": "tslint --config ../../tslint.json --project ."
   }
 }
