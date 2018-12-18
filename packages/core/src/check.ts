@@ -1,12 +1,10 @@
+import { findWorkspaceDir } from "@monorepo-lint/utils";
 import * as path from "path";
 import { Context } from "./Context";
-import { findWorkspaceDir } from "@monorepo-lint/utils";
 import { MonorepoLintConfig } from "./MonorepoLintConfig";
 import { WorkspaceContext } from "./WorkspaceContext";
 
-export interface Checker {
-  (context: Context, args: any): void;
-}
+export type Checker = (context: Context, args: any) => void;
 
 export function check(opts: MonorepoLintConfig, cwd = process.cwd()): boolean {
   const workspaceDir = findWorkspaceDir(cwd);
@@ -31,9 +29,12 @@ export function check(opts: MonorepoLintConfig, cwd = process.cwd()): boolean {
 function checkPackage(opts: MonorepoLintConfig, context: Context) {
   const workspaceContext = context.getWorkspaceContext();
 
-  for (const check of opts.checks) {
-    const checker = resolveChecker(check.type, workspaceContext);
-    checker(context, check.args);
+  for (const c of opts.checks) {
+    if (c.exclude.indexOf(context.getName()) !== -1) {
+      continue;
+    }
+    const checker = resolveChecker(c.type, workspaceContext);
+    checker(context, c.args);
   }
   context.finish();
 }

@@ -1,8 +1,8 @@
-import * as path from "path";
-import * as fs from "fs";
-import diff from "jest-diff";
 import { Context } from "@monorepo-lint/core";
 import { getPackageNameToDir } from "@monorepo-lint/utils";
+import * as fs from "fs";
+import diff from "jest-diff";
+import * as path from "path";
 import { __makeTemplateObject } from "tslib";
 
 export type Opts =
@@ -10,19 +10,16 @@ export type Opts =
       generator: (context: Context) => string;
       template?: undefined;
       templateFile?: undefined;
-      exclude?: string[];
     }
   | {
       template: object;
       generator?: undefined;
       templateFile?: undefined;
-      exclude?: string[];
     }
   | {
       templateFile: string;
       generator?: undefined;
       template?: undefined;
-      exclude?: string[];
     };
 
 export default function expectStandardTsconfig(context: Context, opts: Opts) {
@@ -62,19 +59,16 @@ function getGenerator(context: Context, opts: Opts) {
     const fullPath = path.resolve(workspacePackageDir, opts.templateFile);
     const template = JSON.parse(fs.readFileSync(fullPath, "utf-8"));
 
-    return makeGenerator(template, new Set(opts.exclude));
+    return makeGenerator(template);
   } else if (opts.template) {
-    return makeGenerator(opts.template, new Set(opts.exclude));
+    return makeGenerator(opts.template);
   } else {
     throw new Error("Unable to make generator");
   }
 }
 
-function makeGenerator(template: any, excludes: Set<string>) {
+function makeGenerator(template: any) {
   return function generator(context: Context) {
-    if (excludes.has(context.getName())) {
-      return undefined;
-    }
     template = {
       ...template,
       references: []

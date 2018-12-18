@@ -4,5 +4,6 @@ export interface MonorepoLintConfig {
   checks: ReadonlyArray<{
     type: string;
     args: any;
+    exclude: string[];
   }>;
 }

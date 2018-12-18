@@ -2,7 +2,7 @@
 module.exports = {
   checks: [
     {
-      type: "./packages/expect-standard-tsconfig",
+      type: "@monorepo-lint/expect-standard-tsconfig",
       args: {
         template: {
           compilerOptions: {
@@ -25,8 +25,8 @@ module.exports = {
             esModuleInterop: true
           }
         },
-        exclude: ["monorepo-lint"]
-      }
+      },
+      exclude: ["monorepo-lint"]
     }
   ]
 };
