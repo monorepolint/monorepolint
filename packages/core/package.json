@@ -8,5 +8,6 @@
   "license": "MIT",
   "scripts": {
     "lint": "tslint --config ../../tslint.json --project ."
-  }
+  },
+  "gitHead": "889dbf4d639d77e791b3f93d1375e5ceb92d4aa6"
 }

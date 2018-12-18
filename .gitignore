@@ -1,4 +1,7 @@
 node_modules
 /packages/*/build
+/packages/*/*.tgz
 /.npmrc
 /.yarnrc
+
+yarn-error.log

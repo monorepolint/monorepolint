@@ -1,8 +1,6 @@
 {
   "name": "@monorepo-lint/all",
   "version": "0.1.1",
-  "main": "build/index.js",
-  "typings": "build/index.d.ts",
   "license": "MIT",
   "dependencies": {
     "@monorepo-lint/cli": "^0.1.1",
@@ -12,7 +10,6 @@
     "@monorepo-lint/expect-standard-tsconfig": "^0.1.1",
     "@monorepo-lint/utils": "^0.1.1"
   },
-  "private": true,
   "scripts": {
     "lint": "tslint --config ../../tslint.json --project ."
   }
