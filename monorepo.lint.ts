@@ -1,4 +1,3 @@
-
 module.exports = {
   checks: [
     {
@@ -24,12 +23,12 @@ module.exports = {
             allowSyntheticDefaultImports: true,
             esModuleInterop: true
           }
-        },
+        }
       },
       exclude: ["monorepo-lint"]
     },
     {
-      type:"@monorepo-lint/expect-package-script",
+      type: "@monorepo-lint/expect-package-script",
       args: {
         name: "lint",
         value: "tslint --config ../../tslint.json --project ."
