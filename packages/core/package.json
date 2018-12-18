@@ -1,6 +1,6 @@
 {
   "name": "@monorepo-lint/core",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": "build/index.js",
   "author": "Eric Anderson",
   "url": "https://github.com/monorepo-lint/monorepo-lint",
