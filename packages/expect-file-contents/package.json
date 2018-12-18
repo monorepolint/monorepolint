@@ -1,0 +1,13 @@
+{
+  "name": "@monorepo-lint/expect-file-contents",
+  "version": "0.1.0",
+  "main": "build/expectFileContents.js",
+  "typings": "build/expectFileContents.d.ts",
+  "license": "MIT",
+  "dependencies": {
+    "jest-diff": "^23.6.0"
+  },
+  "devDependencies": {
+    "@types/jest-diff": "^20.0.0"
+  }
+}

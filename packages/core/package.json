@@ -1,0 +1,7 @@
+{
+  "name": "@monorepo-lint/core",
+  "version": "0.1.0",
+  "main": "build/index.js",
+  "typings": "build/index.d.ts",
+  "license": "MIT"
+}

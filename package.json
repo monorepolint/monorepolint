@@ -5,9 +5,19 @@
   "author": "Eric L Anderson",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "build": "cd packages/capper; tsc --build",
+    "build:watch": "cd packages/capper; tsc --build --watch"
+  },
   "workspaces": {
     "packages": [
       "packages/*"
     ]
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.15",
+    "lerna": "^3.6.0",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.2"
   }
 }
