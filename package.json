@@ -6,8 +6,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "cd packages/capper; tsc --build",
-    "build:watch": "cd packages/capper; tsc --build --watch",
+    "build": "cd packages/all; tsc --build",
+    "build:watch": "cd packages/all; tsc --build --watch",
     "prettier:all": "prettier 'packages/*/src/**/*.{ts,tsx,less}' --write",
     "prettier:check": "prettier 'packages/*/src/**/*.{ts,tsx,less}' -l"
   },
