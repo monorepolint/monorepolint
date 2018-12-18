@@ -17,5 +17,5 @@
   "scripts": {
     "lint": "tslint --config ../../tslint.json --project ."
   },
-  "gitHead": "65831ea9bbc6917f079c4257d0681d2e3e14784e"
+  "gitHead": "dcd8c73c1fafc65acc681e9dae0b38a8e31a29f5"
 }
