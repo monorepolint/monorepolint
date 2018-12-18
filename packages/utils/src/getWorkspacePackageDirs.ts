@@ -1,8 +1,8 @@
 import { existsSync } from "fs";
 import glob from "glob";
 import { join as pathJoin } from "path";
-import { readJson } from "./readJson";
 import { PackageJson } from "./PackageJson";
+import { readJson } from "./readJson";
 
 export function getWorkspacePackageDirs(workspaceDir: string) {
   const ret: string[] = [];

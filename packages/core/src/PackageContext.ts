@@ -1,8 +1,8 @@
+import { PackageJson, readJson } from "@monorepo-lint/utils";
 import chalk from "chalk";
 import * as path from "path";
-import { PackageJson, readJson } from "@monorepo-lint/utils";
-import { MonorepoLintConfig } from "./MonorepoLintConfig";
 import { Context } from "./Context";
+import { MonorepoLintConfig } from "./MonorepoLintConfig";
 import { WorkspaceContext } from "./WorkspaceContext";
 
 interface FailureOptions {
@@ -45,10 +45,12 @@ export class PackageContext implements Context {
     this.print(`${chalk.yellow("Warning!")}: ${message}`);
     if (this.opts.verbose && longMessage) {
       for (let i = 0; i <= this.depth + 1; i++) {
+        // tslint:disable-next-line:no-console
         console.group();
       }
       this.print(`${longMessage}`, 0);
       for (let i = 0; i <= this.depth + 1; i++) {
+        // tslint:disable-next-line:no-console
         console.groupEnd();
       }
     }
@@ -72,10 +74,12 @@ export class PackageContext implements Context {
 
       if (this.opts.verbose && longMessage) {
         for (let i = 0; i <= this.depth + 1; i++) {
+          // tslint:disable-next-line:no-console
           console.group();
         }
         this.print(`${longMessage}`, 0);
         for (let i = 0; i <= this.depth + 1; i++) {
+          // tslint:disable-next-line:no-console
           console.groupEnd();
         }
       }

@@ -1,7 +1,7 @@
 import * as path from "path";
 
-import * as yargs from "yargs";
 import { check } from "@monorepo-lint/core";
+import * as yargs from "yargs";
 
 export default function run() {
   try {
@@ -48,6 +48,7 @@ function handleCheck(args: Args) {
       process.cwd()
     )
   ) {
+    // tslint:disable-next-line:no-console
     console.error("Failed");
     process.exit(100);
   }
@@ -65,6 +66,7 @@ function handleFix(args: Args) {
       process.cwd()
     )
   ) {
+    // tslint:disable-next-line:no-console
     console.error("Failed");
     process.exit(100);
   }
