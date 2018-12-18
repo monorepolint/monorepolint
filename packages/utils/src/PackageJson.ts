@@ -9,8 +9,10 @@ export interface PackageJson {
   devDependencies?: {
     [dependency: string]: string;
   };
-  workspaces?: {
-    packages?: string[];
-    nohoist?: string[];
-  } | string[];
+  workspaces?:
+    | {
+        packages?: string[];
+        nohoist?: string[];
+      }
+    | string[];
 }

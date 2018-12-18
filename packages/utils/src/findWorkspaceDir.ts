@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
+import { PackageJson } from "./PackageJson";
 import { readJson } from "./readJson";
-import { PackageJson } from './PackageJson';
 
 export function findWorkspaceDir(dir: string): string | undefined {
   const packagePath = path.join(dir, "package.json");

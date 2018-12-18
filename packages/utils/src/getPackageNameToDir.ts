@@ -1,7 +1,7 @@
 import { join as pathJoin } from "path";
 import { getWorkspacePackageDirs } from "./getWorkspacePackageDirs";
+import { PackageJson } from "./PackageJson";
 import { readJson } from "./readJson";
-import { PackageJson } from './PackageJson';
 
 export function getPackageNameToDir(workspaceDir: string) {
   const ret = new Map<string, string>();
