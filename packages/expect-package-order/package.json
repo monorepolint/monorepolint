@@ -1,19 +1,21 @@
 {
   "name": "@monorepo-lint/expect-package-order",
   "version": "0.1.6",
-  "main": "build/expectPackageOrder.js",
-  "typings": "build/expectPackageOrder.d.ts",
   "author": "Mac Lockard",
   "url": "https://github.com/monorepo-lint/monorepo-lint",
   "license": "MIT",
+  "main": "build/expectPackageOrder.js",
+  "typings": "build/expectPackageOrder.d.ts",
+  "scripts": {
+    "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
+    "test": "../../node_modules/.bin/jest --config ../../jest.config.js --colors",
+    "test:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --colors --watch"
+  },
   "dependencies": {
     "jest-diff": "^23.6.0"
   },
   "devDependencies": {
     "@types/jest-diff": "^20.0.0"
-  },
-  "scripts": {
-    "lint": "tslint --config ../../tslint.json --project ."
   },
   "publishConfig": {
     "access": "public"

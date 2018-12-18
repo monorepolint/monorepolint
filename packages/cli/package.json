@@ -1,25 +1,25 @@
 {
-  "name": "@monorepo-lint/cli",
-  "version": "0.1.6",
-  "main": "build/index.js",
-  "typings": "build/index.d.ts",
-  "license": "MIT",
   "bin": {
     "monorepo-lint": "./bin/monorepo-lint"
   },
-  "devDependencies": {
-    "@types/yargs": "^12.0.1"
-  },
-  "dependencies": {
-    "@monorepo-lint/utils": "^0.1.6",
-    "yargs": "^12.0.5"
-  },
+  "name": "@monorepo-lint/cli",
+  "version": "0.1.6",
+  "license": "MIT",
+  "main": "build/index.js",
+  "typings": "build/index.d.ts",
   "scripts": {
     "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
     "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
     "test": "../../node_modules/.bin/jest --config ../../jest.config.js --colors",
     "test:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --colors --watch"
+  },
+  "dependencies": {
+    "@monorepo-lint/utils": "^0.1.6",
+    "yargs": "^12.0.5"
+  },
+  "devDependencies": {
+    "@types/yargs": "^12.0.1"
   },
   "publishConfig": {
     "access": "public"

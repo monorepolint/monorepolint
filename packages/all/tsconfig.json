@@ -37,6 +37,9 @@
       "path": "../expect-standard-tsconfig"
     },
     {
+      "path": "../expect-package-order"
+    },
+    {
       "path": "../utils"
     }
   ]
