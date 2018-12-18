@@ -15,12 +15,14 @@ export interface Opts {
   value: string;
 }
 
+export const MSG_NO_SCRIPTS_BLOCK = "No scripts block in package.json";
+
 export default function expectPackageScript(context: Context, opts: Opts) {
   const packageJson = context.getPackageJson();
   if (packageJson.scripts === undefined) {
     context.addError({
       file: context.getPackageJsonPath(),
-      message: "No scripts block in package.json",
+      message: MSG_NO_SCRIPTS_BLOCK,
       fixer: () => {
         mutateJson<PackageJson>(context.getPackageJsonPath(), input => {
           input.scripts = {};
