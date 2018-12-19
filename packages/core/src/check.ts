@@ -7,7 +7,7 @@
 
 import { findWorkspaceDir } from "@monorepo-lint/utils";
 import minimatch from "minimatch";
-import { ResolvedConfig } from "./Config";
+import { ResolvedConfig, ResolvedRule } from "./Config";
 import { Context } from "./Context";
 import { WorkspaceContext } from "./WorkspaceContext";
 
@@ -40,26 +40,41 @@ function checkPackage(context: Context) {
     console.log(`Starting check against ${context.getName()}`);
   }
   for (const ruleConfig of context.resolvedConfig.rules) {
-    const exclude = (ruleConfig.excludePackages || []).some(a =>
-      minimatch(context.getName(), a)
-    );
-    const include =
-      ruleConfig.includePackages === undefined
-        ? true
-        : ruleConfig.includePackages.some(a => minimatch(context.getName(), a));
-
-    if (
-      context.getWorkspaceContext() === context &&
-      !ruleConfig.includeWorkspaceRoot
-    ) {
+    if (shouldSkipPackage(context, ruleConfig)) {
       continue;
     }
 
-    if (exclude || !include) {
-      continue;
-    }
     ruleConfig.optionsRuntype.check(ruleConfig.options);
     ruleConfig.check(context, ruleConfig.options);
   }
   context.finish();
+}
+
+/**
+ *
+ * @internal
+ * @param context
+ * @param ruleConfig
+ */
+export function shouldSkipPackage(context: Context, ruleConfig: ResolvedRule) {
+  const exclude = (ruleConfig.excludePackages || []).some(a =>
+    minimatch(context.getName(), a)
+  );
+  const include =
+    ruleConfig.includePackages === undefined
+      ? true
+      : ruleConfig.includePackages.some(a => minimatch(context.getName(), a));
+
+  if (
+    context.getWorkspaceContext() === context &&
+    !ruleConfig.includeWorkspaceRoot
+  ) {
+    return true;
+  }
+
+  if (exclude || !include) {
+    return true;
+  }
+
+  return false;
 }
