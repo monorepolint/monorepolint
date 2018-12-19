@@ -1,0 +1,29 @@
+{
+  "name": "@monorepo-lint/expect-consistent-dependencies",
+  "version": "0.1.6",
+  "author": "Mac Lockard",
+  "url": "https://github.com/monorepo-lint/monorepo-lint",
+  "license": "MIT",
+  "main": "build/expectConsistentDependencies.js",
+  "typings": "build/expectConsistentDependencies.d.ts",
+  "scripts": {
+    "clean": "rm -rf build",
+    "compile:typescript": "../../node_modules/.bin/tsc",
+    "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
+    "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
+    "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
+    "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
+  },
+  "dependencies": {
+    "@monorepo-lint/core": "~0.1.6",
+    "@monorepo-lint/utils": "^0.1.6",
+    "jest-diff": "^23.6.0"
+  },
+  "devDependencies": {
+    "@types/jest-diff": "^20.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "33f740167f2d7cc4f4ddf85a64addc8a73de0dcd"
+}
