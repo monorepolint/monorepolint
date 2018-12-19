@@ -9,27 +9,7 @@ module.exports = {
   rules: {
     ":standard-tsconfig": {
       options: {
-        template: {
-          compilerOptions: {
-            target: "es5",
-            module: "commonjs",
-            lib: ["es2018"],
-            declaration: true,
-            declarationMap: true,
-            sourceMap: true,
-            outDir: "./build",
-            rootDir: "./src",
-            composite: true,
-            importHelpers: true,
-            strict: true,
-            noUnusedLocals: true,
-            noUnusedParameters: true,
-            noImplicitReturns: true,
-            noFallthroughCasesInSwitch: true,
-            allowSyntheticDefaultImports: true,
-            esModuleInterop: true
-          }
-        }
+        templateFile: "./templates/tsconfig.json"
       }
     },
     ":file-contents": {
@@ -41,7 +21,7 @@ module.exports = {
     ":package-script": {
       options: {
         scripts: {
-          clean: "rm -rf build",
+          clean: "rm -rf build lib",
           "compile:typescript": "../../node_modules/.bin/tsc",
           "lint:typescript":
             "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
