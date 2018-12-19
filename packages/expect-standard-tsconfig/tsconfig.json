@@ -20,5 +20,12 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
   },
-  "references": []
+  "references": [
+    {
+      "path": "../core"
+    },
+    {
+      "path": "../utils"
+    }
+  ]
 }

@@ -22,10 +22,17 @@
     ]
   },
   "scripts": {
-    "build": "cd packages/all; tsc --build",
-    "build:watch": "cd packages/all; tsc --build --watch",
-    "prettier:all": "prettier 'packages/*/src/**/*.{ts,tsx,less}' --write",
-    "prettier:check": "prettier 'packages/*/src/**/*.{ts,tsx,less}' -l",
+    "clean": "lerna run clean",
+    "compile": "lerna run compile:typescript",
+    "compile:fast": "cd packages/all; tsc --build",
+    "compile:watch": "cd packages/all; tsc --build --watch",
+    "fix:lint:monorepo-lint": "monorepo-lint fix",
+    "fix:lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' --write",
+    "lint": "npm-run-all lint:*",
+    "lint:monorepo-lint": "monorepo-lint check",
+    "lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' -l",
+    "lint:typescript": "lerna run lint:typescript",
+    "prepublishOnly": "npm-run-all clean compile lint test",
     "test": "lerna run test"
   },
   "devDependencies": {
@@ -37,6 +44,7 @@
     "lerna": "^3.6.0",
     "lint-staged": "^8.1.0",
     "mock-fs": "^4.7.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "~1.15.2",
     "ts-jest": "^23.10.5",
     "ts-node": "^7.0.1",

@@ -7,11 +7,17 @@
   "main": "build/index.js",
   "typings": "build/index.d.ts",
   "scripts": {
-    "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
-    "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
+    "clean": "rm -rf build",
+    "compile:typescript": "../../node_modules/.bin/tsc",
     "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
-    "test": "../../node_modules/.bin/jest --config ../../jest.config.js --colors",
-    "test:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --colors --watch"
+    "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
+    "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
+    "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
+    "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
+    "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
+  },
+  "dependencies": {
+    "@monorepo-lint/utils": "~0.1.6"
   },
   "publishConfig": {
     "access": "public"

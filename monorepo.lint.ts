@@ -40,7 +40,7 @@ module.exports = {
     {
       type: "@monorepo-lint/expect-package-script",
       args: {
-        name: "lint",
+        name: "lint:typescript",
         value:
           "../../node_modules/.bin/tslint --config ../../tslint.json --project ."
       },
@@ -49,9 +49,27 @@ module.exports = {
     {
       type: "@monorepo-lint/expect-package-script",
       args: {
+        name: "compile:typescript",
+        value:
+          "../../node_modules/.bin/tsc"
+      },
+      exclude: ["monorepo-lint"]
+    },
+    {
+      type: "@monorepo-lint/expect-package-script",
+      args: {
         name: "test",
         value:
-          "../../node_modules/.bin/jest --config ../../jest.config.js --colors"
+          "../../node_modules/.bin/jest --colors --passWithNoTests"
+      },
+      exclude: ["monorepo-lint"]
+    },
+    {
+      type: "@monorepo-lint/expect-package-script",
+      args: {
+        name: "clean",
+        value:
+          "rm -rf build"
       },
       exclude: ["monorepo-lint"]
     },
@@ -60,7 +78,7 @@ module.exports = {
       args: {
         name: "test:watch",
         value:
-          "../../node_modules/.bin/jest --config ../../jest.config.js --colors --watch"
+          "../../node_modules/.bin/jest --colors --passWithNoTests --watch"
       },
       exclude: ["monorepo-lint"]
     },
