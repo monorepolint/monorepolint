@@ -1,4 +1,11 @@
 version: 2
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build_node8
+      - build_node11
+
 jobs:
   build_node8:
     docker:
