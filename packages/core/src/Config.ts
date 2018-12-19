@@ -18,7 +18,7 @@ export const RuleEntry = r.Partial({
 export type RuleEntry = r.Static<typeof RuleEntry>;
 
 export const Config = r.Record({
-  rules: r.Dictionary(RuleEntry),
+  rules: r.Dictionary(RuleEntry.Or(r.Array(RuleEntry))),
 });
 export type Config = r.Static<typeof Config>;
 

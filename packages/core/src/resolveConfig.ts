@@ -11,12 +11,22 @@ import { Config, Options, ResolvedConfig, ResolvedRule, RuleEntry, RuleModule } 
 
 export function resolveConfig(config: Config, options: Options, workspaceRootDir: string): ResolvedConfig {
   try {
+    const rules = [];
+    for (let [type, ruleEntries] of Object.entries(config.rules)) {
+      if (!Array.isArray(ruleEntries)) {
+        ruleEntries = [ruleEntries];
+      }
+      for (const ruleEntry of ruleEntries) {
+        rules.push({
+          ...ruleEntry,
+          ...resolveRule(type, workspaceRootDir, ruleEntry),
+        });
+      }
+    }
+
     return {
       ...options,
-      rules: Object.entries(config.rules).map(([type, ruleEntry]) => ({
-        ...ruleEntry,
-        ...resolveRule(type, workspaceRootDir, ruleEntry),
-      })),
+      rules,
     };
   } catch (err) {
     if (err instanceof ValidationError) {
