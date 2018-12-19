@@ -1,11 +1,11 @@
 /*!
- * Copyright (c) 2018 monorepo-lint (http://monorepo-lint.com). All Right Reserved.
+ * Copyright (c) 2018 monorepolint (http://monorepolint.com). All Right Reserved.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
 
-import { PackageJson } from "@monorepo-lint/utils";
+import { PackageJson } from "@monorepolint/utils";
 import { ResolvedConfig } from "./Config";
 import { WorkspaceContext } from "./WorkspaceContext";
 

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2018 monorepo-lint (http://monorepo-lint.com). All Right Reserved.
+ * Copyright (c) 2018 monorepolint (http://monorepolint.com). All Right Reserved.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
@@ -54,7 +54,7 @@ function resolveRule(type: string, workspaceRootDir: string, ruleEntry: RuleEntr
 
 function loadRuleModule(type: string, workspaceRootDir: string) {
   const q = type.startsWith(":")
-    ? "@monorepo-lint/rule-" + type.substring(1)
+    ? "@monorepolint/rule-" + type.substring(1)
     : type.startsWith(".")
     ? path.resolve(workspaceRootDir, type)
     : type;

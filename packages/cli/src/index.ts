@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2018 monorepo-lint (http://monorepo-lint.com). All Right Reserved.
+ * Copyright (c) 2018 monorepolint (http://monorepolint.com). All Right Reserved.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
@@ -7,8 +7,8 @@
 
 import * as path from "path";
 
-import { check, Config, resolveConfig } from "@monorepo-lint/core";
-import { findWorkspaceDir } from "@monorepo-lint/utils";
+import { check, Config, resolveConfig } from "@monorepolint/core";
+import { findWorkspaceDir } from "@monorepolint/utils";
 import * as yargs from "yargs";
 
 export default function run() {
@@ -45,7 +45,7 @@ interface Args {
 }
 
 function handleCheck(args: Args) {
-  const configPath = path.resolve(process.cwd(), "monorepo-lint.config.ts");
+  const configPath = path.resolve(process.cwd(), ".monorepolint.config.ts");
   const config = Config.check(require(configPath));
   const resolvedConfig = resolveConfig(config, args, findWorkspaceDir(process.cwd())!);
 

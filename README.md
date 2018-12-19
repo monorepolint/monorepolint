@@ -1,19 +1,19 @@
-# monorepo-lint
+# monorepolint
 
 Managing large monorepos is hard. This makes it easier to standardize them.
 
-[![CircleCI](https://circleci.com/gh/monorepo-lint/monorepo-lint.svg?style=shield)](https://circleci.com/gh/monorepo-lint/monorepo-lint) [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/) [![Greenkeeper badge](https://badges.greenkeeper.io/monorepo-lint/monorepo-lint.svg)](https://greenkeeper.io/)
+[![CircleCI](https://circleci.com/gh/monorepolint/monorepolint.svg?style=shield)](https://circleci.com/gh/monorepolint/monorepolint) [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/) [![Greenkeeper badge](https://badges.greenkeeper.io/monorepolint/monorepolint.svg)](https://greenkeeper.io/)
 
 ## Installation
 
 ```bash
-yarn add @monorepo-lint/all
+yarn add monorepolint
 ```
 
 or
 
 ```bash
-npm install @monorepo-lint/all
+npm install monorepolint
 ```
 
 ## Running
@@ -23,7 +23,7 @@ npm install @monorepo-lint/all
 Good for CI.
 
 ```bash
-monorepo-lint check
+monorepolint check
 ```
 
 or use the shortcut (which i will only use now):
@@ -47,7 +47,7 @@ mrl check --fix
 
 ## Configuration
 
-For now, look at [monorepo.lint.ts](./monorepo.lint.ts) in this repo.
+For now, look at [.monorepolint.config.ts](./.monorepolint.config.ts) in this repo.
 
 Sample:
 
@@ -166,4 +166,4 @@ module.exports = {
 
 ### I added a new package but I can't get it to work with the local monorepo.lint.ts. What?
 
-The way yarn workspaces function, in order to get the right symlinks in `node_modules/@monorepo-lint/whatever` you need to run `yarn` again.
+The way yarn workspaces function, in order to get the right symlinks in `node_modules/@monorepolint/whatever` you need to run `yarn` again.
