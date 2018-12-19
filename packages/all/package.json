@@ -1,5 +1,5 @@
 {
-  "name": "monorepolint",
+  "name": "@monorepolint/all",
   "version": "1.0.0-alpha.6+74320e3",
   "license": "MIT",
   "scripts": {

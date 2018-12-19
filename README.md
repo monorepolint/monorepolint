@@ -7,13 +7,13 @@ Managing large monorepos is hard. This makes it easier to standardize them.
 ## Installation
 
 ```bash
-yarn add monorepolint
+yarn add @monorepolint/all
 ```
 
 or
 
 ```bash
-npm install monorepolint
+npm install @monorepolint/all
 ```
 
 ## Running
