@@ -77,6 +77,11 @@ module.exports = {
       }
     },
     ":alphabetical-dependencies": {},
-    ":consistent-dependencies": {}
+    ":consistent-dependencies": {},
+    ":banned-dependencies": {
+      options: {
+        bannedDependencies: ["lodash"]
+      }
+    }
   }
 };
