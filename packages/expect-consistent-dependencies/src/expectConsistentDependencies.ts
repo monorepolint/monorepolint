@@ -5,19 +5,22 @@
  *
  */
 
-import { Context } from "@monorepo-lint/core";
+import { Context, RuleModule } from "@monorepo-lint/core";
 import { writeJson } from "@monorepo-lint/utils";
 import diff from "jest-diff";
+import * as r from "runtypes";
 
-export default function expectConsistentDependencies(
-  context: Context,
-  // tslint:disable-next-line:variable-name
-  _opts: {}
-) {
-  checkDeps(context, "dependencies");
-  checkDeps(context, "devDependencies");
-  // we don't check peer deps since they can be more lenient
-}
+export const Options = r.Undefined;
+export type Options = r.Static<typeof Options>;
+
+export default {
+  check: function expectConsistentDependencies(context: Context) {
+    checkDeps(context, "dependencies");
+    checkDeps(context, "devDependencies");
+    // we don't check peer deps since they can be more lenient
+  },
+  optionsRuntype: Options
+} as RuleModule<typeof Options>;
 
 function checkDeps(
   context: Context,
