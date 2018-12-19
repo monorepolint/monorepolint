@@ -22,6 +22,7 @@
     ]
   },
   "scripts": {
+    "changelog": "rm -rf '/tmp/github-changelog-http-cache' && github_changelog_generator",
     "ci": "npm-run-all clean compile lint test",
     "clean": "lerna run clean",
     "compile": "lerna run compile:typescript",
