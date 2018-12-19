@@ -47,7 +47,7 @@ mrl check --fix
 
 ## Configuration
 
-For now, look at [monorepo.lint.ts](./monorepo.lint.ts) in this repo.
+For now, look at [.monorepolint.config.ts](./.monorepolint.config.ts) in this repo.
 
 Sample:
 

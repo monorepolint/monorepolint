@@ -45,7 +45,7 @@ interface Args {
 }
 
 function handleCheck(args: Args) {
-  const configPath = path.resolve(process.cwd(), "monorepolint.config.ts");
+  const configPath = path.resolve(process.cwd(), ".monorepolint.config.ts");
   const config = Config.check(require(configPath));
   const resolvedConfig = resolveConfig(
     config,

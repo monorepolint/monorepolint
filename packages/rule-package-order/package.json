@@ -12,7 +12,7 @@
     "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
-    "test": "../../node_modules/.bin/jest --colors --passWithNoTests --verbose"
+    "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
   },
   "dependencies": {
     "@monorepolint/core": "^1.0.0-alpha.6+74320e3",
