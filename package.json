@@ -36,7 +36,8 @@
     "lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' -l",
     "lint:typescript": "lerna run --no-bail lint:typescript",
     "preLernaPublish": "npm-run-all clean compile lint test",
-    "release": "yarn run preLernaPublish && lerna publish --force-publish",
+    "publish:release": "yarn run preLernaPublish && lerna publish --force-publish --npm-client npm",
+    "publish:prerelease": "yarn run preLernaPublish && lerna publish --force-publish --npm-client npm --canary --yes",
     "test": "lerna run test"
   },
   "devDependencies": {
