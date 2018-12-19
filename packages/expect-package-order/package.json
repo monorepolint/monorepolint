@@ -1,6 +1,6 @@
 {
   "name": "@monorepo-lint/expect-package-order",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "author": "Mac Lockard",
   "url": "https://github.com/monorepo-lint/monorepo-lint",
   "license": "MIT",
@@ -15,8 +15,8 @@
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
   },
   "dependencies": {
-    "@monorepo-lint/core": "~0.1.6",
-    "@monorepo-lint/utils": "^0.1.6",
+    "@monorepo-lint/core": "^0.1.7",
+    "@monorepo-lint/utils": "^0.1.7",
     "jest-diff": "^23.6.0"
   },
   "devDependencies": {
