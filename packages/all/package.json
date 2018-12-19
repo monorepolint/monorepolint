@@ -16,6 +16,7 @@
     "@monorepo-lint/cli": "^0.1.9",
     "@monorepo-lint/core": "^0.1.9",
     "@monorepo-lint/expect-alphabetical-dependencies": "^0.1.9",
+    "@monorepo-lint/expect-consistent-dependencies": "^0.1.9",
     "@monorepo-lint/expect-file-contents": "^0.1.9",
     "@monorepo-lint/expect-package-order": "^0.1.9",
     "@monorepo-lint/expect-package-script": "^0.1.9",

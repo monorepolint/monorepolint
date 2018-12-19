@@ -118,6 +118,11 @@ module.exports = {
       type: "@monorepo-lint/expect-alphabetical-dependencies",
       args: { },
       exclude: [],
+    },
+    {
+      type: "@monorepo-lint/expect-consistent-dependencies",
+      args: { },
+      exclude: ["monorepo-lint"]
     }
   ]
 };
