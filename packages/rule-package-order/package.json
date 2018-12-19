@@ -7,7 +7,7 @@
   "main": "lib/packageOrder.js",
   "typings": "lib/packageOrder.d.ts",
   "scripts": {
-    "clean": "rm -rf build lib",
+    "clean": "rm -rf build lib node_modules *.tgz",
     "compile:typescript": "../../node_modules/.bin/tsc",
     "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
