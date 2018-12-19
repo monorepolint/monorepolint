@@ -1,8 +1,8 @@
 {
-  "name": "@monorepo-lint/utils",
+  "name": "@monorepolint/utils",
   "version": "1.0.0-alpha.6+74320e3",
   "author": "Eric Anderson",
-  "url": "https://github.com/monorepo-lint/monorepo-lint",
+  "url": "https://github.com/monorepolint/monorepolint",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

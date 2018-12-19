@@ -1,8 +1,8 @@
 {
-  "name": "@monorepo-lint/rule-standard-tsconfig",
+  "name": "@monorepolint/rule-standard-tsconfig",
   "version": "1.0.0-alpha.6+74320e3",
   "author": "Eric Anderson",
-  "url": "https://github.com/monorepo-lint/monorepo-lint",
+  "url": "https://github.com/monorepolint/monorepolint",
   "license": "MIT",
   "main": "lib/standardTsconfig.js",
   "typings": "lib/standardTsconfig.d.ts",
@@ -16,8 +16,8 @@
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
   },
   "dependencies": {
-    "@monorepo-lint/core": "^1.0.0-alpha.6+74320e3",
-    "@monorepo-lint/utils": "^1.0.0-alpha.6+74320e3",
+    "@monorepolint/core": "^1.0.0-alpha.6+74320e3",
+    "@monorepolint/utils": "^1.0.0-alpha.6+74320e3",
     "jest-diff": "^23.6.0",
     "runtypes": "^3.1.2"
   },

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2018 monorepo-lint (http://monorepo-lint.com). All Right Reserved.
+ * Copyright (c) 2018 monorepolint (http://monorepolint.com). All Right Reserved.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
@@ -19,7 +19,7 @@ jest.mock("fs", () => ({
   }
 }));
 
-import { Failure, PackageContext } from "@monorepo-lint/core";
+import { Failure, PackageContext } from "@monorepolint/core";
 import packageScript from "../packageScript";
 
 const PACKAGE_WITHOUT_SCRIPTS =
