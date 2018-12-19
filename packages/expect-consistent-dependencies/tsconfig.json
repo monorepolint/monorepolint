@@ -22,28 +22,7 @@
   },
   "references": [
     {
-      "path": "../cli"
-    },
-    {
       "path": "../core"
-    },
-    {
-      "path": "../expect-alphabetical-dependencies"
-    },
-    {
-      "path": "../expect-consistent-dependencies"
-    },
-    {
-      "path": "../expect-file-contents"
-    },
-    {
-      "path": "../expect-package-order"
-    },
-    {
-      "path": "../expect-package-script"
-    },
-    {
-      "path": "../expect-standard-tsconfig"
     },
     {
       "path": "../utils"

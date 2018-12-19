@@ -43,8 +43,10 @@ module.exports = {
         scripts: {
           clean: "rm -rf build",
           "compile:typescript": "../../node_modules/.bin/tsc",
-          "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
-          "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
+          "lint:typescript":
+            "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
+          "test:watch":
+            "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
           test: "../../node_modules/.bin/jest --colors --passWithNoTests"
         }
       }
@@ -74,6 +76,7 @@ module.exports = {
         ]
       }
     },
-    ":alphabetical-dependencies": {}
+    ":alphabetical-dependencies": {},
+    ":consistent-dependencies": {}
   }
 };
