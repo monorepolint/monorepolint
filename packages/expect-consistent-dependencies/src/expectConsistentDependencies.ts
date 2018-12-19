@@ -59,11 +59,11 @@ function filterKeys(
 ) {
   const newOb: Record<string, any> = {};
 
-  Object.keys(filterOb).forEach(key => {
+  for (const key of Object.keys(filterOb)) {
     if (ob[key] !== undefined) {
       newOb[key] = ob[key];
     }
-  });
+  }
 
   return newOb;
 }
