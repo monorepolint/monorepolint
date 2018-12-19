@@ -1,3 +1,10 @@
+/*!
+ * Copyright (c) 2018 monorepo-lint (http://monorepo-lint.com). All Right Reserved.
+ *
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ *
+ */
+
 import { existsSync } from "fs";
 import glob from "glob";
 import { join as pathJoin } from "path";

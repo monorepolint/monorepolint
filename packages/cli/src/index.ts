@@ -1,3 +1,10 @@
+/*!
+ * Copyright (c) 2018 monorepo-lint (http://monorepo-lint.com). All Right Reserved.
+ *
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ *
+ */
+
 import * as path from "path";
 
 import { check } from "@monorepo-lint/core";
@@ -5,6 +12,7 @@ import * as yargs from "yargs";
 
 export default function run() {
   try {
+    // tslint:disable-next-line:no-implicit-dependencies
     require("ts-node").register();
   } catch (err) {
     // no ts-node, no problem
