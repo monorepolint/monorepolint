@@ -18,13 +18,10 @@ export default {
     checkAlpha(context, "devDependencies");
     checkAlpha(context, "peerDependencies");
   },
-  optionsRuntype: Options
+  optionsRuntype: Options,
 } as RuleModule<typeof Options>;
 
-function checkAlpha(
-  context: Context,
-  block: "dependencies" | "devDependencies" | "peerDependencies"
-) {
+function checkAlpha(context: Context, block: "dependencies" | "devDependencies" | "peerDependencies") {
   const packageJson = context.getPackageJson();
   const packagePath = context.getPackageJsonPath();
 
@@ -52,7 +49,7 @@ function checkAlpha(
         const newPackageJson = { ...packageJson };
         newPackageJson[block] = expectedDependencies;
         writeJson(packagePath, newPackageJson);
-      }
+      },
     });
   }
 }

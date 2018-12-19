@@ -14,9 +14,7 @@ import { readJson } from "./readJson";
 export function getWorkspacePackageDirs(workspaceDir: string) {
   const ret: string[] = [];
 
-  const packageJson: PackageJson = readJson(
-    pathJoin(workspaceDir, "package.json")
-  );
+  const packageJson: PackageJson = readJson(pathJoin(workspaceDir, "package.json"));
 
   if (packageJson.workspaces === undefined) {
     throw new Error("Invalid workspaceDir: " + workspaceDir);
@@ -28,11 +26,7 @@ export function getWorkspacePackageDirs(workspaceDir: string) {
 
   for (const pattern of packageGlobs) {
     for (const packagePath of glob.sync(pattern, { cwd: workspaceDir })) {
-      const packageJsonPath = pathJoin(
-        workspaceDir,
-        packagePath,
-        "package.json"
-      );
+      const packageJsonPath = pathJoin(workspaceDir, packagePath, "package.json");
 
       if (existsSync(packageJsonPath)) {
         ret.push(packagePath);

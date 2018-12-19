@@ -26,12 +26,12 @@ export default function run() {
         y
           .option("verbose", {
             count: true,
-            type: "boolean"
+            type: "boolean",
           })
           .option("fix", {
-            type: "boolean"
+            type: "boolean",
           }),
-      handler: handleCheck
+      handler: handleCheck,
     })
     .demandCommand(1, "At least one command required")
     .help()
@@ -47,11 +47,7 @@ interface Args {
 function handleCheck(args: Args) {
   const configPath = path.resolve(process.cwd(), ".monorepolint.config.ts");
   const config = Config.check(require(configPath));
-  const resolvedConfig = resolveConfig(
-    config,
-    args,
-    findWorkspaceDir(process.cwd())!
-  );
+  const resolvedConfig = resolveConfig(config, args, findWorkspaceDir(process.cwd())!);
 
   if (!check(resolvedConfig, process.cwd())) {
     // tslint:disable-next-line:no-console

@@ -1,4 +1,11 @@
 /*!
+ * Copyright (c) 2018 monorepolint (http://monorepolint.com). All Right Reserved.
+ *
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ *
+ */
+
+/*!
  * Copyright (c) 2018 monorepo-lint (http://monorepo-lint.com). All Right Reserved.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
@@ -13,7 +20,7 @@ describe("shouldSkipPackage", () => {
   const resolvedConfig: ResolvedConfig = {
     rules: [],
     verbose: false,
-    fix: false
+    fix: false,
   };
   const workspaceContext = new WorkspaceContext(".", resolvedConfig);
   jest.spyOn(workspaceContext, "getName").mockImplementation(() => "root");
@@ -25,7 +32,7 @@ describe("shouldSkipPackage", () => {
       check: () => true,
       excludePackages: [fooContext.getName(), "other"],
       includePackages: [fooContext.getName()],
-      optionsRuntype: {} as any
+      optionsRuntype: {} as any,
     });
 
     expect(actual).toEqual(true);
@@ -35,7 +42,7 @@ describe("shouldSkipPackage", () => {
     const actual = shouldSkipPackage(fooContext, {
       check: () => true,
       includePackages: [],
-      optionsRuntype: {} as any
+      optionsRuntype: {} as any,
     });
 
     expect(actual).toEqual(true);
@@ -44,7 +51,7 @@ describe("shouldSkipPackage", () => {
   it("should not skip if excludes and includes are omitted", () => {
     const actual = shouldSkipPackage(fooContext, {
       check: () => true,
-      optionsRuntype: {} as any
+      optionsRuntype: {} as any,
     });
 
     expect(actual).toEqual(false);
@@ -53,7 +60,7 @@ describe("shouldSkipPackage", () => {
   it("should skip root by default", () => {
     const actual = shouldSkipPackage(workspaceContext, {
       check: () => true,
-      optionsRuntype: {} as any
+      optionsRuntype: {} as any,
     });
 
     expect(actual).toEqual(true);
@@ -63,7 +70,7 @@ describe("shouldSkipPackage", () => {
     const actual = shouldSkipPackage(workspaceContext, {
       check: () => true,
       excludePackages: ["@foo/*", "other"],
-      optionsRuntype: {} as any
+      optionsRuntype: {} as any,
     });
 
     expect(actual).toEqual(true);
@@ -73,7 +80,7 @@ describe("shouldSkipPackage", () => {
     const actual = shouldSkipPackage(workspaceContext, {
       check: () => true,
       includePackages: ["@foo/*", "other"],
-      optionsRuntype: {} as any
+      optionsRuntype: {} as any,
     });
 
     expect(actual).toEqual(true);

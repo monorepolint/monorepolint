@@ -19,13 +19,10 @@ export default {
     checkDeps(context, "devDependencies");
     // we don't check peer deps since they can be more lenient
   },
-  optionsRuntype: Options
+  optionsRuntype: Options,
 } as RuleModule<typeof Options>;
 
-function checkDeps(
-  context: Context,
-  block: "dependencies" | "devDependencies" | "peerDependencies"
-) {
+function checkDeps(context: Context, block: "dependencies" | "devDependencies" | "peerDependencies") {
   const packageJson = context.getPackageJson();
   const packagePath = context.getPackageJsonPath();
   const dependencies = packageJson[block];
@@ -39,7 +36,7 @@ function checkDeps(
 
   const expectedDependencies = {
     ...dependencies,
-    ...filterKeys(workspaceDependencies, dependencies)
+    ...filterKeys(workspaceDependencies, dependencies),
   };
 
   if (JSON.stringify(dependencies) !== JSON.stringify(expectedDependencies)) {
@@ -51,15 +48,12 @@ function checkDeps(
         const newPackageJson = { ...packageJson };
         newPackageJson[block] = expectedDependencies;
         writeJson(packagePath, newPackageJson);
-      }
+      },
     });
   }
 }
 
-function filterKeys(
-  ob: Record<string, string>,
-  filterOb: Record<string, string>
-) {
+function filterKeys(ob: Record<string, string>, filterOb: Record<string, string>) {
   const newOb: Record<string, any> = {};
 
   for (const key of Object.keys(filterOb)) {

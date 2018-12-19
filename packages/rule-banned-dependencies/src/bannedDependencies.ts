@@ -11,21 +11,18 @@ import diff from "jest-diff";
 import * as r from "runtypes";
 
 export const Options = r.Record({
-  bannedDependencies: r.Array(r.String)
+  bannedDependencies: r.Array(r.String),
 });
 export type Options = r.Static<typeof Options>;
 const ruleModule: RuleModule<typeof Options> = {
-  check: function expectAlphabeticalDependencies(
-    context: Context,
-    opts: Options
-  ) {
+  check: function expectAlphabeticalDependencies(context: Context, opts: Options) {
     const { bannedDependencies } = opts;
 
     checkBanned(context, bannedDependencies, "dependencies");
     checkBanned(context, bannedDependencies, "devDependencies");
     checkBanned(context, bannedDependencies, "peerDependencies");
   },
-  optionsRuntype: Options
+  optionsRuntype: Options,
 };
 export default ruleModule;
 
@@ -51,10 +48,7 @@ function checkBanned(
     }
   }
 
-  if (
-    Object.keys(expectedDependencies).length !==
-    Object.keys(dependencies).length
-  ) {
+  if (Object.keys(expectedDependencies).length !== Object.keys(dependencies).length) {
     context.addError({
       file: packagePath,
       message: `Banned depdendencies in ${block} in package.json`,
@@ -63,7 +57,7 @@ function checkBanned(
         const newPackageJson = { ...packageJson };
         newPackageJson[block] = expectedDependencies;
         writeJson(packagePath, newPackageJson);
-      }
+      },
     });
   }
 }

@@ -12,7 +12,7 @@ import diff from "jest-diff";
 import * as r from "runtypes";
 
 export const Options = r.Record({
-  scripts: r.Dictionary(r.String) // string => string
+  scripts: r.Dictionary(r.String), // string => string
 });
 
 export type Options = r.Static<typeof Options>;
@@ -31,7 +31,7 @@ export default {
             input.scripts = {};
             return input;
           });
-        }
+        },
       });
       return;
     }
@@ -40,21 +40,18 @@ export default {
         context.addError({
           file: context.getPackageJsonPath(),
           message: `Expected standardized script entry for '${name}'`,
-          longMessage: diff(
-            value + "\n",
-            (packageJson.scripts[name] || "") + "\n"
-          ),
+          longMessage: diff(value + "\n", (packageJson.scripts[name] || "") + "\n"),
           fixer: () => {
             mutateJson<PackageJson>(context.getPackageJsonPath(), input => {
               input.scripts![name] = value;
               return input;
             });
-          }
+          },
         });
       }
     }
   },
-  optionsRuntype: Options
+  optionsRuntype: Options,
 } as RuleModule<typeof Options>;
 
 function mutateJson<T>(path: string, mutator: ((f: T) => T)) {

@@ -7,46 +7,27 @@
 
 import * as path from "path";
 import { ValidationError } from "runtypes";
-import {
-  Config,
-  Options,
-  ResolvedConfig,
-  ResolvedRule,
-  RuleEntry,
-  RuleModule
-} from "./Config";
+import { Config, Options, ResolvedConfig, ResolvedRule, RuleEntry, RuleModule } from "./Config";
 
-export function resolveConfig(
-  config: Config,
-  options: Options,
-  workspaceRootDir: string
-): ResolvedConfig {
+export function resolveConfig(config: Config, options: Options, workspaceRootDir: string): ResolvedConfig {
   try {
     return {
       ...options,
       rules: Object.entries(config.rules).map(([type, ruleEntry]) => ({
         ...ruleEntry,
-        ...resolveRule(type, workspaceRootDir, ruleEntry)
-      }))
+        ...resolveRule(type, workspaceRootDir, ruleEntry),
+      })),
     };
   } catch (err) {
     if (err instanceof ValidationError) {
       // tslint:disable-next-line:no-console
-      console.error(
-        `Failed to parse config for key '${err.key}':`,
-        err.message,
-        err
-      );
+      console.error(`Failed to parse config for key '${err.key}':`, err.message, err);
     }
     return process.exit(10);
   }
 }
 
-function resolveRule(
-  type: string,
-  workspaceRootDir: string,
-  ruleEntry: RuleEntry
-): ResolvedRule {
+function resolveRule(type: string, workspaceRootDir: string, ruleEntry: RuleEntry): ResolvedRule {
   const ruleModule = loadRuleModule(type, workspaceRootDir);
 
   try {
@@ -54,16 +35,14 @@ function resolveRule(
 
     const ret: ResolvedRule = {
       ...ruleModule,
-      ...ruleEntry
+      ...ruleEntry,
     };
 
     return ret;
   } catch (err) {
     if (err instanceof ValidationError) {
       // tslint:disable:no-console
-      console.error(
-        `Failed to validate the configuration for the rule '${type}'`
-      );
+      console.error(`Failed to validate the configuration for the rule '${type}'`);
       console.group();
       console.error("Recieved:", ruleEntry.options);
       console.error("Error Message:", err.message);

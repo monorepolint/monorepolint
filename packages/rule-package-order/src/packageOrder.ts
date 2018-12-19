@@ -10,12 +10,10 @@ import { writeJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 import * as r from "runtypes";
 
-export type OrderFunction = ((
-  context: Context
-) => (a: string, b: string) => number);
+export type OrderFunction = ((context: Context) => (a: string, b: string) => number);
 
 export const Options = r.Record({
-  order: r.Union(r.Array(r.String), r.Function)
+  order: r.Union(r.Array(r.String), r.Function),
 });
 
 export interface Options extends r.Static<typeof Options> {
@@ -27,9 +25,7 @@ export default {
     const packageJson = context.getPackageJson();
     const packagePath = context.getPackageJsonPath();
 
-    const compartor = isOrderFunction(order)
-      ? order(context)
-      : createCompartor(order);
+    const compartor = isOrderFunction(order) ? order(context) : createCompartor(order);
 
     const actualOrder = Object.keys(packageJson);
     const expectedOrder = actualOrder.slice().sort(compartor); // sort mutates, so we need to copy the previous result
@@ -47,11 +43,11 @@ export default {
           });
 
           writeJson(packagePath, expectedPackageJson);
-        }
+        },
       });
     }
   },
-  optionsRuntype: Options
+  optionsRuntype: Options,
 } as RuleModule<typeof Options>;
 
 function arrayOrderCompare(a: ReadonlyArray<string>, b: ReadonlyArray<string>) {
@@ -71,8 +67,6 @@ function createCompartor(order: ReadonlyArray<string>) {
   };
 }
 
-function isOrderFunction(
-  order: ReadonlyArray<string> | OrderFunction
-): order is OrderFunction {
+function isOrderFunction(order: ReadonlyArray<string> | OrderFunction): order is OrderFunction {
   return !Array.isArray(order);
 }

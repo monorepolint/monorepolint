@@ -16,7 +16,7 @@ jest.mock("fs", () => ({
 
   readFileSync: function readFileSync(filePath: string, _contentType: string) {
     return mockFiles.get(filePath);
-  }
+  },
 }));
 
 import { Failure, PackageContext } from "@monorepolint/core";
@@ -25,7 +25,7 @@ import packageScript from "../packageScript";
 const PACKAGE_WITHOUT_SCRIPTS =
   JSON.stringify(
     {
-      name: "package-without-scripts"
+      name: "package-without-scripts",
     },
     undefined,
     2
@@ -42,8 +42,8 @@ const PACKAGE_WITH_SCRIPTS =
     {
       name: "package-with-scripts",
       scripts: {
-        [SCRIPT_NAME]: SCRIPT_VALUE
-      }
+        [SCRIPT_NAME]: SCRIPT_VALUE,
+      },
     },
     undefined,
     2
@@ -58,7 +58,7 @@ describe("expectPackageScript", () => {
     const context = new PackageContext(".", {
       rules: [],
       fix: false,
-      verbose: false
+      verbose: false,
     });
 
     const spy = jest.spyOn(context, "addError");
@@ -72,8 +72,8 @@ describe("expectPackageScript", () => {
 
       packageScript.check(context, {
         scripts: {
-          foo: "bar"
-        }
+          foo: "bar",
+        },
       });
 
       expect(spy).toHaveBeenCalledTimes(1);
@@ -89,7 +89,7 @@ describe("expectPackageScript", () => {
     const context = new PackageContext(".", {
       rules: [],
       fix: true,
-      verbose: false
+      verbose: false,
     });
     const spy = jest.spyOn(context, "addError");
 
@@ -102,8 +102,8 @@ describe("expectPackageScript", () => {
 
       packageScript.check(context, {
         scripts: {
-          foo: "bar"
-        }
+          foo: "bar",
+        },
       });
 
       expect(spy).toHaveBeenCalledTimes(1);
@@ -121,8 +121,8 @@ describe("expectPackageScript", () => {
 
       packageScript.check(context, {
         scripts: {
-          [MISSING_SCRIPT_NAME]: MISSING_SCRIPT_VALUE
-        }
+          [MISSING_SCRIPT_NAME]: MISSING_SCRIPT_VALUE,
+        },
       });
 
       expect(spy).toHaveBeenCalledTimes(1);
@@ -130,13 +130,9 @@ describe("expectPackageScript", () => {
       const failure: Failure = spy.mock.calls[0][0];
       expect(failure.file).toBe("package.json");
       expect(failure.fixer).not.toBeUndefined();
-      expect(failure.message).toBe(
-        `Expected standardized script entry for '${MISSING_SCRIPT_NAME}'`
-      );
+      expect(failure.message).toBe(`Expected standardized script entry for '${MISSING_SCRIPT_NAME}'`);
 
-      expect(
-        JSON.parse(mockFiles.get("package.json")!).scripts[MISSING_SCRIPT_NAME]
-      ).toEqual(MISSING_SCRIPT_VALUE);
+      expect(JSON.parse(mockFiles.get("package.json")!).scripts[MISSING_SCRIPT_NAME]).toEqual(MISSING_SCRIPT_VALUE);
     });
 
     it("does nothing if the value exists", () => {
@@ -144,14 +140,14 @@ describe("expectPackageScript", () => {
 
       packageScript.check(context, {
         scripts: {
-          [SCRIPT_NAME]: SCRIPT_VALUE
-        }
+          [SCRIPT_NAME]: SCRIPT_VALUE,
+        },
       });
 
       expect(spy).not.toHaveBeenCalled();
 
       expect(JSON.parse(mockFiles.get("package.json")!).scripts).toEqual({
-        [SCRIPT_NAME]: SCRIPT_VALUE
+        [SCRIPT_NAME]: SCRIPT_VALUE,
       });
     });
   });
