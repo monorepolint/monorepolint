@@ -90,6 +90,11 @@ module.exports = {
         ]
       },
       exclude: [],
+    },
+    {
+      type: "@monorepo-lint/expect-alphabetical-dependencies",
+      args: { },
+      exclude: [],
     }
   ]
 };

@@ -1,0 +1,24 @@
+{
+  "name": "@monorepo-lint/expect-alphabetical-dependencies",
+  "version": "0.1.6",
+  "author": "Mac Lockard",
+  "url": "https://github.com/monorepo-lint/monorepo-lint",
+  "license": "MIT",
+  "main": "build/expectAlphabeticalDependencies.js",
+  "typings": "build/expectAlphabeticalDependencies.d.ts",
+  "scripts": {
+    "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
+    "test": "../../node_modules/.bin/jest --config ../../jest.config.js --colors",
+    "test:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --colors --watch"
+  },
+  "dependencies": {
+    "jest-diff": "^23.6.0"
+  },
+  "devDependencies": {
+    "@types/jest-diff": "^20.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "33f740167f2d7cc4f4ddf85a64addc8a73de0dcd"
+}
