@@ -6,7 +6,9 @@
  */
 
 import { PackageJson } from "@monorepo-lint/utils";
+import { ResolvedConfig } from "./Config";
 import { WorkspaceContext } from "./WorkspaceContext";
+
 export interface Failure {
   message: string;
   file?: string;
@@ -18,6 +20,7 @@ export interface Context {
   readonly failed: boolean;
   readonly packageDir: string;
   readonly parent?: Context;
+  readonly resolvedConfig: ResolvedConfig;
 
   getName(): string;
 

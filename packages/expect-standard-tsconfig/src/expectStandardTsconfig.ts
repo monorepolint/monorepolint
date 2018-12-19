@@ -5,59 +5,69 @@
  *
  */
 
-import { Context } from "@monorepo-lint/core";
+import { Context, RuleModule } from "@monorepo-lint/core";
 import { getPackageNameToDir } from "@monorepo-lint/utils";
 import * as fs from "fs";
 import diff from "jest-diff";
 import * as path from "path";
+import * as r from "runtypes";
 
-export type Opts =
-  | {
-      generator: (context: Context) => string;
-      template?: undefined;
-      templateFile?: undefined;
+export const Options = r
+  .Partial({
+    generator: r.Function,
+    template: r.Record({}).Or(r.String),
+    templateFile: r.String
+  })
+  .withConstraint(({ generator, template, templateFile }) => {
+    let count = 0;
+    if (generator) {
+      count++;
     }
-  | {
-      template: object;
-      generator?: undefined;
-      templateFile?: undefined;
+    if (template) {
+      count++;
     }
-  | {
-      templateFile: string;
-      generator?: undefined;
-      template?: undefined;
-    };
+    if (templateFile) {
+      count++;
+    }
 
-export default function expectStandardTsconfig(context: Context, opts: Opts) {
-  const fullPath = path.resolve(context.packageDir, "tsconfig.json");
-  const generator = getGenerator(context, opts);
-  const expectedContent = generator(context);
+    return count === 1 || "Expect one of { generator, template, templateFile }";
+  });
 
-  const actualContent = fs.existsSync(fullPath)
-    ? fs.readFileSync(fullPath, "utf-8")
-    : undefined;
+export type Options = r.Static<typeof Options>;
 
-  if (expectedContent === undefined) {
-    context.addWarning({
-      file: fullPath,
-      message: "Excluding from expect-standard-tsconfig"
-    });
-    return;
-  }
+export default {
+  check: function expectStandardTsconfig(context: Context, opts: Options) {
+    const fullPath = path.resolve(context.packageDir, "tsconfig.json");
+    const generator = getGenerator(context, opts);
+    const expectedContent = generator(context);
 
-  if (actualContent !== expectedContent) {
-    context.addError({
-      file: fullPath,
-      message: "Expect file contents to match",
-      longMessage: diff(expectedContent, actualContent, { expand: true }),
-      fixer: () => {
-        fs.writeFileSync(fullPath, expectedContent);
-      }
-    });
-  }
-}
+    const actualContent = fs.existsSync(fullPath)
+      ? fs.readFileSync(fullPath, "utf-8")
+      : undefined;
 
-function getGenerator(context: Context, opts: Opts) {
+    if (expectedContent === undefined) {
+      context.addWarning({
+        file: fullPath,
+        message: "Excluding from expect-standard-tsconfig"
+      });
+      return;
+    }
+
+    if (actualContent !== expectedContent) {
+      context.addError({
+        file: fullPath,
+        message: "Expect file contents to match",
+        longMessage: diff(expectedContent, actualContent, { expand: true }),
+        fixer: () => {
+          fs.writeFileSync(fullPath, expectedContent);
+        }
+      });
+    }
+  },
+  optionsRuntype: Options
+} as RuleModule<typeof Options>;
+
+function getGenerator(context: Context, opts: Options) {
   if (opts.generator) {
     return opts.generator;
   } else if (opts.templateFile) {

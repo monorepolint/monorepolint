@@ -9,49 +9,63 @@ import { Context } from "@monorepo-lint/core";
 import * as fs from "fs";
 import diff from "jest-diff";
 import * as path from "path";
+import * as r from "runtypes";
+import { RuleModule } from "../../core/build/Config";
 
-interface BaseOpts {
-  file: string;
-  generator: (context: Context) => string;
-  template: string;
-  templateFile: string;
-}
+const Options = r.Union(
+  r.Record({
+    file: r.String,
+    generator: r.Function,
+    template: r.Undefined,
+    templateFile: r.Undefined
+  }),
 
-type Limit<T, Q extends keyof T> = {
-  [P in keyof T]: P extends Q ? T[P] : undefined
-};
+  r.Record({
+    file: r.String,
+    generator: r.Undefined,
+    template: r.String,
+    templateFile: r.Undefined
+  }),
 
-export type Opts =
-  | Limit<BaseOpts, "file" | "generator">
-  | Limit<BaseOpts, "file" | "template">
-  | Limit<BaseOpts, "file" | "templateFile">;
+  r.Record({
+    file: r.String,
+    generator: r.Undefined,
+    template: r.Undefined,
+    templateFile: r.String
+  })
+);
 
-export default function expectFileContents(context: Context, opts: Opts) {
-  const fullPath = path.join(context.packageDir, opts.file);
-  const generator = getGenerator(context, opts);
-  const expectedContent = generator(context);
+export type Options = r.Static<typeof Options>;
 
-  const actualContent = fs.existsSync(fullPath)
-    ? fs.readFileSync(fullPath, "utf-8")
-    : undefined;
+export default {
+  check: function expectFileContents(context: Context, opts: Options) {
+    const fullPath = path.join(context.packageDir, opts.file);
+    const generator = getGenerator(context, opts);
+    const expectedContent = generator(context);
 
-  if (actualContent !== expectedContent) {
-    context.addError({
-      file: fullPath,
-      message: "Expect file contents to match",
-      longMessage: diff(expectedContent, actualContent, { expand: true }),
-      fixer: () => {
-        if (expectedContent === undefined) {
-          fs.unlinkSync(fullPath);
-        } else {
-          fs.writeFileSync(fullPath, expectedContent);
+    const actualContent = fs.existsSync(fullPath)
+      ? fs.readFileSync(fullPath, "utf-8")
+      : undefined;
+
+    if (actualContent !== expectedContent) {
+      context.addError({
+        file: fullPath,
+        message: "Expect file contents to match",
+        longMessage: diff(expectedContent, actualContent, { expand: true }),
+        fixer: () => {
+          if (expectedContent === undefined) {
+            fs.unlinkSync(fullPath);
+          } else {
+            fs.writeFileSync(fullPath, expectedContent);
+          }
         }
-      }
-    });
-  }
-}
+      });
+    }
+  },
+  optionsRuntype: Options
+} as RuleModule<typeof Options>;
 
-function getGenerator(context: Context, opts: Opts) {
+function getGenerator(context: Context, opts: Options) {
   if (opts.generator) {
     return opts.generator;
   } else if (opts.templateFile) {

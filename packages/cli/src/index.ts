@@ -7,7 +7,8 @@
 
 import * as path from "path";
 
-import { check } from "@monorepo-lint/core";
+import { check, Config, resolveConfig } from "@monorepo-lint/core";
+import { findWorkspaceDir } from "@monorepo-lint/utils";
 import * as yargs from "yargs";
 
 export default function run() {
@@ -22,16 +23,15 @@ export default function run() {
       command: "check [--verbose]",
       describe: "Checks the mono repo for lint violations",
       builder: y =>
-        y.option("verbose", {
-          count: true,
-          type: "boolean"
-        }),
+        y
+          .option("verbose", {
+            count: true,
+            type: "boolean"
+          })
+          .option("fix", {
+            type: "boolean"
+          }),
       handler: handleCheck
-    })
-    .command({
-      command: "fix",
-      describe: "Checks the mono repo for lint violations",
-      handler: handleFix
     })
     .demandCommand(1, "At least one command required")
     .help()
@@ -41,39 +41,19 @@ export default function run() {
 
 interface Args {
   fix: boolean;
-  verbose: number;
+  verbose: boolean;
 }
 
 function handleCheck(args: Args) {
-  const opts = require(path.resolve(process.cwd(), "monorepo.lint.ts"));
-  if (
-    !check(
-      {
-        ...opts,
-        fix: false,
-        verbose: args.verbose > 0
-      },
-      process.cwd()
-    )
-  ) {
-    // tslint:disable-next-line:no-console
-    console.error("Failed");
-    process.exit(100);
-  }
-}
+  const configPath = path.resolve(process.cwd(), "monorepo-lint.config.ts");
+  const config = Config.check(require(configPath));
+  const resolvedConfig = resolveConfig(
+    config,
+    args,
+    findWorkspaceDir(process.cwd())!
+  );
 
-function handleFix(args: Args) {
-  const opts = require(path.resolve(process.cwd(), "monorepo.lint.ts"));
-  if (
-    !check(
-      {
-        ...opts,
-        fix: true,
-        verbose: args.verbose > 0
-      },
-      process.cwd()
-    )
-  ) {
+  if (!check(resolvedConfig, process.cwd())) {
     // tslint:disable-next-line:no-console
     console.error("Failed");
     process.exit(100);

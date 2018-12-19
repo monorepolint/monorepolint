@@ -5,19 +5,21 @@
  *
  */
 
-import { Context } from "@monorepo-lint/core";
+import { Context, RuleModule } from "@monorepo-lint/core";
 import { writeJson } from "@monorepo-lint/utils";
 import diff from "jest-diff";
+import * as r from "runtypes";
 
-export default function expectAlphabeticalDependencies(
-  context: Context,
-  // tslint:disable-next-line:variable-name
-  _opts: {}
-) {
-  checkAlpha(context, "dependencies");
-  checkAlpha(context, "devDependencies");
-  checkAlpha(context, "peerDependencies");
-}
+const Options = r.Undefined;
+
+export default {
+  check: function expectAlphabeticalDependencies(context: Context) {
+    checkAlpha(context, "dependencies");
+    checkAlpha(context, "devDependencies");
+    checkAlpha(context, "peerDependencies");
+  },
+  optionsRuntype: Options
+} as RuleModule<typeof Options>;
 
 function checkAlpha(
   context: Context,

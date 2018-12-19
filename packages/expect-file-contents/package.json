@@ -18,7 +18,8 @@
   },
   "dependencies": {
     "@monorepo-lint/core": "^0.1.9",
-    "jest-diff": "^23.6.0"
+    "jest-diff": "^23.6.0",
+    "runtypes": "^3.1.2"
   },
   "devDependencies": {
     "@types/jest-diff": "^20.0.0"

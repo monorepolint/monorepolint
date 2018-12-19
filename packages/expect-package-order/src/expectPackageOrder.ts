@@ -5,48 +5,54 @@
  *
  */
 
-import { Context } from "@monorepo-lint/core";
+import { Context, RuleModule } from "@monorepo-lint/core";
 import { writeJson } from "@monorepo-lint/utils";
 import diff from "jest-diff";
-
-export interface Opts {
-  readonly order: ReadonlyArray<string> | OrderFunction;
-}
+import * as r from "runtypes";
 
 export type OrderFunction = ((
   context: Context
 ) => (a: string, b: string) => number);
 
-export default function expectPackageOrder(context: Context, opts: Opts) {
-  const packageJson = context.getPackageJson();
-  const packagePath = context.getPackageJsonPath();
+export const Options = r.Record({
+  order: r.Union(r.Array(r.String), r.Function)
+});
 
-  const { order } = opts;
-
-  const compartor = isOrderFunction(order)
-    ? order(context)
-    : createCompartor(order);
-
-  const actualOrder = Object.keys(packageJson);
-  const expectedOrder = actualOrder.slice().sort(compartor); // sort mutates, so we need to copy the previous result
-
-  if (!arrayOrderCompare(actualOrder, expectedOrder)) {
-    context.addError({
-      file: packagePath,
-      message: "Incorrect order of fields in package.json",
-      longMessage: diff(expectedOrder, actualOrder, { expand: true }),
-      fixer: () => {
-        const expectedPackageJson: Record<string, any> = {};
-
-        expectedOrder.forEach(key => {
-          expectedPackageJson[key] = packageJson[key];
-        });
-
-        writeJson(packagePath, expectedPackageJson);
-      }
-    });
-  }
+export interface Options extends r.Static<typeof Options> {
+  readonly order: string[] | OrderFunction;
 }
+
+export default {
+  check: function expectPackageOrder(context: Context, { order }: Options) {
+    const packageJson = context.getPackageJson();
+    const packagePath = context.getPackageJsonPath();
+
+    const compartor = isOrderFunction(order)
+      ? order(context)
+      : createCompartor(order);
+
+    const actualOrder = Object.keys(packageJson);
+    const expectedOrder = actualOrder.slice().sort(compartor); // sort mutates, so we need to copy the previous result
+
+    if (!arrayOrderCompare(actualOrder, expectedOrder)) {
+      context.addError({
+        file: packagePath,
+        message: "Incorrect order of fields in package.json",
+        longMessage: diff(expectedOrder, actualOrder, { expand: true }),
+        fixer: () => {
+          const expectedPackageJson: Record<string, any> = {};
+
+          expectedOrder.forEach(key => {
+            expectedPackageJson[key] = packageJson[key];
+          });
+
+          writeJson(packagePath, expectedPackageJson);
+        }
+      });
+    }
+  },
+  optionsRuntype: Options
+} as RuleModule<typeof Options>;
 
 function arrayOrderCompare(a: ReadonlyArray<string>, b: ReadonlyArray<string>) {
   for (let index = 0; index < a.length; index++) {

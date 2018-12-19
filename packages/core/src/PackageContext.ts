@@ -8,8 +8,8 @@
 import { PackageJson, readJson } from "@monorepo-lint/utils";
 import chalk from "chalk";
 import * as path from "path";
+import { ResolvedConfig } from "./Config";
 import { Context } from "./Context";
-import { MonorepoLintConfig } from "./MonorepoLintConfig";
 import { WorkspaceContext } from "./WorkspaceContext";
 
 interface FailureOptions {
@@ -28,7 +28,7 @@ export class PackageContext implements Context {
 
   constructor(
     public readonly packageDir: string,
-    public readonly opts: MonorepoLintConfig,
+    public readonly resolvedConfig: ResolvedConfig,
     public readonly parent?: Context
   ) {
     this.depth = this.parent ? this.parent.depth + 1 : 0;
@@ -50,7 +50,7 @@ export class PackageContext implements Context {
     this.printName();
 
     this.print(`${chalk.yellow("Warning!")}: ${message}`);
-    if (this.opts.verbose && longMessage) {
+    if (this.resolvedConfig.verbose && longMessage) {
       for (let i = 0; i <= this.depth + 1; i++) {
         // tslint:disable-next-line:no-console
         console.group();
@@ -68,7 +68,7 @@ export class PackageContext implements Context {
 
     const shortFile = path.relative(this.packageDir, file);
 
-    if (this.opts.fix && fixer) {
+    if (this.resolvedConfig.fix && fixer) {
       fixer();
       this.print(
         `${chalk.green("Fixed!")} ${chalk.magenta(shortFile)}: ${message}`
@@ -79,7 +79,7 @@ export class PackageContext implements Context {
         `${chalk.red("Error!")} ${chalk.magenta(shortFile)}: ${message}`
       );
 
-      if (this.opts.verbose && longMessage) {
+      if (this.resolvedConfig.verbose && longMessage) {
         for (let i = 0; i <= this.depth + 1; i++) {
           // tslint:disable-next-line:no-console
           console.group();

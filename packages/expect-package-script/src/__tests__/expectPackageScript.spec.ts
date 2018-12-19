@@ -56,7 +56,7 @@ describe("expectPackageScript", () => {
 
   describe("fix: false", () => {
     const context = new PackageContext(".", {
-      checks: [],
+      rules: [],
       fix: false,
       verbose: false
     });
@@ -70,9 +70,10 @@ describe("expectPackageScript", () => {
     it("handles an empty script section", () => {
       mockFiles.set("package.json", PACKAGE_WITHOUT_SCRIPTS);
 
-      expectPackageScript(context, {
-        name: "foo",
-        value: "bar"
+      expectPackageScript.check(context, {
+        scripts: {
+          foo: "bar"
+        }
       });
 
       expect(spy).toHaveBeenCalledTimes(1);
@@ -86,7 +87,7 @@ describe("expectPackageScript", () => {
 
   describe("fix: true", () => {
     const context = new PackageContext(".", {
-      checks: [],
+      rules: [],
       fix: true,
       verbose: false
     });
@@ -99,9 +100,10 @@ describe("expectPackageScript", () => {
     it("fixes an empty script section", () => {
       mockFiles.set("package.json", PACKAGE_WITHOUT_SCRIPTS);
 
-      expectPackageScript(context, {
-        name: "foo",
-        value: "bar"
+      expectPackageScript.check(context, {
+        scripts: {
+          foo: "bar"
+        }
       });
 
       expect(spy).toHaveBeenCalledTimes(1);
@@ -117,9 +119,10 @@ describe("expectPackageScript", () => {
     it("adds a script", () => {
       mockFiles.set("package.json", PACKAGE_WITH_SCRIPTS);
 
-      expectPackageScript(context, {
-        name: MISSING_SCRIPT_NAME,
-        value: MISSING_SCRIPT_VALUE
+      expectPackageScript.check(context, {
+        scripts: {
+          [MISSING_SCRIPT_NAME]: MISSING_SCRIPT_VALUE
+        }
       });
 
       expect(spy).toHaveBeenCalledTimes(1);
@@ -139,9 +142,10 @@ describe("expectPackageScript", () => {
     it("does nothing if the value exists", () => {
       mockFiles.set("package.json", PACKAGE_WITH_SCRIPTS);
 
-      expectPackageScript(context, {
-        name: SCRIPT_NAME,
-        value: SCRIPT_VALUE
+      expectPackageScript.check(context, {
+        scripts: {
+          [SCRIPT_NAME]: SCRIPT_VALUE
+        }
       });
 
       expect(spy).not.toHaveBeenCalled();

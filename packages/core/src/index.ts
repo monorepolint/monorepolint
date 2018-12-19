@@ -6,8 +6,16 @@
  */
 
 export { Context, Failure } from "./Context";
-export { MonorepoLintConfig } from "./MonorepoLintConfig";
-export { check, Checker } from "./check";
-
+export {
+  Config,
+  RuleModule,
+  Checker,
+  Options,
+  ResolvedConfig,
+  ResolvedRule,
+  RuleEntry
+} from "./Config";
+export { check } from "./check";
 export { PackageContext } from "./PackageContext";
 export { WorkspaceContext } from "./WorkspaceContext";
+export { resolveConfig } from "./resolveConfig";
