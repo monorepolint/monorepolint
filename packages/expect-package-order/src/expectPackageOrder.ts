@@ -31,17 +31,17 @@ export default function expectPackageOrder(context: Context, opts: Opts) {
   const expectedOrder = actualOrder.slice().sort(compartor); // sort mutates, so we need to copy the previous result
 
   if (!arrayOrderCompare(actualOrder, expectedOrder)) {
-    const expectedPackageJson: Record<string, any> = {};
-
-    expectedOrder.forEach(key => {
-      expectedPackageJson[key] = packageJson[key];
-    });
-
     context.addError({
       file: packagePath,
       message: "Incorrect order of fields in package.json",
       longMessage: diff(expectedOrder, actualOrder, { expand: true }),
       fixer: () => {
+        const expectedPackageJson: Record<string, any> = {};
+
+        expectedOrder.forEach(key => {
+          expectedPackageJson[key] = packageJson[key];
+        });
+
         writeJson(packagePath, expectedPackageJson);
       }
     });
