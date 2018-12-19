@@ -7,15 +7,10 @@
 
 export interface PackageJson {
   name?: string;
-  scripts?: {
-    [key: string]: string;
-  };
-  dependencies?: {
-    [dependency: string]: string;
-  };
-  devDependencies?: {
-    [dependency: string]: string;
-  };
+  scripts?: Record<string, string>;
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
   workspaces?:
     | {
         packages?: string[];

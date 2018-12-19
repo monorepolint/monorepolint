@@ -20,30 +20,5 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
   },
-  "references": [
-    {
-      "path": "../cli"
-    },
-    {
-      "path": "../core"
-    },
-    {
-      "path": "../expect-file-contents"
-    },
-    {
-      "path": "../expect-alphabetical-dependencies"
-    },
-    {
-      "path": "../expect-package-script"
-    },
-    {
-      "path": "../expect-standard-tsconfig"
-    },
-    {
-      "path": "../expect-package-order"
-    },
-    {
-      "path": "../utils"
-    }
-  ]
+  "references": []
 }
