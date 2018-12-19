@@ -1,5 +1,5 @@
 {
-  "name": "@monorepo-lint/all",
+  "name": "monorepo-lint",
   "version": "1.0.0-alpha.6+74320e3",
   "license": "MIT",
   "scripts": {
