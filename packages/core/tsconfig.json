@@ -20,5 +20,9 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
   },
-  "references": []
+  "references": [
+    {
+      "path": "../utils"
+    }
+  ]
 }
