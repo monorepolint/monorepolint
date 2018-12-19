@@ -3,7 +3,7 @@
     "target": "es5",
     "module": "commonjs",
     "lib": [
-      "es2015"
+      "es2018"
     ],
     "declaration": true,
     "declarationMap": true,
@@ -28,25 +28,25 @@
       "path": "../core"
     },
     {
-      "path": "../expect-alphabetical-dependencies"
+      "path": "../rule-alphabetical-dependencies"
     },
     {
-      "path": "../expect-consistent-dependencies"
+      "path": "../rule-banned-dependencies"
     },
     {
-      "path": "../expect-file-contents"
+      "path": "../rule-consistent-dependencies"
     },
     {
-      "path": "../expect-no-banned-dependencies"
+      "path": "../rule-file-contents"
     },
     {
-      "path": "../expect-package-order"
+      "path": "../rule-package-order"
     },
     {
-      "path": "../expect-package-script"
+      "path": "../rule-package-script"
     },
     {
-      "path": "../expect-standard-tsconfig"
+      "path": "../rule-standard-tsconfig"
     },
     {
       "path": "../utils"

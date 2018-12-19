@@ -1,7 +1,11 @@
 {
-  "name": "@monorepo-lint/all",
+  "name": "@monorepo-lint/rule-package-script",
   "version": "0.1.9",
+  "author": "Eric Anderson",
+  "url": "https://github.com/monorepo-lint/monorepo-lint",
   "license": "MIT",
+  "main": "build/packageScript.js",
+  "typings": "build/packageScript.d.ts",
   "scripts": {
     "clean": "rm -rf build",
     "compile:typescript": "../../node_modules/.bin/tsc",
@@ -13,16 +17,13 @@
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
   },
   "dependencies": {
-    "@monorepo-lint/cli": "^0.1.9",
     "@monorepo-lint/core": "^0.1.9",
-    "@monorepo-lint/rule-alphabetical-dependencies": "^0.1.9",
-    "@monorepo-lint/rule-banned-dependencies": "^0.1.9",
-    "@monorepo-lint/rule-consistent-dependencies": "^0.1.9",
-    "@monorepo-lint/rule-file-contents": "^0.1.9",
-    "@monorepo-lint/rule-package-order": "^0.1.9",
-    "@monorepo-lint/rule-package-script": "^0.1.9",
-    "@monorepo-lint/rule-standard-tsconfig": "^0.1.9",
-    "@monorepo-lint/utils": "^0.1.9"
+    "@monorepo-lint/utils": "^0.1.9",
+    "jest-diff": "^23.6.0",
+    "runtypes": "^3.1.2"
+  },
+  "devDependencies": {
+    "@types/jest-diff": "^20.0.0"
   },
   "publishConfig": {
     "access": "public"

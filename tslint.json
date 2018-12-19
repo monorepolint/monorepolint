@@ -18,6 +18,7 @@
     "object-literal-sort-keys": false,
 
     // prettier handles these
+    "object-literal-key-quotes": false,
     "trailing-comma": false,
     "arrow-parens": false,
     "align": false,

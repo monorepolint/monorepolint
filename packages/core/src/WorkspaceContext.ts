@@ -6,13 +6,13 @@
  */
 
 import { getWorkspacePackageDirs } from "@monorepo-lint/utils";
+import { ResolvedConfig } from "./Config";
 import { Context } from "./Context";
-import { MonorepoLintConfig } from "./MonorepoLintConfig";
 import { PackageContext } from "./PackageContext";
 
 // Right now, this stuff is done serially so we are writing less code to support that. Later we may want to redo this.
 export class WorkspaceContext extends PackageContext {
-  constructor(packageDir: string, opts: MonorepoLintConfig, parent?: Context) {
+  constructor(packageDir: string, opts: ResolvedConfig, parent?: Context) {
     super(packageDir, opts, parent);
   }
 
@@ -21,6 +21,6 @@ export class WorkspaceContext extends PackageContext {
   }
 
   public createChildContext(dir: string) {
-    return new PackageContext(dir, this.opts, this);
+    return new PackageContext(dir, this.resolvedConfig, this);
   }
 }

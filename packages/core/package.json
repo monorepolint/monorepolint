@@ -18,7 +18,12 @@
   },
   "dependencies": {
     "@monorepo-lint/utils": "^0.1.9",
-    "chalk": "^2.4.1"
+    "chalk": "^2.4.1",
+    "minimatch": "^3.0.4",
+    "runtypes": "^3.1.2"
+  },
+  "devDependencies": {
+    "@types/minimatch": "^3.0.3"
   },
   "publishConfig": {
     "access": "public"
