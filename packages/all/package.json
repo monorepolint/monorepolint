@@ -1,9 +1,9 @@
 {
   "name": "@monorepo-lint/all",
-  "version": "0.1.9",
+  "version": "1.0.0-alpha.6+74320e3",
   "license": "MIT",
   "scripts": {
-    "clean": "rm -rf build",
+    "clean": "rm -rf build lib",
     "compile:typescript": "../../node_modules/.bin/tsc",
     "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
     "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
@@ -13,19 +13,19 @@
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
   },
   "dependencies": {
-    "@monorepo-lint/cli": "^0.1.9",
-    "@monorepo-lint/core": "^0.1.9",
-    "@monorepo-lint/rule-alphabetical-dependencies": "^0.1.9",
-    "@monorepo-lint/rule-banned-dependencies": "^0.1.9",
-    "@monorepo-lint/rule-consistent-dependencies": "^0.1.9",
-    "@monorepo-lint/rule-file-contents": "^0.1.9",
-    "@monorepo-lint/rule-package-order": "^0.1.9",
-    "@monorepo-lint/rule-package-script": "^0.1.9",
-    "@monorepo-lint/rule-standard-tsconfig": "^0.1.9",
-    "@monorepo-lint/utils": "^0.1.9"
+    "@monorepo-lint/cli": "^1.0.0-alpha.6+74320e3",
+    "@monorepo-lint/core": "^1.0.0-alpha.6+74320e3",
+    "@monorepo-lint/rule-alphabetical-dependencies": "^1.0.0-alpha.6+74320e3",
+    "@monorepo-lint/rule-banned-dependencies": "^1.0.0-alpha.6+74320e3",
+    "@monorepo-lint/rule-consistent-dependencies": "^1.0.0-alpha.6+74320e3",
+    "@monorepo-lint/rule-file-contents": "^1.0.0-alpha.6+74320e3",
+    "@monorepo-lint/rule-package-order": "^1.0.0-alpha.6+74320e3",
+    "@monorepo-lint/rule-package-script": "^1.0.0-alpha.6+74320e3",
+    "@monorepo-lint/rule-standard-tsconfig": "^1.0.0-alpha.6+74320e3",
+    "@monorepo-lint/utils": "^1.0.0-alpha.6+74320e3"
   },
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "8cfae5bcd0a5c27ce91d300e7c6cf93184fa4d79"
+  "gitHead": "74320e31cfce7555aece7a98d71d01d2f329be0f"
 }

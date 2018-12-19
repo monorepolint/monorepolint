@@ -1,13 +1,13 @@
 {
   "name": "@monorepo-lint/rule-consistent-dependencies",
-  "version": "0.1.9",
+  "version": "1.0.0-alpha.6+74320e3",
   "author": "Mac Lockard",
   "url": "https://github.com/monorepo-lint/monorepo-lint",
   "license": "MIT",
-  "main": "build/consistentDependencies.js",
-  "typings": "build/consistentDependencies.d.ts",
+  "main": "lib/consistentDependencies.js",
+  "typings": "lib/consistentDependencies.d.ts",
   "scripts": {
-    "clean": "rm -rf build",
+    "clean": "rm -rf build lib",
     "compile:typescript": "../../node_modules/.bin/tsc",
     "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
@@ -15,8 +15,8 @@
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
   },
   "dependencies": {
-    "@monorepo-lint/core": "~0.1.6",
-    "@monorepo-lint/utils": "^0.1.6",
+    "@monorepo-lint/core": "^1.0.0-alpha.6+74320e3",
+    "@monorepo-lint/utils": "^1.0.0-alpha.6+74320e3",
     "jest-diff": "^23.6.0",
     "runtypes": "^3.1.2"
   },
@@ -26,5 +26,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "33f740167f2d7cc4f4ddf85a64addc8a73de0dcd"
+  "gitHead": "74320e31cfce7555aece7a98d71d01d2f329be0f"
 }

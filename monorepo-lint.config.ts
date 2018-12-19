@@ -21,7 +21,7 @@ module.exports = {
     ":package-script": {
       options: {
         scripts: {
-          clean: "rm -rf build",
+          clean: "rm -rf build lib",
           "compile:typescript": "../../node_modules/.bin/tsc",
           "lint:typescript":
             "../../node_modules/.bin/tslint --config ../../tslint.json --project .",

@@ -1,13 +1,13 @@
 {
   "name": "@monorepo-lint/rule-banned-dependencies",
-  "version": "0.1.9",
+  "version": "1.0.0-alpha.6+74320e3",
   "author": "Mac Lockard",
   "url": "https://github.com/monorepo-lint/monorepo-lint",
   "license": "MIT",
-  "main": "build/bannedDependencies.js",
-  "typings": "build/bannedDependencies.d.ts",
+  "main": "lib/bannedDependencies.js",
+  "typings": "lib/bannedDependencies.d.ts",
   "scripts": {
-    "clean": "rm -rf build",
+    "clean": "rm -rf build lib",
     "compile:typescript": "../../node_modules/.bin/tsc",
     "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
     "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
@@ -17,8 +17,8 @@
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
   },
   "dependencies": {
-    "@monorepo-lint/core": "^0.1.9",
-    "@monorepo-lint/utils": "^0.1.9",
+    "@monorepo-lint/core": "^1.0.0-alpha.6+74320e3",
+    "@monorepo-lint/utils": "^1.0.0-alpha.6+74320e3",
     "jest-diff": "^23.6.0",
     "runtypes": "^3.1.2"
   },
@@ -28,5 +28,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "8cfae5bcd0a5c27ce91d300e7c6cf93184fa4d79"
+  "gitHead": "74320e31cfce7555aece7a98d71d01d2f329be0f"
 }
