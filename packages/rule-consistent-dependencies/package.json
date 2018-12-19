@@ -1,6 +1,6 @@
 {
   "name": "@monorepolint/rule-consistent-dependencies",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Mac Lockard",
   "url": "https://github.com/monorepolint/monorepolint",
   "license": "MIT",
@@ -15,8 +15,8 @@
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
   },
   "dependencies": {
-    "@monorepolint/core": "^0.2.0",
-    "@monorepolint/utils": "^0.2.0",
+    "@monorepolint/core": "^0.2.1",
+    "@monorepolint/utils": "^0.2.1",
     "jest-diff": "^23.6.0",
     "runtypes": "^3.1.2"
   },
