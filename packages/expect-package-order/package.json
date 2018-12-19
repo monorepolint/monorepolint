@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@monorepo-lint/core": "~0.1.6",
+    "@monorepo-lint/utils": "^0.1.6",
     "jest-diff": "^23.6.0"
   },
   "devDependencies": {

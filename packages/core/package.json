@@ -17,7 +17,8 @@
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
   },
   "dependencies": {
-    "@monorepo-lint/utils": "~0.1.6"
+    "@monorepo-lint/utils": "~0.1.6",
+    "chalk": "^2.4.1"
   },
   "publishConfig": {
     "access": "public"
