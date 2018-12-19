@@ -118,6 +118,15 @@ module.exports = {
       type: "@monorepo-lint/expect-alphabetical-dependencies",
       args: { },
       exclude: [],
+    },
+    {
+      type: "@monorepo-lint/expect-no-banned-dependencies",
+      args: {
+        bannedDependencies: [
+          "lodash"
+        ]
+      },
+      exclude: [],
     }
   ]
 };
