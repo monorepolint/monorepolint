@@ -7,13 +7,13 @@ Managing large monorepos is hard. This makes it easier to standardize them.
 ## Installation
 
 ```bash
-yarn add @monorepo-lint/all
+yarn add monorepo-lint
 ```
 
 or
 
 ```bash
-npm install @monorepo-lint/all
+npm install monorepo-lint
 ```
 
 ## Running
