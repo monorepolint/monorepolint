@@ -1,9 +1,9 @@
 {
   "bin": {
-    "monorepo-lint": "./bin/monorepo-lint",
+    "monorepolint": "./bin/monorepolint",
     "mrl": "./bin/mrl"
   },
-  "name": "@monorepo-lint/cli",
+  "name": "@monorepolint/cli",
   "version": "1.0.0-alpha.6+74320e3",
   "license": "MIT",
   "main": "lib/index.js",
@@ -16,11 +16,11 @@
     "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
-    "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
+    "test": "../../node_modules/.bin/jest --colors --passWithNoTests --verbose"
   },
   "dependencies": {
-    "@monorepo-lint/core": "^1.0.0-alpha.6+74320e3",
-    "@monorepo-lint/utils": "^1.0.0-alpha.6+74320e3",
+    "@monorepolint/core": "^1.0.0-alpha.6+74320e3",
+    "@monorepolint/utils": "^1.0.0-alpha.6+74320e3",
     "yargs": "^12.0.5"
   },
   "devDependencies": {

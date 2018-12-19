@@ -1,8 +1,8 @@
 {
-  "name": "@monorepo-lint/core",
+  "name": "@monorepolint/core",
   "version": "1.0.0-alpha.6+74320e3",
   "author": "Eric Anderson",
-  "url": "https://github.com/monorepo-lint/monorepo-lint",
+  "url": "https://github.com/monorepolint/monorepolint",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -14,10 +14,10 @@
     "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
-    "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
+    "test": "../../node_modules/.bin/jest --colors --passWithNoTests --verbose"
   },
   "dependencies": {
-    "@monorepo-lint/utils": "^1.0.0-alpha.6+74320e3",
+    "@monorepolint/utils": "^1.0.0-alpha.6+74320e3",
     "chalk": "^2.4.1",
     "minimatch": "^3.0.4",
     "runtypes": "^3.1.2"

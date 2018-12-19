@@ -1,5 +1,5 @@
 {
-  "name": "monorepo-lint",
+  "name": "monorepolint",
   "version": "1.0.0-alpha.6+74320e3",
   "license": "MIT",
   "scripts": {
@@ -10,19 +10,19 @@
     "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
-    "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
+    "test": "../../node_modules/.bin/jest --colors --passWithNoTests --verbose"
   },
   "dependencies": {
-    "@monorepo-lint/cli": "^1.0.0-alpha.6+74320e3",
-    "@monorepo-lint/core": "^1.0.0-alpha.6+74320e3",
-    "@monorepo-lint/rule-alphabetical-dependencies": "^1.0.0-alpha.6+74320e3",
-    "@monorepo-lint/rule-banned-dependencies": "^1.0.0-alpha.6+74320e3",
-    "@monorepo-lint/rule-consistent-dependencies": "^1.0.0-alpha.6+74320e3",
-    "@monorepo-lint/rule-file-contents": "^1.0.0-alpha.6+74320e3",
-    "@monorepo-lint/rule-package-order": "^1.0.0-alpha.6+74320e3",
-    "@monorepo-lint/rule-package-script": "^1.0.0-alpha.6+74320e3",
-    "@monorepo-lint/rule-standard-tsconfig": "^1.0.0-alpha.6+74320e3",
-    "@monorepo-lint/utils": "^1.0.0-alpha.6+74320e3"
+    "@monorepolint/cli": "^1.0.0-alpha.6+74320e3",
+    "@monorepolint/core": "^1.0.0-alpha.6+74320e3",
+    "@monorepolint/rule-alphabetical-dependencies": "^1.0.0-alpha.6+74320e3",
+    "@monorepolint/rule-banned-dependencies": "^1.0.0-alpha.6+74320e3",
+    "@monorepolint/rule-consistent-dependencies": "^1.0.0-alpha.6+74320e3",
+    "@monorepolint/rule-file-contents": "^1.0.0-alpha.6+74320e3",
+    "@monorepolint/rule-package-order": "^1.0.0-alpha.6+74320e3",
+    "@monorepolint/rule-package-script": "^1.0.0-alpha.6+74320e3",
+    "@monorepolint/rule-standard-tsconfig": "^1.0.0-alpha.6+74320e3",
+    "@monorepolint/utils": "^1.0.0-alpha.6+74320e3"
   },
   "publishConfig": {
     "access": "public"
