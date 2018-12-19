@@ -1,6 +1,7 @@
 {
   "bin": {
-    "monorepo-lint": "./bin/monorepo-lint"
+    "monorepo-lint": "./bin/monorepo-lint",
+    "mrl": "./bin/mrl"
   },
   "name": "@monorepo-lint/cli",
   "version": "0.1.9",
