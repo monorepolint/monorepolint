@@ -24,7 +24,7 @@
   "scripts": {
     "changelog": "rm -rf '/tmp/github-changelog-http-cache' && github_changelog_generator",
     "ci": "npm-run-all clean compile lint test",
-    "clean": "lerna run clean",
+    "clean": "lerna run clean && rm -rf node_modules && yarn",
     "compile": "lerna run compile:typescript",
     "compile:fast": "cd packages/all; tsc --build",
     "compile:watch": "cd packages/all; tsc --build --watch",
