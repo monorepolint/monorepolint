@@ -75,7 +75,7 @@ function resolveRule(
 
 function loadRuleModule(type: string, workspaceRootDir: string) {
   const q = type.startsWith(":")
-    ? "@monorepo-lint/expect-" + type.substring(1)
+    ? "@monorepo-lint/rule-" + type.substring(1)
     : type.startsWith(".")
     ? path.resolve(workspaceRootDir, type)
     : type;
