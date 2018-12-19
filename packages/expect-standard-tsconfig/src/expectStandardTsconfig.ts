@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2018 Eric L Anderson (http://monorepo-lint.com). All Right Reserved.
+ * Copyright (c) 2018 monorepo-lint (http://monorepo-lint.com). All Right Reserved.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
@@ -10,7 +10,6 @@ import { getPackageNameToDir } from "@monorepo-lint/utils";
 import * as fs from "fs";
 import diff from "jest-diff";
 import * as path from "path";
-import { __makeTemplateObject } from "tslib";
 
 export type Opts =
   | {

@@ -5,13 +5,13 @@
   "rules": {
     "file-header": [
       true,
-      [
-        "Copyright (c) 2018 Eric L Anderson (http://monorepo-lint.com). All Right Reserved.\n\nLicensed under the MIT license. See LICENSE file in the project root for details.\n"
-      ],
-      [
-        "Copyright (c) 2018 Eric L Anderson (http://monorepo-lint.com). All Right Reserved.\n\nLicensed under the MIT license. See LICENSE file in the project root for details.\n"
-      ]
+
+      "Copyright \\(c\\) 2018 monorepo-lint \\(http://monorepo-lint.com\\)\\. All Right Reserved\\.",
+      "Copyright (c) 2018 monorepo-lint (http://monorepo-lint.com). All Right Reserved.\n\nLicensed under the MIT license. See LICENSE file in the project root for details.\n"
     ],
+
+    // Add rules
+    "no-implicit-dependencies": true,
 
     // Disable recommended rules
     "interface-name": false,

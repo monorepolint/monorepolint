@@ -28,10 +28,11 @@
     "compile:watch": "cd packages/all; tsc --build --watch",
     "fix:lint:monorepo-lint": "monorepo-lint fix",
     "fix:lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' --write",
+    "fix:lint:typescript": "lerna run --no-bail lint:typescript -- --fix",
     "lint": "npm-run-all lint:*",
     "lint:monorepo-lint": "monorepo-lint check",
     "lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' -l",
-    "lint:typescript": "lerna run lint:typescript",
+    "lint:typescript": "lerna run --no-bail lint:typescript",
     "prepublishOnly": "npm-run-all clean compile lint test",
     "test": "lerna run test"
   },

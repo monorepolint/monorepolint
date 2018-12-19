@@ -1,3 +1,10 @@
+/*!
+ * Copyright (c) 2018 monorepo-lint (http://monorepo-lint.com). All Right Reserved.
+ *
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ *
+ */
+
 import { join as pathJoin } from "path";
 import { getWorkspacePackageDirs } from "./getWorkspacePackageDirs";
 import { PackageJson } from "./PackageJson";
