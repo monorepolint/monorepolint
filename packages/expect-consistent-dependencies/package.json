@@ -1,6 +1,6 @@
 {
   "name": "@monorepo-lint/expect-consistent-dependencies",
-  "version": "0.1.6",
+  "version": "0.1.9",
   "author": "Mac Lockard",
   "url": "https://github.com/monorepo-lint/monorepo-lint",
   "license": "MIT",
