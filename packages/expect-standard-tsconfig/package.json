@@ -1,6 +1,6 @@
 {
   "name": "@monorepo-lint/expect-standard-tsconfig",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "author": "Eric Anderson",
   "url": "https://github.com/monorepo-lint/monorepo-lint",
   "license": "MIT",
@@ -16,8 +16,8 @@
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
   },
   "dependencies": {
-    "@monorepo-lint/core": "^0.1.7",
-    "@monorepo-lint/utils": "^0.1.7",
+    "@monorepo-lint/core": "^0.1.8",
+    "@monorepo-lint/utils": "^0.1.8",
     "jest-diff": "^23.6.0"
   },
   "devDependencies": {

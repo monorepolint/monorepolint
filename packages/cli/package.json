@@ -3,7 +3,7 @@
     "monorepo-lint": "./bin/monorepo-lint"
   },
   "name": "@monorepo-lint/cli",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "license": "MIT",
   "main": "build/index.js",
   "typings": "build/index.d.ts",
@@ -18,8 +18,8 @@
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
   },
   "dependencies": {
-    "@monorepo-lint/core": "^0.1.7",
-    "@monorepo-lint/utils": "^0.1.7",
+    "@monorepo-lint/core": "^0.1.8",
+    "@monorepo-lint/utils": "^0.1.8",
     "yargs": "^12.0.5"
   },
   "devDependencies": {
