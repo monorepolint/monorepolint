@@ -34,7 +34,8 @@
     "lint:monorepo-lint": "monorepo-lint check --verbose",
     "lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' -l",
     "lint:typescript": "lerna run --no-bail lint:typescript",
-    "prepublishOnly": "npm-run-all clean compile lint test",
+    "preLernaPublish": "npm-run-all clean compile lint test",
+    "release": "yarn run preLernaPublish && lerna publish",
     "test": "lerna run test"
   },
   "devDependencies": {
