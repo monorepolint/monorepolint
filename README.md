@@ -4,13 +4,52 @@ Managing large monorepos is hard. This makes it easier to standardize them.
 
 [![CircleCI](https://circleci.com/gh/monorepo-lint/monorepo-lint.svg?style=shield)](https://circleci.com/gh/monorepo-lint/monorepo-lint) [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/) [![Greenkeeper badge](https://badges.greenkeeper.io/monorepo-lint/monorepo-lint.svg)](https://greenkeeper.io/)
 
+## Installation
+
+```bash
+yarn add @monorepo-lint/all
+```
+
+or
+
+```bash
+npm install @monorepo-lint/all
+```
+
+## Running
+
+### Check for issues
+
+Good for CI.
+
+```bash
+monorepo-lint check
+```
+
+or use the shortcut (which i will only use now):
+
+```bash
+mrl check
+```
+
+### Lets see more details
+
+```bash
+mrl check --verbose
+```
+
+### Automatically fix issues
+
+```bash
+mrl check --fix
+```
+
+
 ## Configuration
 
 For now, look at [monorepo.lint.ts](./monorepo.lint.ts) in this repo.
 
-### The future of configuration
-
-The way we configure in v0.1.x is way too verbose. We will be changing this soon to be like (compare with [monorepo.lint.ts](./monorepo.lint.ts)) the below. NOTE: this is not final.
+Sample:
 
 ```js
 module.exports = {
