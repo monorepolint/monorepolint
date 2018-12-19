@@ -20,7 +20,7 @@ jest.mock("fs", () => ({
 }));
 
 import { Failure, PackageContext } from "@monorepo-lint/core";
-import expectPackageScript from "../expectPackageScript";
+import packageScript from "../packageScript";
 
 const PACKAGE_WITHOUT_SCRIPTS =
   JSON.stringify(
@@ -70,7 +70,7 @@ describe("expectPackageScript", () => {
     it("handles an empty script section", () => {
       mockFiles.set("package.json", PACKAGE_WITHOUT_SCRIPTS);
 
-      expectPackageScript.check(context, {
+      packageScript.check(context, {
         scripts: {
           foo: "bar"
         }
@@ -100,7 +100,7 @@ describe("expectPackageScript", () => {
     it("fixes an empty script section", () => {
       mockFiles.set("package.json", PACKAGE_WITHOUT_SCRIPTS);
 
-      expectPackageScript.check(context, {
+      packageScript.check(context, {
         scripts: {
           foo: "bar"
         }
@@ -119,7 +119,7 @@ describe("expectPackageScript", () => {
     it("adds a script", () => {
       mockFiles.set("package.json", PACKAGE_WITH_SCRIPTS);
 
-      expectPackageScript.check(context, {
+      packageScript.check(context, {
         scripts: {
           [MISSING_SCRIPT_NAME]: MISSING_SCRIPT_VALUE
         }
@@ -142,7 +142,7 @@ describe("expectPackageScript", () => {
     it("does nothing if the value exists", () => {
       mockFiles.set("package.json", PACKAGE_WITH_SCRIPTS);
 
-      expectPackageScript.check(context, {
+      packageScript.check(context, {
         scripts: {
           [SCRIPT_NAME]: SCRIPT_VALUE
         }

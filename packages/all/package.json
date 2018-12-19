@@ -15,12 +15,12 @@
   "dependencies": {
     "@monorepo-lint/cli": "^0.1.9",
     "@monorepo-lint/core": "^0.1.9",
-    "@monorepo-lint/expect-alphabetical-dependencies": "^0.1.9",
-    "@monorepo-lint/expect-consistent-dependencies": "^0.1.9",
-    "@monorepo-lint/expect-file-contents": "^0.1.9",
-    "@monorepo-lint/expect-package-order": "^0.1.9",
-    "@monorepo-lint/expect-package-script": "^0.1.9",
-    "@monorepo-lint/expect-standard-tsconfig": "^0.1.9",
+    "@monorepo-lint/rule-alphabetical-dependencies": "^0.1.9",
+    "@monorepo-lint/rule-consistent-dependencies": "^0.1.9",
+    "@monorepo-lint/rule-file-contents": "^0.1.9",
+    "@monorepo-lint/rule-package-order": "^0.1.9",
+    "@monorepo-lint/rule-package-script": "^0.1.9",
+    "@monorepo-lint/rule-standard-tsconfig": "^0.1.9",
     "@monorepo-lint/utils": "^0.1.9"
   },
   "publishConfig": {

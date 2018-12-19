@@ -1,18 +1,17 @@
 {
-  "name": "@monorepo-lint/expect-alphabetical-dependencies",
+  "name": "@monorepo-lint/rule-standard-tsconfig",
   "version": "0.1.9",
-  "author": "Mac Lockard",
+  "author": "Eric Anderson",
   "url": "https://github.com/monorepo-lint/monorepo-lint",
   "license": "MIT",
-  "main": "build/expectAlphabeticalDependencies.js",
-  "typings": "build/expectAlphabeticalDependencies.d.ts",
+  "main": "build/standardTsconfig.js",
+  "typings": "build/standardTsconfig.d.ts",
   "scripts": {
     "clean": "rm -rf build",
     "compile:typescript": "../../node_modules/.bin/tsc",
     "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
     "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
     "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
-    "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
   },

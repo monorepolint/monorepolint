@@ -6,11 +6,11 @@
  */
 
 import { Context } from "@monorepo-lint/core";
+import { RuleModule } from "@monorepo-lint/core";
 import * as fs from "fs";
 import diff from "jest-diff";
 import * as path from "path";
 import * as r from "runtypes";
-import { RuleModule } from "../../core/build/Config";
 
 const Options = r.Union(
   r.Record({
