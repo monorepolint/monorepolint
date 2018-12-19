@@ -48,6 +48,13 @@ function checkPackage(context: Context) {
         ? true
         : ruleConfig.includePackages.some(a => minimatch(context.getName(), a));
 
+    if (
+      context.getWorkspaceContext() === context &&
+      !ruleConfig.includeWorkspaceRoot
+    ) {
+      continue;
+    }
+
     if (exclude || !include) {
       continue;
     }
