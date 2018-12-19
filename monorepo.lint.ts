@@ -120,6 +120,15 @@ module.exports = {
       exclude: [],
     },
     {
+      type: "@monorepo-lint/expect-no-banned-dependencies",
+      args: {
+        bannedDependencies: [
+          "lodash"
+        ]
+      },
+      exclude: [],
+    },
+    {
       type: "@monorepo-lint/expect-consistent-dependencies",
       args: { },
       exclude: ["monorepo-lint"]
