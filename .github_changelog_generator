@@ -1,0 +1,5 @@
+issues-wo-labels=false
+release-branch=master
+pr-wo-labels=true
+user=monorepo-lint
+project=monorepo-lint

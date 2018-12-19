@@ -110,8 +110,21 @@ module.exports = {
 
 4. Submit a pull request
 
-### FAQ
+### Generating changelog
 
-#### I added a new package but I can't get it to work with the local monorepo.lint.ts. What?
+1. [Setup a GH Token](https://github.com/github-changelog-generator/github-changelog-generator/tree/master#github-token)
+
+2. Run this command:
+
+  ```shell
+  sudo gem install --pre github_changelog_generator
+  yarn run changelog
+  ```
+
+3. Submit a pull request
+
+## FAQ
+
+### I added a new package but I can't get it to work with the local monorepo.lint.ts. What?
 
 The way yarn workspaces function, in order to get the right symlinks in `node_modules/@monorepo-lint/whatever` you need to run `yarn` again.
