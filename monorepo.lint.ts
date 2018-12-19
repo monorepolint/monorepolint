@@ -127,6 +127,11 @@ module.exports = {
         ]
       },
       exclude: [],
+    },
+    {
+      type: "@monorepo-lint/expect-consistent-dependencies",
+      args: { },
+      exclude: ["monorepo-lint"]
     }
   ]
 };
