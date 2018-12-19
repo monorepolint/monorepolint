@@ -1,0 +1,18 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "package.json",
+        "packages/all/package.json",
+        "packages/cli/package.json",
+        "packages/core/package.json",
+        "packages/expect-alphabetical-dependencies/package.json",
+        "packages/expect-file-contents/package.json",
+        "packages/expect-package-order/package.json",
+        "packages/expect-package-script/package.json",
+        "packages/expect-standard-tsconfig/package.json",
+        "packages/utils/package.json"
+      ]
+    }
+  }
+}
