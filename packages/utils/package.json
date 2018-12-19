@@ -1,6 +1,6 @@
 {
   "name": "@monorepo-lint/utils",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "author": "Eric Anderson",
   "url": "https://github.com/monorepo-lint/monorepo-lint",
   "license": "MIT",
