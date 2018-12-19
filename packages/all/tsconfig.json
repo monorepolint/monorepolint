@@ -31,10 +31,10 @@
       "path": "../expect-alphabetical-dependencies"
     },
     {
-      "path": "../expect-no-banned-dependencies"
+      "path": "../expect-file-contents"
     },
     {
-      "path": "../expect-file-contents"
+      "path": "../expect-no-banned-dependencies"
     },
     {
       "path": "../expect-package-order"
