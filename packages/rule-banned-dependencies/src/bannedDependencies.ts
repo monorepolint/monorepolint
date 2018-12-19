@@ -5,24 +5,29 @@
  *
  */
 
-import { Context } from "@monorepo-lint/core";
+import { Context, RuleModule } from "@monorepo-lint/core";
 import { writeJson } from "@monorepo-lint/utils";
 import diff from "jest-diff";
+import * as r from "runtypes";
 
-export interface Opts {
-  readonly bannedDependencies: ReadonlyArray<string>;
-}
+export const Options = r.Record({
+  bannedDependencies: r.Array(r.String)
+});
+export type Options = r.Static<typeof Options>;
+const ruleModule: RuleModule<typeof Options> = {
+  check: function expectAlphabeticalDependencies(
+    context: Context,
+    opts: Options
+  ) {
+    const { bannedDependencies } = opts;
 
-export default function expectAlphabeticalDependencies(
-  context: Context,
-  opts: Opts
-) {
-  const { bannedDependencies } = opts;
-
-  checkBanned(context, bannedDependencies, "dependencies");
-  checkBanned(context, bannedDependencies, "devDependencies");
-  checkBanned(context, bannedDependencies, "peerDependencies");
-}
+    checkBanned(context, bannedDependencies, "dependencies");
+    checkBanned(context, bannedDependencies, "devDependencies");
+    checkBanned(context, bannedDependencies, "peerDependencies");
+  },
+  optionsRuntype: Options
+};
+export default ruleModule;
 
 function checkBanned(
   context: Context,

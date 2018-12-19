@@ -15,8 +15,8 @@
   "dependencies": {
     "@monorepo-lint/cli": "^0.1.9",
     "@monorepo-lint/core": "^0.1.9",
-    "@monorepo-lint/expect-no-banned-dependencies": "^0.1.9",
     "@monorepo-lint/rule-alphabetical-dependencies": "^0.1.9",
+    "@monorepo-lint/rule-banned-dependencies": "^0.1.9",
     "@monorepo-lint/rule-consistent-dependencies": "^0.1.9",
     "@monorepo-lint/rule-file-contents": "^0.1.9",
     "@monorepo-lint/rule-package-order": "^0.1.9",

@@ -31,16 +31,16 @@
       "path": "../rule-alphabetical-dependencies"
     },
     {
+      "path": "../rule-banned-dependencies"
+    },
+    {
       "path": "../rule-consistent-dependencies"
     },
     {
       "path": "../rule-file-contents"
     },
     {
-      "path": "../expect-no-banned-dependencies"
-    },
-    {
-      "path": "../expect-package-order"
+      "path": "../rule-package-order"
     },
     {
       "path": "../rule-package-script"
