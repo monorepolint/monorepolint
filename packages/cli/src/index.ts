@@ -26,12 +26,12 @@ export default function run() {
         y
           .option("verbose", {
             count: true,
-            type: "boolean"
+            type: "boolean",
           })
           .option("fix", {
-            type: "boolean"
+            type: "boolean",
           }),
-      handler: handleCheck
+      handler: handleCheck,
     })
     .demandCommand(1, "At least one command required")
     .help()

@@ -15,8 +15,8 @@ export function resolveConfig(config: Config, options: Options, workspaceRootDir
       ...options,
       rules: Object.entries(config.rules).map(([type, ruleEntry]) => ({
         ...ruleEntry,
-        ...resolveRule(type, workspaceRootDir, ruleEntry)
-      }))
+        ...resolveRule(type, workspaceRootDir, ruleEntry),
+      })),
     };
   } catch (err) {
     if (err instanceof ValidationError) {
@@ -35,7 +35,7 @@ function resolveRule(type: string, workspaceRootDir: string, ruleEntry: RuleEntr
 
     const ret: ResolvedRule = {
       ...ruleModule,
-      ...ruleEntry
+      ...ruleEntry,
     };
 
     return ret;

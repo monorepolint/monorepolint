@@ -17,21 +17,21 @@ const Options = r.Union(
     file: r.String,
     generator: r.Function,
     template: r.Undefined,
-    templateFile: r.Undefined
+    templateFile: r.Undefined,
   }),
 
   r.Record({
     file: r.String,
     generator: r.Undefined,
     template: r.String,
-    templateFile: r.Undefined
+    templateFile: r.Undefined,
   }),
 
   r.Record({
     file: r.String,
     generator: r.Undefined,
     template: r.Undefined,
-    templateFile: r.String
+    templateFile: r.String,
   })
 );
 
@@ -56,11 +56,11 @@ export default {
           } else {
             fs.writeFileSync(fullPath, expectedContent);
           }
-        }
+        },
       });
     }
   },
-  optionsRuntype: Options
+  optionsRuntype: Options,
 } as RuleModule<typeof Options>;
 
 function getGenerator(context: Context, opts: Options) {

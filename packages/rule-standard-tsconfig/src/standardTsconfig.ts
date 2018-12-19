@@ -16,7 +16,7 @@ export const Options = r
   .Partial({
     generator: r.Function,
     template: r.Record({}).Or(r.String),
-    templateFile: r.String
+    templateFile: r.String,
   })
   .withConstraint(({ generator, template, templateFile }) => {
     let count = 0;
@@ -46,7 +46,7 @@ export default {
     if (expectedContent === undefined) {
       context.addWarning({
         file: fullPath,
-        message: "Excluding from expect-standard-tsconfig"
+        message: "Excluding from expect-standard-tsconfig",
       });
       return;
     }
@@ -58,11 +58,11 @@ export default {
         longMessage: diff(expectedContent, actualContent, { expand: true }),
         fixer: () => {
           fs.writeFileSync(fullPath, expectedContent);
-        }
+        },
       });
     }
   },
-  optionsRuntype: Options
+  optionsRuntype: Options,
 } as RuleModule<typeof Options>;
 
 function getGenerator(context: Context, opts: Options) {
@@ -85,7 +85,7 @@ function makeGenerator(template: any) {
   return function generator(context: Context) {
     template = {
       ...template,
-      references: []
+      references: [],
     }; // make a copy and ensure we have a references array
 
     const nameToDirectory = getPackageNameToDir(context.getWorkspaceContext().packageDir);
@@ -97,7 +97,7 @@ function makeGenerator(template: any) {
       .filter(name => nameToDirectory.has(name))
       .forEach(packageName => {
         template.references.push({
-          path: path.relative(context.packageDir, nameToDirectory.get(packageName)!)
+          path: path.relative(context.packageDir, nameToDirectory.get(packageName)!),
         });
       });
 

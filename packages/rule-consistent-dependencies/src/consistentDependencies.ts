@@ -19,7 +19,7 @@ export default {
     checkDeps(context, "devDependencies");
     // we don't check peer deps since they can be more lenient
   },
-  optionsRuntype: Options
+  optionsRuntype: Options,
 } as RuleModule<typeof Options>;
 
 function checkDeps(context: Context, block: "dependencies" | "devDependencies" | "peerDependencies") {
@@ -36,7 +36,7 @@ function checkDeps(context: Context, block: "dependencies" | "devDependencies" |
 
   const expectedDependencies = {
     ...dependencies,
-    ...filterKeys(workspaceDependencies, dependencies)
+    ...filterKeys(workspaceDependencies, dependencies),
   };
 
   if (JSON.stringify(dependencies) !== JSON.stringify(expectedDependencies)) {
@@ -48,7 +48,7 @@ function checkDeps(context: Context, block: "dependencies" | "devDependencies" |
         const newPackageJson = { ...packageJson };
         newPackageJson[block] = expectedDependencies;
         writeJson(packagePath, newPackageJson);
-      }
+      },
     });
   }
 }

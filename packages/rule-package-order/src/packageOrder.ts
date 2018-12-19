@@ -13,7 +13,7 @@ import * as r from "runtypes";
 export type OrderFunction = ((context: Context) => (a: string, b: string) => number);
 
 export const Options = r.Record({
-  order: r.Union(r.Array(r.String), r.Function)
+  order: r.Union(r.Array(r.String), r.Function),
 });
 
 export interface Options extends r.Static<typeof Options> {
@@ -43,11 +43,11 @@ export default {
           });
 
           writeJson(packagePath, expectedPackageJson);
-        }
+        },
       });
     }
   },
-  optionsRuntype: Options
+  optionsRuntype: Options,
 } as RuleModule<typeof Options>;
 
 function arrayOrderCompare(a: ReadonlyArray<string>, b: ReadonlyArray<string>) {

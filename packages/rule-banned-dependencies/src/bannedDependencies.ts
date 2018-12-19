@@ -11,7 +11,7 @@ import diff from "jest-diff";
 import * as r from "runtypes";
 
 export const Options = r.Record({
-  bannedDependencies: r.Array(r.String)
+  bannedDependencies: r.Array(r.String),
 });
 export type Options = r.Static<typeof Options>;
 const ruleModule: RuleModule<typeof Options> = {
@@ -22,7 +22,7 @@ const ruleModule: RuleModule<typeof Options> = {
     checkBanned(context, bannedDependencies, "devDependencies");
     checkBanned(context, bannedDependencies, "peerDependencies");
   },
-  optionsRuntype: Options
+  optionsRuntype: Options,
 };
 export default ruleModule;
 
@@ -57,7 +57,7 @@ function checkBanned(
         const newPackageJson = { ...packageJson };
         newPackageJson[block] = expectedDependencies;
         writeJson(packagePath, newPackageJson);
-      }
+      },
     });
   }
 }
