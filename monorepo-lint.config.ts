@@ -9,27 +9,7 @@ module.exports = {
   rules: {
     ":standard-tsconfig": {
       options: {
-        template: {
-          compilerOptions: {
-            target: "es5",
-            module: "commonjs",
-            lib: ["es2018"],
-            declaration: true,
-            declarationMap: true,
-            sourceMap: true,
-            outDir: "./build",
-            rootDir: "./src",
-            composite: true,
-            importHelpers: true,
-            strict: true,
-            noUnusedLocals: true,
-            noUnusedParameters: true,
-            noImplicitReturns: true,
-            noFallthroughCasesInSwitch: true,
-            allowSyntheticDefaultImports: true,
-            esModuleInterop: true
-          }
-        }
+        templateFile: "./templates/tsconfig.json"
       }
     },
     ":file-contents": {
