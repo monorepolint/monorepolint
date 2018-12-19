@@ -41,9 +41,7 @@ export default {
     const generator = getGenerator(context, opts);
     const expectedContent = generator(context);
 
-    const actualContent = fs.existsSync(fullPath)
-      ? fs.readFileSync(fullPath, "utf-8")
-      : undefined;
+    const actualContent = fs.existsSync(fullPath) ? fs.readFileSync(fullPath, "utf-8") : undefined;
 
     if (expectedContent === undefined) {
       context.addWarning({
@@ -90,24 +88,16 @@ function makeGenerator(template: any) {
       references: []
     }; // make a copy and ensure we have a references array
 
-    const nameToDirectory = getPackageNameToDir(
-      context.getWorkspaceContext().packageDir
-    );
+    const nameToDirectory = getPackageNameToDir(context.getWorkspaceContext().packageDir);
 
     const packageJson = context.getPackageJson();
-    const deps = [
-      ...Object.keys(packageJson.dependencies || {}),
-      ...Object.keys(packageJson.devDependencies || {})
-    ];
+    const deps = [...Object.keys(packageJson.dependencies || {}), ...Object.keys(packageJson.devDependencies || {})];
 
     deps
       .filter(name => nameToDirectory.has(name))
       .forEach(packageName => {
         template.references.push({
-          path: path.relative(
-            context.packageDir,
-            nameToDirectory.get(packageName)!
-          )
+          path: path.relative(context.packageDir, nameToDirectory.get(packageName)!)
         });
       });
 

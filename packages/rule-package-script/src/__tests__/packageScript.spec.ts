@@ -130,13 +130,9 @@ describe("expectPackageScript", () => {
       const failure: Failure = spy.mock.calls[0][0];
       expect(failure.file).toBe("package.json");
       expect(failure.fixer).not.toBeUndefined();
-      expect(failure.message).toBe(
-        `Expected standardized script entry for '${MISSING_SCRIPT_NAME}'`
-      );
+      expect(failure.message).toBe(`Expected standardized script entry for '${MISSING_SCRIPT_NAME}'`);
 
-      expect(
-        JSON.parse(mockFiles.get("package.json")!).scripts[MISSING_SCRIPT_NAME]
-      ).toEqual(MISSING_SCRIPT_VALUE);
+      expect(JSON.parse(mockFiles.get("package.json")!).scripts[MISSING_SCRIPT_NAME]).toEqual(MISSING_SCRIPT_VALUE);
     });
 
     it("does nothing if the value exists", () => {

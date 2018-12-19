@@ -6,15 +6,7 @@
  */
 
 export { Context, Failure } from "./Context";
-export {
-  Config,
-  RuleModule,
-  Checker,
-  Options,
-  ResolvedConfig,
-  ResolvedRule,
-  RuleEntry
-} from "./Config";
+export { Config, RuleModule, Checker, Options, ResolvedConfig, ResolvedRule, RuleEntry } from "./Config";
 export { check } from "./check";
 export { PackageContext } from "./PackageContext";
 export { WorkspaceContext } from "./WorkspaceContext";

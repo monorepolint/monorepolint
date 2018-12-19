@@ -43,9 +43,7 @@ export default {
     const generator = getGenerator(context, opts);
     const expectedContent = generator(context);
 
-    const actualContent = fs.existsSync(fullPath)
-      ? fs.readFileSync(fullPath, "utf-8")
-      : undefined;
+    const actualContent = fs.existsSync(fullPath) ? fs.readFileSync(fullPath, "utf-8") : undefined;
 
     if (actualContent !== expectedContent) {
       context.addError({

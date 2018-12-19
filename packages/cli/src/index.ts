@@ -47,11 +47,7 @@ interface Args {
 function handleCheck(args: Args) {
   const configPath = path.resolve(process.cwd(), "monorepo-lint.config.ts");
   const config = Config.check(require(configPath));
-  const resolvedConfig = resolveConfig(
-    config,
-    args,
-    findWorkspaceDir(process.cwd())!
-  );
+  const resolvedConfig = resolveConfig(config, args, findWorkspaceDir(process.cwd())!);
 
   if (!check(resolvedConfig, process.cwd())) {
     // tslint:disable-next-line:no-console

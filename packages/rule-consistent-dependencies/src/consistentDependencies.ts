@@ -22,10 +22,7 @@ export default {
   optionsRuntype: Options
 } as RuleModule<typeof Options>;
 
-function checkDeps(
-  context: Context,
-  block: "dependencies" | "devDependencies" | "peerDependencies"
-) {
+function checkDeps(context: Context, block: "dependencies" | "devDependencies" | "peerDependencies") {
   const packageJson = context.getPackageJson();
   const packagePath = context.getPackageJsonPath();
   const dependencies = packageJson[block];
@@ -56,10 +53,7 @@ function checkDeps(
   }
 }
 
-function filterKeys(
-  ob: Record<string, string>,
-  filterOb: Record<string, string>
-) {
+function filterKeys(ob: Record<string, string>, filterOb: Record<string, string>) {
   const newOb: Record<string, any> = {};
 
   for (const key of Object.keys(filterOb)) {

@@ -70,14 +70,10 @@ export class PackageContext implements Context {
 
     if (this.resolvedConfig.fix && fixer) {
       fixer();
-      this.print(
-        `${chalk.green("Fixed!")} ${chalk.magenta(shortFile)}: ${message}`
-      );
+      this.print(`${chalk.green("Fixed!")} ${chalk.magenta(shortFile)}: ${message}`);
     } else {
       this.setFailed();
-      this.print(
-        `${chalk.red("Error!")} ${chalk.magenta(shortFile)}: ${message}`
-      );
+      this.print(`${chalk.red("Error!")} ${chalk.magenta(shortFile)}: ${message}`);
 
       if (this.resolvedConfig.verbose && longMessage) {
         for (let i = 0; i <= this.depth + 1; i++) {

@@ -26,8 +26,7 @@ export const RuleModule = r.Record({
   check: r.Function,
   optionsRuntype: r.Unknown
 });
-export interface RuleModule<T extends Runtype = Runtype>
-  extends r.Static<typeof RuleModule> {
+export interface RuleModule<T extends Runtype = Runtype> extends r.Static<typeof RuleModule> {
   check: Checker<T>;
   optionsRuntype: T;
 }
@@ -37,10 +36,7 @@ export interface Options {
   fix: boolean;
 }
 
-export type Checker<T extends Runtype> = (
-  context: Context,
-  args: r.Static<T>
-) => void;
+export type Checker<T extends Runtype> = (context: Context, args: r.Static<T>) => void;
 export type ResolvedRule = RuleModule & RuleEntry;
 export interface ResolvedConfig extends Options {
   readonly rules: ReadonlyArray<ResolvedRule>;

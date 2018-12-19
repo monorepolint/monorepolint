@@ -15,10 +15,7 @@ export const Options = r.Record({
 });
 export type Options = r.Static<typeof Options>;
 const ruleModule: RuleModule<typeof Options> = {
-  check: function expectAlphabeticalDependencies(
-    context: Context,
-    opts: Options
-  ) {
+  check: function expectAlphabeticalDependencies(context: Context, opts: Options) {
     const { bannedDependencies } = opts;
 
     checkBanned(context, bannedDependencies, "dependencies");
@@ -51,10 +48,7 @@ function checkBanned(
     }
   }
 
-  if (
-    Object.keys(expectedDependencies).length !==
-    Object.keys(dependencies).length
-  ) {
+  if (Object.keys(expectedDependencies).length !== Object.keys(dependencies).length) {
     context.addError({
       file: packagePath,
       message: `Banned depdendencies in ${block} in package.json`,

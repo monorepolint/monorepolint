@@ -11,10 +11,7 @@ import { ResolvedConfig } from "./Config";
 import { Context } from "./Context";
 import { WorkspaceContext } from "./WorkspaceContext";
 
-export function check(
-  resolvedConfig: ResolvedConfig,
-  cwd = process.cwd()
-): boolean {
+export function check(resolvedConfig: ResolvedConfig, cwd = process.cwd()): boolean {
   const workspaceDir = findWorkspaceDir(cwd);
   if (workspaceDir === undefined) {
     throw new Error(`Unable to find a workspace from ${cwd}`);
@@ -40,18 +37,13 @@ function checkPackage(context: Context) {
     console.log(`Starting check against ${context.getName()}`);
   }
   for (const ruleConfig of context.resolvedConfig.rules) {
-    const exclude = (ruleConfig.excludePackages || []).some(a =>
-      minimatch(context.getName(), a)
-    );
+    const exclude = (ruleConfig.excludePackages || []).some(a => minimatch(context.getName(), a));
     const include =
       ruleConfig.includePackages === undefined
         ? true
         : ruleConfig.includePackages.some(a => minimatch(context.getName(), a));
 
-    if (
-      context.getWorkspaceContext() === context &&
-      !ruleConfig.includeWorkspaceRoot
-    ) {
+    if (context.getWorkspaceContext() === context && !ruleConfig.includeWorkspaceRoot) {
       continue;
     }
 
