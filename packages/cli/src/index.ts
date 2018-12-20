@@ -7,9 +7,9 @@
 
 import * as path from "path";
 
-import { check, Config, resolveConfig } from "@monorepolint/core";
+import { check, Config, Options, resolveConfig } from "@monorepolint/core";
 import { findWorkspaceDir } from "@monorepolint/utils";
-import * as yargs from "yargs";
+import yargs from "yargs";
 
 export default function run() {
   try {
@@ -19,32 +19,26 @@ export default function run() {
     // no ts-node, no problem
   }
   yargs
-    .command({
-      command: "check [--verbose]",
-      describe: "Checks the mono repo for lint violations",
-      builder: y =>
-        y
-          .option("verbose", {
-            count: true,
-            type: "boolean",
-          })
-          .option("fix", {
-            type: "boolean",
-          }),
-      handler: handleCheck,
-    })
+    .command(
+      "check [--verbose] [--fix]",
+      "Checks the mono repo for lint violations",
+      {
+        verbose: {
+          type: "boolean",
+        },
+        fix: {
+          type: "boolean",
+        },
+      },
+      handleCheck
+    )
     .demandCommand(1, "At least one command required")
     .help()
     .showHelpOnFail(true)
     .parse();
 }
 
-interface Args {
-  fix: boolean;
-  verbose: boolean;
-}
-
-function handleCheck(args: Args) {
+function handleCheck(args: Options) {
   const configPath = path.resolve(process.cwd(), ".monorepolint.config.ts");
   const config = Config.check(require(configPath));
   const resolvedConfig = resolveConfig(config, args, findWorkspaceDir(process.cwd())!);
