@@ -8,6 +8,7 @@
 import camelCase from "camelcase";
 import * as path from "path";
 import { ValidationError } from "runtypes";
+import { __importDefault } from "tslib";
 
 import { Config, Options, ResolvedConfig, ResolvedRule, RuleEntry, RuleModule } from "./Config";
 
@@ -69,10 +70,10 @@ function loadRuleModule(type: string, workspaceRootDir: string) {
     ? // tslint:disable-next-line:no-implicit-dependencies
       require("@monorepolint/rules")[camelCase(type.slice(1))]
     : type.startsWith(".")
-    ? require(path.resolve(workspaceRootDir, type)).default
+    ? __importDefault(path.resolve(workspaceRootDir, type))
     : type.includes(":")
     ? require(type.split(":")[0])[camelCase(type.split(":")[1])]
-    : require(type).default;
+    : __importDefault(type);
 
   try {
     return RuleModule.check(mod) as RuleModule;
