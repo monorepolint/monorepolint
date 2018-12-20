@@ -69,10 +69,10 @@ function loadRuleModule(type: string, workspaceRootDir: string) {
     ? // tslint:disable-next-line:no-implicit-dependencies
       require("@monorepolint/rules")[camelCase(type.slice(1))]
     : type.startsWith(".")
-    ? require(path.resolve(workspaceRootDir, type))
+    ? require(path.resolve(workspaceRootDir, type)).default
     : type.includes(":")
     ? require(type.split(":")[0])[camelCase(type.split(":")[1])]
-    : require(type);
+    : require(type).default;
 
   try {
     return RuleModule.check(mod) as RuleModule;
