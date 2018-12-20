@@ -32,8 +32,8 @@ export interface RuleModule<T extends Runtype = Runtype> extends r.Static<typeof
 }
 
 export interface Options {
-  verbose: boolean;
-  fix: boolean;
+  verbose?: boolean;
+  fix?: boolean;
 }
 
 export type Checker<T extends Runtype> = (context: Context, args: r.Static<T>) => void;
