@@ -10,17 +10,17 @@ import { writeJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 import * as r from "runtypes";
 
-export type OrderFunction = ((context: Context) => (a: string, b: string) => number);
+type OrderFunction = ((context: Context) => (a: string, b: string) => number);
 
-export const Options = r.Record({
+const Options = r.Record({
   order: r.Union(r.Array(r.String), r.Function),
 });
 
-export interface Options extends r.Static<typeof Options> {
+interface Options extends r.Static<typeof Options> {
   readonly order: string[] | OrderFunction;
 }
 
-export default {
+export const packageOrder = {
   check: function expectPackageOrder(context: Context, { order }: Options) {
     const packageJson = context.getPackageJson();
     const packagePath = context.getPackageJsonPath();

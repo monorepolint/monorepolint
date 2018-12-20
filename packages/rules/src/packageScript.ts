@@ -19,7 +19,7 @@ export type Options = r.Static<typeof Options>;
 
 export const MSG_NO_SCRIPTS_BLOCK = "No scripts block in package.json";
 
-export default {
+export const packageScript = {
   check: function expectPackageScript(context: Context, options: Options) {
     const packageJson = context.getPackageJson();
     if (packageJson.scripts === undefined) {

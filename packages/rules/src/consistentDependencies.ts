@@ -10,10 +10,10 @@ import { writeJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 import * as r from "runtypes";
 
-export const Options = r.Undefined;
-export type Options = r.Static<typeof Options>;
+const Options = r.Undefined;
+type Options = r.Static<typeof Options>;
 
-export default {
+export const consistentDependencies = {
   check: function expectConsistentDependencies(context: Context) {
     checkDeps(context, "dependencies");
     checkDeps(context, "devDependencies");

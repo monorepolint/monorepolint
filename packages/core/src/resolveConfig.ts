@@ -5,8 +5,11 @@
  *
  */
 
+import camelCase from "camelcase";
 import * as path from "path";
 import { ValidationError } from "runtypes";
+import { __importDefault } from "tslib";
+
 import { Config, Options, ResolvedConfig, ResolvedRule, RuleEntry, RuleModule } from "./Config";
 
 export function resolveConfig(config: Config, options: Options, workspaceRootDir: string): ResolvedConfig {
@@ -63,18 +66,30 @@ function resolveRule(type: string, workspaceRootDir: string, ruleEntry: RuleEntr
 }
 
 function loadRuleModule(type: string, workspaceRootDir: string) {
-  const q = type.startsWith(":")
-    ? "@monorepolint/rule-" + type.substring(1)
-    : type.startsWith(".")
-    ? path.resolve(workspaceRootDir, type)
-    : type;
+  let mod: any;
+  if (type.startsWith(":")) {
+    // if the type starts with `:`, its a built in rule so should be imported from `@monorepolint/rules`
+    const ruleVariable = camelCase(type.slice(1));
+    // tslint:disable-next-line:no-implicit-dependencies
+    mod = require("@monorepolint/rules")[ruleVariable];
+  } else if (type.startsWith(".")) {
+    // if the type starts with `.` then the rule should be a default export from a local file
+    mod = __importDefault(require(path.resolve(workspaceRootDir, type))).default;
+  } else if (type.includes(":")) {
+    // if the type includes `:`, then we should import a const rather than default
+    const [packageName, ruleVariable] = type.split(":");
+    mod = require(packageName)[camelCase(ruleVariable)];
+  } else {
+    // otherwise just import the default
+    mod = __importDefault(require(type)).default;
+  }
 
   try {
-    return RuleModule.check(require(q).default) as RuleModule;
+    return RuleModule.check(mod) as RuleModule;
   } catch (err) {
     if (err instanceof ValidationError) {
       // tslint:disable-next-line:no-console
-      console.error(`Failed load rule '${type}' (${q}):`, err.message, err);
+      console.error(`Failed load rule '${type}':`, err.message, err);
     }
     return process.exit(10);
   }

@@ -1,11 +1,11 @@
 {
-  "name": "@monorepolint/rule-standard-tsconfig",
+  "name": "@monorepolint/rules",
   "version": "0.2.1",
-  "author": "Eric Anderson",
+  "author": "Mac Lockard",
   "url": "https://github.com/monorepolint/monorepolint",
   "license": "MIT",
-  "main": "lib/standardTsconfig.js",
-  "typings": "lib/standardTsconfig.d.ts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rm -rf build lib node_modules *.tgz",
     "compile:typescript": "../../node_modules/.bin/tsc",

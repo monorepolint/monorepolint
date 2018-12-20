@@ -15,13 +15,7 @@
   "dependencies": {
     "@monorepolint/cli": "^0.2.1",
     "@monorepolint/core": "^0.2.1",
-    "@monorepolint/rule-alphabetical-dependencies": "^0.2.1",
-    "@monorepolint/rule-banned-dependencies": "^0.2.1",
-    "@monorepolint/rule-consistent-dependencies": "^0.2.1",
-    "@monorepolint/rule-file-contents": "^0.2.1",
-    "@monorepolint/rule-package-order": "^0.2.1",
-    "@monorepolint/rule-package-script": "^0.2.1",
-    "@monorepolint/rule-standard-tsconfig": "^0.2.1",
+    "@monorepolint/rules": "^0.2.1",
     "@monorepolint/utils": "^0.2.1"
   },
   "publishConfig": {
