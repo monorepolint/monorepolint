@@ -20,7 +20,7 @@ jest.mock("fs", () => ({
 }));
 
 import { Failure, PackageContext } from "@monorepolint/core";
-import packageScript from "../packageScript";
+import { packageScript } from "../packageScript";
 
 const PACKAGE_WITHOUT_SCRIPTS =
   JSON.stringify(

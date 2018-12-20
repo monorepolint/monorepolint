@@ -12,25 +12,7 @@
       "path": "../core"
     },
     {
-      "path": "../rule-alphabetical-dependencies"
-    },
-    {
-      "path": "../rule-banned-dependencies"
-    },
-    {
-      "path": "../rule-consistent-dependencies"
-    },
-    {
-      "path": "../rule-file-contents"
-    },
-    {
-      "path": "../rule-package-order"
-    },
-    {
-      "path": "../rule-package-script"
-    },
-    {
-      "path": "../rule-standard-tsconfig"
+      "path": "../rules"
     },
     {
       "path": "../utils"

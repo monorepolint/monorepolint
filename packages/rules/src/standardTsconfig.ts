@@ -12,7 +12,7 @@ import diff from "jest-diff";
 import * as path from "path";
 import * as r from "runtypes";
 
-export const Options = r
+const Options = r
   .Partial({
     generator: r.Function,
     template: r.Record({}).Or(r.String),
@@ -35,7 +35,7 @@ export const Options = r
 
 export type Options = r.Static<typeof Options>;
 
-export default {
+export const standardTsconfig = {
   check: function expectStandardTsconfig(context: Context, opts: Options) {
     const fullPath = path.resolve(context.packageDir, "tsconfig.json");
     const generator = getGenerator(context, opts);

@@ -10,12 +10,15 @@ import { writeJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 import * as r from "runtypes";
 
-export const Options = r.Record({
+const Options = r.Record({
   bannedDependencies: r.Array(r.String),
 });
-export type Options = r.Static<typeof Options>;
-const ruleModule: RuleModule<typeof Options> = {
+
+type Options = r.Static<typeof Options>;
+
+export const bannedDependencies: RuleModule<typeof Options> = {
   check: function expectAlphabeticalDependencies(context: Context, opts: Options) {
+    // tslint:disable-next-line:no-shadowed-variable
     const { bannedDependencies } = opts;
 
     checkBanned(context, bannedDependencies, "dependencies");
@@ -24,10 +27,10 @@ const ruleModule: RuleModule<typeof Options> = {
   },
   optionsRuntype: Options,
 };
-export default ruleModule;
 
 function checkBanned(
   context: Context,
+  // tslint:disable-next-line:no-shadowed-variable
   bannedDependencies: ReadonlyArray<string>,
   block: "dependencies" | "devDependencies" | "peerDependencies"
 ) {

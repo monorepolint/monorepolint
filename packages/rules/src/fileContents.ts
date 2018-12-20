@@ -35,9 +35,9 @@ const Options = r.Union(
   })
 );
 
-export type Options = r.Static<typeof Options>;
+type Options = r.Static<typeof Options>;
 
-export default {
+export const fileContents = {
   check: function expectFileContents(context: Context, opts: Options) {
     const fullPath = path.join(context.packageDir, opts.file);
     const generator = getGenerator(context, opts);

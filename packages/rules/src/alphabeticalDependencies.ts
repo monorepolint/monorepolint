@@ -12,7 +12,7 @@ import * as r from "runtypes";
 
 const Options = r.Undefined;
 
-export default {
+export const alphabeticalDependencies = {
   check: function expectAlphabeticalDependencies(context: Context) {
     checkAlpha(context, "dependencies");
     checkAlpha(context, "devDependencies");

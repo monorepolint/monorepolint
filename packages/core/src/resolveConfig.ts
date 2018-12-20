@@ -5,8 +5,10 @@
  *
  */
 
+import camelCase from "camelcase";
 import * as path from "path";
 import { ValidationError } from "runtypes";
+
 import { Config, Options, ResolvedConfig, ResolvedRule, RuleEntry, RuleModule } from "./Config";
 
 export function resolveConfig(config: Config, options: Options, workspaceRootDir: string): ResolvedConfig {
@@ -63,18 +65,21 @@ function resolveRule(type: string, workspaceRootDir: string, ruleEntry: RuleEntr
 }
 
 function loadRuleModule(type: string, workspaceRootDir: string) {
-  const q = type.startsWith(":")
-    ? "@monorepolint/rule-" + type.substring(1)
+  const mod = type.startsWith(":")
+    ? // tslint:disable-next-line:no-implicit-dependencies
+      require("@monorepolint/rules")[camelCase(type.slice(1))]
     : type.startsWith(".")
-    ? path.resolve(workspaceRootDir, type)
-    : type;
+    ? require(path.resolve(workspaceRootDir, type))
+    : type.includes(":")
+    ? require(type.split(":")[0])[camelCase(type.split(":")[1])]
+    : require(type);
 
   try {
-    return RuleModule.check(require(q).default) as RuleModule;
+    return RuleModule.check(mod) as RuleModule;
   } catch (err) {
     if (err instanceof ValidationError) {
       // tslint:disable-next-line:no-console
-      console.error(`Failed load rule '${type}' (${q}):`, err.message, err);
+      console.error(`Failed load rule '${type}':`, err.message, err);
     }
     return process.exit(10);
   }

@@ -612,6 +612,11 @@
   dependencies:
     any-observable "^0.3.0"
 
+"@types/camelcase@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@types/camelcase/-/camelcase-4.1.0.tgz#e054f7986f31658d49936261b5cd4588ef29d1ee"
+  integrity sha512-nsaprOtNLvUrLyFX5+mRpE9h2Q0d5YzQRr+Lav3fxdYtc1/E/U7G+Ld861NWBDDtWY3MnwKoUOhCrE1nrVxUQA==
+
 "@types/events@*":
   version "1.2.0"
   resolved "http://registry.npmjs.org/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
@@ -1324,7 +1329,7 @@ camelcase@^4.1.0:
 
 camelcase@^5.0.0:
   version "5.0.0"
-  resolved "https://registry.npmjs.org/camelcase/-/camelcase-5.0.0.tgz#03295527d58bd3cd4aa75363f35b2e8d97be2f42"
+  resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-5.0.0.tgz#03295527d58bd3cd4aa75363f35b2e8d97be2f42"
   integrity sha512-faqwZqnWxbxn+F1d399ygeamQNy3lPp/H9H6rNrqYh4FSVCtcY+3cub1MxA8o9mDd55mM8Aghuu/kuyYA6VTsA==
 
 capture-exit@^1.2.0:

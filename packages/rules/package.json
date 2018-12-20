@@ -1,0 +1,32 @@
+{
+    "name": "@monorepolint/rules",
+    "version": "0.2.1",
+    "author": "Mac Lockard",
+    "url": "https://github.com/monorepolint/monorepolint",
+    "license": "MIT",
+    "main": "lib/index.js",
+    "typings": "lib/index.d.ts",
+    "scripts": {
+      "clean": "rm -rf build lib",
+      "compile:typescript": "../../node_modules/.bin/tsc",
+      "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
+      "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
+      "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
+      "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
+      "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
+    },
+    "dependencies": {
+      "@monorepolint/core": "^0.2.1",
+      "@monorepolint/utils": "^0.2.1",
+      "jest-diff": "^23.6.0",
+      "runtypes": "^3.1.2"
+    },
+    "devDependencies": {
+      "@types/jest-diff": "^20.0.0"
+    },
+    "publishConfig": {
+      "access": "public"
+    },
+    "gitHead": "74320e31cfce7555aece7a98d71d01d2f329be0f"
+  }
+  
