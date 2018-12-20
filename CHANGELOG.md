@@ -1,25 +1,38 @@
 # Change Log
 
-## [v0.1.9](https://github.com/monorepolint/monorepolint/tree/v0.1.9) (2018-12-19)
+## [Unreleased](https://github.com/monorepolint/monorepolint/tree/HEAD)
 
+[Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.2.1...HEAD)
+
+**Merged pull requests:**
+
+- Maclockard/reorg [\#26](https://github.com/monorepolint/monorepolint/pull/26) ([maclockard](https://github.com/maclockard))
+
+## [v0.2.1](https://github.com/monorepolint/monorepolint/tree/v0.2.1) (2018-12-19)
+[Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.1.9...v0.2.1)
+
+**Implemented enhancements:**
+
+- Implement new config format [\#13](https://github.com/monorepolint/monorepolint/issues/13)
+- Adds back multiplicity in the form of an array as a the value for the package key [\#24](https://github.com/monorepolint/monorepolint/pull/24) ([ericanderson](https://github.com/ericanderson))
+- Adds :ban-dependencies rule [\#17](https://github.com/monorepolint/monorepolint/pull/17) ([maclockard](https://github.com/maclockard))
+- Maclockard/enforce consistent deps [\#14](https://github.com/monorepolint/monorepolint/pull/14) ([maclockard](https://github.com/maclockard))
+
+**Merged pull requests:**
+
+- Renames `@monorepo-lint/all` to `monorepolint` [\#21](https://github.com/monorepolint/monorepolint/pull/21) ([ericanderson](https://github.com/ericanderson))
+- Introduces new format for config and rule modules [\#18](https://github.com/monorepolint/monorepolint/pull/18) ([ericanderson](https://github.com/ericanderson))
+- Add Greenkeeper badge 🌴 [\#15](https://github.com/monorepolint/monorepolint/pull/15) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
+## [v0.1.9](https://github.com/monorepolint/monorepolint/tree/v0.1.9) (2018-12-19)
 [Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.1.6...v0.1.9)
 
 **Implemented enhancements:**
 
-- Adds @monorepolint/expect-alphabetical-dependencies [\#3](https://github.com/monorepolint/monorepolint/pull/3) ([maclockard](https://github.com/maclockard))
-- Implements @monorepolint/expect-package-order [\#1](https://github.com/monorepolint/monorepolint/pull/1) ([maclockard](https://github.com/maclockard))
-
-**Merged pull requests:**
-
-- Starts filling out README.md [\#6](https://github.com/monorepolint/monorepolint/pull/6) ([ericanderson](https://github.com/ericanderson))
-- Adds circle config [\#5](https://github.com/monorepolint/monorepolint/pull/5) ([ericanderson](https://github.com/ericanderson))
-- Updates copyright [\#4](https://github.com/monorepolint/monorepolint/pull/4) ([ericanderson](https://github.com/ericanderson))
-- Adds prepublishOnly script and related [\#2](https://github.com/monorepolint/monorepolint/pull/2) ([ericanderson](https://github.com/ericanderson))
+- Adds @monorepo-lint/expect-alphabetical-dependencies [\#3](https://github.com/monorepolint/monorepolint/pull/3) ([maclockard](https://github.com/maclockard))
+- Implements @monorepo-lint/expect-package-order [\#1](https://github.com/monorepolint/monorepolint/pull/1) ([maclockard](https://github.com/maclockard))
 
 ## [v0.1.6](https://github.com/monorepolint/monorepolint/tree/v0.1.6) (2018-12-18)
-
-[Full Changelog](https://github.com/monorepolint/monorepolint/compare/8661ea28e4cc53483b489b0ea6dad728dbb52c9c...v0.1.6)
-
 **Implemented enhancements:**
 
 - Implement expect-standard-tsconfig [\#10](https://github.com/monorepolint/monorepolint/issues/10)

@@ -1,5 +1,6 @@
 issues-wo-labels=false
 release-branch=master
-pr-wo-labels=true
+pr-wo-labels=false
 user=monorepolint
 project=monorepolint
+exclude-labels=chore,exclude-from-changelog
