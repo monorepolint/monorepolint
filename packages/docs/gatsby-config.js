@@ -25,7 +25,6 @@ module.exports = {
               pathToConfigModule: `src/utils/typography.js`,
             },
         },
-        `gatsby-plugin-catch-links`,
         {
             resolve: `gatsby-source-filesystem`,
             options: {
@@ -38,11 +37,10 @@ module.exports = {
             resolve: `gatsby-source-filesystem`,
             options: {
               name: `rules`,
-            //   path: `${__dirname}/../`,
-              path: `${__dirname}/../`,
-              ignore: [`**/!(rule.md)`],
+              path: `${__dirname}/../rules/lib`,
             },
         },
+        `gatsby-transformer-documentationjs`,
         {
             resolve: `gatsby-transformer-remark`,
             options: {

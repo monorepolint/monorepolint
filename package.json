@@ -28,6 +28,7 @@
     "compile": "lerna run compile:typescript",
     "compile:fast": "cd packages/all; tsc --build",
     "compile:watch": "cd packages/all; tsc --build --watch",
+    "debug": "node --inspect-brk ./node_modules/.bin/mrl check",
     "fix:lint:monorepolint": "monorepolint fix",
     "fix:lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' --write",
     "fix:lint:typescript": "lerna run --no-bail lint:typescript -- --fix",
