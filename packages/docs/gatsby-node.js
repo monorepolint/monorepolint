@@ -41,13 +41,14 @@ exports.createPages = async ({ actions, graphql }) => {
 
   const allRules = await graphql(`
     {
-      allMarkdownRemark(
-        filter: { frontmatter: { rule: { ne: null } } }
-      ) {
+      allDocumentationJs {
         edges {
           node {
-            frontmatter {
-              rule
+            name
+            description {
+              childMarkdownRemark {
+                html
+              }
             }
           }
         }
@@ -62,15 +63,16 @@ exports.createPages = async ({ actions, graphql }) => {
   }
 
   allRules.data.allMarkdownRemark.edges.forEach(edge => {
-    const { node: { frontmatter } } = edge;
-    console.log(frontmatter);
+    console.log(edge);
+    // const { node: { frontmatter } } = edge;
+    // console.log(frontmatter);
 
-    createPage({
-      path: `/rules/${frontmatter.rule}`,
-      component: ruleTemplate,
-      context: {
-        rule: frontmatter.rule,
-      }
-    })
+    // createPage({
+    //   path: `/rules/${frontmatter.rule}`,
+    //   component: ruleTemplate,
+    //   context: {
+    //     rule: frontmatter.rule,
+    //   }
+    // })
   })
 }

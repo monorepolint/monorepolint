@@ -29,7 +29,8 @@ module.exports = {
             "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
           test: "../../node_modules/.bin/jest --colors --passWithNoTests"
         }
-      }
+      },
+      excludePackages: ["@monorepolint/docs"],
     },
     ":package-order": {
       options: {
@@ -55,13 +56,19 @@ module.exports = {
           "publishConfig",
           "gitHead"
         ]
-      }
+      },
+      includeWorkspaceRoot: true,
     },
-    ":alphabetical-dependencies": {},
-    ":consistent-dependencies": {},
+    ":alphabetical-dependencies": {
+      includeWorkspaceRoot: true,
+    },
+    ":consistent-dependencies": {
+      includeWorkspaceRoot: true,
+    },
     ":banned-dependencies": {
       options: {
-        bannedDependencies: ["lodash"]
+        bannedDependencies: ["lodash"],
+        includeWorkspaceRoot: true,
       }
     }
   }
