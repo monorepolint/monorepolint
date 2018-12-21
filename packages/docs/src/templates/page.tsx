@@ -12,7 +12,7 @@
  *
  */
 import { graphql } from "gatsby";
-import React from "react";
+import React, { memo } from "react";
 import Helmet from "react-helmet";
 
 export interface Props {
@@ -26,7 +26,7 @@ export interface Props {
   };
 }
 
-export default function(props: Props) {
+export default memo(function(props: Props) {
   const {
     data: {
       markdownRemark: { frontmatter, html },
@@ -34,19 +34,20 @@ export default function(props: Props) {
   } = props;
 
   return (
-    <div className="blog-post-container">
-      <Helmet title={`monorepo-lint - ${frontmatter.title}`} />
+    <div>
+      <Helmet title={`monorepolint | ${frontmatter.title}`} />
       <div className="blog-post">
         <h1>{frontmatter.title}</h1>
         <div className="blog-post-content" dangerouslySetInnerHTML={{ __html: html }} />
       </div>
     </div>
   );
-}
+});
 
 export const query = graphql`
   query($path: String!) {
     markdownRemark(frontmatter: { path: { eq: $path } }) {
+      tableOfContents(pathToSlugField: "frontmatter.path")
       html
       frontmatter {
         path

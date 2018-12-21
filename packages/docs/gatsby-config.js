@@ -12,7 +12,6 @@ module.exports = {
                 allExtensions:true,
             },
         },
-        `gatsby-plugin-react-helmet`,
         { 
             resolve: `gatsby-plugin-nprogress`,
             options: {
@@ -36,8 +35,16 @@ module.exports = {
         {
             resolve: `gatsby-source-filesystem`,
             options: {
-              name: `rules`,
-              path: `${__dirname}/../rules/lib`,
+              name: `pages`,
+              path: `${__dirname}/../rules/docs`,
+              ignore: [`!(*.md)`],
+            },
+        },
+        {
+            resolve: `gatsby-source-filesystem`,
+            options: {
+              name: `api`,
+              path: `${__dirname}/../core/lib`,
             },
         },
         `gatsby-transformer-documentationjs`,
@@ -45,11 +52,13 @@ module.exports = {
             resolve: `gatsby-transformer-remark`,
             options: {
                 plugins: [
-                    `gatsby-remark-copy-linked-files`,
                     `gatsby-remark-autolink-headers`,
+                    `gatsby-remark-copy-linked-files`,
                     `gatsby-remark-prismjs`,
                 ]
             },
         },
+        `gatsby-plugin-react-helmet`,
+        `gatsby-plugin-catch-links`,
     ],
 }

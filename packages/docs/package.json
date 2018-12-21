@@ -13,8 +13,7 @@
     "test:watch": "test --watch"
   },
   "dependencies": {
-    "@blueprintjs/core": "^3.10.0",
-    "@blueprintjs/icons": "^3.4.0",
+    "decamelize": "^2.0.0",
     "gatsby": "^2.0.72",
     "gatsby-plugin-catch-links": "^2.0.9",
     "gatsby-plugin-nprogress": "^2.0.7",
@@ -36,6 +35,7 @@
     "typography-theme-github": "^0.16.18"
   },
   "devDependencies": {
+    "@types/decamelize": "^1.2.0",
     "@types/react": "^16.7.17",
     "@types/react-dom": "^16.0.11",
     "@types/react-helmet": "^5.0.7",

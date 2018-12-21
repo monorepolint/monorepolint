@@ -12,9 +12,6 @@ import * as r from "runtypes";
 
 const Options = r.Undefined;
 
-/**
- * hello world!
- */
 export const alphabeticalDependencies = {
   check: function expectAlphabeticalDependencies(context: Context) {
     checkAlpha(context, "dependencies");
