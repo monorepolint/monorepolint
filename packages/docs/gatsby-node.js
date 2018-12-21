@@ -1,5 +1,17 @@
 const path = require("path")
 
+// exports.onCreateNode = ({ node, getNode, actions }) => {
+//   const { createNodeField } = actions;
+//   if (node.internal.type === `MarkdownRemark`) {
+//     const slug = createFilePath({ node, getNode, basePath: `pages` });
+//     createNodeField({   
+//       node,  
+//       name: `slug`,   
+//       value: slug,
+//     })
+//   }
+// }
+
 exports.createPages = async ({ actions, graphql }) => {
   const { createPage } = actions;
 
@@ -62,7 +74,7 @@ exports.createPages = async ({ actions, graphql }) => {
     throw Error(allRules.errors);
   }
 
-  allRules.data.allMarkdownRemark.edges.forEach(edge => {
+  allRules.data.allDocumentationJs.edges.forEach(edge => {
     console.log(edge);
     // const { node: { frontmatter } } = edge;
     // console.log(frontmatter);
