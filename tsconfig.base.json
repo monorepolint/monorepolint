@@ -9,6 +9,7 @@
     "composite": true,
     "importHelpers": true,
     "strict": true,
+    "jsx": "react",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,

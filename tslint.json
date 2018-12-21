@@ -15,6 +15,7 @@
 
     // Disable recommended rules
     "interface-name": false,
+    "only-arrow-functions": false,
     "object-literal-sort-keys": false,
 
     // prettier handles these
