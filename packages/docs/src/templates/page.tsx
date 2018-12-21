@@ -1,4 +1,11 @@
 /*!
+ * Copyright (c) 2018 monorepolint (http://monorepolint.com). All Right Reserved.
+ *
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ *
+ */
+
+/*!
  * Copyright (c) 2018 monorepo-lint (http://monorepo-lint.com). All Right Reserved.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
@@ -22,8 +29,8 @@ export interface Props {
 export default function(props: Props) {
   const {
     data: {
-      markdownRemark: { frontmatter, html }
-    }
+      markdownRemark: { frontmatter, html },
+    },
   } = props;
 
   return (
@@ -31,10 +38,7 @@ export default function(props: Props) {
       <Helmet title={`monorepo-lint - ${frontmatter.title}`} />
       <div className="blog-post">
         <h1>{frontmatter.title}</h1>
-        <div
-          className="blog-post-content"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+        <div className="blog-post-content" dangerouslySetInnerHTML={{ __html: html }} />
       </div>
     </div>
   );

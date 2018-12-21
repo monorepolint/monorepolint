@@ -5,9 +5,5 @@
     "rootDir": "./src",
     "skipLibCheck": true
   },
-  "references": [
-    {
-      "path": "../rules"
-    }
-  ]
+  "references": []
 }
