@@ -16,8 +16,14 @@
     background-color: #F9F9F9;
 }
 
+.scrollable {
+    overflow: auto;
+}
+
 .content {
     flex: 1 1 auto;
+
+    margin: 20px;
 
     display: flex;
     flex-direction: column;
