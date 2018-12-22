@@ -21,7 +21,9 @@ export function PageWrapper(props: Props) {
       <Helmet titleTemplate="%s | monorepolint" />
       <div className={Classes.wrapper}>
         <Header />
-        <div className={Classes.content}>{props.children}</div>
+        <div className={Classes.scrollable}>
+          <div className={Classes.content}>{props.children}</div>
+        </div>
       </div>
     </>
   );
