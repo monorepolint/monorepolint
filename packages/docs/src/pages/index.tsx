@@ -5,38 +5,56 @@
  *
  */
 
-import { Link } from "gatsby";
+import { graphql, Link } from "gatsby";
 import React, { memo } from "react";
 import Helmet from "react-helmet";
 
-import { PageWrapper } from "../components";
-import { SOURCE_URL } from "../utils/constants";
+import { ContentWrapper, PageWrapper } from "../components";
+import { API_URL, CLI_URL, RULES_URL, SOURCE_URL } from "../utils/constants";
+import Classes from "./index.module.css";
 
-export default memo(function() {
+export interface Props {
+  data: {
+    markdownRemark: {
+      html: any;
+    };
+  };
+}
+
+export default memo(function(props: Props) {
   return (
     <>
       <Helmet title={"Home"} />
       <PageWrapper>
-        <h1>monorepolint</h1>
+        <h1 className={Classes.title}>monorepolint</h1>
         <p>Managing large monorepos is hard. This makes it easier to standardize them.</p>
-        <ul>
-          <li>
-            <Link to={"./quick-start"}>Quick Start</Link>
-          </li>
-          <li>
-            <Link to={"./cli"}>cli</Link>
-          </li>
-          <li>
-            <Link to={"./api"}>API</Link>
-          </li>
-          <li>
-            <Link to={"./rules"}>Rules</Link>
-          </li>
-          <li>
-            <a href={SOURCE_URL}>Github</a>
-          </li>
-        </ul>
+        <div className={Classes.links}>
+          <Link className={Classes.link} to={CLI_URL}>
+            CLI
+          </Link>
+          <Link className={Classes.link} to={RULES_URL}>
+            Rules
+          </Link>
+          <Link className={Classes.link} to={API_URL}>
+            API
+          </Link>
+          <a className={Classes.link} href={SOURCE_URL}>
+            Github
+          </a>
+        </div>
+        <hr className={Classes.divider} />
+        <ContentWrapper>
+          <div dangerouslySetInnerHTML={{ __html: props.data.markdownRemark.html }} />
+        </ContentWrapper>
       </PageWrapper>
     </>
   );
 });
+
+export const query = graphql`
+  query($path: String!) {
+    markdownRemark(frontmatter: { path: { eq: $path } }) {
+      html
+    }
+  }
+`;

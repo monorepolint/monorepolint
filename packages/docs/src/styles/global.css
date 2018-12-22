@@ -9,3 +9,11 @@ body {
     min-height: 100%;
     overflow: auto;
 }
+
+a {
+    color: #2458B3;
+}
+
+.language-javascript, .language-text, .language-json {
+    border-radius: 10px;
+}

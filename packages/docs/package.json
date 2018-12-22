@@ -1,6 +1,6 @@
 {
   "name": "@monorepolint/docs",
-  "version": "0.1.6",
+  "version": "0.2.1",
   "author": "Mac Lockard",
   "url": "https://github.com/monorepo-lint/monorepo-lint",
   "license": "MIT",
@@ -13,6 +13,9 @@
     "test:watch": "test --watch"
   },
   "dependencies": {
+    "@babel/core": "^7.2.2",
+    "@monorepolint/core": "^0.2.1",
+    "@monorepolint/rules": "^0.2.1",
     "decamelize": "^2.0.0",
     "gatsby": "^2.0.72",
     "gatsby-plugin-catch-links": "^2.0.9",
@@ -30,6 +33,7 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-helmet": "^5.2.0",
+    "react-icons": "^3.2.2",
     "react-typography": "^0.16.18",
     "typography": "^0.16.18",
     "typography-theme-github": "^0.16.18"
@@ -39,6 +43,7 @@
     "@types/react": "^16.7.17",
     "@types/react-dom": "^16.0.11",
     "@types/react-helmet": "^5.0.7",
+    "@types/react-icons": "^2.2.6",
     "@types/typography": "^0.16.0",
     "gatsby-cli": "^2.4.7"
   },

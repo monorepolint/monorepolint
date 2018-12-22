@@ -10,6 +10,7 @@ import { graphql, Link } from "gatsby";
 import React from "react";
 import Helmet from "react-helmet";
 
+import { PageWrapper } from "../components";
 import { RULES_SOURCE_URL } from "../utils/constants";
 
 export interface Props {
@@ -54,11 +55,13 @@ export default function(props: Props) {
   });
 
   return (
-    <div>
-      <Helmet title={`monorepolint | Rules`} />
-      <h1>Rules</h1>
-      {apisRendered}
-    </div>
+    <>
+      <Helmet title={`Rules`} />
+      <PageWrapper>
+        <h1>Rules</h1>
+        {apisRendered}
+      </PageWrapper>
+    </>
   );
 }
 

@@ -5,5 +5,4 @@
  *
  */
 
-export { PageWrapper } from "./page-wrapper";
-export { ContentWrapper } from "./content-wrapper";
+declare module "prismjs/components/prism*";

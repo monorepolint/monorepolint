@@ -8,6 +8,7 @@
 import React, { ReactNode } from "react";
 import Helmet from "react-helmet";
 
+import { Header } from "../header";
 import Classes from "./PageWrapper.module.css";
 
 export interface Props {
@@ -19,7 +20,7 @@ export function PageWrapper(props: Props) {
     <>
       <Helmet titleTemplate="%s | monorepolint" />
       <div className={Classes.wrapper}>
-        <div>----------------</div>
+        <Header />
         <div className={Classes.content}>{props.children}</div>
       </div>
     </>

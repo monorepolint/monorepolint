@@ -8,6 +8,7 @@
 import { graphql } from "gatsby";
 import React from "react";
 import Helmet from "react-helmet";
+import { PageWrapper } from "../components";
 
 export interface Props {
   data: {
@@ -39,11 +40,13 @@ export default function(props: Props) {
   });
 
   return (
-    <div>
-      <Helmet title={`monorepolint | API`} />
-      <h1>API</h1>
-      {apisRendered}
-    </div>
+    <>
+      <Helmet title="API" />
+      <PageWrapper>
+        <h1>API</h1>
+        {apisRendered}
+      </PageWrapper>
+    </>
   );
 }
 
