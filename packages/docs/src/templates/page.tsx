@@ -5,19 +5,15 @@
  *
  */
 
-/*!
- * Copyright (c) 2018 monorepo-lint (http://monorepo-lint.com). All Right Reserved.
- *
- * Licensed under the MIT license. See LICENSE file in the project root for details.
- *
- */
 import { graphql } from "gatsby";
 import React, { memo } from "react";
 import Helmet from "react-helmet";
+import { PageWrapper } from "../components";
 
 export interface Props {
   data: {
     markdownRemark: {
+      tableOfContents: any;
       html: any;
       frontmatter: {
         title: string;
@@ -34,13 +30,13 @@ export default memo(function(props: Props) {
   } = props;
 
   return (
-    <div>
-      <Helmet title={`monorepolint | ${frontmatter.title}`} />
-      <div className="blog-post">
+    <>
+      <Helmet title={frontmatter.title} />
+      <PageWrapper>
         <h1>{frontmatter.title}</h1>
-        <div className="blog-post-content" dangerouslySetInnerHTML={{ __html: html }} />
-      </div>
-    </div>
+        <div dangerouslySetInnerHTML={{ __html: html }} />
+      </PageWrapper>
+    </>
   );
 });
 

@@ -32,6 +32,11 @@ exports.createPages = async ({ actions, graphql }) => {
   allPages.data.allMarkdownRemark.edges.forEach(edge => {
     const { node: { frontmatter } } = edge;
 
+    // special case the home page
+    if(frontmatter.path === "/") {
+      return;
+    }
+
     createPage({
       path: frontmatter.path,
       component: pageTemplate,

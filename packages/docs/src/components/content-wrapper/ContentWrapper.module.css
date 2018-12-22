@@ -1,0 +1,8 @@
+.wrapper {
+    width: 70%;
+}
+
+.content {
+    align-self: flex-start;
+    max-width: 700px;
+}

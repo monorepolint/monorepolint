@@ -10,3 +10,8 @@ export const SOURCE_URL = "https://github.com/monorepolint/monorepolint";
 export const SOURCE_TREE_URL = `${SOURCE_URL}/tree/master`;
 
 export const RULES_SOURCE_URL = `${SOURCE_TREE_URL}/packages/rules`;
+
+export const HOME_URL = "/";
+export const CLI_URL = "/cli";
+export const RULES_URL = "/rules";
+export const API_URL = "/api";
