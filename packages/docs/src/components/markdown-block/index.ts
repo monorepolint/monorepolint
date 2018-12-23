@@ -5,5 +5,4 @@
  *
  */
 
-export { PageWrapper } from "./page-wrapper";
-export { MarkdownBlock } from "./markdown-block";
+export { MarkdownBlock } from "./MarkdownBlock";

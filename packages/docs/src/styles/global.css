@@ -11,7 +11,13 @@ body {
 }
 
 a {
-    color: #2458B3;
+    /* color: #1F4B99; */
+    color: #6B9FA1;
+}
+
+h1 {
+    /* color: #6B9FA1; */
+    color: #1F4B99;
 }
 
 .language-javascript, .language-text, .language-json {

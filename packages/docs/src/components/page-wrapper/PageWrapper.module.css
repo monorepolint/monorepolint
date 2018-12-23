@@ -12,18 +12,17 @@
 
     display: flex;
     flex-direction: column;
-
     background-color: #F9F9F9;
 }
 
 .scrollable {
-    overflow: auto;
+    overflow-y: scroll;
 }
 
 .content {
     flex: 1 1 auto;
 
-    margin: 20px;
+    margin: 20px 50px 50px 50px;
 
     display: flex;
     flex-direction: column;

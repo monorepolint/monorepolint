@@ -8,6 +8,7 @@
 import React, { ReactNode } from "react";
 import Helmet from "react-helmet";
 
+import { Footer } from "../footer";
 import { Header } from "../header";
 import Classes from "./PageWrapper.module.css";
 
@@ -23,6 +24,7 @@ export function PageWrapper(props: Props) {
         <Header />
         <div className={Classes.scrollable}>
           <div className={Classes.content}>{props.children}</div>
+          <Footer />
         </div>
       </div>
     </>

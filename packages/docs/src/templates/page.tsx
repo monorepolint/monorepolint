@@ -8,7 +8,7 @@
 import { graphql } from "gatsby";
 import React, { memo } from "react";
 import Helmet from "react-helmet";
-import { PageWrapper } from "../components";
+import { MarkdownBlock, PageWrapper } from "../components";
 
 export interface Props {
   data: {
@@ -25,7 +25,7 @@ export interface Props {
 export default memo(function(props: Props) {
   const {
     data: {
-      markdownRemark: { frontmatter, html },
+      markdownRemark: { frontmatter, html, tableOfContents },
     },
   } = props;
 
@@ -33,8 +33,7 @@ export default memo(function(props: Props) {
     <>
       <Helmet title={frontmatter.title} />
       <PageWrapper>
-        <h1>{frontmatter.title}</h1>
-        <div dangerouslySetInnerHTML={{ __html: html }} />
+        <MarkdownBlock title={frontmatter.title} markdown={html} tableOfContents={tableOfContents} />
       </PageWrapper>
     </>
   );

@@ -3,8 +3,6 @@ path: "/"
 title: "Overview"
 ---
 
-<!-- # Get Started -->
-
 Install using yarn or your favorite package manager.
 
 ```
