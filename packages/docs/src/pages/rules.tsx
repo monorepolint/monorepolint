@@ -5,13 +5,13 @@
  *
  */
 
-import decamelize from "decamelize";
-import { graphql, Link } from "gatsby";
+// import decamelize from "decamelize";
+import { graphql } from "gatsby";
 import React from "react";
-import Helmet from "react-helmet";
+// import Helmet from "react-helmet";
 
-import { PageWrapper } from "../components";
-import { RULES_SOURCE_URL } from "../utils/constants";
+// import { PageWrapper, MarkdownWrapper } from "../components";
+// import { RULES_SOURCE_URL } from "../utils/constants";
 
 export interface Props {
   data: {
@@ -29,40 +29,43 @@ export interface Rule {
 }
 
 export default function(props: Props) {
-  const rules = props.data.allMarkdownRemark.edges.map(e => e.node);
+  // const rules = props.data.allMarkdownRemark.edges.map(e => e.node);
 
-  const apisRendered = rules.map(a => {
-    const path = a.frontmatter.rule;
+  // const apisRendered = rules.map(a => {
+  //   const path = a.frontmatter.rule;
 
-    const name = decamelize(
-      path
-        .split("/")
-        .pop()!
-        .split(".")[0],
-      " "
-    );
-    const url = `${RULES_SOURCE_URL}/${path}`;
+  //   const name = decamelize(
+  //     path
+  //       .split("/")
+  //       .pop()!
+  //       .split(".")[0],
+  //     " "
+  //   );
+  //   const url = `${RULES_SOURCE_URL}/${path}`;
 
-    return (
-      <div>
-        <h2 style={{ textTransform: "capitalize" }}>{name}</h2>
-        <h6>
-          <a href={url}>source</a>
-        </h6>
-        <div dangerouslySetInnerHTML={{ __html: a.html }} />
-      </div>
-    );
-  });
+  //   return (
+  //     <div>
+  //       <h2 style={{ textTransform: "capitalize" }}>{name}</h2>
+  //       <h6>
+  //         <a href={url}>source</a>
+  //       </h6>
+  //       <div dangerouslySetInnerHTML={{ __html: a.html }} />
+  //     </div>
+  //   );
+  // });
 
-  return (
-    <>
-      <Helmet title={`Rules`} />
-      <PageWrapper>
-        <h1>Rules</h1>
-        {apisRendered}
-      </PageWrapper>
-    </>
-  );
+  // return (
+  //   <>
+  //     <Helmet title={`Rules`} />
+  //     <PageWrapper>
+  //       <MarkdownWrapper>
+  //         <h1>Rules</h1>
+  //         {apisRendered}
+  //       </MarkdownWrapper>
+  //     </PageWrapper>
+  //   </>
+  // );
+  return <div />;
 }
 
 export const query = graphql`

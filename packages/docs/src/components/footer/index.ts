@@ -5,4 +5,4 @@
  *
  */
 
-export { ContentWrapper } from "./ContentWrapper";
+export { Footer } from "./Footer";

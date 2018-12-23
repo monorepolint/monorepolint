@@ -9,7 +9,7 @@ import { graphql, Link } from "gatsby";
 import React, { memo } from "react";
 import Helmet from "react-helmet";
 
-import { ContentWrapper, PageWrapper } from "../components";
+import { MarkdownBlock, PageWrapper } from "../components";
 import { API_URL, CLI_URL, RULES_URL, SOURCE_URL } from "../utils/constants";
 import Classes from "./index.module.css";
 
@@ -43,9 +43,7 @@ export default memo(function(props: Props) {
           </a>
         </div>
         <hr className={Classes.divider} />
-        <ContentWrapper>
-          <div dangerouslySetInnerHTML={{ __html: props.data.markdownRemark.html }} />
-        </ContentWrapper>
+        <MarkdownBlock markdown={props.data.markdownRemark.html} />
       </PageWrapper>
     </>
   );

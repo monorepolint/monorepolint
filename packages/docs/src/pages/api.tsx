@@ -7,8 +7,8 @@
 
 import { graphql } from "gatsby";
 import React from "react";
-import Helmet from "react-helmet";
-import { PageWrapper } from "../components";
+// import Helmet from "react-helmet";
+// import { PageWrapper, MarkdownBlock } from "../components";
 
 export interface Props {
   data: {
@@ -28,26 +28,30 @@ export interface Api {
 }
 
 export default function(props: Props) {
-  const apis = props.data.allDocumentationJs.edges.map(e => e.node);
+  // const apis = props.data.allDocumentationJs.edges.map(e => e.node);
 
-  const apisRendered = apis.map(a => {
-    return (
-      <div>
-        <h3>{a.name}</h3>
-        {a.description !== null && <div dangerouslySetInnerHTML={{ __html: a.description.childMarkdownRemark.html }} />}
-      </div>
-    );
-  });
+  // const apisRendered = apis.map(a => {
+  //   return (
+  //     <div>
+  //       <h3>{a.name}</h3>
+  //       {a.description !== null &&
+  // <div dangerouslySetInnerHTML={{ __html: a.description.childMarkdownRemark.html }} />}
+  //     </div>
+  //   );
+  // });
 
-  return (
-    <>
-      <Helmet title="API" />
-      <PageWrapper>
-        <h1>API</h1>
-        {apisRendered}
-      </PageWrapper>
-    </>
-  );
+  // return (
+  //   <>
+  //     <Helmet title="API" />
+  //     <PageWrapper>
+  //       <MarkdownWrapper>
+  //       <h1>API</h1>
+  //       {apisRendered}
+  //       </MarkdownWrapper>
+  //     </PageWrapper>
+  //   </>
+  // );
+  return <div />;
 }
 
 export const query = graphql`
