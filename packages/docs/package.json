@@ -27,7 +27,6 @@
     "gatsby-remark-copy-linked-files": "^2.0.8",
     "gatsby-remark-prismjs": "^3.1.4",
     "gatsby-source-filesystem": "^2.0.12",
-    "gatsby-transformer-documentationjs": "^2.0.2",
     "gatsby-transformer-remark": "^2.1.17",
     "prismjs": "^1.15.0",
     "react": "^16.6.3",

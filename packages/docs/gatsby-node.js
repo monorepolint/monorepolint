@@ -5,7 +5,7 @@
  *
  */
 
-const path = require("path")
+const path = require("path");
 
 exports.createPages = async ({ actions, graphql }) => {
   const { createPage } = actions;
@@ -19,10 +19,8 @@ exports.createPages = async ({ actions, graphql }) => {
       ) {
         edges {
           node {
-            tableOfContents(pathToSlugField: "frontmatter.path")
             frontmatter {
               path
-              title
             }
           }
         }
@@ -40,9 +38,11 @@ exports.createPages = async ({ actions, graphql }) => {
     const { node: { frontmatter } } = edge;
 
     // special case the home page
-    if(frontmatter.path === "/") {
+    if (frontmatter.path === "/") {
       return;
     }
+
+    console.log(frontmatter);
 
     createPage({
       path: frontmatter.path,

@@ -3,7 +3,7 @@ path: "/cli"
 title: "Command Line Interface"
 ---
 
-## Code blocks
+# Code blocks
 
 ```
 $ monorepolint check
@@ -15,7 +15,7 @@ or use the shorter alias
 $ mrl check
 ```
 
-# something else important
+## something else important
 or use the shorter alias
 or use the shorter alias
 or use the shorter alias
@@ -31,7 +31,15 @@ or use the shorter alias
 or use the shorter alias
 or use the shorter alias
 
-## small thing
+### small thing
+or use the shorter alias
+or use the shorter alias
+or use the shorter alias
+or use the shorter alias
+or use the shorter alias
+or use the shorter alias
+
+### smaller thing
 or use the shorter alias
 or use the shorter alias
 or use the shorter alias

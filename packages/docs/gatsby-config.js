@@ -40,22 +40,6 @@ module.exports = {
             },
         },
         {
-            resolve: `gatsby-source-filesystem`,
-            options: {
-              name: `pages`,
-              path: `${__dirname}/../rules/docs`,
-              ignore: [`!(*.md)`],
-            },
-        },
-        {
-            resolve: `gatsby-source-filesystem`,
-            options: {
-              name: `api`,
-              path: `${__dirname}/../core/lib`,
-            },
-        },
-        `gatsby-transformer-documentationjs`,
-        {
             resolve: `gatsby-transformer-remark`,
             options: {
                 plugins: [
