@@ -37,6 +37,7 @@ module.exports = {
           "name",
           "version",
           "author",
+          "contributors",
           "url",
           "license",
           "private",
