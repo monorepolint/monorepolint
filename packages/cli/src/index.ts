@@ -5,10 +5,11 @@
  *
  */
 
-import * as path from "path";
-
 import { check, Config, Options, resolveConfig } from "@monorepolint/core";
 import { findWorkspaceDir } from "@monorepolint/utils";
+import chalk from "chalk";
+import * as fs from "fs";
+import * as path from "path";
 import yargs from "yargs";
 
 export default function run() {
@@ -38,14 +39,27 @@ export default function run() {
     .parse();
 }
 
+function getVersion(): string {
+  return JSON.parse(fs.readFileSync(path.join(__dirname, "../package.json"), "utf-8")).version;
+}
+
 function handleCheck(args: Options) {
+  // tslint:disable:no-console
+  console.log("monorepolint (mrl) v" + getVersion());
+  console.log();
+
   const configPath = path.resolve(process.cwd(), ".monorepolint.config.ts");
   const config = Config.check(require(configPath));
   const resolvedConfig = resolveConfig(config, args, findWorkspaceDir(process.cwd())!);
 
   if (!check(resolvedConfig, process.cwd())) {
-    // tslint:disable-next-line:no-console
-    console.error("Failed");
+    console.error();
+
+    console.error("monorepolint (mrl) failed 1 or more checks");
+    console.error();
+    console.error(`For more information, run ${chalk.blue("mrl check --verbose")}`);
+    console.error(`To automatically fix errors, run ${chalk.blue("mrl check --fix")}`);
+    console.error();
     process.exit(100);
   }
 }

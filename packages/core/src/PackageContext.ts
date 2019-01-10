@@ -123,7 +123,7 @@ export class PackageContext implements Context {
     if (this.printedName) {
       return;
     }
-    this.print(chalk.blue(this.getName()), this.depth);
+    this.print(`${chalk.blue(this.getName())} (${this.packageDir})`, this.depth);
     this.printedName = true;
   }
 }
