@@ -1,7 +1,10 @@
 {
   "name": "@monorepolint/core",
   "version": "0.2.1",
-  "author": "Eric Anderson",
+  "author": "Eric L Anderson (https://github.com/ericanderson)",
+  "contributors": [
+    "Mac Lockard (https://github.com/maclockard)"
+  ],
   "url": "https://github.com/monorepolint/monorepolint",
   "license": "MIT",
   "main": "lib/index.js",

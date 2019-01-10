@@ -5,6 +5,10 @@
   },
   "name": "@monorepolint/cli",
   "version": "0.2.1",
+  "author": "Eric L Anderson (https://github.com/ericanderson)",
+  "contributors": [
+    "Mac Lockard (https://github.com/maclockard)"
+  ],
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

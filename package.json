@@ -1,6 +1,9 @@
 {
   "name": "monorepolint",
-  "author": "Eric L Anderson",
+  "author": "Eric L Anderson (https://github.com/ericanderson)",
+  "contributors": [
+    "Mac Lockard (https://github.com/maclockard)"
+  ],
   "url": "https://github.com/monorepolint/monorepolint",
   "license": "MIT",
   "private": true,
