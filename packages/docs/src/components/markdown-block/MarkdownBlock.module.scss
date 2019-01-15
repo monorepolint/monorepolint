@@ -38,10 +38,10 @@
     display: none;
 }
 
-@media (min-width: 600px) and (min-height:850px) {
+@media (min-width: 650px) {
     .right {
         margin-left: 20px;
-        flex: 0 0 auto;
+        flex: 0 0 190px;
         width: 125px;
 
         display: flex;
@@ -51,7 +51,6 @@
 
 .tableOfContents {
     margin-top: 50px;
-    position: fixed;
 }
 
 .tableOfContents ul {
