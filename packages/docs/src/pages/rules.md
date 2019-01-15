@@ -1,5 +1,6 @@
 ---
-rule: "src/fileContents.ts"
+path: "/rules"
+title: "Builtin Rules"
 ---
 
 ### Description

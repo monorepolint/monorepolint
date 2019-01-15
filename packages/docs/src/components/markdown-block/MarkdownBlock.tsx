@@ -7,7 +7,7 @@
 
 import React, { memo } from "react";
 
-import Classes from "./MarkdownBlock.module.css";
+import Classes from "./MarkdownBlock.module.scss";
 
 export interface Props {
   title?: string;

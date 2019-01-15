@@ -19,6 +19,7 @@ module.exports = {
                 allExtensions:true,
             },
         },
+        `gatsby-plugin-sass`,
         { 
             resolve: `gatsby-plugin-nprogress`,
             options: {

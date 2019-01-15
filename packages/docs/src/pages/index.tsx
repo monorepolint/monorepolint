@@ -11,7 +11,7 @@ import Helmet from "react-helmet";
 
 import { MarkdownBlock, PageWrapper } from "../components";
 import { API_URL, CLI_URL, RULES_URL, SOURCE_URL } from "../utils/constants";
-import Classes from "./index.module.css";
+import Classes from "./index.module.scss";
 
 export interface Props {
   data: {

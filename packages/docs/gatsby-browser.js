@@ -5,5 +5,5 @@
  *
  */
 
-require("./src/styles/global.css")
-require("./src/styles/external.css")
+require("./src/styles/global.scss")
+require("./src/styles/external.scss")

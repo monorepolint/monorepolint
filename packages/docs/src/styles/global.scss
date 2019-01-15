@@ -1,0 +1,33 @@
+/*!
+ * Copyright (c) 2018 monorepolint (http://monorepolint.com). All Right Reserved.
+ *
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ *
+ */
+
+@import "./variables.scss";
+
+html {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    min-height: 100%;
+    overflow: auto;
+}
+
+a {
+    color: $secondary-color;
+}
+
+h1 {
+    color: $secondary-color;
+}
+
+.language-javascript, .language-text, .language-json {
+    border-radius: 10px;
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.25);
+}

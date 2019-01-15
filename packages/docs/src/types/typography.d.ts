@@ -5,4 +5,4 @@
  *
  */
 
-declare module "prismjs/components/prism-*";
+declare module "typography-theme-*";

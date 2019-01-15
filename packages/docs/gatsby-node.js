@@ -42,8 +42,6 @@ exports.createPages = async ({ actions, graphql }) => {
       return;
     }
 
-    console.log(frontmatter);
-
     createPage({
       path: frontmatter.path,
       component: pageTemplate,

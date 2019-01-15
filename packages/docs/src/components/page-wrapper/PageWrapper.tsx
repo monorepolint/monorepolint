@@ -10,7 +10,7 @@ import Helmet from "react-helmet";
 
 import { Footer } from "../footer";
 import { Header } from "../header";
-import Classes from "./PageWrapper.module.css";
+import Classes from "./PageWrapper.module.scss";
 
 export interface Props {
   children?: ReactNode;

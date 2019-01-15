@@ -1,0 +1,21 @@
+/*!
+ * Copyright (c) 2018 monorepolint (http://monorepolint.com). All Right Reserved.
+ *
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ *
+ */
+
+@import "../../styles/variables.scss";
+
+.footer {
+    flex: 0 0 auto;
+
+    width: 100%;
+    height: 80px;
+    background-color: $dark-gray;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}

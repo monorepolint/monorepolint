@@ -10,7 +10,7 @@ import React from "react";
 import { FiGithub } from "react-icons/fi";
 
 import { HOME_URL, SOURCE_URL } from "../../utils/constants";
-import Classes from "./Header.module.css";
+import Classes from "./Header.module.scss";
 
 export function Header() {
   return (
