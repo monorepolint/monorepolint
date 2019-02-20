@@ -7,11 +7,11 @@
 
 import { existsSync } from "fs";
 import glob from "glob";
-import { join as pathJoin } from "path";
+import { join as pathJoin, resolve as pathResolve } from "path";
 import { PackageJson } from "./PackageJson";
 import { readJson } from "./readJson";
 
-export function getWorkspacePackageDirs(workspaceDir: string) {
+export function getWorkspacePackageDirs(workspaceDir: string, resolvePaths: boolean = false) {
   const ret: string[] = [];
 
   const packageJson: PackageJson = readJson(pathJoin(workspaceDir, "package.json"));
@@ -29,7 +29,11 @@ export function getWorkspacePackageDirs(workspaceDir: string) {
       const packageJsonPath = pathJoin(workspaceDir, packagePath, "package.json");
 
       if (existsSync(packageJsonPath)) {
-        ret.push(packagePath);
+        if (resolvePaths === true) {
+          ret.push(pathResolve(pathJoin(workspaceDir, packagePath)));
+        } else {
+          ret.push(packagePath);
+        }
       }
     }
   }
