@@ -5,19 +5,11 @@
  *
  */
 
-// tslint:disable:variable-name
 // tslint:disable:no-console
-const mockFiles: Map<string, string> = new Map();
+import { createMockFiles } from "./utils";
 
-jest.mock("fs", () => ({
-  writeFileSync: function writeFileSync(filePath: string, contents: string) {
-    mockFiles.set(filePath, contents);
-  },
-
-  readFileSync: function readFileSync(filePath: string, _contentType: string) {
-    return mockFiles.get(filePath);
-  },
-}));
+// done first since this also mocks 'fs'
+const mockFiles: Map<string, string> = createMockFiles();
 
 import { Failure, PackageContext } from "@monorepolint/core";
 import { packageScript } from "../packageScript";

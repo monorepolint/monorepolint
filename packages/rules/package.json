@@ -16,7 +16,10 @@
     "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
     "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
-    "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
+    "test": "../../node_modules/.bin/jest --colors --passWithNoTests",
+    "foo": "bar",
+    "missing": "missing value",
+    "exists": "exists value"
   },
   "dependencies": {
     "@monorepolint/core": "^0.2.1",
