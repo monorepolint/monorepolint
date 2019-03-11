@@ -17,7 +17,7 @@ const Options = r.Record({
 type Options = r.Static<typeof Options>;
 
 export const bannedDependencies: RuleModule<typeof Options> = {
-  check: function expectAlphabeticalDependencies(context: Context, opts: Options) {
+  check: function expectAllowedDependencies(context: Context, opts: Options) {
     // tslint:disable-next-line:no-shadowed-variable
     const { bannedDependencies } = opts;
 

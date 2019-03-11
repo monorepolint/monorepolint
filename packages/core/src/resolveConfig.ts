@@ -16,8 +16,11 @@ export function resolveConfig(config: Config, options: Options, workspaceRootDir
   try {
     const rules = [];
     for (let [type, ruleEntries] of Object.entries(config.rules)) {
+      if (ruleEntries === false) {
+        continue;
+      }
       if (!Array.isArray(ruleEntries)) {
-        ruleEntries = [ruleEntries];
+        ruleEntries = [ruleEntries === true ? {} : ruleEntries];
       }
       for (const ruleEntry of ruleEntries) {
         rules.push({

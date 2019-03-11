@@ -31,34 +31,9 @@ module.exports = {
         }
       }
     },
-    ":package-order": {
-      options: {
-        order: [
-          "name",
-          "version",
-          "author",
-          "contributors",
-          "url",
-          "license",
-          "private",
-          "main",
-          "typings",
-          "style",
-          "sideEffects",
-          "workspaces",
-          "husky",
-          "lint-staged",
-          "scripts",
-          "dependencies",
-          "peerDependencies",
-          "devDependencies",
-          "publishConfig",
-          "gitHead"
-        ]
-      }
-    },
-    ":alphabetical-dependencies": {},
-    ":consistent-dependencies": {},
+    ":package-order": true,
+    ":alphabetical-dependencies": true,
+    ":consistent-dependencies": true,
     ":banned-dependencies": {
       options: {
         bannedDependencies: ["lodash"]

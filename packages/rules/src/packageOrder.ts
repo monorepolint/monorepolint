@@ -12,18 +12,48 @@ import * as r from "runtypes";
 
 type OrderFunction = ((context: Context) => (a: string, b: string) => number);
 
-const Options = r.Record({
-  order: r.Union(r.Array(r.String), r.Function),
-});
+const Options = r
+  .Record({
+    order: r.Union(r.Array(r.String), r.Function),
+  })
+  .Or(r.Undefined);
 
-interface Options extends r.Static<typeof Options> {
-  readonly order: string[] | OrderFunction;
-}
+type Options = r.Static<typeof Options>;
+
+const defaultKeyOrder = [
+  "name",
+  "version",
+  "author",
+  "contributors",
+  "url",
+  "license",
+  "private",
+  "engines",
+  "bin",
+  "main",
+  "module",
+  "typings",
+  "style",
+  "sideEffects",
+  "workspaces",
+  "husky",
+  "lint-staged",
+  "files",
+  "scripts",
+  "resolutions",
+  "dependencies",
+  "peerDependencies",
+  "devDependencies",
+  "optionalDependencies",
+  "publishConfig",
+];
 
 export const packageOrder = {
-  check: function expectPackageOrder(context: Context, { order }: Options) {
+  check: function expectPackageOrder(context: Context, opts: Options) {
     const packageJson = context.getPackageJson();
     const packagePath = context.getPackageJsonPath();
+
+    const order: string[] | OrderFunction = opts === undefined ? defaultKeyOrder : opts.order;
 
     const compartor = isOrderFunction(order) ? order(context) : createCompartor(order);
 
