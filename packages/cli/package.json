@@ -6,6 +6,10 @@
     "Mac Lockard (https://github.com/maclockard)"
   ],
   "license": "MIT",
+  "bin": {
+    "monorepolint": "./bin/monorepolint",
+    "mrl": "./bin/mrl"
+  },
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
