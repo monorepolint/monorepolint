@@ -10,5 +10,6 @@ export { bannedDependencies } from "./bannedDependencies";
 export { consistentDependencies } from "./consistentDependencies";
 export { fileContents } from "./fileContents";
 export { packageOrder } from "./packageOrder";
+export { packageEntry } from "./packageEntry";
 export { packageScript } from "./packageScript";
 export { standardTsconfig } from "./standardTsconfig";

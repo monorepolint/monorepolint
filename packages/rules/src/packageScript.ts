@@ -6,8 +6,7 @@
  */
 
 import { Context, RuleModule } from "@monorepolint/core";
-import { PackageJson } from "@monorepolint/utils";
-import * as fs from "fs";
+import { mutateJson, PackageJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 import * as r from "runtypes";
 
@@ -53,9 +52,3 @@ export const packageScript = {
   },
   optionsRuntype: Options,
 } as RuleModule<typeof Options>;
-
-function mutateJson<T>(path: string, mutator: ((f: T) => T)) {
-  let file: T = JSON.parse(fs.readFileSync(path, "utf-8"));
-  file = mutator(file);
-  fs.writeFileSync(path, JSON.stringify(file, undefined, 2) + "\n");
-}
