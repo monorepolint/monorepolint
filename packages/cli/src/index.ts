@@ -55,10 +55,15 @@ function handleCheck(args: Options) {
   if (!check(resolvedConfig, process.cwd())) {
     console.error();
 
+    const userAgent = process.env.npm_config_user_agent;
+    const npmAgent = typeof userAgent === "string" ? userAgent.split(" ")[0].split("/")[0] : undefined;
+
+    const runCommand = npmAgent === "yarn" ? "yarn mrl" : npmAgent === "npm" ? "npm run mrl" : "mrl";
+
     console.error("monorepolint (mrl) failed 1 or more checks");
     console.error();
-    console.error(`For more information, run ${chalk.blue("mrl check --verbose")}`);
-    console.error(`To automatically fix errors, run ${chalk.blue("mrl check --fix")}`);
+    console.error(`For more information, run ${chalk.blue(`${runCommand} check --verbose`)}`);
+    console.error(`To automatically fix errors, run ${chalk.blue(`${runCommand} check --fix`)}`);
     console.error();
     process.exit(100);
   }
