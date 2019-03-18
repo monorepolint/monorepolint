@@ -21,7 +21,7 @@ export default function run() {
   }
   yargs
     .command(
-      "check [--verbose] [--fix]",
+      "check [--verbose] [--fix] [--paths <paths>...]",
       "Checks the mono repo for lint violations",
       {
         verbose: {
@@ -29,6 +29,10 @@ export default function run() {
         },
         fix: {
           type: "boolean",
+        },
+        paths: {
+          type: "array",
+          string: true,
         },
       },
       handleCheck
@@ -52,7 +56,7 @@ function handleCheck(args: Options) {
   const config = Config.check(require(configPath));
   const resolvedConfig = resolveConfig(config, args, findWorkspaceDir(process.cwd())!);
 
-  if (!check(resolvedConfig, process.cwd())) {
+  if (!check(resolvedConfig, process.cwd(), args.paths)) {
     console.error();
 
     const execPath = process.env.npm_execpath;
