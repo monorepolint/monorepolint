@@ -4,5 +4,7 @@ node_modules
 /packages/*/*.tgz
 /.npmrc
 /.yarnrc
+/docs/_book
 
+.DS_Store
 yarn-error.log
