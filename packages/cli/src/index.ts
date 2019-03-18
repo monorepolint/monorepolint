@@ -55,8 +55,16 @@ function handleCheck(args: Options) {
   if (!check(resolvedConfig, process.cwd())) {
     console.error();
 
-    const userAgent = process.env.npm_config_user_agent;
-    const npmAgent = typeof userAgent === "string" ? userAgent.split(" ")[0].split("/")[0] : undefined;
+    const execPath = process.env.npm_execpath;
+
+    const npmAgent =
+      typeof execPath === "string"
+        ? execPath.includes("yarn")
+          ? "yarn"
+          : execPath.includes("npm")
+          ? "npm"
+          : undefined
+        : undefined;
 
     const runCommand = npmAgent === "yarn" ? "yarn mrl" : npmAgent === "npm" ? "npm run mrl" : "mrl";
 
