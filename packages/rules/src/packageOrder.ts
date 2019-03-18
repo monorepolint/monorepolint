@@ -61,9 +61,25 @@ function arrayOrderCompare(a: ReadonlyArray<string>, b: ReadonlyArray<string>) {
 }
 
 function createCompartor(order: ReadonlyArray<string>) {
-  // tslint:disable-next-line:only-arrow-functions
-  return function(a: string, b: string) {
-    return order.indexOf(a) - order.indexOf(b);
+  return (a: string, b: string) => {
+    const aIndex = order.indexOf(a);
+    const bIndex = order.indexOf(b);
+
+    // if one of the two is missing from the order array, push it further down
+    if (aIndex >= 0 && bIndex < 0) {
+      return -1;
+    } else if (aIndex < 0 && bIndex >= 0) {
+      return 1;
+    }
+
+    // otherwise compare the indexes and use alphabetical as a tie breaker
+    const compared = aIndex - bIndex;
+
+    if (compared !== 0) {
+      return compared;
+    } else {
+      return a.localeCompare(b);
+    }
   };
 }
 
