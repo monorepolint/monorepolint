@@ -7,11 +7,12 @@
 
 import { findWorkspaceDir } from "@monorepolint/utils";
 import minimatch from "minimatch";
+import { dirname as pathDirname, resolve as pathResolve } from "path";
 import { ResolvedConfig, ResolvedRule } from "./Config";
 import { Context } from "./Context";
 import { WorkspaceContext } from "./WorkspaceContext";
 
-export function check(resolvedConfig: ResolvedConfig, cwd = process.cwd()): boolean {
+export function check(resolvedConfig: ResolvedConfig, cwd = process.cwd(), paths?: ReadonlyArray<string>): boolean {
   const workspaceDir = findWorkspaceDir(cwd);
   if (workspaceDir === undefined) {
     throw new Error(`Unable to find a workspace from ${cwd}`);
@@ -19,8 +20,19 @@ export function check(resolvedConfig: ResolvedConfig, cwd = process.cwd()): bool
 
   const workspaceContext = new WorkspaceContext(workspaceDir, resolvedConfig);
 
-  if (workspaceDir === cwd) {
+  if (paths !== undefined) {
+    const resolvedPaths = paths.map(p => pathDirname(pathResolve(p)));
+
+    for (const path of resolvedPaths) {
+      if (workspaceDir === path) {
+        checkPackage(workspaceContext);
+      } else {
+        checkPackage(workspaceContext.createChildContext(path));
+      }
+    }
+  } else if (workspaceDir === cwd) {
     checkPackage(workspaceContext);
+
     for (const packageDir of workspaceContext.getWorkspacePackageDirs()) {
       checkPackage(workspaceContext.createChildContext(packageDir));
     }
