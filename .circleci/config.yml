@@ -1,26 +1,71 @@
-version: 2
+version: 2.1
+
+defaults: &defaults
+  working_directory: ~/repo
+
+executors:
+  node8:
+    docker:
+      - image: circleci/node:8.11
+  node11:
+    docker:
+      - image: circleci/node:11.4
+
 workflows:
   version: 2
   build:
     jobs:
-      - build_node8
-      - build_node11
+      - build_and_test:
+          name: build_node8
+          executor: node8
+      - build_and_test:
+          name: build_node11
+          executor: node11
+      - deploy_prerelease:
+          requires:
+            - build_node8
+            - build_node11
+          filters:
+            branches:
+              only: master
 
 jobs:
-  build_node8:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:8.11
-  
-    working_directory: ~/repo
+  build_and_test:
+    <<: *defaults
+    parameters:
+      executor:
+        default: node11
+        type: string
+    executor: "<< parameters.executor >>"
 
+    steps:
+      - prepare
+        
+      # run tests!
+      - run: yarn ci
+  
+  deploy_prerelease:
+    <<: *defaults
+    executor: node11
+    steps:
+      - prepare
+
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+      - run:
+          name: Publish package
+          command: npm publish
+
+commands:
+  prepare:
     steps:
       - checkout
 
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-{{ checksum "yarn.lock" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
@@ -29,34 +74,4 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-        
-      # run tests!
-      - run: yarn ci
-
-  build_node11:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:11.4
-  
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
-      - run: yarn install
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-        
-      # run tests!
-      - run: yarn ci
+          key: v1-dependencies-{{ checksum "yarn.lock" }}  

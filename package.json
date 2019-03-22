@@ -40,7 +40,7 @@
     "lint:typescript": "lerna run --no-bail lint:typescript",
     "preLernaPublish": "npm-run-all clean compile lint test",
     "publish:release": "yarn run preLernaPublish && lerna publish --force-publish --npm-client npm",
-    "publish:prerelease": "yarn run preLernaPublish && lerna publish --force-publish --npm-client npm --canary --yes",
+    "publish:prerelease": "yarn run preLernaPublish && lerna publish --force-publish --npm-client npm --canary minor --yes",
     "test": "lerna run test"
   },
   "devDependencies": {
