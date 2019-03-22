@@ -1,6 +1,6 @@
 {
   "name": "@monorepolint/core",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "author": "Eric L Anderson (https://github.com/ericanderson)",
   "contributors": [
     "Mac Lockard (https://github.com/maclockard)"
@@ -20,7 +20,7 @@
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
   },
   "dependencies": {
-    "@monorepolint/utils": "^0.2.1",
+    "@monorepolint/utils": "^0.3.0",
     "camelcase": "^5.2.0",
     "chalk": "^2.4.1",
     "minimatch": "^3.0.4",
