@@ -5504,7 +5504,7 @@ redent@^2.0.0:
     indent-string "^3.0.0"
     strip-indent "^2.0.0"
 
-reflect-metadata@^0.1.12:
+reflect-metadata@^0.1.13:
   version "0.1.13"
   resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
   integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
@@ -5691,12 +5691,12 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   dependencies:
     aproba "^1.1.1"
 
-runtypes@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/runtypes/-/runtypes-3.1.2.tgz#81e186500b6882e0d5badeb5c6deef72e3fcc068"
-  integrity sha512-oxAaykMNPeuxBTHFPHb4N/WiOMln/Sg73CRfEywpdO5FQyi+lVvGvehGny/QtP2hHvfm7/4E8KLcchfZBnMK6Q==
+runtypes@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/runtypes/-/runtypes-4.0.0.tgz#fd08332ea69ac70d6ea2c518f0875b0afa4a94a5"
+  integrity sha512-fMWXQ3jofaiQn5UZtHOm+BQyApa1c5m4W1r7DOfRST80sGQDN6b2XDwoQgGedE/B74W/QPSNPjVaSAkuU1ueqw==
   dependencies:
-    reflect-metadata "^0.1.12"
+    reflect-metadata "^0.1.13"
 
 rxjs@^6.1.0, rxjs@^6.3.3:
   version "6.3.3"
@@ -6487,10 +6487,10 @@ typedarray@^0.0.6:
   resolved "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.2.2:
-  version "3.2.2"
-  resolved "https://registry.npmjs.org/typescript/-/typescript-3.2.2.tgz#fe8101c46aa123f8353523ebdcf5730c2ae493e5"
-  integrity sha512-VCj5UiSyHBjwfYacmDuc/NOk4QQixbE+Wn7MFJuS0nRuPQbof132Pw4u53dm264O8LPc2MVsc7RJNml5szurkg==
+typescript@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.1.tgz#ba72a6a600b2158139c5dd8850f700e231464202"
+  integrity sha512-64HkdiRv1yYZsSe4xC1WVgamNigVYjlssIoaH2HcZF0+ijsk5YK2g0G34w9wJkze8+5ow4STd22AynfO6ZYYLw==
 
 uglify-js@^3.1.4:
   version "3.4.9"
