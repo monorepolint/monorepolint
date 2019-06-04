@@ -22,7 +22,7 @@
     "@monorepolint/core": "^0.3.0",
     "@monorepolint/utils": "^0.3.0",
     "jest-diff": "^23.6.0",
-    "runtypes": "^3.1.2"
+    "runtypes": "^4.0.0"
   },
   "devDependencies": {
     "@types/jest-diff": "^20.0.0"
