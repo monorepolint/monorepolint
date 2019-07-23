@@ -49,13 +49,13 @@ export class PackageContext implements Context {
   public addWarning({ message, longMessage }: FailureOptions) {
     this.printName();
 
-    this.print(`${chalk.yellow("Warning!")}: ${message}`);
+    this.printWarning(`${chalk.yellow("Warning!")}: ${message}`);
     if (this.resolvedConfig.verbose && longMessage) {
       for (let i = 0; i <= this.depth + 1; i++) {
         // tslint:disable-next-line:no-console
         console.group();
       }
-      this.print(`${longMessage}`, 0);
+      this.printWarning(`${longMessage}`, 0);
       for (let i = 0; i <= this.depth + 1; i++) {
         // tslint:disable-next-line:no-console
         console.groupEnd();
@@ -73,14 +73,14 @@ export class PackageContext implements Context {
       this.print(`${chalk.green("Fixed!")} ${chalk.magenta(shortFile)}: ${message}`);
     } else {
       this.setFailed();
-      this.print(`${chalk.red("Error!")} ${chalk.magenta(shortFile)}: ${message}`);
+      this.printError(`${chalk.red("Error!")} ${chalk.magenta(shortFile)}: ${message}`);
 
       if (this.resolvedConfig.verbose && longMessage) {
         for (let i = 0; i <= this.depth + 1; i++) {
           // tslint:disable-next-line:no-console
           console.group();
         }
-        this.print(`${longMessage}`, 0);
+        this.printError(`${longMessage}`, 0);
         for (let i = 0; i <= this.depth + 1; i++) {
           // tslint:disable-next-line:no-console
           console.groupEnd();
@@ -116,7 +116,21 @@ export class PackageContext implements Context {
 
   private print(str: string, depth: number = this.depth + 1) {
     // tslint:disable-next-line:no-console
-    console.log(" ".repeat(depth * 2) + str);
+    console.log(this.getMessage(str, depth));
+  }
+
+  private printWarning(str: string, depth: number = this.depth + 1) {
+    // tslint:disable-next-line:no-console
+    console.warn(this.getMessage(str, depth));
+  }
+
+  private printError(str: string, depth: number = this.depth + 1) {
+    // tslint:disable-next-line:no-console
+    console.error(this.getMessage(str, depth));
+  }
+
+  private getMessage(str: string, depth: number) {
+    return " ".repeat(depth * 2) + str;
   }
 
   private printName() {
