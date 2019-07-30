@@ -1,5 +1,5 @@
 {
-  "name": "@monorepolint/cli",
+  "name": "monorepolint",
   "version": "0.4.0",
   "author": "Eric L Anderson (https://github.com/ericanderson)",
   "contributors": [
