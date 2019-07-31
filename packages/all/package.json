@@ -14,10 +14,10 @@
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
   },
   "dependencies": {
-    "monorepolint": "^0.4.0",
     "@monorepolint/core": "^0.4.0",
     "@monorepolint/rules": "^0.4.0",
-    "@monorepolint/utils": "^0.4.0"
+    "@monorepolint/utils": "^0.4.0",
+    "monorepolint": "^0.4.0"
   },
   "publishConfig": {
     "access": "public"

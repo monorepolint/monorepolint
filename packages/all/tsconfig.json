@@ -6,9 +6,6 @@
   },
   "references": [
     {
-      "path": "../cli"
-    },
-    {
       "path": "../core"
     },
     {
@@ -16,6 +13,9 @@
     },
     {
       "path": "../utils"
+    },
+    {
+      "path": "../cli"
     }
   ]
 }
