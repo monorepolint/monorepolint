@@ -3,4 +3,4 @@ release-branch=master
 pr-wo-labels=false
 user=monorepolint
 project=monorepolint
-exclude-labels=chore,exclude-from-changelog
+exclude-labels=chore,exclude-from-changelog,greenkeeper

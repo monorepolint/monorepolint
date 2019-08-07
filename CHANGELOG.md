@@ -1,17 +1,29 @@
 # Change Log
 
+## [v0.4.0](https://github.com/monorepolint/monorepolint/tree/v0.4.0) (2019-08-07)
+
+[Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.3.0...v0.4.0)
+
+**Breaking changes:**
+
+- tsc -\> 3.5.1, runtypes -\> 4.0.0 [\#61](https://github.com/monorepolint/monorepolint/pull/61) ([maclockard](https://github.com/maclockard))
+
+**Implemented enhancements:**
+
+- Print errors to stdout via console.error [\#63](https://github.com/monorepolint/monorepolint/pull/63) ([styu](https://github.com/styu))
+- Auto publish alpha version from commits to master [\#53](https://github.com/monorepolint/monorepolint/pull/53) ([ericanderson](https://github.com/ericanderson))
+
 ## [v0.3.0](https://github.com/monorepolint/monorepolint/tree/v0.3.0) (2019-03-22)
 
 [Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.2.1...v0.3.0)
 
 **Breaking changes:**
 
-- Maclockard/reorg [\#26](https://github.com/monorepolint/monorepolint/pull/26) ([maclockard](https://github.com/maclockard))
+- Merge rules into a single package [\#26](https://github.com/monorepolint/monorepolint/pull/26) ([maclockard](https://github.com/maclockard))
 
-**Closed issues:**
+**Implemented enhancements:**
 
-- An in-range update of @types/yargs is breaking the build 🚨 [\#28](https://github.com/monorepolint/monorepolint/issues/28)
-- An in-range update of lerna is breaking the build 🚨 [\#27](https://github.com/monorepolint/monorepolint/issues/27)
+- Added ability to downselect based on paths option [\#52](https://github.com/monorepolint/monorepolint/pull/52) ([maclockard](https://github.com/maclockard))
 
 ## [v0.2.1](https://github.com/monorepolint/monorepolint/tree/v0.2.1) (2018-12-19)
 
@@ -27,7 +39,7 @@
 
 - Adds back multiplicity in the form of an array as a the value for the package key [\#24](https://github.com/monorepolint/monorepolint/pull/24) ([ericanderson](https://github.com/ericanderson))
 - Adds :ban-dependencies rule [\#17](https://github.com/monorepolint/monorepolint/pull/17) ([maclockard](https://github.com/maclockard))
-- Maclockard/enforce consistent deps [\#14](https://github.com/monorepolint/monorepolint/pull/14) ([maclockard](https://github.com/maclockard))
+- Adds :consistent-dependencies [\#14](https://github.com/monorepolint/monorepolint/pull/14) ([maclockard](https://github.com/maclockard))
 
 ## [v0.1.9](https://github.com/monorepolint/monorepolint/tree/v0.1.9) (2018-12-19)
 
