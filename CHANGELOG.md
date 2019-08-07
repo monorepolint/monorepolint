@@ -1,31 +1,45 @@
 # Change Log
 
-## [Unreleased](https://github.com/monorepolint/monorepolint/tree/HEAD)
+## [v0.3.0](https://github.com/monorepolint/monorepolint/tree/v0.3.0) (2019-03-22)
 
-[Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.2.1...HEAD)
+[Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.2.1...v0.3.0)
 
-**Merged pull requests:**
+**Breaking changes:**
 
 - Maclockard/reorg [\#26](https://github.com/monorepolint/monorepolint/pull/26) ([maclockard](https://github.com/maclockard))
 
+**Closed issues:**
+
+- An in-range update of @types/yargs is breaking the build 🚨 [\#28](https://github.com/monorepolint/monorepolint/issues/28)
+- An in-range update of lerna is breaking the build 🚨 [\#27](https://github.com/monorepolint/monorepolint/issues/27)
+
 ## [v0.2.1](https://github.com/monorepolint/monorepolint/tree/v0.2.1) (2018-12-19)
+
 [Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.1.9...v0.2.1)
+
+**Breaking changes:**
+
+- Implement new config format [\#13](https://github.com/monorepolint/monorepolint/issues/13)
+- Renames `@monorepo-lint/all` to `monorepolint` [\#21](https://github.com/monorepolint/monorepolint/pull/21) ([ericanderson](https://github.com/ericanderson))
+- Introduces new format for config and rule modules [\#18](https://github.com/monorepolint/monorepolint/pull/18) ([ericanderson](https://github.com/ericanderson))
 
 **Implemented enhancements:**
 
-- Implement new config format [\#13](https://github.com/monorepolint/monorepolint/issues/13)
 - Adds back multiplicity in the form of an array as a the value for the package key [\#24](https://github.com/monorepolint/monorepolint/pull/24) ([ericanderson](https://github.com/ericanderson))
 - Adds :ban-dependencies rule [\#17](https://github.com/monorepolint/monorepolint/pull/17) ([maclockard](https://github.com/maclockard))
 - Maclockard/enforce consistent deps [\#14](https://github.com/monorepolint/monorepolint/pull/14) ([maclockard](https://github.com/maclockard))
 
-**Merged pull requests:**
-
-- Renames `@monorepo-lint/all` to `monorepolint` [\#21](https://github.com/monorepolint/monorepolint/pull/21) ([ericanderson](https://github.com/ericanderson))
-- Introduces new format for config and rule modules [\#18](https://github.com/monorepolint/monorepolint/pull/18) ([ericanderson](https://github.com/ericanderson))
-- Add Greenkeeper badge 🌴 [\#15](https://github.com/monorepolint/monorepolint/pull/15) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
-
 ## [v0.1.9](https://github.com/monorepolint/monorepolint/tree/v0.1.9) (2018-12-19)
-[Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.1.6...v0.1.9)
+
+[Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.1.8...v0.1.9)
+
+## [v0.1.8](https://github.com/monorepolint/monorepolint/tree/v0.1.8) (2018-12-19)
+
+[Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.1.7...v0.1.8)
+
+## [v0.1.7](https://github.com/monorepolint/monorepolint/tree/v0.1.7) (2018-12-19)
+
+[Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.1.6...v0.1.7)
 
 **Implemented enhancements:**
 
@@ -33,11 +47,38 @@
 - Implements @monorepo-lint/expect-package-order [\#1](https://github.com/monorepolint/monorepolint/pull/1) ([maclockard](https://github.com/maclockard))
 
 ## [v0.1.6](https://github.com/monorepolint/monorepolint/tree/v0.1.6) (2018-12-18)
+
+[Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.1.5...v0.1.6)
+
 **Implemented enhancements:**
 
 - Implement expect-standard-tsconfig [\#10](https://github.com/monorepolint/monorepolint/issues/10)
 - Implement expect-package-script [\#9](https://github.com/monorepolint/monorepolint/issues/9)
 - Implement expect-file-contents [\#8](https://github.com/monorepolint/monorepolint/issues/8)
+
+## [v0.1.5](https://github.com/monorepolint/monorepolint/tree/v0.1.5) (2018-12-18)
+
+[Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.1.4...v0.1.5)
+
+## [v0.1.4](https://github.com/monorepolint/monorepolint/tree/v0.1.4) (2018-12-18)
+
+[Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.1.3...v0.1.4)
+
+## [v0.1.3](https://github.com/monorepolint/monorepolint/tree/v0.1.3) (2018-12-18)
+
+[Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.1.2...v0.1.3)
+
+## [v0.1.2](https://github.com/monorepolint/monorepolint/tree/v0.1.2) (2018-12-18)
+
+[Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.1.1...v0.1.2)
+
+## [v0.1.1](https://github.com/monorepolint/monorepolint/tree/v0.1.1) (2018-12-18)
+
+[Full Changelog](https://github.com/monorepolint/monorepolint/compare/v0.1.0...v0.1.1)
+
+## [v0.1.0](https://github.com/monorepolint/monorepolint/tree/v0.1.0) (2018-12-18)
+
+[Full Changelog](https://github.com/monorepolint/monorepolint/compare/8661ea28e4cc53483b489b0ea6dad728dbb52c9c...v0.1.0)
 
 
 
