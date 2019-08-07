@@ -1,6 +1,6 @@
 {
   "name": "@monorepolint/cli",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": "Eric L Anderson (https://github.com/ericanderson)",
   "contributors": [
     "Mac Lockard (https://github.com/maclockard)"
@@ -23,8 +23,8 @@
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
   },
   "dependencies": {
-    "@monorepolint/core": "^0.3.0",
-    "@monorepolint/utils": "^0.3.0",
+    "@monorepolint/core": "^0.4.0",
+    "@monorepolint/utils": "^0.4.0",
     "chalk": "^2.4.1",
     "yargs": "^13.1.0"
   },
