@@ -22,10 +22,12 @@
     "@monorepolint/core": "^0.4.0",
     "@monorepolint/utils": "^0.4.0",
     "jest-diff": "^23.6.0",
+    "minimatch": "^3.0.4",
     "runtypes": "^4.0.0"
   },
   "devDependencies": {
-    "@types/jest-diff": "^20.0.0"
+    "@types/jest-diff": "^20.0.0",
+    "@types/minimatch": "^3.0.3"
   },
   "publishConfig": {
     "access": "public"
