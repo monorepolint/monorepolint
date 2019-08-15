@@ -8,6 +8,7 @@
 import { Context, RuleModule } from "@monorepolint/core";
 import { writeJson } from "@monorepolint/utils";
 import diff from "jest-diff";
+import minimatch from "minimatch";
 import * as r from "runtypes";
 
 const Options = r.Record({
@@ -45,9 +46,11 @@ function checkBanned(
 
   const expectedDependencies: Record<string, string> = {};
 
-  for (const key of Object.keys(dependencies)) {
-    if (bannedDependencies.indexOf(key) < 0) {
-      expectedDependencies[key] = dependencies[key];
+  for (const dependency of Object.keys(dependencies)) {
+    for (const bannedDependency of bannedDependencies) {
+      if (!minimatch(dependency, bannedDependency)) {
+        expectedDependencies[dependency] = dependencies[dependency];
+      }
     }
   }
 
