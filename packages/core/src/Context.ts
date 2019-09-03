@@ -12,7 +12,7 @@ import { WorkspaceContext } from "./WorkspaceContext";
 export interface Failure {
   message: string;
   file?: string;
-  longMessage?: string;
+  longMessage?: string | null;
   fixer?: () => void;
 }
 export interface Context {

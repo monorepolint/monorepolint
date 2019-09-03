@@ -6,7 +6,7 @@ defaults: &defaults
 executors:
   node8:
     docker:
-      - image: circleci/node:8.11
+      - image: circleci/node:8.12
   node10:
     docker:
       - image: circleci/node:10.13

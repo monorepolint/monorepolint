@@ -8,7 +8,7 @@
 import { readJson } from "./readJson";
 import { writeJson } from "./writeJson";
 
-export function mutateJson<T extends object>(path: string, mutator: ((f: T) => T)) {
+export function mutateJson<T extends object>(path: string, mutator: (f: T) => T) {
   let file: T = readJson(path);
   file = mutator(file);
   writeJson(path, file);

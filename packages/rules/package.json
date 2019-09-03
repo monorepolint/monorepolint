@@ -21,7 +21,7 @@
   "dependencies": {
     "@monorepolint/core": "^0.4.0",
     "@monorepolint/utils": "^0.4.0",
-    "jest-diff": "^23.6.0",
+    "jest-diff": "^24.9.0",
     "minimatch": "^3.0.4",
     "runtypes": "^4.0.0"
   },
