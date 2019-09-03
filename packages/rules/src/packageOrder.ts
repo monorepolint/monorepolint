@@ -10,7 +10,7 @@ import { writeJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 import * as r from "runtypes";
 
-type OrderFunction = ((context: Context) => (a: string, b: string) => number);
+type OrderFunction = (context: Context) => (a: string, b: string) => number;
 
 const Options = r
   .Record({
