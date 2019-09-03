@@ -38,6 +38,9 @@ export function resolveConfig(config: Config, options: Options, workspaceRootDir
     if (err instanceof ValidationError) {
       // tslint:disable-next-line:no-console
       console.error(`Failed to parse config for key '${err.key}':`, err.message, err);
+    } else {
+      // tslint:disable-next-line:no-console
+      console.error(`Unexpected error: ${err}`);
     }
     return process.exit(10);
   }
@@ -56,14 +59,19 @@ function resolveRule(type: string, workspaceRootDir: string, ruleEntry: RuleEntr
 
     return ret;
   } catch (err) {
+    // tslint:disable:no-console
+    console.error(`Failed to validate the configuration for the rule '${type}'`);
+    console.group();
+
     if (err instanceof ValidationError) {
-      // tslint:disable:no-console
-      console.error(`Failed to validate the configuration for the rule '${type}'`);
-      console.group();
       console.error("Recieved:", ruleEntry.options);
       console.error("Error Message:", err.message);
       console.error(err.key);
+    } else {
+      console.error(`Unexpected error occured: ${err}`);
     }
+
+    console.groupEnd();
     return process.exit(10);
   }
 }
