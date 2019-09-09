@@ -7,7 +7,7 @@
 
 import { Context } from "@monorepolint/core";
 import { RuleModule } from "@monorepolint/core";
-import * as fs from "fs";
+import { existsSync, readFileSync, unlinkSync, writeFileSync } from "fs";
 import diff from "jest-diff";
 import * as path from "path";
 import * as r from "runtypes";
@@ -43,7 +43,7 @@ export const fileContents = {
     const generator = getGenerator(context, opts);
     const expectedContent = generator(context);
 
-    const actualContent = fs.existsSync(fullPath) ? fs.readFileSync(fullPath, "utf-8") : undefined;
+    const actualContent = existsSync(fullPath) ? readFileSync(fullPath, "utf-8") : undefined;
 
     if (actualContent !== expectedContent) {
       context.addError({
@@ -52,9 +52,9 @@ export const fileContents = {
         longMessage: diff(expectedContent, actualContent, { expand: true }),
         fixer: () => {
           if (expectedContent === undefined) {
-            fs.unlinkSync(fullPath);
+            unlinkSync(fullPath);
           } else {
-            fs.writeFileSync(fullPath, expectedContent);
+            writeFileSync(fullPath, expectedContent);
           }
         },
       });
@@ -69,7 +69,7 @@ function getGenerator(context: Context, opts: Options) {
   } else if (opts.templateFile) {
     const { packageDir: workspacePackageDir } = context.getWorkspaceContext();
     const fullPath = path.resolve(workspacePackageDir, opts.templateFile);
-    const template = fs.readFileSync(fullPath, "utf-8");
+    const template = readFileSync(fullPath, "utf-8");
 
     return makeGenerator(template);
   } else if (opts.template) {
