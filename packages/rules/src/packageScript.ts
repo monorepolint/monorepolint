@@ -20,7 +20,7 @@ export const Options = r.Record({
         })
         .And(
           r.Partial({
-            fixValue: r.Union(r.String, r.Literal(false)),
+            fixValue: r.Union(r.String, r.Undefined, r.Literal(false)),
           })
         )
     )
@@ -48,9 +48,10 @@ export const packageScript = {
       return;
     }
     for (const [name, value] of Object.entries(options.scripts)) {
-      const allowedValues = new Set<string>();
+      const allowedValues = new Set<string | undefined>();
       let fixValue: string | undefined | false;
       let allowEmpty = false;
+      let fixToEmpty = false;
 
       if (typeof value === "string") {
         allowedValues.add(value);
@@ -59,10 +60,10 @@ export const packageScript = {
         for (const q of value.options) {
           if (q === undefined) {
             allowEmpty = true;
-          } else {
-            allowedValues.add(q);
           }
+          allowedValues.add(q);
         }
+        fixToEmpty = value.hasOwnProperty("fixValue") && value.fixValue === undefined;
         fixValue = value.fixValue;
       }
 
@@ -71,11 +72,15 @@ export const packageScript = {
       if (!allowedValues.has(actualValue) && !(allowEmpty === true && actualValue === undefined)) {
         let fixer;
 
-        if (fixValue !== false && fixValue !== undefined) {
-          const q: string = fixValue;
+        if (fixValue !== false && (fixValue !== undefined || fixToEmpty === true)) {
+          const q = fixValue;
           fixer = () => {
             mutateJson<PackageJson>(context.getPackageJsonPath(), input => {
-              input.scripts![name] = q;
+              if (fixToEmpty && q === undefined) {
+                delete input.scripts![name];
+              } else {
+                input.scripts![name] = q!;
+              }
               return input;
             });
           };
@@ -85,7 +90,7 @@ export const packageScript = {
           message: `Expected standardized script entry for '${name}'. Valid options: ${Array.from(
             allowedValues.values()
           )
-            .map(a => `'${a}'`)
+            .map(a => (a === undefined ? "(empty}" : `'${a}'`))
             .join(", ")}`,
           longMessage: diff(value + "\n", (packageJson.scripts[name] || "") + "\n"),
           fixer,
