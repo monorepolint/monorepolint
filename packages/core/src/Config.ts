@@ -35,6 +35,7 @@ export interface Options {
   readonly verbose?: boolean;
   readonly fix?: boolean;
   readonly paths?: ReadonlyArray<string>;
+  readonly silent?: boolean;
 }
 
 export type Checker<T extends Runtype> = (context: Context, args: r.Static<T>) => void;

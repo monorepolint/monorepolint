@@ -95,6 +95,7 @@ describe("expectPackageOrder", () => {
       rules: [],
       fix: true,
       verbose: false,
+      silent: true,
     });
     const spy = jest.spyOn(context, "addError");
 
