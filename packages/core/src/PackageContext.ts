@@ -115,16 +115,25 @@ export class PackageContext implements Context {
   }
 
   private print(str: string, depth: number = this.depth + 1) {
+    if (this.resolvedConfig.silent) {
+      return;
+    }
     // tslint:disable-next-line:no-console
     console.log(this.getMessage(str, depth));
   }
 
   private printWarning(str: string, depth: number = this.depth + 1) {
+    if (this.resolvedConfig.silent) {
+      return;
+    }
     // tslint:disable-next-line:no-console
     console.warn(this.getMessage(str, depth));
   }
 
   private printError(str: string, depth: number = this.depth + 1) {
+    if (this.resolvedConfig.silent) {
+      return;
+    }
     // tslint:disable-next-line:no-console
     console.error(this.getMessage(str, depth));
   }
@@ -134,6 +143,9 @@ export class PackageContext implements Context {
   }
 
   private printName() {
+    if (this.resolvedConfig.silent) {
+      return;
+    }
     if (this.printedName) {
       return;
     }

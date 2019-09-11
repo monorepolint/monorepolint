@@ -11,7 +11,20 @@ import diff from "jest-diff";
 import * as r from "runtypes";
 
 export const Options = r.Record({
-  scripts: r.Dictionary(r.String), // string => string
+  scripts: r.Dictionary(
+    r.Union(
+      r.String,
+      r
+        .Record({
+          options: r.Array(r.String.Or(r.Undefined)),
+        })
+        .And(
+          r.Partial({
+            fixValue: r.Union(r.String, r.Undefined, r.Literal(false)),
+          })
+        )
+    )
+  ), // string => string
 });
 
 export type Options = r.Static<typeof Options>;
@@ -35,17 +48,52 @@ export const packageScript = {
       return;
     }
     for (const [name, value] of Object.entries(options.scripts)) {
-      if (packageJson.scripts[name] !== value) {
-        context.addError({
-          file: context.getPackageJsonPath(),
-          message: `Expected standardized script entry for '${name}'`,
-          longMessage: diff(value + "\n", (packageJson.scripts[name] || "") + "\n"),
-          fixer: () => {
+      const allowedValues = new Set<string | undefined>();
+      let fixValue: string | undefined | false;
+      let allowEmpty = false;
+      let fixToEmpty = false;
+
+      if (typeof value === "string") {
+        allowedValues.add(value);
+        fixValue = value;
+      } else {
+        for (const q of value.options) {
+          if (q === undefined) {
+            allowEmpty = true;
+          }
+          allowedValues.add(q);
+        }
+        fixToEmpty = value.hasOwnProperty("fixValue") && value.fixValue === undefined;
+        fixValue = value.fixValue;
+      }
+
+      const actualValue = packageJson.scripts[name];
+
+      if (!allowedValues.has(actualValue) && !(allowEmpty === true && actualValue === undefined)) {
+        let fixer;
+
+        if (fixValue !== false && (fixValue !== undefined || fixToEmpty === true)) {
+          const q = fixValue;
+          fixer = () => {
             mutateJson<PackageJson>(context.getPackageJsonPath(), input => {
-              input.scripts![name] = value;
+              if (fixToEmpty && q === undefined) {
+                delete input.scripts![name];
+              } else {
+                input.scripts![name] = q!;
+              }
               return input;
             });
-          },
+          };
+        }
+        context.addError({
+          file: context.getPackageJsonPath(),
+          message: `Expected standardized script entry for '${name}'. Valid options: ${Array.from(
+            allowedValues.values()
+          )
+            .map(a => (a === undefined ? "(empty)" : `'${a}'`))
+            .join(", ")}`,
+          longMessage: diff(value + "\n", (packageJson.scripts[name] || "") + "\n"),
+          fixer,
         });
       }
     }
