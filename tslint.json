@@ -11,7 +11,7 @@
     ],
 
     // Add rules
-    "no-implicit-dependencies": true,
+    "no-implicit-dependencies": [true, "dev"],
 
     // Disable recommended rules
     "interface-name": false,

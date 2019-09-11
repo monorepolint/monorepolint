@@ -57,7 +57,7 @@ function filterKeys(ob: Record<string, string>, filterOb: Record<string, string>
   const newOb: Record<string, any> = {};
 
   for (const key of Object.keys(filterOb)) {
-    if (ob[key] !== undefined) {
+    if (ob[key] !== undefined && filterOb[key] !== "*") {
       newOb[key] = ob[key];
     }
   }

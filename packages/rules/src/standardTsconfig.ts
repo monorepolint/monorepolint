@@ -7,7 +7,7 @@
 
 import { Context, RuleModule } from "@monorepolint/core";
 import { getPackageNameToDir } from "@monorepolint/utils";
-import * as fs from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import diff from "jest-diff";
 import * as path from "path";
 import * as r from "runtypes";
@@ -41,7 +41,7 @@ export const standardTsconfig = {
     const generator = getGenerator(context, opts);
     const expectedContent = generator(context);
 
-    const actualContent = fs.existsSync(fullPath) ? fs.readFileSync(fullPath, "utf-8") : undefined;
+    const actualContent = existsSync(fullPath) ? readFileSync(fullPath, "utf-8") : undefined;
 
     if (expectedContent === undefined) {
       context.addWarning({
@@ -57,7 +57,7 @@ export const standardTsconfig = {
         message: "Expect file contents to match",
         longMessage: diff(expectedContent, actualContent, { expand: true }),
         fixer: () => {
-          fs.writeFileSync(fullPath, expectedContent);
+          writeFileSync(fullPath, expectedContent);
         },
       });
     }
@@ -71,7 +71,7 @@ function getGenerator(context: Context, opts: Options) {
   } else if (opts.templateFile) {
     const { packageDir: workspacePackageDir } = context.getWorkspaceContext();
     const fullPath = path.resolve(workspacePackageDir, opts.templateFile);
-    const template = JSON.parse(fs.readFileSync(fullPath, "utf-8"));
+    const template = JSON.parse(readFileSync(fullPath, "utf-8"));
 
     return makeGenerator(template);
   } else if (opts.template) {
