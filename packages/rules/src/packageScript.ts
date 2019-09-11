@@ -90,7 +90,7 @@ export const packageScript = {
           message: `Expected standardized script entry for '${name}'. Valid options: ${Array.from(
             allowedValues.values()
           )
-            .map(a => (a === undefined ? "(empty}" : `'${a}'`))
+            .map(a => (a === undefined ? "(empty)" : `'${a}'`))
             .join(", ")}`,
           longMessage: diff(value + "\n", (packageJson.scripts[name] || "") + "\n"),
           fixer,

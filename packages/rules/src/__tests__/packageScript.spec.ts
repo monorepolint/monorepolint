@@ -196,5 +196,25 @@ describe("expectPackageScript", () => {
 
       expect(JSON.parse(mockFiles.get("package.json")!).scripts).toEqual({});
     });
+
+    it("can allow only empty", () => {
+      mockFiles.set("package.json", PACKAGE_WITH_SCRIPTS);
+
+      packageScript.check(context, {
+        scripts: {
+          [SCRIPT_NAME]: {
+            options: [undefined],
+            fixValue: undefined,
+          },
+        },
+      });
+
+      const errors = spy.mock.calls;
+
+      expect(errors.length).toBe(1);
+      expect(errors[0][0].fixer).toBeDefined();
+
+      expect(JSON.parse(mockFiles.get("package.json")!).scripts).toEqual({});
+    });
   });
 });
