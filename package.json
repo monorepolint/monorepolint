@@ -32,12 +32,12 @@
     "compile:fast": "cd packages/all; tsc --build",
     "compile:watch": "cd packages/all; tsc --build --watch",
     "fix:lint:monorepolint": "monorepolint fix",
-    "fix:lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' --write",
+    "fix:lint:prettier": "prettier '**/*.{ts,tsx,less,json,md}' --write",
     "fix:lint:typescript": "lerna run --no-bail lint:typescript -- --fix",
     "lint": "npm-run-all lint:*",
     "lint:monorepolint": "monorepolint check --verbose",
-    "lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' -l",
-    "lint:typescript": "lerna run --no-bail lint:typescript",
+    "lint:prettier": "prettier '**/*.{ts,tsx,less,json,md}' -l",
+    "lint:subprojects": "lerna run --no-bail lint",
     "preLernaPublish": "npm-run-all clean compile lint test",
     "publish:release": "yarn run preLernaPublish && lerna publish --force-publish --npm-client npm",
     "publish:prerelease": "yarn run preLernaPublish && lerna publish --force-publish --npm-client npm --canary minor --yes",
@@ -58,7 +58,7 @@
     "ts-jest": "^24.0.0",
     "ts-node": "^8.0.3",
     "tslint": "^5.12.0",
-    "typescript": "^3.5.1"
+    "typescript": "^3.6.3"
   },
   "optionalDependencies": {
     "fsevents": "^1.2.9"

@@ -1,6 +1,6 @@
 # Rules
 
-Monorepolint comes with a number of builtin rules. 
+Monorepolint comes with a number of builtin rules.
 
 To add your own custom rules see `writing-custom-rules.md`
 
@@ -16,7 +16,7 @@ Makes sure that all dependency blocks are orderded alphabetically.
 module.exports = {
   rules: {
     ":alphabetical-dependencies": true,
-  }
+  },
 };
 ```
 
@@ -28,7 +28,7 @@ Disallow problematic dependencies.
 
 ### Options
 
-* `bannedDependencies`
+- `bannedDependencies`
   - An array of depedency names to ban
 
 ### Example
@@ -38,10 +38,10 @@ module.exports = {
   rules: {
     ":banned-dependencies": {
       options: {
-        bannedDependencies: ["lodash"]
-      }
-    }
-  }
+        bannedDependencies: ["lodash"],
+      },
+    },
+  },
 };
 ```
 
@@ -56,8 +56,8 @@ Enforce dependency versions are consistent with workspace root.
 ```javascript
 module.exports = {
   rules: {
-    ":consistent-dependencies": true
-  }
+    ":consistent-dependencies": true,
+  },
 };
 ```
 
@@ -69,14 +69,14 @@ Enforce each package has a file with certain contents enforced by either a templ
 
 ### Options
 
-* `file`
+- `file`
   - Name of the file
-* `generator` (Optional)
+- `generator` (Optional)
   - Function that can generate the file
-* `template` (Optional)
+- `template` (Optional)
   - Expected file contents
-* `templateFile` (Optional)
-  - Path to a file to use as a template 
+- `templateFile` (Optional)
+  - Path to a file to use as a template
 
 Exactly one of `generator`, `template`, or `templateFile` needs to be specified.
 
@@ -87,10 +87,10 @@ module.exports = {
   rules: {
     "file-contents": {
       options: {
-        templateFile: "./templates/jest.config.js"
-      }
-    }
-  }
+        templateFile: "./templates/jest.config.js",
+      },
+    },
+  },
 };
 ```
 
@@ -102,7 +102,7 @@ Standardize arbitrary entries in package.json.
 
 ### Options
 
-* `entries`
+- `entries`
   - An object of expected key value pairs for the package.json
 
 ### Example
@@ -113,11 +113,11 @@ module.exports = {
     ":package-entry": {
       options: {
         entries: {
-          "author": "Eric L Anderson (https://github.com/ericanderson)"
-        }
-      }
-    }
-  }
+          author: "Eric L Anderson (https://github.com/ericanderson)",
+        },
+      },
+    },
+  },
 };
 ```
 
@@ -129,7 +129,7 @@ Standardize entry order in package.json.
 
 ### Options
 
-* `order` (Optional)
+- `order` (Optional)
   - Either a comparator function on keys or an array of expected package order. If a a key is missing from this array, it will be at the bottom of the package.json. If missing, uses a default ordering found below.
 
 ### Example
@@ -164,11 +164,11 @@ module.exports = {
           "peerDependencies",
           "devDependencies",
           "optionalDependencies",
-          "publishConfig"
-        ]
-      }
-    }
-  }
+          "publishConfig",
+        ],
+      },
+    },
+  },
 };
 ```
 
@@ -180,7 +180,7 @@ Standardize package scripts. This is a seperate rule from Package Entries to mak
 
 ### Options
 
-* `scripts`
+- `scripts`
   - An object of expected key value pairs for the scripts block
 
 ### Example
@@ -202,12 +202,12 @@ module.exports = {
           },
           "any-of-these-auto-fix-to-c": {
             options: ["a", "b", "c"],
-            fixValue: "c"
-          }
-        }
-      }
-    }
-  }
+            fixValue: "c",
+          },
+        },
+      },
+    },
+  },
 };
 ```
 
@@ -219,12 +219,12 @@ Special case of the File Contents rule for typescript configs. Using a template 
 
 ### Options
 
-* `generator` (Optional)
+- `generator` (Optional)
   - Function that can generate the config
-* `template` (Optional)
+- `template` (Optional)
   - Expected config contents
-* `templateFile` (Optional)
-  - Path to a file to use as a template 
+- `templateFile` (Optional)
+  - Path to a file to use as a template
 
 Exactly one of `generator`, `template`, or `templateFile` needs to be specified.
 
@@ -235,9 +235,9 @@ module.exports = {
   rules: {
     ":standard-tsconfig": {
       options: {
-        templateFile: "./templates/tsconfig.json"
-      }
-    }
-  }
+        templateFile: "./templates/tsconfig.json",
+      },
+    },
+  },
 };
 ```

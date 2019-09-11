@@ -45,7 +45,6 @@ mrl check --verbose
 mrl check --fix
 ```
 
-
 ## Configuration
 
 For now, look at [.monorepolint.config.ts](./.monorepolint.config.ts) in this repo.
@@ -75,29 +74,27 @@ module.exports = {
             noImplicitReturns: true,
             noFallthroughCasesInSwitch: true,
             allowSyntheticDefaultImports: true,
-            esModuleInterop: true
-          }
-        }
-      }
+            esModuleInterop: true,
+          },
+        },
+      },
     ],
     ":file-contents": [
       {
         options: "jest.config.js",
-        templateFile: "./templates/jest.config.js"
-      }
+        templateFile: "./templates/jest.config.js",
+      },
     ],
     ":package-script": [
       {
         options: {
-          clean: "rm -rf build",
+          "clean": "rm -rf build",
           "compile:typescript": "../../node_modules/.bin/tsc",
-          "lint:typescript":
-            "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
-          "test:watch":
-            "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
-          test: "../../node_modules/.bin/jest --colors --passWithNoTests"
-        }
-      }
+          "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
+          "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
+          "test": "../../node_modules/.bin/jest --colors --passWithNoTests",
+        },
+      },
     ],
     ":package-order": [
       {
@@ -120,13 +117,13 @@ module.exports = {
           "peerDependencies",
           "devDependencies",
           "publishConfig",
-          "gitHead"
+          "gitHead",
         ],
-        includeWorkspaceRoot: true
-      }
+        includeWorkspaceRoot: true,
+      },
     ],
-    ":alphabetical-dependencies": {}
-  }
+    ":alphabetical-dependencies": {},
+  },
 };
 ```
 
@@ -156,10 +153,10 @@ module.exports = {
 
 2. Run this command:
 
-  ```shell
-  sudo gem install --pre github_changelog_generator
-  yarn run changelog
-  ```
+```shell
+sudo gem install --pre github_changelog_generator
+yarn run changelog
+```
 
 3. Submit a pull request
 

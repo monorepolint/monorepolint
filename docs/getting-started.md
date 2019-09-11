@@ -12,8 +12,8 @@ Add an initial `.monorepolint.config.ts` at the toplevel of your monorepo.
 module.exports = {
   rules: {
     ":package-order": true,
-    ":alphabetical-dependencies": true
-  }
+    ":alphabetical-dependencies": true,
+  },
 };
 ```
 
@@ -43,6 +43,6 @@ And standardize them.
 
 ## Next steps
 
-* Understand how the config works in config.md
-* Add more built in rules from rules.md
-* Write custom rules - writing-custom-rules
+- Understand how the config works in config.md
+- Add more built in rules from rules.md
+- Write custom rules - writing-custom-rules

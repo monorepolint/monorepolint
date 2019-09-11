@@ -3,14 +3,12 @@
   "version": "0.4.0",
   "license": "MIT",
   "scripts": {
-    "clean": "rm -rf build lib node_modules *.tgz",
-    "compile:typescript": "../../node_modules/.bin/tsc",
-    "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
-    "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
-    "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
-    "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
-    "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
-    "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
+    "clean": "rm -rf build lib node_modules *.tgz tsconfig.tsbuildinfo",
+    "compile:typescript": "tsc --build",
+    "lint:typescript": "tslint --config ../../tslint.json --project .",
+    "lint": "npm-run-all -p lint:*",
+    "test:watch": "jest --colors --passWithNoTests --watch",
+    "test": "jest --colors --passWithNoTests"
   },
   "dependencies": {
     "@monorepolint/cli": "^0.4.0",
