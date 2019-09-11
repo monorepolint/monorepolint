@@ -6,7 +6,7 @@
  */
 
 // tslint:disable:no-console
-import { createMockFiles } from "./utils";
+import { createMockFiles, jsonToString } from "./utils";
 
 // done first since this also mocks 'fs'
 const mockFiles: Map<string, string> = createMockFiles();
@@ -14,9 +14,7 @@ const mockFiles: Map<string, string> = createMockFiles();
 import { Failure, PackageContext } from "@monorepolint/core";
 import { packageScript } from "../packageScript";
 
-const json = (a: unknown) => JSON.stringify(a, undefined, 2) + "\n";
-
-const PACKAGE_WITHOUT_SCRIPTS = json({
+const PACKAGE_WITHOUT_SCRIPTS = jsonToString({
   name: "package-without-scripts",
 });
 
@@ -26,7 +24,7 @@ const MISSING_SCRIPT_VALUE = "missing value";
 const SCRIPT_NAME = "exists";
 const SCRIPT_VALUE = "exists value";
 
-const PACKAGE_WITH_SCRIPTS = json({
+const PACKAGE_WITH_SCRIPTS = jsonToString({
   name: "package-with-scripts",
   scripts: {
     [SCRIPT_NAME]: SCRIPT_VALUE,

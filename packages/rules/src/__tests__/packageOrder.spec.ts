@@ -6,7 +6,7 @@
  */
 
 // tslint:disable:no-console
-import { createMockFiles } from "./utils";
+import { createMockFiles, jsonToString } from "./utils";
 
 // done first since this also mocks 'fs'
 const mockFiles: Map<string, string> = createMockFiles();
@@ -14,31 +14,21 @@ const mockFiles: Map<string, string> = createMockFiles();
 import { Context, Failure, PackageContext } from "@monorepolint/core";
 import { packageOrder } from "../packageOrder";
 
-const PACKAGE_UNORDERED =
-  JSON.stringify(
-    {
-      scripts: {},
-      dependencies: {},
-      version: {},
-      name: "package",
-    },
-    undefined,
-    2
-  ) + "\n";
+const PACKAGE_UNORDERED = jsonToString({
+  scripts: {},
+  dependencies: {},
+  version: {},
+  name: "package",
+});
 
-const PACKAGE_UNORDERED_UNKOWN_KEYS =
-  JSON.stringify(
-    {
-      butter: false,
-      apple: false,
-      scripts: {},
-      dependencies: {},
-      version: {},
-      name: "package-unknown-keys",
-    },
-    undefined,
-    2
-  ) + "\n";
+const PACKAGE_UNORDERED_UNKOWN_KEYS = jsonToString({
+  butter: false,
+  apple: false,
+  scripts: {},
+  dependencies: {},
+  version: {},
+  name: "package-unknown-keys",
+});
 
 const orderArray = ["name", "version", "scripts", "dependencies"];
 
@@ -47,43 +37,28 @@ const orderFunction = (_context: Context) => (a: string, b: string) => {
   return b.length - a.length || a.localeCompare(b);
 };
 
-const PACKAGE_ORDERED =
-  JSON.stringify(
-    {
-      name: "package",
-      version: {},
-      scripts: {},
-      dependencies: {},
-    },
-    undefined,
-    2
-  ) + "\n";
+const PACKAGE_ORDERED = jsonToString({
+  name: "package",
+  version: {},
+  scripts: {},
+  dependencies: {},
+});
 
-const PACKAGE_ORDERED_BY_LENGTH =
-  JSON.stringify(
-    {
-      dependencies: {},
-      scripts: {},
-      version: {},
-      name: "package",
-    },
-    undefined,
-    2
-  ) + "\n";
+const PACKAGE_ORDERED_BY_LENGTH = jsonToString({
+  dependencies: {},
+  scripts: {},
+  version: {},
+  name: "package",
+});
 
-const PACKAGE_ORDERED_UNKOWN_KEYS =
-  JSON.stringify(
-    {
-      name: "package-unknown-keys",
-      version: {},
-      scripts: {},
-      dependencies: {},
-      apple: false,
-      butter: false,
-    },
-    undefined,
-    2
-  ) + "\n";
+const PACKAGE_ORDERED_UNKOWN_KEYS = jsonToString({
+  name: "package-unknown-keys",
+  version: {},
+  scripts: {},
+  dependencies: {},
+  apple: false,
+  butter: false,
+});
 
 describe("expectPackageOrder", () => {
   afterEach(() => {
