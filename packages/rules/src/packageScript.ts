@@ -85,14 +85,15 @@ export const packageScript = {
             });
           };
         }
+
+        const validOptionsString = Array.from(allowedValues.values())
+          .map(a => (a === undefined ? "(empty)" : `'${a}'`))
+          .join(", ");
+
         context.addError({
           file: context.getPackageJsonPath(),
-          message: `Expected standardized script entry for '${name}'. Valid options: ${Array.from(
-            allowedValues.values()
-          )
-            .map(a => (a === undefined ? "(empty)" : `'${a}'`))
-            .join(", ")}`,
-          longMessage: diff(value + "\n", (packageJson.scripts[name] || "") + "\n"),
+          message: `Expected standardized script entry for '${name}'. Valid options: ${validOptionsString}`,
+          longMessage: diff(validOptionsString + "\n", (packageJson.scripts[name] || "") + "\n"),
           fixer,
         });
       }
