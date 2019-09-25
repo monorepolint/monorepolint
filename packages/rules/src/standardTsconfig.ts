@@ -9,6 +9,7 @@ import { Context, RuleModule } from "@monorepolint/core";
 import { getPackageNameToDir } from "@monorepolint/utils";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import diff from "jest-diff";
+import minimatch from "minimatch";
 import * as path from "path";
 import * as r from "runtypes";
 
@@ -17,6 +18,7 @@ const Options = r
     generator: r.Function,
     template: r.Record({}).Or(r.String),
     templateFile: r.String,
+    excludedReferences: r.Array(r.String).Or(r.Undefined),
   })
   .withConstraint(({ generator, template, templateFile }) => {
     let count = 0;
@@ -73,15 +75,15 @@ function getGenerator(context: Context, opts: Options) {
     const fullPath = path.resolve(workspacePackageDir, opts.templateFile);
     const template = JSON.parse(readFileSync(fullPath, "utf-8"));
 
-    return makeGenerator(template);
+    return makeGenerator(template, opts.excludedReferences);
   } else if (opts.template) {
-    return makeGenerator(opts.template);
+    return makeGenerator(opts.template, opts.excludedReferences);
   } else {
     throw new Error("Unable to make generator");
   }
 }
 
-function makeGenerator(template: any) {
+function makeGenerator(template: any, excludedReferences: ReadonlyArray<string> = []) {
   return function generator(context: Context) {
     template = {
       ...template,
@@ -94,7 +96,9 @@ function makeGenerator(template: any) {
     const deps = [...Object.keys(packageJson.dependencies || {}), ...Object.keys(packageJson.devDependencies || {})];
 
     deps
-      .filter(name => nameToDirectory.has(name))
+      .filter(
+        name => nameToDirectory.has(name) && !excludedReferences.some(excludedRef => minimatch(name, excludedRef))
+      )
       .forEach(packageName => {
         template.references.push({
           path: path.relative(context.packageDir, nameToDirectory.get(packageName)!),

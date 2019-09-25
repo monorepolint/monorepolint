@@ -5,7 +5,7 @@
  *
  */
 import { WorkspaceContext } from "@monorepolint/core";
-import { mkdirSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
 import { consistentDependencies } from "../consistentDependencies";
@@ -73,7 +73,9 @@ describe("consistentDependencies", () => {
     function addFile(filePath: string, content: string) {
       const dirPath = path.resolve(dir.name, path.dirname(filePath));
       const resolvedFilePath = path.resolve(dir.name, filePath);
-      mkdirSync(dirPath, { recursive: true });
+      if (!existsSync(dirPath)) {
+        mkdirSync(dirPath, { recursive: true });
+      }
       writeFileSync(resolvedFilePath, content);
     }
 
