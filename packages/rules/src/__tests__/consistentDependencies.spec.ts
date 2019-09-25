@@ -73,9 +73,18 @@ describe("consistentDependencies", () => {
     function addFile(filePath: string, content: string) {
       const dirPath = path.resolve(dir.name, path.dirname(filePath));
       const resolvedFilePath = path.resolve(dir.name, filePath);
-      if (!existsSync(dirPath)) {
-        mkdirSync(dirPath, { recursive: true });
+
+      // node < 10 doesn't support mkdirSync w/ recursive: true
+      // so we manually do it instead
+      const dirSegments = dirPath.split(path.sep);
+      for (let i = 2; i <= dirSegments.length; i++) {
+        // we skip the empty segment
+        const curDirPath = dirSegments.slice(0, i).join(path.sep);
+        if (!existsSync(curDirPath)) {
+          mkdirSync(curDirPath);
+        }
       }
+
       writeFileSync(resolvedFilePath, content);
     }
 
