@@ -19,8 +19,8 @@
   },
   "lint-staged": {
     "packages/*/src/**/*.{ts,tsx}": [
-      "tslint -c tslint.json --fix",
       "prettier --write",
+      "tslint -c tslint.json --fix",
       "git add"
     ]
   },
