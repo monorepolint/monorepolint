@@ -23,6 +23,7 @@ type Options = r.Static<typeof Options>;
 const defaultKeyOrder = [
   "name",
   "version",
+  "description",
   "author",
   "contributors",
   "url",
