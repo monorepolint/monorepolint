@@ -61,6 +61,7 @@ describe("consistentDependencies", () => {
       rules: [],
       fix,
       verbose: false,
+      silent: true,
     });
 
     function checkAndSpy(q: string) {
