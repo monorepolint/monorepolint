@@ -7,7 +7,7 @@
 
 import { Context } from "@monorepolint/core";
 import { RuleModule } from "@monorepolint/core";
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from "fs";
 import diff from "jest-diff";
 import * as path from "path";
 import * as r from "runtypes";
@@ -43,7 +43,8 @@ export const fileContents = {
     const generator = getGenerator(context, opts);
     const expectedContent = generator(context);
 
-    const actualContent = existsSync(fullPath) ? readFileSync(fullPath, "utf-8") : undefined;
+    const pathExists = existsSync(fullPath);
+    const actualContent = pathExists ? readFileSync(fullPath, "utf-8") : undefined;
 
     if (actualContent !== expectedContent) {
       context.addError({
@@ -51,9 +52,12 @@ export const fileContents = {
         message: "Expect file contents to match",
         longMessage: diff(expectedContent, actualContent, { expand: true }),
         fixer: () => {
-          if (expectedContent === undefined) {
+          if (expectedContent === undefined && pathExists) {
             unlinkSync(fullPath);
           } else {
+            if (!existsSync(path.dirname(fullPath))) {
+              mkdirSync(path.dirname(fullPath), { recursive: true });
+            }
             writeFileSync(fullPath, expectedContent);
           }
         },
