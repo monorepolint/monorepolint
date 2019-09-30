@@ -33,6 +33,7 @@ module.exports = {
     },
     ":package-order": true,
     ":alphabetical-dependencies": true,
+    ":alphabetical-scripts": true,
     ":consistent-dependencies": true,
     ":banned-dependencies": {
       options: {

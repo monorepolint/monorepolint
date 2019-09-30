@@ -11,11 +11,9 @@ import { checkAlpha } from "./util/checkAlpha";
 
 const Options = r.Undefined;
 
-export const alphabeticalDependencies: RuleModule<typeof Options> = {
-  check: function expectAlphabeticalDependencies(context: Context) {
-    checkAlpha(context, "dependencies");
-    checkAlpha(context, "devDependencies");
-    checkAlpha(context, "peerDependencies");
+export const alphabeticalScripts: RuleModule<typeof Options> = {
+  check: function expectAlphabeticalScripts(context: Context) {
+    checkAlpha(context, "scripts");
   },
   optionsRuntype: Options,
 };
