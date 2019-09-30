@@ -6,6 +6,7 @@
  */
 
 export { alphabeticalDependencies } from "./alphabeticalDependencies";
+export { alphabeticalScripts } from "./alphabeticalScripts";
 export { bannedDependencies } from "./bannedDependencies";
 export { consistentDependencies } from "./consistentDependencies";
 export { fileContents } from "./fileContents";
