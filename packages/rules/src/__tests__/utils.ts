@@ -21,3 +21,7 @@ export function createMockFiles() {
 
   return mockFiles;
 }
+
+export function jsonToString(obj: {}) {
+  return JSON.stringify(obj, undefined, 2) + "\n";
+}

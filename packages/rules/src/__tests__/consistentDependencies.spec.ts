@@ -9,10 +9,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
 import { consistentDependencies } from "../consistentDependencies";
-
-function jsonToString(obj: {}) {
-  return JSON.stringify(obj, undefined, 2) + "\n";
-}
+import { jsonToString } from "./utils";
 
 const PACKAGE_ROOT = jsonToString({
   workspaces: {
@@ -61,6 +58,7 @@ describe("consistentDependencies", () => {
       rules: [],
       fix,
       verbose: false,
+      silent: true,
     });
 
     function checkAndSpy(q: string) {

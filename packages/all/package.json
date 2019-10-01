@@ -5,12 +5,12 @@
   "scripts": {
     "clean": "rm -rf build lib node_modules *.tgz",
     "compile:typescript": "../../node_modules/.bin/tsc",
-    "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
     "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
-    "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
+    "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
     "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
-    "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
-    "test": "../../node_modules/.bin/jest --colors --passWithNoTests"
+    "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
+    "test": "../../node_modules/.bin/jest --colors --passWithNoTests",
+    "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch"
   },
   "dependencies": {
     "@monorepolint/cli": "^0.4.0",
