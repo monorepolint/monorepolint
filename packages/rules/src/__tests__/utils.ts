@@ -17,6 +17,14 @@ export function createMockFiles() {
     readFileSync: function readFileSync(filePath: string, _contentType: string) {
       return mockFiles.get(filePath);
     },
+
+    existsSync: function existsSync(filePath: string) {
+      return mockFiles.has(filePath);
+    },
+
+    mkdirSync: function mkdirSync(directoryPath: string) {
+      return mockFiles.set(directoryPath, "");
+    },
   }));
 
   return mockFiles;
