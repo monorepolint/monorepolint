@@ -11,6 +11,7 @@ import { existsSync, readFileSync, unlinkSync, writeFileSync } from "fs";
 import diff from "jest-diff";
 import * as path from "path";
 import * as r from "runtypes";
+import { makeDirectoryRecursively } from "./util/makeDirectory";
 
 const Options = r.Union(
   r.Record({
@@ -43,17 +44,18 @@ export const fileContents = {
     const generator = getGenerator(context, opts);
     const expectedContent = generator(context);
 
-    const actualContent = existsSync(fullPath) ? readFileSync(fullPath, "utf-8") : undefined;
-
+    const pathExists = existsSync(fullPath);
+    const actualContent = pathExists ? readFileSync(fullPath, "utf-8") : undefined;
     if (actualContent !== expectedContent) {
       context.addError({
         file: fullPath,
         message: "Expect file contents to match",
         longMessage: diff(expectedContent, actualContent, { expand: true }),
         fixer: () => {
-          if (expectedContent === undefined) {
+          if (expectedContent === undefined && pathExists) {
             unlinkSync(fullPath);
           } else {
+            makeDirectoryRecursively(path.dirname(fullPath));
             writeFileSync(fullPath, expectedContent);
           }
         },
