@@ -80,6 +80,7 @@ describe("expectPackageEntries", () => {
         entries: {
           license: "UNLICENSED",
         },
+        entriesExist: undefined,
       });
 
       expect(spy).toHaveBeenCalledTimes(1);
@@ -102,6 +103,7 @@ describe("expectPackageEntries", () => {
             url: "https://github.com:foo/foo",
           },
         },
+        entriesExist: undefined,
       });
 
       expect(spy).toHaveBeenCalledTimes(1);
@@ -124,9 +126,55 @@ describe("expectPackageEntries", () => {
             url: "https://github.com:foo/foo",
           },
         },
+        entriesExist: undefined,
       });
 
       expect(spy).toHaveBeenCalledTimes(0);
+      expect(mockFiles.get("package.json")).toEqual(PACKAGE_REPOSITORY);
+    });
+
+    it("errors for keys that are missing", () => {
+      mockFiles.set("package.json", PACKAGE_REPOSITORY);
+
+      packageEntry.check(context, {
+        entries: undefined,
+        entriesExist: ["bugs"],
+      });
+
+      expect(spy).toHaveBeenCalledTimes(1);
+
+      const failure: Failure = spy.mock.calls[0][0];
+      expect(failure.file).toBe("package.json");
+      expect(failure.fixer).toBeUndefined();
+      expect(failure.message).toBe("Expected entry for 'bugs' to exist");
+      expect(mockFiles.get("package.json")).toEqual(PACKAGE_REPOSITORY);
+    });
+
+    it("handles both entries and entriesExist", () => {
+      mockFiles.set("package.json", PACKAGE_MISSING_ENTRY);
+
+      packageEntry.check(context, {
+        entries: {
+          repository: {
+            type: "git",
+            url: "https://github.com:foo/foo",
+          },
+        },
+        entriesExist: ["bugs"],
+      });
+
+      expect(spy).toHaveBeenCalledTimes(2);
+
+      const failure: Failure = spy.mock.calls[0][0];
+      expect(failure.file).toBe("package.json");
+      expect(failure.fixer).not.toBeUndefined();
+      expect(failure.message).toBe("Expected standardized entry for 'repository'");
+
+      const failure2: Failure = spy.mock.calls[1][0];
+      expect(failure2.file).toBe("package.json");
+      expect(failure2.fixer).toBeUndefined();
+      expect(failure2.message).toBe("Expected entry for 'bugs' to exist");
+
       expect(mockFiles.get("package.json")).toEqual(PACKAGE_REPOSITORY);
     });
   });
