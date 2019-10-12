@@ -1,6 +1,6 @@
 # Rules
 
-Monorepolint comes with a number of builtin rules. 
+Monorepolint comes with a number of builtin rules.
 
 To add your own custom rules see `writing-custom-rules.md`
 
@@ -76,7 +76,7 @@ Enforce each package has a file with certain contents enforced by either a templ
 * `template` (Optional)
   - Expected file contents
 * `templateFile` (Optional)
-  - Path to a file to use as a template 
+  - Path to a file to use as a template
 
 Exactly one of `generator`, `template`, or `templateFile` needs to be specified.
 
@@ -104,6 +104,8 @@ Standardize arbitrary entries in package.json.
 
 * `entries`
   - An object of expected key value pairs for the package.json
+* `entriesExists`
+  - An array of expected keys to exist in package.json (without any value enforcement)
 
 ### Example
 
@@ -114,7 +116,10 @@ module.exports = {
       options: {
         entries: {
           "author": "Eric L Anderson (https://github.com/ericanderson)"
-        }
+        },
+        entriesExists: [
+          "bugs"
+        ]
       }
     }
   }
@@ -224,7 +229,7 @@ Special case of the File Contents rule for typescript configs. Using a template 
 * `template` (Optional)
   - Expected config contents
 * `templateFile` (Optional)
-  - Path to a file to use as a template 
+  - Path to a file to use as a template
 
 Exactly one of `generator`, `template`, or `templateFile` needs to be specified.
 
