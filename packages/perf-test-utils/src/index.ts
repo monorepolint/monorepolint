@@ -5,3 +5,11 @@
  *
  */
 
+// import { getFunctionTimings } from "./getFunctionTimings";
+// import { delay } from "./utils";
+
+// getFunctionTimings(async () => {
+//   await delay(500);
+// }, 100)
+//   .then(timings => console.log(timings))
+//   .catch(err => console.log(err));
