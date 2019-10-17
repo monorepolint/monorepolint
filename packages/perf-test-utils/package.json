@@ -1,7 +1,14 @@
 {
-  "name": "monorepolint",
+  "name": "@monorepolint/perf-test-utils",
   "version": "0.4.0",
+  "author": "Eric L Anderson (https://github.com/ericanderson)",
+  "contributors": [
+    "Mac Lockard (https://github.com/maclockard)"
+  ],
+  "url": "https://github.com/monorepolint/monorepolint",
   "license": "MIT",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rm -rf build lib node_modules *.tgz",
     "compile:typescript": "../../node_modules/.bin/tsc",
@@ -13,14 +20,9 @@
     "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch"
   },
   "dependencies": {
-    "@monorepolint/cli": "^0.4.0",
-    "@monorepolint/core": "^0.4.0",
-    "@monorepolint/rules": "^0.4.0",
-    "@monorepolint/utils": "^0.4.0"
+    "tslib": "^1.9.0"
   },
-  "devDependencies": {
-    "@monorepolint/perf-test-utils": "^0.4.0"
-  },
+  "devDependencies": {},
   "publishConfig": {
     "access": "public"
   },
