@@ -11,14 +11,24 @@ import diff from "jest-diff";
 import * as r from "runtypes";
 
 export const Options = r.Union(
-  r.Record({
-    entries: r.Dictionary(r.Unknown), // string => unknown, enforces existence of keys and their values
-    entriesExist: r.Undefined,
-  }),
-  r.Record({
-    entries: r.Undefined,
-    entriesExist: r.Array(r.String), // enforces existence of keys, but not values
-  }),
+  r
+    .Record({
+      entries: r.Dictionary(r.Unknown), // string => unknown, enforces existence of keys and their values
+    })
+    .And(
+      r.Partial({
+        entriesExist: r.Undefined,
+      })
+    ),
+  r
+    .Record({
+      entriesExist: r.Array(r.String), // enforces existence of keys, but not values
+    })
+    .And(
+      r.Partial({
+        entries: r.Undefined,
+      })
+    ),
   r.Record({
     entries: r.Dictionary(r.Unknown), // string => unknown, enforces existence of keys and their values
     entriesExist: r.Array(r.String),
