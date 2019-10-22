@@ -27,6 +27,12 @@ const PACKAGE_CHILD_WITH_STAR = jsonToString({
   },
 });
 
+const PACKAGE_CHILD_WITH_LATEST = jsonToString({
+  dependencies: {
+    foo: "*",
+  },
+});
+
 const PACKAGE_CHILD_WITH_RIGHT_VERSION = jsonToString({
   dependencies: {
     foo: "5",
@@ -88,6 +94,7 @@ describe("consistentDependencies", () => {
     const { addFile, workspaceContext, checkAndSpy } = makeWorkspace({ fix: false });
     addFile("./package.json", PACKAGE_ROOT);
     addFile("./packages/star/package.json", PACKAGE_CHILD_WITH_STAR);
+    addFile("./packages/latest/package.json", PACKAGE_CHILD_WITH_LATEST);
     addFile("./packages/right/package.json", PACKAGE_CHILD_WITH_RIGHT_VERSION);
     addFile("./packages/wrong/package.json", PACKAGE_CHILD_WITH_WRONG_VERSION);
 
@@ -95,6 +102,9 @@ describe("consistentDependencies", () => {
 
     const star = checkAndSpy("./packages/star");
     expect(star.addErrorSpy).toHaveBeenCalledTimes(0);
+
+    const latest = checkAndSpy("./packages/latest");
+    expect(latest.addErrorSpy).toHaveBeenCalledTimes(0);
 
     const right = checkAndSpy("./packages/right");
     expect(right.addErrorSpy).toHaveBeenCalledTimes(0);
