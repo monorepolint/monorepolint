@@ -13,6 +13,8 @@ import * as r from "runtypes";
 const Options = r.Undefined;
 type Options = r.Static<typeof Options>;
 
+const skippedVersions = ["*", "latest"];
+
 export const consistentDependencies = {
   check: function expectConsistentDependencies(context: Context) {
     checkDeps(context, "dependencies");
@@ -57,7 +59,7 @@ function filterKeys(ob: Record<string, string>, filterOb: Record<string, string>
   const newOb: Record<string, any> = {};
 
   for (const key of Object.keys(filterOb)) {
-    if (ob[key] !== undefined && filterOb[key] !== "*") {
+    if (ob[key] !== undefined && skippedVersions.indexOf(filterOb[key]) === -1) {
       newOb[key] = ob[key];
     }
   }
