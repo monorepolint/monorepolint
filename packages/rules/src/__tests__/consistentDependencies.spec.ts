@@ -29,7 +29,7 @@ const PACKAGE_CHILD_WITH_STAR = jsonToString({
 
 const PACKAGE_CHILD_WITH_LATEST = jsonToString({
   dependencies: {
-    foo: "*",
+    foo: "latest",
   },
 });
 
