@@ -54,10 +54,10 @@ describe("nestedWorkspaces", () => {
     cleanupJobs = [];
   });
 
-  function makeWorkspace({ fix }: { fix: boolean }) {
+  function makeWorkspace() {
     const workspaceContext = new WorkspaceContext(cwd!, {
       rules: [],
-      fix,
+      fix: false,
       verbose: false,
       silent: true,
     });
@@ -81,14 +81,14 @@ describe("nestedWorkspaces", () => {
   }
 
   it("checks correctly when no packages", async () => {
-    const { addFile, checkAndSpy } = makeWorkspace({ fix: false });
+    const { addFile, checkAndSpy } = makeWorkspace();
     addFile("./package.json", EMPTY_PACKAGE);
 
     expect((await checkAndSpy()).addErrorSpy).toHaveBeenCalledTimes(0);
   });
 
   it("checks correctly when one level packages", async () => {
-    const { addFile, checkAndSpy } = makeWorkspace({ fix: false });
+    const { addFile, checkAndSpy } = makeWorkspace();
     addFile("./package.json", PACKAGE_ROOT_WITH_PACKAGES_STAR);
     addFile("./packages/star/package.json", EMPTY_PACKAGE);
 
@@ -96,7 +96,7 @@ describe("nestedWorkspaces", () => {
   });
 
   it("checks fail when one level packages with no workspaces field", async () => {
-    const { addFile, checkAndSpy } = makeWorkspace({ fix: false });
+    const { addFile, checkAndSpy } = makeWorkspace();
     addFile("./package.json", EMPTY_PACKAGE);
     addFile("./packages/star/package.json", EMPTY_PACKAGE);
 
@@ -104,7 +104,7 @@ describe("nestedWorkspaces", () => {
   });
 
   it("checks correctly when two level packages with two level workspaces field", async () => {
-    const { addFile, checkAndSpy } = makeWorkspace({ fix: false });
+    const { addFile, checkAndSpy } = makeWorkspace();
     addFile("./package.json", PACKAGE_ROOT_WITH_TWO_LEVEL);
     addFile("./packages/star/package.json", EMPTY_PACKAGE);
     addFile("./packages/deep/star/package.json", EMPTY_PACKAGE);
@@ -113,7 +113,7 @@ describe("nestedWorkspaces", () => {
   });
 
   it("checks fail when two level packages with one level workspaces field", async () => {
-    const { addFile, checkAndSpy } = makeWorkspace({ fix: false });
+    const { addFile, checkAndSpy } = makeWorkspace();
     addFile("./package.json", PACKAGE_ROOT_WITH_PACKAGES_STAR);
     addFile("./packages/star/package.json", EMPTY_PACKAGE);
     addFile("./packages/deep/star/package.json", EMPTY_PACKAGE);
@@ -122,7 +122,7 @@ describe("nestedWorkspaces", () => {
   });
 
   it("checks correctly when three level packages with three level workspaces field", async () => {
-    const { addFile, checkAndSpy } = makeWorkspace({ fix: false });
+    const { addFile, checkAndSpy } = makeWorkspace();
     addFile("./package.json", PACKAGE_ROOT_WITH_THREE_LEVEL);
     addFile("./packages/star/package.json", EMPTY_PACKAGE);
     addFile("./packages/deep/star/package.json", EMPTY_PACKAGE);
