@@ -7,6 +7,7 @@
 
 import { Context, RuleModule } from "@monorepolint/core";
 import globby from "globby";
+import path from "path";
 import * as r from "runtypes";
 
 export const Options = r.Undefined;
@@ -42,15 +43,16 @@ export const nestedWorkspaces: RuleModule<typeof Options> = {
     // Expand the globs to get an array of all package.json files that are in packages specified by a workspace.
     const expandedWorkspacesGlobs = await globby([...workspacePackageJsons, "!**/node_modules/**"]);
 
-    // Check that sets are equal (we know the inverse is true already)
-    const setsAreEqual = packageJsonPaths.every(packageJsonPath => expandedWorkspacesGlobs.includes(packageJsonPath));
+    // Ensure there are no package.jsons which are not included in the globbed workspaces set
+    const difference = packageJsonPaths.filter(packageJsonPath => !expandedWorkspacesGlobs.includes(packageJsonPath));
 
-    if (!setsAreEqual) {
+    if (difference.length !== 0) {
+      const differencesList = difference.map(packageJsonPath => path.dirname(packageJsonPath)).join(", ");
       context.addError({
         file: context.getPackageJsonPath(),
         message:
-          'The "workspace" field is missing one or more values. This is usually because there is an unlisted nested workspace.' +
-          'Nested workspaces should be listed individually, e.g. "packages/workspace-a/*".',
+          `The "workspace" field is missing one or more values: ${differencesList}. ` +
+          'You may be able to use a glob to avoid listing each out individually, e.g. "packages/nested-workspace/*".',
       });
     }
   },

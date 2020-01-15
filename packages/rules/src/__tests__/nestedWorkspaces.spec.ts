@@ -75,6 +75,7 @@ describe("nestedWorkspaces", () => {
 
       makeDirectoryRecursively(dirPath);
       writeFileSync(resolvedFilePath, content);
+      return resolvedFilePath;
     }
 
     return { addFile, workspaceContext, checkAndSpy };
@@ -97,10 +98,15 @@ describe("nestedWorkspaces", () => {
 
   it("checks fail when one level packages with no workspaces field", async () => {
     const { addFile, checkAndSpy } = makeWorkspace();
-    addFile("./package.json", EMPTY_PACKAGE);
+    const packageJsonPath = addFile("./package.json", EMPTY_PACKAGE);
     addFile("./packages/star/package.json", EMPTY_PACKAGE);
 
-    expect((await checkAndSpy()).addErrorSpy).toHaveBeenCalledTimes(1);
+    const spy = (await checkAndSpy()).addErrorSpy;
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith({
+      file: packageJsonPath,
+      message: 'The "workspace" field is missing, even though there are workspaces in the repository.',
+    });
   });
 
   it("checks correctly when two level packages with two level workspaces field", async () => {
@@ -114,11 +120,18 @@ describe("nestedWorkspaces", () => {
 
   it("checks fail when two level packages with one level workspaces field", async () => {
     const { addFile, checkAndSpy } = makeWorkspace();
-    addFile("./package.json", PACKAGE_ROOT_WITH_PACKAGES_STAR);
+    const packageJsonPath = addFile("./package.json", PACKAGE_ROOT_WITH_PACKAGES_STAR);
     addFile("./packages/star/package.json", EMPTY_PACKAGE);
     addFile("./packages/deep/star/package.json", EMPTY_PACKAGE);
 
-    expect((await checkAndSpy()).addErrorSpy).toHaveBeenCalledTimes(1);
+    const spy = (await checkAndSpy()).addErrorSpy;
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith({
+      file: packageJsonPath,
+      message:
+        'The "workspace" field is missing one or more values: packages/deep/star. ' +
+        'You may be able to use a glob to avoid listing each out individually, e.g. "packages/nested-workspace/*".',
+    });
   });
 
   it("checks correctly when three level packages with three level workspaces field", async () => {
