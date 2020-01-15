@@ -14,8 +14,7 @@ export const Options = r.Undefined;
 
 type Options = r.Static<typeof Options>;
 
-// Custom monorepolint rule to enforce that the root package.json contains
-// all of the workspaces in the repo (including nested packages)
+// Enforce that the root package.json contains all of the workspaces in the repo (including nested packages)
 export const nestedWorkspaces: RuleModule<typeof Options> = {
   check: async (context: Context) => {
     const rootPackageJson = context.getWorkspaceContext().getPackageJson();
