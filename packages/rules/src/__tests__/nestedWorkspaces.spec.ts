@@ -130,7 +130,7 @@ describe("nestedWorkspaces", () => {
       file: packageJsonPath,
       message:
         'The "workspace" field is missing one or more values: packages/deep/star. ' +
-        'You may be able to use a glob to avoid listing each out individually, e.g. "packages/nested-workspace/*".',
+        'You may be able to use a glob to avoid listing each workspace individually, e.g. "packages/nested-workspace/*".',
     });
   });
 
