@@ -52,7 +52,7 @@ export const nestedWorkspaces: RuleModule<typeof Options> = {
         file: context.getPackageJsonPath(),
         message:
           `The "workspace" field is missing one or more values: ${differencesList}. ` +
-          'You may be able to use a glob to avoid listing each out individually, e.g. "packages/nested-workspace/*".',
+          'You may be able to use a glob to avoid listing each workspace individually, e.g. "packages/nested-workspace/*".',
       });
     }
   },
