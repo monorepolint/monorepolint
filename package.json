@@ -44,7 +44,7 @@
     "test": "lerna run test"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.0",
+    "@types/jest": "^25.1.0",
     "@types/mock-fs": "^3.6.30",
     "@types/node": "^12.7.4",
     "gh-pages": "^2.0.1",
