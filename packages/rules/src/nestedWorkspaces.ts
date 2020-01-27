@@ -20,7 +20,8 @@ export const nestedWorkspaces: RuleModule<typeof Options> = {
     const rootPackageJson = context.getWorkspaceContext().getPackageJson();
 
     // Expand a set of globs covering all package.json files in the entire repo (except the root)
-    const packageJsonPaths = await globby(["*/**/package.json", "!**/node_modules/**"]);
+    // Ignore fixture and test directories for the case which they contain mock package.json files.
+    const packageJsonPaths = await globby(["*/**/package.json", "!**/{node_modules,__fixture__,__test__}/**"]);
 
     const workspaces = Array.isArray(rootPackageJson.workspaces)
       ? rootPackageJson.workspaces
