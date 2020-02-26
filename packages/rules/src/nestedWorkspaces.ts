@@ -16,11 +16,11 @@ type Options = r.Static<typeof Options>;
 
 // Enforce that the root package.json contains all of the workspaces in the repo (including nested packages)
 export const nestedWorkspaces: RuleModule<typeof Options> = {
-  check: async (context: Context) => {
+  check: (context: Context) => {
     const rootPackageJson = context.getWorkspaceContext().getPackageJson();
 
     // Expand a set of globs covering all package.json files in the entire repo (except the root)
-    const packageJsonPaths = await globby(["*/**/package.json", "!**/node_modules/**"]);
+    const packageJsonPaths = globby.sync(["*/**/package.json", "!**/node_modules/**"]);
 
     const workspaces = Array.isArray(rootPackageJson.workspaces)
       ? rootPackageJson.workspaces
@@ -40,7 +40,7 @@ export const nestedWorkspaces: RuleModule<typeof Options> = {
     const workspacePackageJsons = (workspaces || []).map(item => `${item}/package.json`);
 
     // Expand the globs to get an array of all package.json files that are in packages specified by a workspace.
-    const expandedWorkspacesGlobs = await globby([...workspacePackageJsons, "!**/node_modules/**"]);
+    const expandedWorkspacesGlobs = globby.sync([...workspacePackageJsons, "!**/node_modules/**"]);
 
     // Ensure there are no package.jsons which are not included in the globbed workspaces set
     const difference = packageJsonPaths.filter(packageJsonPath => !expandedWorkspacesGlobs.includes(packageJsonPath));
