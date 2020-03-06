@@ -5,11 +5,10 @@
  *
  */
 import { WorkspaceContext } from "@monorepolint/core";
-import { writeFileSync } from "fs";
+import { NormalFileSystem } from "@monorepolint/utils";
 import * as path from "path";
 import * as tmp from "tmp";
 import { nestedWorkspaces } from "../nestedWorkspaces";
-import { makeDirectoryRecursively } from "../util/makeDirectory";
 import { jsonToString } from "./utils";
 
 const EMPTY_PACKAGE = jsonToString({});
@@ -55,12 +54,17 @@ describe("nestedWorkspaces", () => {
   });
 
   function makeWorkspace() {
-    const workspaceContext = new WorkspaceContext(cwd!, {
-      rules: [],
-      fix: false,
-      verbose: false,
-      silent: true,
-    });
+    const fs = new NormalFileSystem();
+    const workspaceContext = new WorkspaceContext(
+      cwd!,
+      {
+        rules: [],
+        fix: false,
+        verbose: false,
+        silent: true,
+      },
+      fs
+    );
 
     async function checkAndSpy() {
       const addErrorSpy = jest.spyOn(workspaceContext, "addError");
@@ -73,8 +77,8 @@ describe("nestedWorkspaces", () => {
       const dirPath = path.resolve(cwd!, path.dirname(filePath));
       const resolvedFilePath = path.resolve(cwd!, filePath);
 
-      makeDirectoryRecursively(dirPath);
-      writeFileSync(resolvedFilePath, content);
+      fs.mkdir(dirPath, { recursive: true });
+      fs.writeFile(resolvedFilePath, content);
       return resolvedFilePath;
     }
 
