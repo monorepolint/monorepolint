@@ -1,13 +1,11 @@
 /*!
- * Copyright 2019 Palantir Technologies, Inc.
+ * Copyright 2020 Palantir Technologies, Inc.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
 
 import { Context, RuleModule } from "@monorepolint/core";
-import { getPackageNameToDir } from "@monorepolint/utils";
-import { existsSync, readFileSync, writeFileSync } from "fs";
 import diff from "jest-diff";
 import minimatch from "minimatch";
 import * as path from "path";
@@ -42,8 +40,9 @@ export const standardTsconfig = {
     const fullPath = path.resolve(context.packageDir, "tsconfig.json");
     const generator = getGenerator(context, opts);
     const expectedContent = generator(context);
+    const fs = context.fileSystem;
 
-    const actualContent = existsSync(fullPath) ? readFileSync(fullPath, "utf-8") : undefined;
+    const actualContent = fs.exists(fullPath) ? fs.readFile(fullPath, "utf-8") : undefined;
 
     if (expectedContent === undefined) {
       context.addWarning({
@@ -59,7 +58,7 @@ export const standardTsconfig = {
         message: "Expect file contents to match",
         longMessage: diff(expectedContent, actualContent, { expand: true }),
         fixer: () => {
-          writeFileSync(fullPath, expectedContent);
+          fs.writeFile(fullPath, expectedContent);
         },
       });
     }
@@ -73,7 +72,7 @@ function getGenerator(context: Context, opts: Options) {
   } else if (opts.templateFile) {
     const { packageDir: workspacePackageDir } = context.getWorkspaceContext();
     const fullPath = path.resolve(workspacePackageDir, opts.templateFile);
-    const template = JSON.parse(readFileSync(fullPath, "utf-8"));
+    const template = context.fileSystem.readJson(fullPath);
 
     return makeGenerator(template, opts.excludedReferences);
   } else if (opts.template) {
@@ -90,7 +89,7 @@ function makeGenerator(template: any, excludedReferences: ReadonlyArray<string> 
       references: [],
     }; // make a copy and ensure we have a references array
 
-    const nameToDirectory = getPackageNameToDir(context.getWorkspaceContext().packageDir);
+    const nameToDirectory = context.fileSystem.getPackageNameToDir(context.getWorkspaceContext().packageDir);
 
     const packageJson = context.getPackageJson();
     const deps = [...Object.keys(packageJson.dependencies || {}), ...Object.keys(packageJson.devDependencies || {})];

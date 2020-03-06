@@ -1,24 +1,29 @@
 /*!
- * Copyright 2019 Palantir Technologies, Inc.
+ * Copyright 2020 Palantir Technologies, Inc.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
 
-import { findWorkspaceDir } from "@monorepolint/utils";
+import { FileSystem } from "@monorepolint/utils";
 import minimatch from "minimatch";
 import { dirname as pathDirname, resolve as pathResolve } from "path";
 import { ResolvedConfig, ResolvedRule } from "./Config";
 import { Context } from "./Context";
 import { WorkspaceContext } from "./WorkspaceContext";
 
-export function check(resolvedConfig: ResolvedConfig, cwd = process.cwd(), paths?: ReadonlyArray<string>): boolean {
-  const workspaceDir = findWorkspaceDir(cwd);
+export function check(
+  resolvedConfig: ResolvedConfig,
+  cwd = process.cwd(),
+  fs: FileSystem,
+  paths?: ReadonlyArray<string>
+): boolean {
+  const workspaceDir = fs.findWorkspaceDir(cwd);
   if (workspaceDir === undefined) {
     throw new Error(`Unable to find a workspace from ${cwd}`);
   }
 
-  const workspaceContext = new WorkspaceContext(workspaceDir, resolvedConfig);
+  const workspaceContext = new WorkspaceContext(workspaceDir, resolvedConfig, fs);
 
   if (paths !== undefined) {
     const resolvedPaths = paths.map(p => pathDirname(pathResolve(p)));

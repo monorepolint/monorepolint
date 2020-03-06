@@ -1,15 +1,14 @@
 /*!
- * Copyright 2019 Palantir Technologies, Inc.
+ * Copyright 2020 Palantir Technologies, Inc.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
 import { WorkspaceContext } from "@monorepolint/core";
-import { readFileSync, writeFileSync } from "fs";
+import { NormalFileSystem } from "@monorepolint/utils";
 import * as path from "path";
 import * as tmp from "tmp";
 import { consistentDependencies } from "../consistentDependencies";
-import { makeDirectoryRecursively } from "../util/makeDirectory";
 import { jsonToString } from "./utils";
 
 const PACKAGE_ROOT = jsonToString({
@@ -61,12 +60,17 @@ describe("consistentDependencies", () => {
     const dir: tmp.DirResult = tmp.dirSync();
     cleanupJobs.push(() => dir.removeCallback());
 
-    const workspaceContext = new WorkspaceContext(dir.name, {
-      rules: [],
-      fix,
-      verbose: false,
-      silent: true,
-    });
+    const fs = new NormalFileSystem();
+    const workspaceContext = new WorkspaceContext(
+      dir.name,
+      {
+        rules: [],
+        fix,
+        verbose: false,
+        silent: true,
+      },
+      fs
+    );
 
     function checkAndSpy(q: string) {
       const context = workspaceContext.createChildContext(path.resolve(dir.name, q));
@@ -79,12 +83,12 @@ describe("consistentDependencies", () => {
       const dirPath = path.resolve(dir.name, path.dirname(filePath));
       const resolvedFilePath = path.resolve(dir.name, filePath);
 
-      makeDirectoryRecursively(dirPath);
-      writeFileSync(resolvedFilePath, content);
+      fs.mkdir(dirPath, { recursive: true });
+      fs.writeFile(resolvedFilePath, content);
     }
 
     function readFile(filePath: string) {
-      return readFileSync(path.resolve(dir.name, filePath)).toString();
+      return fs.readFile(path.resolve(dir.name, filePath)).toString();
     }
 
     return { addFile, readFile, workspaceContext, checkAndSpy };

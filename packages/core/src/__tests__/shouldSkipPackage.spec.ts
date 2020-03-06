@@ -1,10 +1,11 @@
 /*!
- * Copyright 2019 Palantir Technologies, Inc.
+ * Copyright 2020 Palantir Technologies, Inc.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
 
+import { NormalFileSystem } from "@monorepolint/utils";
 import { shouldSkipPackage } from "../check";
 import { ResolvedConfig } from "../Config";
 import { WorkspaceContext } from "../WorkspaceContext";
@@ -15,7 +16,7 @@ describe("shouldSkipPackage", () => {
     verbose: false,
     fix: false,
   };
-  const workspaceContext = new WorkspaceContext(".", resolvedConfig);
+  const workspaceContext = new WorkspaceContext(".", resolvedConfig, new NormalFileSystem());
   jest.spyOn(workspaceContext, "getName").mockImplementation(() => "root");
 
   const fooContext = createChild(workspaceContext, "packages/foo", "@foo/bar");

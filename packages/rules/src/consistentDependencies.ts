@@ -1,12 +1,11 @@
 /*!
- * Copyright 2019 Palantir Technologies, Inc.
+ * Copyright 2020 Palantir Technologies, Inc.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
 
 import { Context, RuleModule } from "@monorepolint/core";
-import { writeJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 import * as r from "runtypes";
 
@@ -49,7 +48,7 @@ function checkDeps(context: Context, block: "dependencies" | "devDependencies" |
       fixer: () => {
         const newPackageJson = { ...packageJson };
         newPackageJson[block] = expectedDependencies;
-        writeJson(packagePath, newPackageJson);
+        context.fileSystem.writeJson(packagePath, newPackageJson);
       },
     });
   }

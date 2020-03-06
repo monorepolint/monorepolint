@@ -1,11 +1,11 @@
 /*!
- * Copyright 2019 Palantir Technologies, Inc.
+ * Copyright 2020 Palantir Technologies, Inc.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
 
-import { PackageJson, readJson } from "@monorepolint/utils";
+import { FileSystem, PackageJson } from "@monorepolint/utils";
 import chalk from "chalk";
 import * as path from "path";
 import { ResolvedConfig } from "./Config";
@@ -29,6 +29,7 @@ export class PackageContext implements Context {
   constructor(
     public readonly packageDir: string,
     public readonly resolvedConfig: ResolvedConfig,
+    public readonly fileSystem: FileSystem,
     public readonly parent?: Context
   ) {
     this.depth = this.parent ? this.parent.depth + 1 : 0;
@@ -43,7 +44,7 @@ export class PackageContext implements Context {
   }
 
   public getPackageJson(): PackageJson {
-    return readJson(this.getPackageJsonPath());
+    return this.fileSystem.readJson(this.getPackageJsonPath()) as PackageJson;
   }
 
   public addWarning({ message, longMessage }: FailureOptions) {

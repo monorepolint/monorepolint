@@ -1,11 +1,11 @@
 /*!
- * Copyright 2019 Palantir Technologies, Inc.
+ * Copyright 2020 Palantir Technologies, Inc.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
 
-import { PackageJson } from "@monorepolint/utils";
+import { FileSystem, PackageJson } from "@monorepolint/utils";
 import { ResolvedConfig } from "./Config";
 import { WorkspaceContext } from "./WorkspaceContext";
 
@@ -21,6 +21,7 @@ export interface Context {
   readonly packageDir: string;
   readonly parent?: Context;
   readonly resolvedConfig: ResolvedConfig;
+  readonly fileSystem: FileSystem;
 
   getName(): string;
 

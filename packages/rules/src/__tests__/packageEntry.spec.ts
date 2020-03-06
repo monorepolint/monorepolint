@@ -1,5 +1,5 @@
 /*!
- * Copyright 2019 Palantir Technologies, Inc.
+ * Copyright 2020 Palantir Technologies, Inc.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
@@ -12,6 +12,7 @@ import { createMockFiles } from "./utils";
 const mockFiles: Map<string, string> = createMockFiles();
 
 import { Failure, PackageContext } from "@monorepolint/core";
+import { NormalFileSystem } from "@monorepolint/utils";
 import { packageEntry } from "../packageEntry";
 
 const PACKAGE_MISSING_ENTRY =
@@ -61,12 +62,16 @@ describe("expectPackageEntries", () => {
   });
 
   describe("fix: true", () => {
-    const context = new PackageContext(".", {
-      rules: [],
-      fix: true,
-      verbose: false,
-      silent: true,
-    });
+    const context = new PackageContext(
+      ".",
+      {
+        rules: [],
+        fix: true,
+        verbose: false,
+        silent: true,
+      },
+      new NormalFileSystem()
+    );
     const spy = jest.spyOn(context, "addError");
 
     afterEach(() => {

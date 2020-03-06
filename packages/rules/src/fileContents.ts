@@ -1,5 +1,5 @@
 /*!
- * Copyright 2019 Palantir Technologies, Inc.
+ * Copyright 2020 Palantir Technologies, Inc.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
@@ -7,11 +7,9 @@
 
 import { Context } from "@monorepolint/core";
 import { RuleModule } from "@monorepolint/core";
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from "fs";
 import diff from "jest-diff";
 import * as path from "path";
 import * as r from "runtypes";
-import { makeDirectoryRecursively } from "./util/makeDirectory";
 
 const Options = r.Union(
   r.Record({
@@ -44,8 +42,10 @@ export const fileContents = {
     const generator = getGenerator(context, opts);
     const expectedContent = generator(context);
 
-    const pathExists = existsSync(fullPath);
-    const actualContent = pathExists ? readFileSync(fullPath, "utf-8") : undefined;
+    const fs = context.fileSystem;
+
+    const pathExists = fs.exists(fullPath);
+    const actualContent = pathExists ? fs.readFile(fullPath, "utf-8") : undefined;
     if (actualContent !== expectedContent) {
       context.addError({
         file: fullPath,
@@ -53,10 +53,10 @@ export const fileContents = {
         longMessage: diff(expectedContent, actualContent, { expand: true }),
         fixer: () => {
           if (expectedContent === undefined && pathExists) {
-            unlinkSync(fullPath);
+            fs.unlink(fullPath);
           } else {
-            makeDirectoryRecursively(path.dirname(fullPath));
-            writeFileSync(fullPath, expectedContent);
+            fs.mkdir(path.dirname(fullPath), { recursive: true });
+            fs.writeFile(fullPath, expectedContent);
           }
         },
       });
@@ -71,7 +71,7 @@ function getGenerator(context: Context, opts: Options) {
   } else if (opts.templateFile) {
     const { packageDir: workspacePackageDir } = context.getWorkspaceContext();
     const fullPath = path.resolve(workspacePackageDir, opts.templateFile);
-    const template = readFileSync(fullPath, "utf-8");
+    const template = context.fileSystem.readFile(fullPath, "utf-8");
 
     return makeGenerator(template);
   } else if (opts.template) {

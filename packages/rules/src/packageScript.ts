@@ -1,12 +1,12 @@
 /*!
- * Copyright 2019 Palantir Technologies, Inc.
+ * Copyright 2020 Palantir Technologies, Inc.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
 
 import { Context, RuleModule } from "@monorepolint/core";
-import { mutateJson, PackageJson } from "@monorepolint/utils";
+import { PackageJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 import * as r from "runtypes";
 
@@ -39,7 +39,7 @@ export const packageScript = {
         file: context.getPackageJsonPath(),
         message: MSG_NO_SCRIPTS_BLOCK,
         fixer: () => {
-          mutateJson<PackageJson>(context.getPackageJsonPath(), input => {
+          context.fileSystem.mutateJson<PackageJson>(context.getPackageJsonPath(), input => {
             input.scripts = {};
             return input;
           });
@@ -75,7 +75,7 @@ export const packageScript = {
         if (fixValue !== false && (fixValue !== undefined || fixToEmpty === true)) {
           const q = fixValue;
           fixer = () => {
-            mutateJson<PackageJson>(context.getPackageJsonPath(), input => {
+            context.fileSystem.mutateJson<PackageJson>(context.getPackageJsonPath(), input => {
               if (fixToEmpty && q === undefined) {
                 delete input.scripts![name];
               } else {

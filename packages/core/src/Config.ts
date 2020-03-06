@@ -1,5 +1,5 @@
 /*!
- * Copyright 2019 Palantir Technologies, Inc.
+ * Copyright 2020 Palantir Technologies, Inc.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
@@ -36,6 +36,7 @@ export interface Options {
   readonly fix?: boolean;
   readonly paths?: ReadonlyArray<string>;
   readonly silent?: boolean;
+  readonly fast?: boolean;
 }
 
 export type Checker<T extends Runtype> = (context: Context, args: r.Static<T>) => void;

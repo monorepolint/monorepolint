@@ -1,14 +1,14 @@
 /*!
- * Copyright 2019 Palantir Technologies, Inc.
+ * Copyright 2020 Palantir Technologies, Inc.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
 
 import { check, Config, Options, resolveConfig } from "@monorepolint/core";
-import { findWorkspaceDir } from "@monorepolint/utils";
+import { CachedFileSystem, NormalFileSystem } from "@monorepolint/utils";
 import chalk from "chalk";
-import * as fs from "fs";
+import * as nodeFs from "fs"; // tslint:disable-line:import-blacklist
 import * as path from "path";
 import yargs from "yargs";
 
@@ -21,10 +21,13 @@ export default function run() {
   }
   yargs
     .command(
-      "check [--verbose] [--fix] [--paths <paths>...]",
+      "check [--verbose] [--fast] [--fix] [--paths <paths>...]",
       "Checks the mono repo for lint violations",
       {
         verbose: {
+          type: "boolean",
+        },
+        fast: {
           type: "boolean",
         },
         fix: {
@@ -44,7 +47,7 @@ export default function run() {
 }
 
 function getVersion(): string {
-  return JSON.parse(fs.readFileSync(path.join(__dirname, "../package.json"), "utf-8")).version;
+  return JSON.parse(nodeFs.readFileSync(path.join(__dirname, "../package.json"), "utf-8")).version;
 }
 
 function handleCheck(args: Options) {
@@ -52,11 +55,12 @@ function handleCheck(args: Options) {
   console.log("monorepolint (mrl) v" + getVersion());
   console.log();
 
+  const fs = args.fast ? new CachedFileSystem() : new NormalFileSystem();
   const configPath = path.resolve(process.cwd(), ".monorepolint.config.ts");
   const config = Config.check(require(configPath));
-  const resolvedConfig = resolveConfig(config, args, findWorkspaceDir(process.cwd())!);
+  const resolvedConfig = resolveConfig(config, args, fs.findWorkspaceDir(process.cwd())!);
 
-  if (!check(resolvedConfig, process.cwd(), args.paths)) {
+  if (!check(resolvedConfig, process.cwd(), fs, args.paths)) {
     console.error();
 
     const execPath = process.env.npm_execpath;
@@ -79,4 +83,6 @@ function handleCheck(args: Options) {
     console.error();
     process.exit(100);
   }
+
+  fs.flush();
 }
