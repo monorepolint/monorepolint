@@ -5,6 +5,13 @@
  *
  */
 
+/*!
+ * Copyright 2020 Palantir Technologies, Inc.
+ *
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ *
+ */
+
 import { Context, RuleModule } from "@monorepolint/core";
 import { LockFileObject, parse as lockfileParse } from "@yarnpkg/lockfile";
 import { readFileSync } from "fs";
