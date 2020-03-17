@@ -5,17 +5,16 @@
  *
  */
 import { WorkspaceContext } from "@monorepolint/core";
-import { stringify } from "@yarnpkg/lockfile";
 import { writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
-import { bannedTransitiveDependencies } from "../bannedTransitiveDependencies";
+import { bannedDependencies } from "../bannedDependencies";
 import { makeDirectoryRecursively } from "../util/makeDirectory";
 import { jsonToString } from "./utils";
 
 const EMPTY_PACKAGE = jsonToString({});
 
-describe("bannedTransitiveDependencies", () => {
+describe("bannedDependencies", () => {
   tmp.setGracefulCleanup();
 
   let cleanupJobs: Array<() => void> = [];
@@ -45,10 +44,10 @@ describe("bannedTransitiveDependencies", () => {
       silent: true,
     });
 
-    async function checkAndSpy(bannedDependencies: string[]) {
+    async function checkAndSpy(bannedTransitives: string[]) {
       const addErrorSpy = jest.spyOn(workspaceContext, "addError");
-      bannedTransitiveDependencies.check(workspaceContext, {
-        bannedTransitiveDependencies: bannedDependencies,
+      bannedDependencies.check(workspaceContext, {
+        bannedTransitiveDependencies: bannedTransitives,
       });
       return { addErrorSpy };
     }
@@ -65,30 +64,33 @@ describe("bannedTransitiveDependencies", () => {
     return { addFile, workspaceContext, checkAndSpy };
   }
 
-  it("Flags banned packages correctly", async () => {
-    const { addFile, checkAndSpy } = makeWorkspace();
-    addFile("./package.json", EMPTY_PACKAGE);
-    addFile(
-      "./yarn.lock",
-      stringify({
-        aaa: {
-          version: "0.0.1",
-          resolved: "aaa",
-          dependencies: [],
-        },
-        bbb: {
-          version: "0.0.1",
-          resolved: "bbb",
-          dependencies: [],
-        },
-        ccc: {
-          version: "0.0.1",
-          resolved: "ccc",
-          dependencies: ["aaa"],
-        },
-      })
-    );
+  // TODO: Add test for regular banned dependencies
 
-    expect((await checkAndSpy(["aaa", "bbb"])).addErrorSpy).toHaveBeenCalledTimes(2);
+  it("Flags banned transitives correctly", async () => {
+    const { addFile, checkAndSpy } = makeWorkspace();
+    const rootPackageJson = jsonToString({
+      dependencies: {
+        aaa: "0.0.1",
+      },
+    });
+    addFile("./package.json", rootPackageJson);
+
+    const aaaPackageJson = jsonToString({
+      dependencies: {
+        bbb: "0.0.1",
+        ccc: "0.0.1",
+      },
+    });
+    addFile("./aaa/package.json", aaaPackageJson);
+    const bbbPackageJson = jsonToString({
+      dependencies: {
+        ddd: "0.0.1",
+      },
+    });
+    addFile("./aaa/bbb/package.json", bbbPackageJson);
+    addFile("./aaa/bbb/ddd/package.json", EMPTY_PACKAGE);
+    addFile("./aaa/ccc/package.json", EMPTY_PACKAGE);
+
+    expect((await checkAndSpy(["ccc", "ddd"])).addErrorSpy).toHaveBeenCalledTimes(2);
   });
 });
