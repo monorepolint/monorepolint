@@ -37,7 +37,6 @@ export class PackageDependencyGraphService implements IPackageDependencyGraphSer
     const nodes = new Map<string, IPackageDependencyGraphNode>();
 
     const visit = (packageJsonPath: string): IPackageDependencyGraphNode => {
-      console.warn("VISIT", packageJsonPath, process.cwd())
       if (nodes.has(packageJsonPath)) {
         return nodes.get(packageJsonPath)!;
       }

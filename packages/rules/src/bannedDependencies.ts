@@ -9,6 +9,7 @@ import { Context, RuleModule } from "@monorepolint/core";
 import { writeJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 import minimatch from "minimatch";
+import path from "path";
 import * as r from "runtypes";
 import { PackageDependencyGraphService } from "./util/packageDependencyGraphService";
 
@@ -43,8 +44,6 @@ export const bannedDependencies: RuleModule<typeof Options> = {
   check: function expectAllowedDependencies(context: Context, opts: Options) {
     // tslint:disable-next-line:no-shadowed-variable
     const { bannedDependencies, bannedTransitiveDependencies } = opts;
-
-    console.warn("G")
 
     if (bannedDependencies) {
       checkBanned(context, bannedDependencies, "dependencies");
@@ -104,8 +103,7 @@ function checkTransitives(
   bannedDependencies: ReadonlyArray<string>
 ) {
   const graphService = new PackageDependencyGraphService();
-  console.warn(context.getPackageJsonPath());
-  const root = graphService.buildDependencyGraph(`./${context.getPackageJsonPath()}`);
+  const root = graphService.buildDependencyGraph(path.resolve(context.getPackageJsonPath()));
   for (const { dependencies } of graphService.traverse(root)) {
     for (const [dependency, dependencyNode] of dependencies) {
       if (bannedDependencies.includes(dependency)) {
