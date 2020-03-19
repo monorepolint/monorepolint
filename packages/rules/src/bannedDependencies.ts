@@ -44,6 +44,8 @@ export const bannedDependencies: RuleModule<typeof Options> = {
     // tslint:disable-next-line:no-shadowed-variable
     const { bannedDependencies, bannedTransitiveDependencies } = opts;
 
+    console.warn("G")
+
     if (bannedDependencies) {
       checkBanned(context, bannedDependencies, "dependencies");
       checkBanned(context, bannedDependencies, "devDependencies");
@@ -102,8 +104,8 @@ function checkTransitives(
   bannedDependencies: ReadonlyArray<string>
 ) {
   const graphService = new PackageDependencyGraphService();
-
-  const root = graphService.buildDependencyGraph(context.getPackageJsonPath());
+  console.warn(context.getPackageJsonPath());
+  const root = graphService.buildDependencyGraph(`./${context.getPackageJsonPath()}`);
   for (const { dependencies } of graphService.traverse(root)) {
     for (const [dependency, dependencyNode] of dependencies) {
       if (bannedDependencies.includes(dependency)) {
