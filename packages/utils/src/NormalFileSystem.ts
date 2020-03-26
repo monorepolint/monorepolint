@@ -39,7 +39,14 @@ export class NormalFileSystem extends AbstractFileSystem implements FileSystem {
   }
 
   public unlink(path: string): void {
-    return nodeFs.unlinkSync(path);
+    try {
+      return nodeFs.unlinkSync(path);
+    } catch (e) {
+      if (e.code !== "ENOENT") {
+        // we don't need to throw if the file doesnt exist already
+        throw e;
+      }
+    }
   }
 
   public flush(): Promise<unknown> {
@@ -61,6 +68,8 @@ export class NormalFileSystem extends AbstractFileSystem implements FileSystem {
           }
         }
       }
+    } else {
+      nodeFs.mkdirSync(directoryPath);
     }
   }
 }
