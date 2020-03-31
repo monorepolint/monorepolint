@@ -8,22 +8,51 @@
 import { Context, RuleModule } from "@monorepolint/core";
 import diff from "jest-diff";
 import minimatch from "minimatch";
+import path from "path";
 import * as r from "runtypes";
+import { PackageDependencyGraphService } from "./util/packageDependencyGraphService";
 
-const Options = r.Record({
-  bannedDependencies: r.Array(r.String),
-});
+const Options = r.Union(
+  r
+    .Record({
+      bannedDependencies: r.Array(r.String),
+    })
+    .And(
+      r.Partial({
+        bannedTransitiveDependencies: r.Undefined,
+      })
+    ),
+  r
+    .Record({
+      bannedTransitiveDependencies: r.Array(r.String),
+    })
+    .And(
+      r.Partial({
+        bannedDependencies: r.Undefined,
+      })
+    ),
+  r.Record({
+    bannedDependencies: r.Array(r.String),
+    bannedTransitiveDependencies: r.Array(r.String),
+  })
+);
 
 type Options = r.Static<typeof Options>;
 
 export const bannedDependencies: RuleModule<typeof Options> = {
   check: function expectAllowedDependencies(context: Context, opts: Options) {
     // tslint:disable-next-line:no-shadowed-variable
-    const { bannedDependencies } = opts;
+    const { bannedDependencies, bannedTransitiveDependencies } = opts;
 
-    checkBanned(context, bannedDependencies, "dependencies");
-    checkBanned(context, bannedDependencies, "devDependencies");
-    checkBanned(context, bannedDependencies, "peerDependencies");
+    if (bannedDependencies) {
+      checkBanned(context, bannedDependencies, "dependencies");
+      checkBanned(context, bannedDependencies, "devDependencies");
+      checkBanned(context, bannedDependencies, "peerDependencies");
+    }
+
+    if (bannedTransitiveDependencies) {
+      checkTransitives(context, bannedTransitiveDependencies);
+    }
   },
   optionsRuntype: Options,
 };
@@ -64,5 +93,24 @@ function checkBanned(
         context.fileSystem.writeJson(packagePath, newPackageJson);
       },
     });
+  }
+}
+
+function checkTransitives(
+  context: Context,
+  // tslint:disable-next-line: no-shadowed-variable
+  bannedDependencies: ReadonlyArray<string>
+) {
+  const graphService = new PackageDependencyGraphService();
+  const root = graphService.buildDependencyGraph(path.resolve(context.getPackageJsonPath()));
+  for (const { dependencies } of graphService.traverse(root)) {
+    for (const [dependency, dependencyNode] of dependencies) {
+      if (bannedDependencies.includes(dependency)) {
+        context.addError({
+          file: dependencyNode.paths.packageJsonPath,
+          message: `Banned transitive depdendencies in repo: ${dependency}`,
+        });
+      }
+    }
   }
 }
