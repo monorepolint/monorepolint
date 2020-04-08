@@ -264,3 +264,37 @@ module.exports = {
   }
 };
 ```
+
+## Standardized Dependency Versions
+
+[source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/requireDependency.ts)
+
+Standardize dependency versions across packages
+
+### Options
+
+- `dependencies` (Optional)
+  - Map of dependency name to version
+- `devDependencies` (Optional)
+  - Map of dependency name to version
+- `peerDependencies` (Optional)
+  - Map of dependency name to version
+- `optionalDdependencies` (Optional)
+  - Map of dependency name to version
+
+### Example
+
+```javascript
+module.exports = {
+  rules: {
+    ":require-dependency": {
+      options: {
+        devDependencies: {
+          typescript: "^3.8.3",
+        },
+      },
+    },
+  },
+};
+```
+

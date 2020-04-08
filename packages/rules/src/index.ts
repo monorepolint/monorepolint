@@ -15,3 +15,4 @@ export { packageEntry } from "./packageEntry";
 export { packageScript } from "./packageScript";
 export { standardTsconfig } from "./standardTsconfig";
 export { nestedWorkspaces } from "./nestedWorkspaces";
+export { requireDependency } from "./requireDependency";
