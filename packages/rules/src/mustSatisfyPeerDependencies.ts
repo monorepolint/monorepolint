@@ -28,8 +28,30 @@ export const mustSatisfyPeerDependencies: RuleModule<typeof Options> = {
   optionsRuntype: Options,
 };
 
-// do not accept `<` or `>`
-export const ALLOWED_RANGE_REGEX = /^\^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.d+\.d+)?( \|\| \^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.d+\.d+)?)*$/;
+/*
+  separating on `|`, this regex allows any of the following formats:
+  - *
+  - x
+  More info: https://docs.npmjs.com/about-semantic-versioning
+*/
+export const MATCH_ANY_VERSION_RANGE = /^(\*|x)$/;
+/*
+  separating on `|`, this regex allows any of the following formats:
+  - 15
+  - ^15
+  - 15.x
+  - ^15.x
+  - 15.x.x
+  - ^15.x.x
+  - ^15.2
+  - ^15.2.x
+  - ^15.2.1
+  More info: https://docs.npmjs.com/about-semantic-versioning
+*/
+export const MATCH_MAJOR_VERSION_RANGE = /^(\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d+\.\d+|\^\d+\.\d+\.x|\^\d+\.\d+\.\d+)$/;
+// does not accept `<` or `>`
+// TODO: accept minor pins `~4.2.1`
+export const RANGE_REGEX = /^(\*|x|\^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+)?( \|\| \^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+)?)*)$/;
 
 function checkSatisfyPeerDependencies(context: Context, opts: Options) {
   const { skipUnparseableRanges } = opts;
@@ -49,7 +71,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
       continue;
     }
     for (const [peerDependencyName, range] of Object.entries(requiredPeerDependencies)) {
-      if (!ALLOWED_RANGE_REGEX.test(range)) {
+      if (!RANGE_REGEX.test(range)) {
         if (skipUnparseableRanges) {
           continue;
         }
@@ -137,6 +159,16 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
   - `17.0.0`
 */
 export function doesASatisfyB(a: string, b: string): boolean {
+  const aIsAnyVersionRange = isAnyVersionRange(a);
+  const bIsAnyVersionRange = isAnyVersionRange(b);
+  if (bIsAnyVersionRange) {
+    return true;
+  } else if (aIsAnyVersionRange) {
+    // `bIsAnyVersionRange` is `false`
+    // `a` permits more values than `b`, therefore `a` is "less strict"
+    return false;
+  }
+
   const aVersions = a.includes("||") ? a.split("||").map(s => s.trim()) : [a];
   const bVersions = b.includes("||") ? b.split("||").map(s => s.trim()) : [b];
 
@@ -149,9 +181,9 @@ export function doesASatisfyB(a: string, b: string): boolean {
     }
 
     const aSemVer = coerce(aVersion)!;
-    const aVersionIsRange = aVersion.startsWith("^");
+    const aVersionIsRange = isMajorVersionRange(aVersion);
     const majorMatchingBSemVer = coerce(majorMatchingBVersion)!;
-    const majorMatchingBVersionIsRange = majorMatchingBVersion.startsWith("^");
+    const majorMatchingBVersionIsRange = isMajorVersionRange(majorMatchingBVersion);
 
     if (majorMatchingBVersionIsRange) {
       // `a` satisfies `b` so long as `aSemVer` is greater than or equal to `majorMatchingBSemVer`
@@ -170,4 +202,12 @@ export function doesASatisfyB(a: string, b: string): boolean {
       }
     }
   });
+}
+
+function isAnyVersionRange(version: string): boolean {
+  return MATCH_ANY_VERSION_RANGE.test(version);
+}
+
+function isMajorVersionRange(version: string): boolean {
+  return MATCH_MAJOR_VERSION_RANGE.test(version);
 }
