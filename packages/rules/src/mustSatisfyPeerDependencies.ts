@@ -57,7 +57,21 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
   const { skipUnparseableRanges } = opts;
   const graphService = new PackageDependencyGraphService();
   const rootNode = graphService.buildDependencyGraph(path.resolve(context.getPackageJsonPath()), 1);
+  const rootDependencies = rootNode.packageJson.dependencies || {};
   const rootPeerDependencies = rootNode.packageJson.peerDependencies || {};
+  const rootPackageJsonPath = rootNode.paths.packageJsonPath;
+  const rootPackageName = rootNode.packageJson.name || rootPackageJsonPath;
+
+  for (const [peerDependencyName, peerDependencyRange] of Object.entries(rootPeerDependencies)) {
+    const dependencyRange = rootDependencies[peerDependencyName];
+    if (dependencyRange != null) {
+      context.addError({
+        file: rootPackageJsonPath,
+        message: `[0] Package ${rootPackageName} has overloaded ${peerDependencyName} dependencies.`,
+        longMessage: `Peer dependency '${peerDependencyRange}' and regular dependency '${dependencyRange}'.`,
+      });
+    }
+  }
 
   interface IPeerDependencyRequirement {
     node: IPackageDependencyGraphNode;
@@ -98,31 +112,52 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
           continue;
         } else {
           context.addError({
-            file: rootNode.paths.packageJsonPath,
-            message: `[1] Package ${rootNode.packageJson.name} has conflicting inherited ${peerDependencyName} peer depdendencies.`,
-            longMessage: `Dependency ${peerRequirement.node.packageJson.name} requires ${peerRequirement.range} and dependency ${mostStrictPeerRequirement.node.packageJson.name} requires ${mostStrictPeerRequirement.range}.`,
+            file: rootPackageJsonPath,
+            message:
+              `[1] Package ${rootPackageName} has ` + `conflicting inherited ${peerDependencyName} peer dependencies.`,
+            longMessage:
+              `Dependency ${peerRequirement.node.packageJson.name} requires ${peerRequirement.range} and ` +
+              `dependency ${mostStrictPeerRequirement.node.packageJson.name} requires ${mostStrictPeerRequirement.range}.`,
           });
         }
       }
     }
-    const rootPeerDependency = rootPeerDependencies[peerDependencyName];
-    if (rootPeerDependency == null || !doesASatisfyB(rootPeerDependency, mostStrictPeerRequirement.range)) {
+
+    const rootDependencyRange = rootDependencies[peerDependencyName];
+    if (rootDependencyRange != null && !doesASatisfyB(rootDependencyRange, mostStrictPeerRequirement.range)) {
       context.addError({
-        file: rootNode.paths.packageJsonPath,
-        message:
-          rootPeerDependency == null
-            ? `[2] Package ${rootNode.packageJson.name} is missing ${peerDependencyName} peer dependency.`
-            : `[3] Package ${rootNode.packageJson.name} peer dependency on ${peerDependencyName} is not strict enough.`,
+        file: rootPackageJsonPath,
+        message: `[2] Package ${rootPackageName} dependency on ${peerDependencyName} does not satisfy inherited peer dependencies.`,
         longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires ${mostStrictPeerRequirement.range} or stricter.`,
-        fixer: () => {
-          mutateJson<PackageJson>(rootNode.paths.packageJsonPath, packageJson => {
-            if (packageJson.peerDependencies == null) {
-              packageJson.peerDependencies = {};
-            }
-            packageJson.peerDependencies[peerDependencyName] = mostStrictPeerRequirement.range;
-            return packageJson;
-          });
-        },
+      });
+    }
+
+    const rootPeerDependencyRange = rootPeerDependencies[peerDependencyName];
+    if (rootDependencyRange == null && rootPeerDependencyRange == null) {
+      context.addError({
+        file: rootPackageJsonPath,
+        message: `[3] Package ${rootPackageName} is missing required ${peerDependencyName} dependency.`,
+        longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires ${mostStrictPeerRequirement.range} or stricter.`,
+        fixer: getAddDependencyTypeFixer({
+          packageJsonPath: rootPackageJsonPath,
+          dependencyType: "peerDependencies",
+          dependencyName: peerDependencyName,
+          version: mostStrictPeerRequirement.range,
+        }),
+      });
+    }
+
+    if (rootPeerDependencyRange != null && !doesASatisfyB(rootPeerDependencyRange, mostStrictPeerRequirement.range)) {
+      context.addError({
+        file: rootPackageJsonPath,
+        message: `[4] Package ${rootPackageName} peer dependency on ${peerDependencyName} is not strict enough.`,
+        longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires ${mostStrictPeerRequirement.range} or stricter.`,
+        fixer: getAddDependencyTypeFixer({
+          packageJsonPath: rootPackageJsonPath,
+          dependencyType: "peerDependencies",
+          dependencyName: peerDependencyName,
+          version: mostStrictPeerRequirement.range,
+        }),
       });
     }
   }
@@ -210,4 +245,28 @@ function isAnyVersionRange(version: string): boolean {
 
 function isMajorVersionRange(version: string): boolean {
   return MATCH_MAJOR_VERSION_RANGE.test(version);
+}
+
+type IDependencyType = "dependencies" | "devDependencies" | "peerDependencies";
+
+function getAddDependencyTypeFixer({
+  packageJsonPath,
+  dependencyType,
+  dependencyName,
+  version,
+}: {
+  packageJsonPath: string;
+  dependencyType: IDependencyType;
+  dependencyName: string;
+  version: string;
+}) {
+  return () => {
+    mutateJson<PackageJson>(packageJsonPath, packageJson => {
+      if (packageJson[dependencyType] == null) {
+        packageJson[dependencyType] = {};
+      }
+      packageJson[dependencyType]![dependencyName] = version;
+      return packageJson;
+    });
+  };
 }
