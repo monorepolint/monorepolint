@@ -451,8 +451,8 @@ describe("mustSatisfyPeerDependencies", () => {
   it("Flags overloaded dependency (entry in regular dependencies and peer dependencies)", async () => {
     const { addPackageJson, checkAndSpy } = makeWorkspace();
 
-    const rootPackageJson = {
-      name: "root",
+    const testPackageJson = {
+      name: "test",
       dependencies: {
         greatLib: "^15",
       },
@@ -460,7 +460,7 @@ describe("mustSatisfyPeerDependencies", () => {
         greatLib: "15",
       },
     };
-    addPackageJson("./package.json", rootPackageJson);
+    addPackageJson("./package.json", testPackageJson);
 
     const greatLibPackageJson = {
       name: "greatLib",
@@ -470,18 +470,18 @@ describe("mustSatisfyPeerDependencies", () => {
     const { addErrorSpy } = await checkAndSpy(false);
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[0] Package ${rootPackageJson.name} has overloaded greatLib dependencies.`
+      `[0] Package ${testPackageJson.name} has overloaded greatLib dependencies.`
     );
     expect(addErrorSpy.mock.calls[0][0].longMessage).toEqual(
-      `Peer dependency '${rootPackageJson.peerDependencies.greatLib}' and regular dependency '${rootPackageJson.dependencies.greatLib}'.`
+      `Peer dependency '${testPackageJson.peerDependencies.greatLib}' and regular dependency '${testPackageJson.dependencies.greatLib}'.`
     );
   });
 
   it("Flags conflicting peer dependencies", async () => {
     const { addPackageJson, checkAndSpy } = makeWorkspace();
 
-    const rootPackageJson = {
-      name: "root",
+    const testPackageJson = {
+      name: "test",
       dependencies: {
         aaa: "0.0.1",
         bbb: "0.0.1",
@@ -490,7 +490,7 @@ describe("mustSatisfyPeerDependencies", () => {
         greatLib: "15",
       },
     };
-    addPackageJson("./package.json", rootPackageJson);
+    addPackageJson("./package.json", testPackageJson);
 
     const aaaPackageJson = {
       name: "a",
@@ -510,25 +510,25 @@ describe("mustSatisfyPeerDependencies", () => {
     const { addErrorSpy } = await checkAndSpy(false);
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[1] Package ${rootPackageJson.name} has conflicting inherited greatLib peer dependencies.`
+      `[1] Package ${testPackageJson.name} has conflicting inherited greatLib peer dependencies.`
     );
     expect(addErrorSpy.mock.calls[0][0].longMessage).toEqual(
       `Dependency ${bbbPackageJson.name} requires ${bbbPackageJson.peerDependencies.greatLib} and dependency ${aaaPackageJson.name} requires ${aaaPackageJson.peerDependencies.greatLib}.`
     );
   });
 
-  it("Flags unsatisfied peer dependencies (root has regular dep)", async () => {
+  it("Flags unsatisfied peer dependencies (test package has regular dep)", async () => {
     const { addPackageJson, checkAndSpy } = makeWorkspace();
 
-    const rootPackageJson = {
-      name: "root",
+    const testPackageJson = {
+      name: "test",
       dependencies: {
         aaa: "0.0.1",
         bbb: "0.0.1",
         greatLib: "^15",
       },
     };
-    addPackageJson("./package.json", rootPackageJson);
+    addPackageJson("./package.json", testPackageJson);
 
     const greatLibPackageJson = {
       name: "greatLib",
@@ -552,7 +552,7 @@ describe("mustSatisfyPeerDependencies", () => {
     const { addErrorSpy } = await checkAndSpy(false);
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[2] Package ${rootPackageJson.name} dependency on greatLib does not satisfy inherited peer dependencies.`
+      `[2] Package ${testPackageJson.name} dependency on greatLib does not satisfy inherited peer dependencies.`
     );
     expect(addErrorSpy.mock.calls[0][0].longMessage).toEqual(
       `Dependency ${bbbPackageJson.name} requires ${bbbPackageJson.peerDependencies.greatLib} or stricter.`
@@ -562,14 +562,14 @@ describe("mustSatisfyPeerDependencies", () => {
   it("Flags missing peer dependencies (NO regular dependency present)", async () => {
     const { addPackageJson, checkAndSpy } = makeWorkspace(true);
 
-    const rootPackageJson = {
-      name: "root",
+    const testPackageJson = {
+      name: "test",
       dependencies: {
         aaa: "0.0.1",
         bbb: "0.0.1",
       },
     };
-    const readRootPackageJson = addPackageJson("./package.json", rootPackageJson);
+    const readTestPackageJson = addPackageJson("./package.json", testPackageJson);
 
     const aaaPackageJson = {
       name: "a",
@@ -589,16 +589,16 @@ describe("mustSatisfyPeerDependencies", () => {
     const { addErrorSpy } = await checkAndSpy(false);
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[3] Package ${rootPackageJson.name} is missing required greatLib dependency.`
+      `[3] Package ${testPackageJson.name} is missing required greatLib dependency.`
     );
-    expect(readRootPackageJson().peerDependencies!.greatLib).toEqual(bbbPackageJson.peerDependencies.greatLib);
+    expect(readTestPackageJson().peerDependencies!.greatLib).toEqual(bbbPackageJson.peerDependencies.greatLib);
   });
 
-  it("Flags unsatisfied peer dependencies (root has peer dep)", async () => {
+  it("Flags unsatisfied peer dependencies (test package has peer dep)", async () => {
     const { addPackageJson, checkAndSpy } = makeWorkspace(true);
 
-    const rootPackageJson = {
-      name: "root",
+    const testPackageJson = {
+      name: "test",
       dependencies: {
         aaa: "0.0.1",
         bbb: "0.0.1",
@@ -607,7 +607,7 @@ describe("mustSatisfyPeerDependencies", () => {
         greatLib: "^15 || ^16",
       },
     };
-    const readRootPackageJson = addPackageJson("./package.json", rootPackageJson);
+    const readTestPackageJson = addPackageJson("./package.json", testPackageJson);
 
     const aaaPackageJson = {
       name: "a",
@@ -627,8 +627,8 @@ describe("mustSatisfyPeerDependencies", () => {
     const { addErrorSpy } = await checkAndSpy(false);
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[4] Package ${rootPackageJson.name} peer dependency on greatLib is not strict enough.`
+      `[4] Package ${testPackageJson.name} peer dependency on greatLib is not strict enough.`
     );
-    expect(readRootPackageJson().peerDependencies!.greatLib).toEqual(bbbPackageJson.peerDependencies.greatLib);
+    expect(readTestPackageJson().peerDependencies!.greatLib).toEqual(bbbPackageJson.peerDependencies.greatLib);
   });
 });
