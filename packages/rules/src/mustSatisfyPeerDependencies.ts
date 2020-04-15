@@ -59,7 +59,7 @@ export const RANGE_REGEX = /^(\*|x|\^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+)?
 
 interface IPeerDependencyRequirement {
   node: IPackageDependencyGraphNode;
-  range: string;
+  range: ValidRange;
 }
 
 function checkSatisfyPeerDependencies(context: Context, opts: Options) {
@@ -93,13 +93,10 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
       continue;
     }
     for (const [peerDependencyName, range] of Object.entries(requiredPeerDependencies)) {
-      if (!RANGE_REGEX.test(range)) {
+      if (!isValidRange(range)) {
         const message = `Unable to parse ${dependencyNode.packageJson.name}'s ${peerDependencyName} peer dependency range '${range}'.`;
         if (skipUnparseableRanges) {
-          context.addWarning({
-            file: dependencyNode.paths.packageJsonPath,
-            message,
-          });
+          context.addWarning({ file: dependencyNode.paths.packageJsonPath, message });
           continue;
         }
         throw new Error(message);
@@ -135,12 +132,21 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
     // if this package has a dependency on an inherited peer dependency,
     // the range must be equal to or stricter than `mostStrictPeerRequirement`
     const packageDependencyRange = packageDependencies[peerDependencyName];
-    if (packageDependencyRange != null && !doesASatisfyB(packageDependencyRange, mostStrictPeerRequirement.range)) {
-      context.addError({
-        file: packageJsonPath,
-        message: `[2] Package ${packageName} dependency on ${peerDependencyName} does not satisfy inherited peer dependencies.`,
-        longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires ${mostStrictPeerRequirement.range} or stricter.`,
-      });
+    if (packageDependencyRange != null) {
+      if (!isValidRange(packageDependencyRange)) {
+        const message = `Unable to parse ${packageName}'s ${peerDependencyName} dependency range '${packageDependencyRange}'.`;
+        if (skipUnparseableRanges) {
+          context.addWarning({ file: packageJsonPath, message });
+        } else {
+          throw new Error(message);
+        }
+      } else if (!doesASatisfyB(packageDependencyRange, mostStrictPeerRequirement.range)) {
+        context.addError({
+          file: packageJsonPath,
+          message: `[2] Package ${packageName} dependency on ${peerDependencyName} does not satisfy inherited peer dependencies.`,
+          longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires ${mostStrictPeerRequirement.range} or stricter.`,
+        });
+      }
     }
 
     // for every inherited peer dependency, this package must declare a dependency or peer dependency
@@ -162,21 +168,27 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
 
     // if this package has a peer dependency on an inherited peer dependency,
     // the range must be equal to or stricter than `mostStrictPeerRequirement`
-    if (
-      packagePeerDependencyRange != null &&
-      !doesASatisfyB(packagePeerDependencyRange, mostStrictPeerRequirement.range)
-    ) {
-      context.addError({
-        file: packageJsonPath,
-        message: `[4] Package ${packageName} peer dependency on ${peerDependencyName} is not strict enough.`,
-        longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires ${mostStrictPeerRequirement.range} or stricter.`,
-        fixer: getAddDependencyTypeFixer({
-          packageJsonPath,
-          dependencyType: "peerDependencies",
-          dependencyName: peerDependencyName,
-          version: mostStrictPeerRequirement.range,
-        }),
-      });
+    if (packagePeerDependencyRange != null) {
+      if (!isValidRange(packagePeerDependencyRange)) {
+        const message = `Unable to parse ${packageName}'s ${peerDependencyName} peer dependency range '${packagePeerDependencyRange}'.`;
+        if (skipUnparseableRanges) {
+          context.addWarning({ file: packageJsonPath, message });
+        } else {
+          throw new Error(message);
+        }
+      } else if (!doesASatisfyB(packagePeerDependencyRange, mostStrictPeerRequirement.range)) {
+        context.addError({
+          file: packageJsonPath,
+          message: `[4] Package ${packageName} peer dependency on ${peerDependencyName} is not strict enough.`,
+          longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires ${mostStrictPeerRequirement.range} or stricter.`,
+          fixer: getAddDependencyTypeFixer({
+            packageJsonPath,
+            dependencyType: "peerDependencies",
+            dependencyName: peerDependencyName,
+            version: mostStrictPeerRequirement.range,
+          }),
+        });
+      }
     }
   }
 }
@@ -217,7 +229,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
  * @param b version range that matches `RANGE_REGEX`
  * @returns `true` if `a` is more strict than or equal to `b`, `false` otherwise
  */
-export function doesASatisfyB(a: string, b: string): boolean {
+export function doesASatisfyB(a: ValidRange, b: ValidRange): boolean {
   const aIsAnyVersionRange = isAnyVersionRange(a);
   const bIsAnyVersionRange = isAnyVersionRange(b);
   if (bIsAnyVersionRange) {
@@ -268,6 +280,11 @@ function isAnyVersionRange(version: string): boolean {
 
 function isMajorVersionRange(version: string): boolean {
   return MATCH_MAJOR_VERSION_RANGE.test(version);
+}
+
+export type ValidRange = string & { _type: "valid range" };
+export function isValidRange(version: string): version is ValidRange {
+  return RANGE_REGEX.test(version);
 }
 
 type IDependencyType = "dependencies" | "devDependencies" | "peerDependencies";
