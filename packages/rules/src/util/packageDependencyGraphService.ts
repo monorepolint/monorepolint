@@ -18,7 +18,7 @@ export interface IPackageDependencyGraphNode {
 /** Service abstraction for constructing and traversing package dependency graphs. */
 export interface IPackageDependencyGraphService {
   /** Construct a graph of package dependencies. */
-  buildDependencyGraph(packageJsonPath: string): IPackageDependencyGraphNode;
+  buildDependencyGraph(packageJsonPath: string, maxDepth?: number): IPackageDependencyGraphNode;
 
   /** Traverse a package dependency graph. */
   traverse(
@@ -33,10 +33,10 @@ export interface IPackageDependencyGraphService {
 /** Default implementation of the package dependency graph service. */
 export class PackageDependencyGraphService implements IPackageDependencyGraphService {
   /** Construct a graph of package dependencies and return the root node. */
-  public buildDependencyGraph(startPackageJsonPath: string): IPackageDependencyGraphNode {
+  public buildDependencyGraph(startPackageJsonPath: string, maxDepth?: number): IPackageDependencyGraphNode {
     const nodes = new Map<string, IPackageDependencyGraphNode>();
 
-    const visit = (packageJsonPath: string): IPackageDependencyGraphNode => {
+    const visit = (packageJsonPath: string, currentDepth: number): IPackageDependencyGraphNode => {
       if (nodes.has(packageJsonPath)) {
         return nodes.get(packageJsonPath)!;
       }
@@ -54,18 +54,21 @@ export class PackageDependencyGraphService implements IPackageDependencyGraphSer
       // It's important that we register the node before visiting its dependencies to avoid cycles
       nodes.set(packageJsonPath, node);
 
-      const dependencies = packageJson.dependencies != null ? Object.keys(packageJson.dependencies) : [];
-      for (const dependency of dependencies) {
-        node.dependencies.set(
-          dependency,
-          visit(require.resolve(`${dependency}/package.json`, { paths: [node.paths.rootDirectory] }))
-        );
+      const nextDepth = currentDepth + 1;
+      if (maxDepth == null || nextDepth <= maxDepth) {
+        const dependencies = packageJson.dependencies != null ? Object.keys(packageJson.dependencies) : [];
+        for (const dependency of dependencies) {
+          node.dependencies.set(
+            dependency,
+            visit(require.resolve(`${dependency}/package.json`, { paths: [node.paths.rootDirectory] }), nextDepth)
+          );
+        }
       }
 
       return node;
     };
 
-    return visit(startPackageJsonPath);
+    return visit(startPackageJsonPath, 0);
   }
 
   /** Traverse a package dependency graph with an iterator. */
