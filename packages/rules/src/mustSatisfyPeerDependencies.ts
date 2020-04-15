@@ -27,6 +27,7 @@ export const mustSatisfyPeerDependencies: RuleModule<typeof Options> = {
   check: checkSatisfyPeerDependencies,
   optionsRuntype: Options,
 };
+
 /**
  * separating on `|`, this regex allows any of the following formats:
  * - `*`
@@ -56,6 +57,11 @@ export const MATCH_MAJOR_VERSION_RANGE = /^(\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d+\
 // TODO: accept minor pins `~4.2.1`
 export const RANGE_REGEX = /^(\*|x|\^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+)?( \|\| \^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+)?)*)$/;
 
+interface IPeerDependencyRequirement {
+  node: IPackageDependencyGraphNode;
+  range: string;
+}
+
 function checkSatisfyPeerDependencies(context: Context, opts: Options) {
   const { skipUnparseableRanges } = opts;
   const graphService = new PackageDependencyGraphService();
@@ -77,10 +83,6 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
     }
   }
 
-  interface IPeerDependencyRequirement {
-    node: IPackageDependencyGraphNode;
-    range: string;
-  }
   // map of all inherited peer dependency requirements
   const allRequiredPeerDependencies: { [peerDependencyName: string]: IPeerDependencyRequirement[] } = {};
 
@@ -179,36 +181,42 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
   }
 }
 
-/*
-  Returns `true` if `a` is more strict than or equal to `b`
-  Returns `false` otherwise
-
-  This code assumes that major versions are not repeated in union ranges.
-  e.g. `^15.0.5 || ^16.0.0`, but not `15.0.5 || 15.0.999`
-
-  To determine that `a` is "more strict than or equal to" `b`:
-  For set `a` of version values (`15.0.5`) and ranges (`^16.0.0`),
-  each entry must be permitted by (equal to or greater than) some entry in `b`.
-
-  Actual dependencies of `a` can be more restrictive along matching `^`? majors in `b`, but not less.
-  For example, the following values are more strict than or equal to
-  (satisfy a required dependency) `^15.0.5 || ^16.0.0`:
-  - `^15.0.5 || ^16.0.0`
-  - `^15.0.5 || ^16.x.x`
-  - `^15.0.5 || ^16`
-  - `15.0.5 || 16.0.0`
-  - `^15.0.999 || ^16.0.0`
-  - `^15.0.5 || ^16.0.999`
-  - `^15.0.999`
-  - `^16.0.0`
-  - `16.0.0`
-  Here are some sample values that are less strict than (do not satisfy a required dependency) `^15.0.0 || ^16.0.0`:
-  - `^15.0.5 || ^16.0.0 || ^17.0.0`
-  - `^14.0.0 || ^15.0.5 || ^16.0.0`
-  - `^15.0.0 || ^16.0.0`
-  - `^17.0.0`
-  - `17.0.0`
-*/
+/**
+ * Given two version ranges, determine whether `a` satisfies `b`.
+ * `a` satisfies `b` iff `a` is a "more strict than or equal to" subset of `b`.
+ * For example, both `^15` and `^15.2.0` satisfy `^15`, but `^15 || ^16` does not.
+ *
+ * NOTE: This code assumes that input version ranges match `RANGE_REGEX`.
+ * Specifically, major version ranges are not repeated in union ranges.
+ * e.g. `^15.0.5 || ^16.0.0`, but not `15.0.5 || 15.0.999`
+ *
+ * To determine that `a` is "more strict than or equal to" `b`, we first
+ * split the set of all versions or ranges that are potentially unioned in `a` and `b`.
+ * For example, if `a` is `15.0.5`, we produce the set `[ "15.0.5" ]`,
+ * and if `b` is `^15 || ^16`, we produce the set `[ "^15", "^16" ]`.
+ * `a` is "more strict than or equal to" `b` iff each entry in `a`'s set
+ * satisfies (equal to or greater than) some entry in `b`.
+ *
+ * The following version ranges satisfy `^15.0.5 || ^16.0.0`:
+ * - `^15.0.5 || ^16.0.0`
+ * - `^15.0.5 || ^16.x.x`
+ * - `15.0.5 || 16.0.0`
+ * - `^15.0.999 || ^16.0.0`
+ * - `^15.0.5 || ^16.0.999`
+ * - `^15.0.999`
+ * - `^16.0.0`
+ * - `16.0.0`
+ * The following version ranges do not satisfy `^15.0.5 || ^16.0.0`:
+ * - `^15.0.0 || ^16.0.0`
+ * - `^15.0.5 || ^17.0.0`
+ * - `^14.0.0 || ^15.0.5 || ^16.0.0`
+ * - `^17.0.0`
+ * - `17.0.0`
+ *
+ * @param a version range that matches `RANGE_REGEX`
+ * @param b version range that matches `RANGE_REGEX`
+ * @returns `true` if `a` is more strict than or equal to `b`, `false` otherwise
+ */
 export function doesASatisfyB(a: string, b: string): boolean {
   const aIsAnyVersionRange = isAnyVersionRange(a);
   const bIsAnyVersionRange = isAnyVersionRange(b);
