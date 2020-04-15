@@ -27,29 +27,32 @@ export const mustSatisfyPeerDependencies: RuleModule<typeof Options> = {
   check: checkSatisfyPeerDependencies,
   optionsRuntype: Options,
 };
-
-/*
-  separating on `|`, this regex allows any of the following formats:
-  - *
-  - x
-  More info: https://docs.npmjs.com/about-semantic-versioning
-*/
+/**
+ * separating on `|`, this regex allows any of the following formats:
+ * - `*`
+ * - `x`
+ *
+ * More info: https://docs.npmjs.com/about-semantic-versioning
+ */
 export const MATCH_ANY_VERSION_RANGE = /^(\*|x)$/;
-/*
-  separating on `|`, this regex allows any of the following formats:
-  - 15
-  - ^15
-  - 15.x
-  - ^15.x
-  - 15.x.x
-  - ^15.x.x
-  - ^15.2
-  - ^15.2.x
-  - ^15.2.1
-  More info: https://docs.npmjs.com/about-semantic-versioning
-*/
+
+/**
+ * separating on `|`, this regex allows any of the following formats:
+ * - `15`
+ * - `^15`
+ * - `15.x`
+ * - `^15.x`
+ * - `15.x.x`
+ * - `^15.x.x`
+ * - `^15.2`
+ * - `^15.2.x`
+ * - `^15.2.1`
+ *
+ * More info: https://docs.npmjs.com/about-semantic-versioning
+ */
 export const MATCH_MAJOR_VERSION_RANGE = /^(\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d+\.\d+|\^\d+\.\d+\.x|\^\d+\.\d+\.\d+)$/;
-// does not accept `<` or `>`
+
+// does not currently accept `<`, `>`, `=`, or `-` (e.g. `>= 1.5.2 < 2` / `1.0.0 - 1.2.0`)
 // TODO: accept minor pins `~4.2.1`
 export const RANGE_REGEX = /^(\*|x|\^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+)?( \|\| \^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+)?)*)$/;
 
