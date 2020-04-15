@@ -10,13 +10,24 @@ import { PackageJson, readJson, writeJson } from "@monorepolint/utils";
 import * as path from "path";
 import * as tmp from "tmp";
 import {
-  doesASatisfyB,
+  doesASatisfyB as doesASatisfyBTyped,
+  isValidRange,
   MATCH_ANY_VERSION_RANGE,
   MATCH_MAJOR_VERSION_RANGE,
   mustSatisfyPeerDependencies,
   RANGE_REGEX,
 } from "../mustSatisfyPeerDependencies";
 import { makeDirectoryRecursively } from "../util/makeDirectory";
+
+const doesASatisfyB = (a: string, b: string) => {
+  if (!isValidRange(a)) {
+    throw new Error(`${a} is not a valid range.`);
+  }
+  if (!isValidRange(b)) {
+    throw new Error(`${b} is not a valid range.`);
+  }
+  return doesASatisfyBTyped(a, b);
+};
 
 describe("mustSatisfyPeerDependencies", () => {
   tmp.setGracefulCleanup();
