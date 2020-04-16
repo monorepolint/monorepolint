@@ -13,10 +13,26 @@ import { coerce } from "semver";
 import { IPackageDependencyGraphNode, PackageDependencyGraphService } from "./util/packageDependencyGraphService";
 
 const Options = r.Union(
-  r.Partial({
-    skipUnparseableRanges: r.Undefined,
-  }),
+  r
+    .Record({
+      skipUnparseableRanges: r.Boolean,
+    })
+    .And(
+      r.Partial({
+        dependencyWhitelist: r.Undefined,
+      })
+    ),
+  r
+    .Record({
+      dependencyWhitelist: r.Array(r.String),
+    })
+    .And(
+      r.Partial({
+        skipUnparseableRanges: r.Undefined,
+      })
+    ),
   r.Record({
+    dependencyWhitelist: r.Array(r.String),
     skipUnparseableRanges: r.Boolean,
   })
 );
@@ -63,7 +79,7 @@ interface IPeerDependencyRequirement {
 }
 
 function checkSatisfyPeerDependencies(context: Context, opts: Options) {
-  const { skipUnparseableRanges } = opts;
+  const { dependencyWhitelist, skipUnparseableRanges } = opts;
   const graphService = new PackageDependencyGraphService();
   const packageNode = graphService.buildDependencyGraph(path.resolve(context.getPackageJsonPath()), 1);
   const packageDependencies = packageNode.packageJson.dependencies || {};
@@ -73,6 +89,10 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
 
   // check that no peer dependencies are also declared as regular dependencies
   for (const [peerDependencyName, peerDependencyRange] of Object.entries(packagePeerDependencies)) {
+    if (dependencyWhitelist != null && !dependencyWhitelist.includes(peerDependencyName)) {
+      continue;
+    }
+
     const dependencyRange = packageDependencies[peerDependencyName];
     if (dependencyRange != null) {
       context.addError({
@@ -93,6 +113,10 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
       continue;
     }
     for (const [peerDependencyName, range] of Object.entries(requiredPeerDependencies)) {
+      if (dependencyWhitelist != null && !dependencyWhitelist.includes(peerDependencyName)) {
+        continue;
+      }
+
       if (!isValidRange(range)) {
         const message = `Unable to parse ${dependencyNode.packageJson.name}'s ${peerDependencyName} peer dependency range '${range}'.`;
         if (skipUnparseableRanges) {
