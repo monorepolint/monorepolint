@@ -59,12 +59,24 @@ describe("mustSatisfyPeerDependencies", () => {
       silent: true,
     });
 
-    async function checkAndSpy(skipUnparseableRanges: boolean) {
+    function checkAndSpy(skipUnparseableRanges: boolean, dependencyWhitelist?: string[]) {
       const addErrorSpy = jest.spyOn(workspaceContext, "addError");
-      mustSatisfyPeerDependencies.check(workspaceContext, {
-        skipUnparseableRanges,
-      });
+      check(skipUnparseableRanges, dependencyWhitelist);
       return { addErrorSpy };
+    }
+
+    function check(skipUnparseableRanges: boolean, dependencyWhitelist?: string[]) {
+      mustSatisfyPeerDependencies.check(
+        workspaceContext,
+        dependencyWhitelist
+          ? {
+              skipUnparseableRanges,
+              dependencyWhitelist,
+            }
+          : {
+              skipUnparseableRanges,
+            }
+      );
     }
 
     function addPackageJson(filePath: string, packageJson: PackageJson) {
@@ -82,7 +94,7 @@ describe("mustSatisfyPeerDependencies", () => {
       };
     }
 
-    return { addPackageJson, workspaceContext, checkAndSpy };
+    return { addPackageJson, workspaceContext, check, checkAndSpy };
   }
 
   describe("regex tests", () => {
@@ -478,7 +490,7 @@ describe("mustSatisfyPeerDependencies", () => {
     };
     addPackageJson("./greatLib/package.json", greatLibPackageJson);
 
-    const { addErrorSpy } = await checkAndSpy(false);
+    const { addErrorSpy } = checkAndSpy(false);
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
       `[0] Package ${testPackageJson.name} has overloaded greatLib dependencies.`
@@ -518,7 +530,7 @@ describe("mustSatisfyPeerDependencies", () => {
     };
     addPackageJson("./bbb/package.json", bbbPackageJson);
 
-    const { addErrorSpy } = await checkAndSpy(false);
+    const { addErrorSpy } = checkAndSpy(false);
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
       `[1] Package ${testPackageJson.name} has conflicting inherited greatLib peer dependencies.`
@@ -560,7 +572,7 @@ describe("mustSatisfyPeerDependencies", () => {
     };
     addPackageJson("./bbb/package.json", bbbPackageJson);
 
-    const { addErrorSpy } = await checkAndSpy(false);
+    const { addErrorSpy } = checkAndSpy(false);
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
       `[2] Package ${testPackageJson.name} dependency on greatLib does not satisfy inherited peer dependencies.`
@@ -597,7 +609,7 @@ describe("mustSatisfyPeerDependencies", () => {
     };
     addPackageJson("./bbb/package.json", bbbPackageJson);
 
-    const { addErrorSpy } = await checkAndSpy(false);
+    const { addErrorSpy } = checkAndSpy(false);
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
       `[3] Package ${testPackageJson.name} is missing required greatLib dependency.`
@@ -635,11 +647,57 @@ describe("mustSatisfyPeerDependencies", () => {
     };
     addPackageJson("./bbb/package.json", bbbPackageJson);
 
-    const { addErrorSpy } = await checkAndSpy(false);
+    const { addErrorSpy } = checkAndSpy(false);
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
       `[4] Package ${testPackageJson.name} peer dependency on greatLib is not strict enough.`
     );
     expect(readTestPackageJson().peerDependencies!.greatLib).toEqual(bbbPackageJson.peerDependencies.greatLib);
+  });
+
+  it("Honors dependencyWhitelist", async () => {
+    const { addPackageJson, check, checkAndSpy } = makeWorkspace();
+
+    const testPackageJson = {
+      name: "test",
+      dependencies: {
+        aaa: "0.0.1",
+        bbb: "0.0.1",
+        greatLib: "^15",
+      },
+      peerDependencies: {
+        startHere: "15",
+        greatLib: "15",
+      },
+    };
+    addPackageJson("./package.json", testPackageJson);
+
+    const startHerePackageJson = {
+      name: "startHere",
+    };
+    addPackageJson("./startHere/package.json", startHerePackageJson);
+    const greatLibPackageJson = {
+      name: "greatLib",
+    };
+    addPackageJson("./greatLib/package.json", greatLibPackageJson);
+    const aaaPackageJson = {
+      name: "a",
+      peerDependencies: {
+        greatLib: "15",
+      },
+    };
+    addPackageJson("./aaa/package.json", aaaPackageJson);
+    const bbbPackageJson = {
+      name: "b",
+      peerDependencies: {
+        greatLib: "16",
+      },
+    };
+    addPackageJson("./bbb/package.json", bbbPackageJson);
+
+    const { addErrorSpy } = checkAndSpy(false, ["startHere"]);
+    expect(addErrorSpy).toHaveBeenCalledTimes(0);
+    check(false, ["startHere", "greatLib"]);
+    expect(addErrorSpy).toHaveBeenCalledTimes(2);
   });
 });
