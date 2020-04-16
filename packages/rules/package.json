@@ -24,11 +24,13 @@
     "globby": "^10.0.2",
     "jest-diff": "^24.9.0",
     "minimatch": "^3.0.4",
-    "runtypes": "^4.0.0"
+    "runtypes": "^4.0.0",
+    "semver": "^6.0.0"
   },
   "devDependencies": {
     "@types/jest-diff": "^20.0.0",
     "@types/minimatch": "^3.0.3",
+    "@types/semver": "^6.2.0",
     "@types/tmp": "^0.1.0",
     "tmp": "^0.1.0"
   },
