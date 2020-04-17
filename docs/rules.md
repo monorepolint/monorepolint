@@ -112,6 +112,37 @@ module.exports = {
 };
 ```
 
+## Must Satisfy Peer Dependencies
+
+[source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/mustSatisfyPeerDependencies.ts)
+
+Ensures that packages satisfy peer dependency requirements declared by their dependencies.
+
+### Options
+
+* `skipUnparseableRanges`
+  - If true, warn and skip dependency ranges that are unparseable. Otherwise, throw. Default is false.
+* `dependencyWhitelist`
+  - An array of package names indicating which peer dependencies must be satisfied.
+
+### Example
+
+```javascript
+module.exports = {
+  rules: {
+    ":must-satisfy-peer-dependencies": {
+      options: {
+        skipUnparseableRanges: false,
+        dependencyWhitelist: [
+          "react",
+          "react-dom"
+        ]
+      }
+    }
+  }
+};
+```
+
 ## Package Entries
 
 [source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/packageEntry.ts)

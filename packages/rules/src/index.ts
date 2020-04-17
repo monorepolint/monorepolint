@@ -10,6 +10,7 @@ export { alphabeticalScripts } from "./alphabeticalScripts";
 export { bannedDependencies } from "./bannedDependencies";
 export { consistentDependencies } from "./consistentDependencies";
 export { fileContents } from "./fileContents";
+export { mustSatisfyPeerDependencies } from "./mustSatisfyPeerDependencies";
 export { packageOrder } from "./packageOrder";
 export { packageEntry } from "./packageEntry";
 export { packageScript } from "./packageScript";
