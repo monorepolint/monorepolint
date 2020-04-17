@@ -13,6 +13,10 @@ import { coerce } from "semver";
 import { IPackageDependencyGraphNode, PackageDependencyGraphService } from "./util/packageDependencyGraphService";
 
 const Options = r.Union(
+  r.Partial({
+    skipUnparseableRanges: r.Undefined,
+    dependencyWhitelist: r.Undefined,
+  }),
   r
     .Record({
       skipUnparseableRanges: r.Boolean,
