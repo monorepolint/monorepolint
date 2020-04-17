@@ -75,7 +75,7 @@ export class PackageContext implements Context {
       this.setFailed();
       this.printError(`${chalk.red("Error!")} ${chalk.magenta(shortFile)}: ${message}`);
 
-      if (this.resolvedConfig.verbose && longMessage) {
+      if (longMessage) {
         for (let i = 0; i <= this.depth + 1; i++) {
           // tslint:disable-next-line:no-console
           console.group();
