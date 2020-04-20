@@ -536,7 +536,7 @@ describe("mustSatisfyPeerDependencies", () => {
       `[1] Package ${testPackageJson.name} has conflicting inherited greatLib peer dependencies.`
     );
     expect(addErrorSpy.mock.calls[0][0].longMessage).toEqual(
-      `Dependency ${bbbPackageJson.name} requires '${bbbPackageJson.peerDependencies.greatLib}' and dependency ${aaaPackageJson.name} requires '${aaaPackageJson.peerDependencies.greatLib}'.`
+      `Dependency ${bbbPackageJson.name} requires '${bbbPackageJson.peerDependencies.greatLib}' but dependency ${aaaPackageJson.name} requires '${aaaPackageJson.peerDependencies.greatLib}'.`
     );
   });
 

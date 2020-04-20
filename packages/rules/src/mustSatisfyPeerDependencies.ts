@@ -150,7 +150,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
             file: packageJsonPath,
             message: `[1] Package ${packageName} has conflicting inherited ${peerDependencyName} peer dependencies.`,
             longMessage:
-              `Dependency ${peerRequirement.node.packageJson.name} requires '${peerRequirement.range}' and ` +
+              `Dependency ${peerRequirement.node.packageJson.name} requires '${peerRequirement.range}' but ` +
               `dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}'.`,
           });
         }
