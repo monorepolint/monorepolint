@@ -89,10 +89,10 @@ function loadRuleModule(type: string, workspaceRootDir: string) {
   } else if (type.includes(":")) {
     // if the type includes `:`, then we should import a const rather than default
     const [packageName, ruleVariable] = type.split(":");
-    mod = require(packageName)[camelCase(ruleVariable)];
+    mod = require(require.resolve(packageName, { paths: [workspaceRootDir] }))[camelCase(ruleVariable)];
   } else {
     // otherwise just import the default
-    mod = __importDefault(require(type)).default;
+    mod = __importDefault(require(require.resolve(type, { paths: [workspaceRootDir] }))).default;
   }
 
   try {
