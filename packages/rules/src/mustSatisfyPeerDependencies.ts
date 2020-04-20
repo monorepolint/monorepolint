@@ -150,8 +150,8 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
             file: packageJsonPath,
             message: `[1] Package ${packageName} has conflicting inherited ${peerDependencyName} peer dependencies.`,
             longMessage:
-              `Dependency ${peerRequirement.node.packageJson.name} requires ${peerRequirement.range} and ` +
-              `dependency ${mostStrictPeerRequirement.node.packageJson.name} requires ${mostStrictPeerRequirement.range}.`,
+              `Dependency ${peerRequirement.node.packageJson.name} requires '${peerRequirement.range}' but ` +
+              `dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}'.`,
           });
         }
       }
@@ -171,8 +171,8 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
       } else if (!doesASatisfyB(packageDependencyRange, mostStrictPeerRequirement.range)) {
         context.addError({
           file: packageJsonPath,
-          message: `[2] Package ${packageName} dependency on ${peerDependencyName} does not satisfy inherited peer dependencies.`,
-          longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires ${mostStrictPeerRequirement.range} or stricter.`,
+          message: `[2] Package ${packageName} dependency on ${peerDependencyName} '${packageDependencyRange}' does not satisfy inherited peer dependencies.`,
+          longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
         });
       }
     }
@@ -184,7 +184,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
       context.addError({
         file: packageJsonPath,
         message: `[3] Package ${packageName} is missing required ${peerDependencyName} dependency.`,
-        longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires ${mostStrictPeerRequirement.range} or stricter.`,
+        longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
         fixer: getAddDependencyTypeFixer({
           packageJsonPath,
           dependencyType: "peerDependencies",
@@ -207,8 +207,8 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
       } else if (!doesASatisfyB(packagePeerDependencyRange, mostStrictPeerRequirement.range)) {
         context.addError({
           file: packageJsonPath,
-          message: `[4] Package ${packageName} peer dependency on ${peerDependencyName} is not strict enough.`,
-          longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires ${mostStrictPeerRequirement.range} or stricter.`,
+          message: `[4] Package ${packageName} peer dependency on ${peerDependencyName} '${packagePeerDependencyRange}' is not strict enough.`,
+          longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
           fixer: getAddDependencyTypeFixer({
             packageJsonPath,
             dependencyType: "peerDependencies",
