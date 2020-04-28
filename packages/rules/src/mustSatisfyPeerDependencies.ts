@@ -71,11 +71,19 @@ export const MATCH_ANY_VERSION_RANGE = /^(\*|x)$/;
  *
  * More info: https://docs.npmjs.com/about-semantic-versioning
  */
-export const MATCH_MAJOR_VERSION_RANGE = /^(\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d+\.\d+|\^\d+\.\d+\.x|\^\d+\.\d+\.\d+)$/;
+export const MATCH_MAJOR_VERSION_RANGE = /^(\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d+\.\d+|\^\d+\.\d+\.x|\^\d+\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$/;
 
-// does not currently accept `<`, `>`, `=`, or `-` (e.g. `>= 1.5.2 < 2` / `1.0.0 - 1.2.0`)
-// TODO: accept minor pins `~4.2.1`
-export const RANGE_REGEX = /^(\*|x|\^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+)?( \|\| \^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+)?)*)$/;
+/**
+ * Does not currently accept `<`, `>`, `=`, or `-` (e.g. `>= 1.5.2 < 2` / `1.0.0 - 1.2.0`)
+ *
+ * See https://semver.org/#spec-item-9 for details about semver formatting, and
+ * https://regex101.com/r/vkijKf/1/ for a sample Regex.
+ *
+ * Note that the semver spec does _not_ specify npm range syntax. (`^`, `||`, `~`, `>`, etc.)
+ *
+ * TODO: accept minor pins `~4.2.1`
+ */
+export const RANGE_REGEX = /^(\*|x|\^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?( \|\| \^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?)*)$/;
 
 interface IPeerDependencyRequirement {
   node: IPackageDependencyGraphNode;
