@@ -493,10 +493,8 @@ describe("mustSatisfyPeerDependencies", () => {
     const { addErrorSpy } = checkAndSpy(false);
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[0] Package ${testPackageJson.name} has overloaded greatLib dependencies.`
-    );
-    expect(addErrorSpy.mock.calls[0][0].longMessage).toEqual(
-      `Peer dependency '${testPackageJson.peerDependencies.greatLib}' and regular dependency '${testPackageJson.dependencies.greatLib}'.`
+      `[0] Package ${testPackageJson.name} has overloaded greatLib dependencies.\n\t` +
+        `Peer dependency '${testPackageJson.peerDependencies.greatLib}' and regular dependency '${testPackageJson.dependencies.greatLib}'.`
     );
   });
 
@@ -533,10 +531,8 @@ describe("mustSatisfyPeerDependencies", () => {
     const { addErrorSpy } = checkAndSpy(false);
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[1] Package ${testPackageJson.name} has conflicting inherited greatLib peer dependencies.`
-    );
-    expect(addErrorSpy.mock.calls[0][0].longMessage).toEqual(
-      `Dependency ${bbbPackageJson.name} requires '${bbbPackageJson.peerDependencies.greatLib}' but dependency ${aaaPackageJson.name} requires '${aaaPackageJson.peerDependencies.greatLib}'.`
+      `[1] Package ${testPackageJson.name} has conflicting inherited greatLib peer dependencies.\n\t` +
+        `Dependency ${bbbPackageJson.name} requires '${bbbPackageJson.peerDependencies.greatLib}' but dependency ${aaaPackageJson.name} requires '${aaaPackageJson.peerDependencies.greatLib}'.`
     );
   });
 
@@ -575,10 +571,8 @@ describe("mustSatisfyPeerDependencies", () => {
     const { addErrorSpy } = checkAndSpy(false);
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[2] Package ${testPackageJson.name} dependency on greatLib '${testPackageJson.dependencies.greatLib}' does not satisfy inherited peer dependencies.`
-    );
-    expect(addErrorSpy.mock.calls[0][0].longMessage).toEqual(
-      `Dependency ${bbbPackageJson.name} requires '${bbbPackageJson.peerDependencies.greatLib}' or stricter.`
+      `[2] Package ${testPackageJson.name} dependency on greatLib '${testPackageJson.dependencies.greatLib}' does not satisfy inherited peer dependencies.\n\t` +
+        `Dependency ${bbbPackageJson.name} requires '${bbbPackageJson.peerDependencies.greatLib}' or stricter.`
     );
   });
 
@@ -612,7 +606,8 @@ describe("mustSatisfyPeerDependencies", () => {
     const { addErrorSpy } = checkAndSpy(false);
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[3] Package ${testPackageJson.name} is missing required greatLib dependency.`
+      `[3] Package ${testPackageJson.name} is missing required greatLib dependency.\n\t` +
+        `Dependency ${bbbPackageJson.name} requires '${bbbPackageJson.peerDependencies.greatLib}' or stricter.`
     );
     expect(readTestPackageJson().peerDependencies!.greatLib).toEqual(bbbPackageJson.peerDependencies.greatLib);
   });
@@ -650,7 +645,8 @@ describe("mustSatisfyPeerDependencies", () => {
     const { addErrorSpy } = checkAndSpy(false);
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[4] Package ${testPackageJson.name} peer dependency on greatLib '${testPackageJson.peerDependencies.greatLib}' is not strict enough.`
+      `[4] Package ${testPackageJson.name} peer dependency on greatLib '${testPackageJson.peerDependencies.greatLib}' is not strict enough.\n\t` +
+        `Dependency ${bbbPackageJson.name} requires '${bbbPackageJson.peerDependencies.greatLib}' or stricter.`
     );
     expect(readTestPackageJson().peerDependencies!.greatLib).toEqual(bbbPackageJson.peerDependencies.greatLib);
   });
