@@ -13,6 +13,7 @@ import {
   doesASatisfyB as doesASatisfyBTyped,
   isValidRange,
   MATCH_ANY_VERSION_RANGE,
+  MATCH_GREATER_OR_EQUAL_VERSION_RANGE,
   MATCH_MAJOR_VERSION_RANGE,
   mustSatisfyPeerDependencies,
   RANGE_REGEX,
@@ -99,6 +100,25 @@ describe("mustSatisfyPeerDependencies", () => {
 
   describe("regex tests", () => {
     const anyVersionRangePassTests = ["*", "x"];
+    const greaterOrEqualVersionRangePassTests = [
+      ">=15",
+      ">=15.2",
+      ">=15.2.2",
+      ">=15.2.2-0",
+      ">=15.2.2-alpha",
+      ">=15.2.2-alpha.1",
+      ">=15.2.2-alpha.beta",
+      ">=15.2.2-beta",
+      ">=15.2.2-beta.2",
+      ">=15.2.2-beta.11",
+      ">=15.2.2-rc",
+      ">=15.2.2-rc.1",
+      ">=15.2.2-rc.1+001",
+      ">=15.2.2+20130313144700",
+      ">=15.2.2+20130313144700.sha",
+      ">=15.2.2-rc.1+exp.sha.5114f85",
+      ">=15.2.2+sha-1",
+    ];
     const majorVersionRangePassTests = [
       "15",
       "^15",
@@ -154,6 +174,11 @@ describe("mustSatisfyPeerDependencies", () => {
       "15.alpha | 16",
       "15+rc | 16",
       "15.x.16.x",
+      ">15",
+      ">= 15",
+      "^>=15",
+      ">=^15",
+      "^ >=15",
     ];
 
     it("Properly matches any version range regex", async () => {
@@ -162,6 +187,8 @@ describe("mustSatisfyPeerDependencies", () => {
         expect(MATCH_ANY_VERSION_RANGE.test(passTest)).toBeTruthy();
       }
       const failTests = [
+        ...greaterOrEqualVersionRangePassTests,
+        ...majorVersionRangePassTests,
         ...failEverythingTests,
         "* || x",
         "* || *",
@@ -181,12 +208,51 @@ describe("mustSatisfyPeerDependencies", () => {
       }
     });
 
+    it("Properly matches greator or equal version range regex", async () => {
+      const passTests = [...greaterOrEqualVersionRangePassTests];
+      for (const passTest of passTests) {
+        expect(MATCH_GREATER_OR_EQUAL_VERSION_RANGE.test(passTest)).toBeTruthy();
+      }
+      const failTests = [
+        ...anyVersionRangePassTests,
+        ...majorVersionRangePassTests,
+        ...failEverythingTests,
+        ">=",
+        ">=x",
+        ">=4.x",
+        ">=4.x.x",
+        ">=4 || 5",
+        ">=4 || *",
+        "4.2.x",
+        "4.2.2",
+        "4.2.2-0",
+        "4.2.2-rc",
+        "4.2.2-rc.0",
+        "4.2.2-alpha.beta",
+        "4.2.2+sha",
+      ];
+      for (const failTest of failTests) {
+        expect(MATCH_GREATER_OR_EQUAL_VERSION_RANGE.test(failTest)).toBeFalsy();
+      }
+    });
+
     it("Properly matches major version range regex", async () => {
       const passTests = [...majorVersionRangePassTests];
       for (const passTest of passTests) {
         expect(MATCH_MAJOR_VERSION_RANGE.test(passTest)).toBeTruthy();
       }
-      const failTests = [...failEverythingTests, "4.2.x", "4.2.2"];
+      const failTests = [
+        ...anyVersionRangePassTests,
+        ...greaterOrEqualVersionRangePassTests,
+        ...failEverythingTests,
+        "4.2.x",
+        "4.2.2",
+        "4.2.2-0",
+        "4.2.2-rc",
+        "4.2.2-rc.0",
+        "4.2.2-alpha.beta",
+        "4.2.2+sha",
+      ];
       for (const failTest of failTests) {
         expect(MATCH_MAJOR_VERSION_RANGE.test(failTest)).toBeFalsy();
       }
@@ -195,6 +261,7 @@ describe("mustSatisfyPeerDependencies", () => {
     it("Properly matches allowed range regex", async () => {
       const passTests = [
         ...anyVersionRangePassTests,
+        ...greaterOrEqualVersionRangePassTests,
         ...majorVersionRangePassTests,
         "15.2",
         "15.2.3",
@@ -231,12 +298,22 @@ describe("mustSatisfyPeerDependencies", () => {
         "15.2.2-rc || 16 || 17.2.x",
         "15.2.2-rc.0 || 16 || 17.2.x",
         "15.2.2+sha || 16 || 17.2.x",
+        "15.2.2-rc.0 || 16.6.6 || 17.2.x",
+        "15.2.2-rc.0 || 16.6.6-0 || 17.2.x",
+        "15.2.2-rc.0 || 16.6.6-rc || 17.2.x",
+        "15.2.2-rc.0 || 16.6.6-rc.0 || 17.2.x",
+        "15.2.2-rc.0 || 16.6.6+sha || 17.2.x",
         "15.2 || ^16 || ^17.2.x",
         "15.2.2 || ^16 || ^17.2.x",
         "15.2.2-0 || ^16 || ^17.2.x",
         "15.2.2-rc || ^16 || ^17.2.x",
         "15.2.2-rc.0 || ^16 || ^17.2.x",
         "15.2.2+sha || ^16 || ^17.2.x",
+        "15.2.2-rc.0 || ^16.6.6 || ^17.2.x",
+        "15.2.2-rc.0 || ^16.6.6-0 || ^17.2.x",
+        "15.2.2-rc.0 || ^16.6.6-rc || ^17.2.x",
+        "15.2.2-rc.0 || ^16.6.6-rc.0 || ^17.2.x",
+        "15.2.2-rc.0 || ^16.6.6+sha || ^17.2.x",
         "^15.2 || ^16 || ^17.2.x",
       ];
       for (const passTest of passTests) {
@@ -305,6 +382,32 @@ describe("mustSatisfyPeerDependencies", () => {
       expect(doesASatisfyB(equivalentRange6, higherVersion)).toBeFalsy();
     });
 
+    it("version satisfies a greator or equal version range", async () => {
+      const version = "15.0.0";
+      const range = ">=15";
+      expect(doesASatisfyB(version, range)).toBeTruthy();
+      expect(doesASatisfyB(range, version)).toBeFalsy();
+      const equivalentRange1 = ">=15.0";
+      expect(doesASatisfyB(version, equivalentRange1)).toBeTruthy();
+      expect(doesASatisfyB(equivalentRange1, version)).toBeFalsy();
+      const equivalentRange2 = ">=15.0.0";
+      expect(doesASatisfyB(version, equivalentRange2)).toBeTruthy();
+      expect(doesASatisfyB(equivalentRange2, version)).toBeFalsy();
+    });
+
+    it("higher version satisfies a greator or equal version range", async () => {
+      const higherVersion = "15.0.2";
+      const range = ">=15";
+      expect(doesASatisfyB(higherVersion, range)).toBeTruthy();
+      expect(doesASatisfyB(range, higherVersion)).toBeFalsy();
+      const equivalentRange1 = ">=15.0";
+      expect(doesASatisfyB(higherVersion, equivalentRange1)).toBeTruthy();
+      expect(doesASatisfyB(equivalentRange1, higherVersion)).toBeFalsy();
+      const equivalentRange2 = ">=15.0.0";
+      expect(doesASatisfyB(higherVersion, equivalentRange2)).toBeTruthy();
+      expect(doesASatisfyB(equivalentRange2, higherVersion)).toBeFalsy();
+    });
+
     it("version satisfies 'any' range", async () => {
       const version = "15.0.0";
       const anyRange = "*";
@@ -315,6 +418,16 @@ describe("mustSatisfyPeerDependencies", () => {
       expect(doesASatisfyB(equivalentRange, version)).toBeFalsy();
     });
 
+    it("greator or equal version range satisfies 'any' range", async () => {
+      const range = ">=15";
+      const anyRange = "*";
+      expect(doesASatisfyB(range, anyRange)).toBeTruthy();
+      expect(doesASatisfyB(anyRange, range)).toBeFalsy();
+      const equivalentRange = "x";
+      expect(doesASatisfyB(range, equivalentRange)).toBeTruthy();
+      expect(doesASatisfyB(equivalentRange, range)).toBeFalsy();
+    });
+
     it("range satisfies 'any' range", async () => {
       const range = "^15";
       const anyRange = "*";
@@ -323,6 +436,16 @@ describe("mustSatisfyPeerDependencies", () => {
       const equivalentRange = "x";
       expect(doesASatisfyB(range, equivalentRange)).toBeTruthy();
       expect(doesASatisfyB(equivalentRange, range)).toBeFalsy();
+    });
+
+    it("union range satisfies 'any' range", async () => {
+      const unionRange = "^15 || ^16";
+      const anyRange = "*";
+      expect(doesASatisfyB(unionRange, anyRange)).toBeTruthy();
+      expect(doesASatisfyB(anyRange, unionRange)).toBeFalsy();
+      const equivalentRange = "x";
+      expect(doesASatisfyB(unionRange, equivalentRange)).toBeTruthy();
+      expect(doesASatisfyB(equivalentRange, unionRange)).toBeFalsy();
     });
 
     it("version found in union start", async () => {
@@ -403,6 +526,37 @@ describe("mustSatisfyPeerDependencies", () => {
       const rangeRangeUnion = "^14 || ^15";
       expect(doesASatisfyB(range, rangeRangeUnion)).toBeTruthy();
       expect(doesASatisfyB(rangeRangeUnion, range)).toBeFalsy();
+    });
+
+    it("union satisfies greator or equal version range", async () => {
+      const rangeVersionUnion = "^15 || 16.0.0";
+      const range = ">=15";
+      expect(doesASatisfyB(rangeVersionUnion, range)).toBeTruthy();
+      expect(doesASatisfyB(range, rangeVersionUnion)).toBeFalsy();
+      const rangeRangeUnion = "^15 || ^16";
+      expect(doesASatisfyB(rangeRangeUnion, range)).toBeTruthy();
+      expect(doesASatisfyB(range, rangeRangeUnion)).toBeFalsy();
+    });
+
+    it("greator or equal version range satisfies greator or equal version range", async () => {
+      const range = ">=15";
+      expect(doesASatisfyB(range, range)).toBeTruthy();
+      const stricterRange = ">=16";
+      expect(doesASatisfyB(stricterRange, range)).toBeTruthy();
+      expect(doesASatisfyB(range, stricterRange)).toBeFalsy();
+    });
+
+    it("equivalent greator or equal version ranges satisfy each other", async () => {
+      const rangeA = ">=15";
+      const rangeB = ">=15.0";
+      const rangeC = ">=15.0.0";
+      expect(doesASatisfyB(rangeA, rangeB)).toBeTruthy();
+      expect(doesASatisfyB(rangeB, rangeA)).toBeTruthy();
+      expect(doesASatisfyB(rangeA, rangeC)).toBeTruthy();
+      expect(doesASatisfyB(rangeC, rangeA)).toBeTruthy();
+
+      expect(doesASatisfyB(rangeB, rangeC)).toBeTruthy();
+      expect(doesASatisfyB(rangeC, rangeB)).toBeTruthy();
     });
 
     it("higher range satisfies a range in union start", async () => {
