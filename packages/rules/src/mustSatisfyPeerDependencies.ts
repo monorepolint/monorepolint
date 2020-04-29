@@ -69,6 +69,11 @@ export const MATCH_ANY_VERSION_RANGE = /^(\*|x)$/;
  * - `^15.2.x`
  * - `^15.2.1`
  *
+ * See https://semver.org/#spec-item-9 for details about semver formatting, and
+ * https://regex101.com/r/vkijKf/1/ for a sample Regex.
+ *
+ * Note that the semver spec does _not_ specify npm range syntax. (`^`, `||`, `~`, `>`, etc.)
+ *
  * More info: https://docs.npmjs.com/about-semantic-versioning
  */
 export const MATCH_MAJOR_VERSION_RANGE = /^(\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d+\.\d+|\^\d+\.\d+\.x|\^\d+\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$/;
@@ -80,6 +85,8 @@ export const MATCH_MAJOR_VERSION_RANGE = /^(\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d+\
  * https://regex101.com/r/vkijKf/1/ for a sample Regex.
  *
  * Note that the semver spec does _not_ specify npm range syntax. (`^`, `||`, `~`, `>`, etc.)
+ *
+ * More info: https://docs.npmjs.com/about-semantic-versioning
  *
  * TODO: accept minor pins `~4.2.1`
  */
