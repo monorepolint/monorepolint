@@ -101,8 +101,9 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
     if (dependencyRange != null) {
       context.addError({
         file: packageJsonPath,
-        message: `[0] Package ${packageName} has overloaded ${peerDependencyName} dependencies.`,
-        longMessage: `Peer dependency '${peerDependencyRange}' and regular dependency '${dependencyRange}'.`,
+        message:
+          `[0] Package ${packageName} has overloaded ${peerDependencyName} dependencies.\n\t` +
+          `Peer dependency '${peerDependencyRange}' and regular dependency '${dependencyRange}'.`,
       });
     }
   }
@@ -148,8 +149,8 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
         } else if (!doesASatisfyB(mostStrictPeerRequirement.range, peerRequirement.range)) {
           context.addError({
             file: packageJsonPath,
-            message: `[1] Package ${packageName} has conflicting inherited ${peerDependencyName} peer dependencies.`,
-            longMessage:
+            message:
+              `[1] Package ${packageName} has conflicting inherited ${peerDependencyName} peer dependencies.\n\t` +
               `Dependency ${peerRequirement.node.packageJson.name} requires '${peerRequirement.range}' but ` +
               `dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}'.`,
           });
@@ -171,8 +172,9 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
       } else if (!doesASatisfyB(packageDependencyRange, mostStrictPeerRequirement.range)) {
         context.addError({
           file: packageJsonPath,
-          message: `[2] Package ${packageName} dependency on ${peerDependencyName} '${packageDependencyRange}' does not satisfy inherited peer dependencies.`,
-          longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
+          message:
+            `[2] Package ${packageName} dependency on ${peerDependencyName} '${packageDependencyRange}' does not satisfy inherited peer dependencies.\n\t` +
+            `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
         });
       }
     }
@@ -183,8 +185,9 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
     if (packageDependencyRange == null && packagePeerDependencyRange == null) {
       context.addError({
         file: packageJsonPath,
-        message: `[3] Package ${packageName} is missing required ${peerDependencyName} dependency.`,
-        longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
+        message:
+          `[3] Package ${packageName} is missing required ${peerDependencyName} dependency.\n\t` +
+          `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
         fixer: getAddDependencyTypeFixer({
           packageJsonPath,
           dependencyType: "peerDependencies",
@@ -207,8 +210,9 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
       } else if (!doesASatisfyB(packagePeerDependencyRange, mostStrictPeerRequirement.range)) {
         context.addError({
           file: packageJsonPath,
-          message: `[4] Package ${packageName} peer dependency on ${peerDependencyName} '${packagePeerDependencyRange}' is not strict enough.`,
-          longMessage: `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
+          message:
+            `[4] Package ${packageName} peer dependency on ${peerDependencyName} '${packagePeerDependencyRange}' is not strict enough.\n\t` +
+            `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
           fixer: getAddDependencyTypeFixer({
             packageJsonPath,
             dependencyType: "peerDependencies",
