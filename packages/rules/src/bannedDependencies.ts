@@ -86,7 +86,7 @@ function checkBanned(
   if (Object.keys(expectedDependencies).length !== Object.keys(dependencies).length) {
     context.addError({
       file: packagePath,
-      message: `Banned depdendencies in ${block} in package.json`,
+      message: `Banned dependencies in ${block} in package.json`,
       longMessage: diff(expectedDependencies, dependencies, { expand: true }),
       fixer: () => {
         const newPackageJson = { ...packageJson };
@@ -109,7 +109,7 @@ function checkTransitives(
       if (bannedDependencies.includes(dependency)) {
         context.addError({
           file: dependencyNode.paths.packageJsonPath,
-          message: `Banned transitive depdendencies in repo: ${dependency}`,
+          message: `Banned transitive dependencies in repo: ${dependency}`,
         });
       }
     }
