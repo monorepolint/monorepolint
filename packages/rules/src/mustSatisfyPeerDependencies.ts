@@ -58,7 +58,25 @@ export const mustSatisfyPeerDependencies: RuleModule<typeof Options> = {
 export const MATCH_ANY_VERSION_RANGE = /^(\*|x)$/;
 
 /**
- * separating on `|`, this regex allows any of the following formats:
+ * This regex allows any of the following formats:
+ * - `>=15`
+ * - `>=15.2`
+ * - `>=15.2.1`
+ * - `>=15.2.1-rc.0`
+ * - `>=15.2.1+sha`
+ * - `>=15.2.1-rc.0+sha`
+ *
+ * See https://semver.org/#spec-item-9 for details about semver formatting, and
+ * https://regex101.com/r/vkijKf/1/ for a sample Regex.
+ *
+ * Note that the semver spec does _not_ specify npm range syntax. (`^`, `||`, `~`, `>`, etc.)
+ *
+ * More info: https://docs.npmjs.com/about-semantic-versioning
+ */
+export const MATCH_GREATER_OR_EQUAL_VERSION_RANGE = /^>=\d+(?:\.\d+|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?$/;
+
+/**
+ * This regex allows any of the following formats:
  * - `15`
  * - `^15`
  * - `15.x`
@@ -68,6 +86,9 @@ export const MATCH_ANY_VERSION_RANGE = /^(\*|x)$/;
  * - `^15.2`
  * - `^15.2.x`
  * - `^15.2.1`
+ * - `^15.2.1-rc.0`
+ * - `^15.2.1+sha`
+ * - `^15.2.1-rc.0+sha`
  *
  * See https://semver.org/#spec-item-9 for details about semver formatting, and
  * https://regex101.com/r/vkijKf/1/ for a sample Regex.
@@ -76,10 +97,11 @@ export const MATCH_ANY_VERSION_RANGE = /^(\*|x)$/;
  *
  * More info: https://docs.npmjs.com/about-semantic-versioning
  */
-export const MATCH_MAJOR_VERSION_RANGE = /^(\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d+\.\d+|\^\d+\.\d+\.x|\^\d+\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$/;
+export const MATCH_MAJOR_VERSION_RANGE = /^(?:\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d+\.\d+|\^\d+\.\d+\.x|\^\d+\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$/;
 
 /**
- * Does not currently accept `<`, `>`, `=`, or `-` (e.g. `>= 1.5.2 < 2` / `1.0.0 - 1.2.0`)
+ * Does not currently accept `<`, `<=`, `>`, `=` or `-` for ranges (e.g. `> 2.5.1 < 3` or `1.0.0 - 1.2.0`),
+ * though it will accept isolated `>=` ranges (e.g. `>=2.5.1`, but not `^1 || >=2.5.1`)
  *
  * See https://semver.org/#spec-item-9 for details about semver formatting, and
  * https://regex101.com/r/vkijKf/1/ for a sample Regex.
@@ -90,7 +112,7 @@ export const MATCH_MAJOR_VERSION_RANGE = /^(\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d+\
  *
  * TODO: accept minor pins `~4.2.1`
  */
-export const RANGE_REGEX = /^(\*|x|\^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?( \|\| \^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?)*)$/;
+export const RANGE_REGEX = /^(\*|x|>=\d+(?:\.\d+|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?|\^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?( \|\| \^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?)*)$/;
 
 interface IPeerDependencyRequirement {
   node: IPackageDependencyGraphNode;
@@ -246,8 +268,8 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
  * For example, both `^15` and `^15.2.0` satisfy `^15`, but `^15 || ^16` does not.
  *
  * NOTE: This code assumes that input version ranges match `RANGE_REGEX`.
- * Specifically, major version ranges are not repeated in union ranges.
- * e.g. `^15.0.5 || ^16.0.0`, but not `15.0.5 || 15.0.999`
+ * Additionally, major version ranges must not be repeated in union ranges.
+ * e.g. `^15.0.5 || ^16.0.0` is permitted, but `15.0.5 || 15.0.999` is not.
  *
  * To determine that `a` is "more strict than or equal to" `b`, we first
  * split the set of all versions or ranges that are potentially unioned in `a` and `b`.
@@ -290,6 +312,26 @@ export function doesASatisfyB(a: ValidRange, b: ValidRange): boolean {
   const aVersions = a.includes("||") ? a.split("||").map(s => s.trim()) : [a];
   const bVersions = b.includes("||") ? b.split("||").map(s => s.trim()) : [b];
 
+  const aIsGreaterOrEqualVersionRange = isGreaterOrEqualVersionRange(a);
+  const bIsGreaterOrEqualVersionRange = isGreaterOrEqualVersionRange(b);
+  if (aIsGreaterOrEqualVersionRange && bIsGreaterOrEqualVersionRange) {
+    const aSemVer = coerce(a)!;
+    const bSemVer = coerce(b)!;
+    // `a` satisfies `b` so long as `aSemVer` is greater than or equal to `bSemVer`
+    return aSemVer.compare(bSemVer) !== -1;
+  } else if (bIsGreaterOrEqualVersionRange) {
+    const bSemVer = coerce(b)!;
+    return aVersions.every(aVersion => {
+      const aSemVer = coerce(aVersion)!;
+      // `a` satisfies `b` so long as `aSemVer` is greater than or equal to `bSemVer`
+      return aSemVer.compare(bSemVer) !== -1;
+    });
+  } else if (aIsGreaterOrEqualVersionRange) {
+    // `bIsGreaterOrEqualVersionRange` is `false` (and `bIsAnyVersionRange` is `false`)
+    // `a` permits more values than `b`, therefore `a` is "less strict"
+    return false;
+  }
+
   return aVersions.every(aVersion => {
     const aSemVer = coerce(aVersion)!;
     const majorMatchingBVersion = bVersions.find(m => coerce(m)!.major === aSemVer.major);
@@ -323,6 +365,10 @@ export function doesASatisfyB(a: ValidRange, b: ValidRange): boolean {
 
 function isAnyVersionRange(version: string): boolean {
   return MATCH_ANY_VERSION_RANGE.test(version);
+}
+
+function isGreaterOrEqualVersionRange(version: string): boolean {
+  return MATCH_GREATER_OR_EQUAL_VERSION_RANGE.test(version);
 }
 
 function isMajorVersionRange(version: string): boolean {
