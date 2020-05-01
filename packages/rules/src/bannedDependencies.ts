@@ -73,20 +73,19 @@ function checkBanned(
     return;
   }
 
+  const newPackageJson = { ...packageJson };
   const violations: string[] = [];
 
   for (const dependency of Object.keys(dependencies)) {
     for (const bannedDependency of bannedDependencies) {
       if (minimatch(dependency, bannedDependency)) {
         violations.push(dependency);
+        delete newPackageJson[block]![dependency];
       }
     }
   }
 
   if (violations.length > 0) {
-    const newPackageJson = { ...packageJson };
-    violations.forEach(v => delete newPackageJson[block]![v]);
-
     context.addError({
       file: packagePath,
       message:
