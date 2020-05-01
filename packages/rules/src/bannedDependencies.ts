@@ -73,24 +73,25 @@ function checkBanned(
     return;
   }
 
-  const expectedDependencies: Record<string, string> = {};
+  const violations: string[] = [];
 
   for (const dependency of Object.keys(dependencies)) {
     for (const bannedDependency of bannedDependencies) {
-      if (!minimatch(dependency, bannedDependency)) {
-        expectedDependencies[dependency] = dependencies[dependency];
+      if (minimatch(dependency, bannedDependency)) {
+        violations.push(dependency);
       }
     }
   }
 
-  if (Object.keys(expectedDependencies).length !== Object.keys(dependencies).length) {
+  if (violations.length > 0) {
+    const newPackageJson = { ...packageJson };
+    violations.forEach(v => delete newPackageJson[block]![v]);
+
     context.addError({
       file: packagePath,
-      message: `Banned dependencies in ${block} in package.json`,
-      longMessage: diff(expectedDependencies, dependencies, { expand: true }),
+      message: `Banned dependencies in '${block}' block of package.json: ${violations.map(v => `'${v}'`).join(", ")}`,
+      longMessage: diff(newPackageJson[block], dependencies, { expand: true }),
       fixer: () => {
-        const newPackageJson = { ...packageJson };
-        newPackageJson[block] = expectedDependencies;
         writeJson(packagePath, newPackageJson);
       },
     });
