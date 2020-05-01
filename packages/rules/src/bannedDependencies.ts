@@ -13,7 +13,7 @@ import path from "path";
 import * as r from "runtypes";
 import { PackageDependencyGraphService } from "./util/packageDependencyGraphService";
 
-const BannedDependenciesOptions = r.Union(
+const Options = r.Union(
   r
     .Record({
       bannedDependencies: r.Array(r.String),
@@ -38,10 +38,10 @@ const BannedDependenciesOptions = r.Union(
   })
 );
 
-export type BannedDependenciesOptions = r.Static<typeof BannedDependenciesOptions>;
+export type Options = r.Static<typeof Options>;
 
-export const bannedDependencies: RuleModule<typeof BannedDependenciesOptions> = {
-  check: function expectAllowedDependencies(context: Context, opts: BannedDependenciesOptions) {
+export const bannedDependencies: RuleModule<typeof Options> = {
+  check: function expectAllowedDependencies(context: Context, opts: Options) {
     // tslint:disable-next-line:no-shadowed-variable
     const { bannedDependencies, bannedTransitiveDependencies } = opts;
 
@@ -55,7 +55,7 @@ export const bannedDependencies: RuleModule<typeof BannedDependenciesOptions> = 
       checkTransitives(context, bannedTransitiveDependencies);
     }
   },
-  optionsRuntype: BannedDependenciesOptions,
+  optionsRuntype: Options,
 };
 
 function checkBanned(

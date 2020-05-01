@@ -8,7 +8,7 @@ import { WorkspaceContext } from "@monorepolint/core";
 import { writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
-import { bannedDependencies, BannedDependenciesOptions } from "../bannedDependencies";
+import { bannedDependencies, Options } from "../bannedDependencies";
 import { makeDirectoryRecursively } from "../util/makeDirectory";
 import { jsonToString } from "./utils";
 
@@ -44,7 +44,7 @@ describe("bannedDependencies", () => {
       silent: true,
     });
 
-    function checkAndSpy(options: BannedDependenciesOptions) {
+    function checkAndSpy(options: Options) {
       const addErrorSpy = jest.spyOn(workspaceContext, "addError");
       bannedDependencies.check(workspaceContext, {
         ...options,
