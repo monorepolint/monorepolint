@@ -8,7 +8,7 @@ import { WorkspaceContext } from "@monorepolint/core";
 import { writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
-import { bannedDependencies } from "../bannedDependencies";
+import { bannedDependencies, Options } from "../bannedDependencies";
 import { makeDirectoryRecursively } from "../util/makeDirectory";
 import { jsonToString } from "./utils";
 
@@ -44,10 +44,10 @@ describe("bannedDependencies", () => {
       silent: true,
     });
 
-    async function checkAndSpy(bannedTransitives: string[]) {
+    function checkAndSpy(options: Options) {
       const addErrorSpy = jest.spyOn(workspaceContext, "addError");
       bannedDependencies.check(workspaceContext, {
-        bannedTransitiveDependencies: bannedTransitives,
+        ...options,
       });
       return { addErrorSpy };
     }
@@ -64,7 +64,28 @@ describe("bannedDependencies", () => {
     return { addFile, workspaceContext, checkAndSpy };
   }
 
-  // TODO: Add test for regular banned dependencies
+  it("Flags banned dependencies correctly", async () => {
+    const { addFile, checkAndSpy } = makeWorkspace();
+    const rootPackageJson = jsonToString({
+      dependencies: {
+        aaa: "0.0.1",
+        ccc: "0.0.1",
+      },
+    });
+    addFile("./package.json", rootPackageJson);
+
+    const { addErrorSpy: addErrorSpy1 } = checkAndSpy({ bannedDependencies: ["ccc"] });
+    expect(addErrorSpy1).toHaveBeenCalledTimes(1);
+    addErrorSpy1.mockReset();
+
+    const { addErrorSpy: addErrorSpy2 } = checkAndSpy({ bannedDependencies: ["ddd"] });
+    expect(addErrorSpy2).toHaveBeenCalledTimes(0);
+    addErrorSpy2.mockReset();
+
+    const { addErrorSpy: addErrorSpy3 } = checkAndSpy({ bannedDependencies: ["ccc", "ddd"] });
+    expect(addErrorSpy3).toHaveBeenCalledTimes(1);
+    addErrorSpy3.mockReset();
+  });
 
   it("Flags banned transitives correctly", async () => {
     const { addFile, checkAndSpy } = makeWorkspace();
@@ -91,6 +112,6 @@ describe("bannedDependencies", () => {
     addFile("./aaa/bbb/ddd/package.json", EMPTY_PACKAGE);
     addFile("./aaa/ccc/package.json", EMPTY_PACKAGE);
 
-    expect((await checkAndSpy(["ccc", "ddd"])).addErrorSpy).toHaveBeenCalledTimes(2);
+    expect(checkAndSpy({ bannedTransitiveDependencies: ["ccc", "ddd"] }).addErrorSpy).toHaveBeenCalledTimes(2);
   });
 });

@@ -38,7 +38,7 @@ const Options = r.Union(
   })
 );
 
-type Options = r.Static<typeof Options>;
+export type Options = r.Static<typeof Options>;
 
 export const bannedDependencies: RuleModule<typeof Options> = {
   check: function expectAllowedDependencies(context: Context, opts: Options) {
@@ -73,24 +73,26 @@ function checkBanned(
     return;
   }
 
-  const expectedDependencies: Record<string, string> = {};
+  const newPackageJson = { ...packageJson };
+  const violations: string[] = [];
 
   for (const dependency of Object.keys(dependencies)) {
     for (const bannedDependency of bannedDependencies) {
-      if (!minimatch(dependency, bannedDependency)) {
-        expectedDependencies[dependency] = dependencies[dependency];
+      if (minimatch(dependency, bannedDependency)) {
+        violations.push(dependency);
+        delete newPackageJson[block]![dependency];
       }
     }
   }
 
-  if (Object.keys(expectedDependencies).length !== Object.keys(dependencies).length) {
+  if (violations.length > 0) {
     context.addError({
       file: packagePath,
-      message: `Banned dependencies in ${block} in package.json`,
-      longMessage: diff(expectedDependencies, dependencies, { expand: true }),
+      message:
+        `Found ${violations.length} banned dependencies in '${block}' block of package.json:\n\t` +
+        violations.map(v => `'${v}'`).join(", "),
+      longMessage: diff(newPackageJson[block], dependencies, { expand: true }),
       fixer: () => {
-        const newPackageJson = { ...packageJson };
-        newPackageJson[block] = expectedDependencies;
         writeJson(packagePath, newPackageJson);
       },
     });
