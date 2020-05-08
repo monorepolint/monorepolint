@@ -16,6 +16,7 @@ const Options = r.Union(
   r.Partial({
     skipUnparseableRanges: r.Undefined,
     dependencyWhitelist: r.Undefined,
+    dependencyBlacklist: r.Undefined,
   }),
   r
     .Record({
@@ -24,6 +25,7 @@ const Options = r.Union(
     .And(
       r.Partial({
         dependencyWhitelist: r.Undefined,
+        dependencyBlacklist: r.Undefined,
       })
     ),
   r
@@ -33,15 +35,57 @@ const Options = r.Union(
     .And(
       r.Partial({
         skipUnparseableRanges: r.Undefined,
+        dependencyBlacklist: r.Undefined,
+      })
+    ),
+  r
+    .Record({
+      dependencyBlacklist: r.Array(r.String),
+    })
+    .And(
+      r.Partial({
+        skipUnparseableRanges: r.Undefined,
+        dependencyWhitelist: r.Undefined,
+      })
+    ),
+  r
+    .Record({
+      skipUnparseableRanges: r.Boolean,
+      dependencyWhitelist: r.Array(r.String),
+    })
+    .And(
+      r.Partial({
+        dependencyBlacklist: r.Undefined,
+      })
+    ),
+  r
+    .Record({
+      skipUnparseableRanges: r.Boolean,
+      dependencyBlacklist: r.Array(r.String),
+    })
+    .And(
+      r.Partial({
+        dependencyWhitelist: r.Undefined,
+      })
+    ),
+  r
+    .Record({
+      dependencyWhitelist: r.Array(r.String),
+      dependencyBlacklist: r.Array(r.String),
+    })
+    .And(
+      r.Partial({
+        skipUnparseableRanges: r.Undefined,
       })
     ),
   r.Record({
-    dependencyWhitelist: r.Array(r.String),
     skipUnparseableRanges: r.Boolean,
+    dependencyWhitelist: r.Array(r.String),
+    dependencyBlacklist: r.Array(r.String),
   })
 );
 
-type Options = r.Static<typeof Options>;
+export type Options = r.Static<typeof Options>;
 
 export const mustSatisfyPeerDependencies: RuleModule<typeof Options> = {
   check: checkSatisfyPeerDependencies,
@@ -120,7 +164,7 @@ interface IPeerDependencyRequirement {
 }
 
 function checkSatisfyPeerDependencies(context: Context, opts: Options) {
-  const { dependencyWhitelist, skipUnparseableRanges } = opts;
+  const { dependencyBlacklist, dependencyWhitelist, skipUnparseableRanges } = opts;
   const graphService = new PackageDependencyGraphService();
   const packageNode = graphService.buildDependencyGraph(path.resolve(context.getPackageJsonPath()), 1);
   const packageDependencies = packageNode.packageJson.dependencies || {};
@@ -130,7 +174,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
 
   // check that no peer dependencies are also declared as regular dependencies
   for (const [peerDependencyName, peerDependencyRange] of Object.entries(packagePeerDependencies)) {
-    if (dependencyWhitelist != null && !dependencyWhitelist.includes(peerDependencyName)) {
+    if (shouldSkipPackage({ dependencyBlacklist, dependencyWhitelist, packageName: peerDependencyName })) {
       continue;
     }
 
@@ -155,7 +199,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
       continue;
     }
     for (const [peerDependencyName, range] of Object.entries(requiredPeerDependencies)) {
-      if (dependencyWhitelist != null && !dependencyWhitelist.includes(peerDependencyName)) {
+      if (shouldSkipPackage({ dependencyBlacklist, dependencyWhitelist, packageName: peerDependencyName })) {
         continue;
       }
 
@@ -260,6 +304,25 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
       }
     }
   }
+}
+
+function shouldSkipPackage({
+  dependencyBlacklist,
+  dependencyWhitelist,
+  packageName,
+}: {
+  dependencyBlacklist?: string[];
+  dependencyWhitelist?: string[];
+  packageName: string;
+}) {
+  // blacklist should take precedance
+  if (
+    (dependencyBlacklist != null && dependencyBlacklist.includes(packageName)) ||
+    (dependencyWhitelist != null && !dependencyWhitelist.includes(packageName))
+  ) {
+    return true;
+  }
+  return false;
 }
 
 /**
