@@ -16,6 +16,7 @@ const Options = r.Union(
     skipUnparseableRanges: r.Undefined,
     dependencyWhitelist: r.Undefined,
     dependencyBlacklist: r.Undefined,
+    enforceForDevDependencies: r.Undefined,
   }),
   r
     .Record({
@@ -25,6 +26,7 @@ const Options = r.Union(
       r.Partial({
         dependencyWhitelist: r.Undefined,
         dependencyBlacklist: r.Undefined,
+        enforceForDevDependencies: r.Undefined,
       })
     ),
   r
@@ -35,11 +37,90 @@ const Options = r.Union(
       r.Partial({
         skipUnparseableRanges: r.Undefined,
         dependencyBlacklist: r.Undefined,
+        enforceForDevDependencies: r.Undefined,
       })
     ),
   r
     .Record({
       dependencyBlacklist: r.Array(r.String),
+    })
+    .And(
+      r.Partial({
+        skipUnparseableRanges: r.Undefined,
+        dependencyWhitelist: r.Undefined,
+        enforceForDevDependencies: r.Undefined,
+      })
+    ),
+  r
+    .Record({
+      enforceForDevDependencies: r.Boolean,
+    })
+    .And(
+      r.Partial({
+        skipUnparseableRanges: r.Undefined,
+        dependencyWhitelist: r.Undefined,
+        dependencyBlacklist: r.Undefined,
+      })
+    ),
+  r
+    .Record({
+      skipUnparseableRanges: r.Boolean,
+      dependencyWhitelist: r.Array(r.String),
+    })
+    .And(
+      r.Partial({
+        dependencyBlacklist: r.Undefined,
+        enforceForDevDependencies: r.Undefined,
+      })
+    ),
+  r
+    .Record({
+      skipUnparseableRanges: r.Boolean,
+      dependencyBlacklist: r.Array(r.String),
+    })
+    .And(
+      r.Partial({
+        dependencyWhitelist: r.Undefined,
+        enforceForDevDependencies: r.Undefined,
+      })
+    ),
+  r
+    .Record({
+      skipUnparseableRanges: r.Boolean,
+      enforceForDevDependencies: r.Boolean,
+    })
+    .And(
+      r.Partial({
+        dependencyWhitelist: r.Undefined,
+        dependencyBlacklist: r.Undefined,
+      })
+    ),
+  r
+    .Record({
+      dependencyWhitelist: r.Array(r.String),
+      dependencyBlacklist: r.Array(r.String),
+    })
+    .And(
+      r.Partial({
+        skipUnparseableRanges: r.Undefined,
+        enforceForDevDependencies: r.Undefined,
+      })
+    ),
+  r
+    .Record({
+      dependencyWhitelist: r.Array(r.String),
+      enforceForDevDependencies: r.Boolean,
+    })
+    .And(
+      r.Partial({
+        skipUnparseableRanges: r.Undefined,
+        dependencyBlacklist: r.Undefined,
+      })
+    ),
+  r
+    .Record({
+      dependencyBlacklist: r.Array(r.String),
+      enforceForDevDependencies: r.Boolean,
     })
     .And(
       r.Partial({
@@ -51,6 +132,18 @@ const Options = r.Union(
     .Record({
       skipUnparseableRanges: r.Boolean,
       dependencyWhitelist: r.Array(r.String),
+      dependencyBlacklist: r.Array(r.String),
+    })
+    .And(
+      r.Partial({
+        enforceForDevDependencies: r.Undefined,
+      })
+    ),
+  r
+    .Record({
+      skipUnparseableRanges: r.Boolean,
+      dependencyWhitelist: r.Array(r.String),
+      enforceForDevDependencies: r.Boolean,
     })
     .And(
       r.Partial({
@@ -61,6 +154,7 @@ const Options = r.Union(
     .Record({
       skipUnparseableRanges: r.Boolean,
       dependencyBlacklist: r.Array(r.String),
+      enforceForDevDependencies: r.Boolean,
     })
     .And(
       r.Partial({
@@ -71,6 +165,7 @@ const Options = r.Union(
     .Record({
       dependencyWhitelist: r.Array(r.String),
       dependencyBlacklist: r.Array(r.String),
+      enforceForDevDependencies: r.Boolean,
     })
     .And(
       r.Partial({
@@ -81,6 +176,7 @@ const Options = r.Union(
     skipUnparseableRanges: r.Boolean,
     dependencyWhitelist: r.Array(r.String),
     dependencyBlacklist: r.Array(r.String),
+    enforceForDevDependencies: r.Boolean,
   })
 );
 
@@ -163,10 +259,11 @@ interface IPeerDependencyRequirement {
 }
 
 function checkSatisfyPeerDependencies(context: Context, opts: Options) {
-  const { dependencyBlacklist, dependencyWhitelist, skipUnparseableRanges } = opts;
+  const { dependencyBlacklist, dependencyWhitelist, enforceForDevDependencies, skipUnparseableRanges } = opts;
   const packageJsonPath = path.resolve(context.getPackageJsonPath());
   const packageJson: PackageJson = require(packageJsonPath);
   const packageDependencies = packageJson.dependencies || {};
+  const packageDevDependencies = packageJson.devDependencies || {};
   const packagePeerDependencies = packageJson.peerDependencies || {};
   const packageName = packageJson.name || packageJsonPath;
 
@@ -191,7 +288,10 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
   const allRequiredPeerDependencies: { [peerDependencyName: string]: IPeerDependencyRequirement[] } = {};
 
   // for each of this package's dependencies, add the dependency's peer requirements into `allRequiredPeerDependencies`
-  for (const dependency of Object.keys(packageDependencies)) {
+  const allDependencies = enforceForDevDependencies
+    ? [...Object.keys(packageDependencies), ...Object.keys(packageDevDependencies)]
+    : Object.keys(packageDependencies);
+  for (const dependency of allDependencies) {
     const dependencyPackageJsonPath = require.resolve(`${dependency}/package.json`, {
       paths: [path.dirname(packageJsonPath)],
     });
