@@ -10,7 +10,6 @@ import { mutateJson, PackageJson } from "@monorepolint/utils";
 import path from "path";
 import * as r from "runtypes";
 import { coerce } from "semver";
-import { IPackageDependencyGraphNode, PackageDependencyGraphService } from "./util/packageDependencyGraphService";
 
 const Options = r.Union(
   r.Partial({
@@ -159,18 +158,17 @@ export const MATCH_MAJOR_VERSION_RANGE = /^(?:\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d
 export const RANGE_REGEX = /^(\*|x|>=\d+(?:\.\d+|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?|\^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?( \|\| \^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?)*)$/;
 
 interface IPeerDependencyRequirement {
-  node: IPackageDependencyGraphNode;
+  fromPackageJson: PackageJson;
   range: ValidRange;
 }
 
 function checkSatisfyPeerDependencies(context: Context, opts: Options) {
   const { dependencyBlacklist, dependencyWhitelist, skipUnparseableRanges } = opts;
-  const graphService = new PackageDependencyGraphService();
-  const packageNode = graphService.buildDependencyGraph(path.resolve(context.getPackageJsonPath()), 1);
-  const packageDependencies = packageNode.packageJson.dependencies || {};
-  const packagePeerDependencies = packageNode.packageJson.peerDependencies || {};
-  const packageJsonPath = packageNode.paths.packageJsonPath;
-  const packageName = packageNode.packageJson.name || packageJsonPath;
+  const packageJsonPath = path.resolve(context.getPackageJsonPath());
+  const packageJson: PackageJson = require(packageJsonPath);
+  const packageDependencies = packageJson.dependencies || {};
+  const packagePeerDependencies = packageJson.peerDependencies || {};
+  const packageName = packageJson.name || packageJsonPath;
 
   // check that no peer dependencies are also declared as regular dependencies
   for (const [peerDependencyName, peerDependencyRange] of Object.entries(packagePeerDependencies)) {
@@ -193,8 +191,12 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
   const allRequiredPeerDependencies: { [peerDependencyName: string]: IPeerDependencyRequirement[] } = {};
 
   // for each of this package's dependencies, add the dependency's peer requirements into `allRequiredPeerDependencies`
-  for (const [, dependencyNode] of packageNode.dependencies) {
-    const requiredPeerDependencies = dependencyNode.packageJson.peerDependencies;
+  for (const dependency of Object.keys(packageDependencies)) {
+    const dependencyPackageJsonPath = require.resolve(`${dependency}/package.json`, {
+      paths: [path.dirname(packageJsonPath)],
+    });
+    const dependencyPackageJson: PackageJson = require(dependencyPackageJsonPath);
+    const requiredPeerDependencies = dependencyPackageJson.peerDependencies;
     if (requiredPeerDependencies == null) {
       continue;
     }
@@ -204,9 +206,9 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
       }
 
       if (!isValidRange(range)) {
-        const message = `Unable to parse ${dependencyNode.packageJson.name}'s ${peerDependencyName} peer dependency range '${range}'.`;
+        const message = `Unable to parse ${dependencyPackageJson.name}'s ${peerDependencyName} peer dependency range '${range}'.`;
         if (skipUnparseableRanges) {
-          context.addWarning({ file: dependencyNode.paths.packageJsonPath, message });
+          context.addWarning({ file: dependencyPackageJsonPath, message });
           continue;
         }
         throw new Error(message);
@@ -214,7 +216,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
       if (allRequiredPeerDependencies[peerDependencyName] == null) {
         allRequiredPeerDependencies[peerDependencyName] = [];
       }
-      allRequiredPeerDependencies[peerDependencyName].push({ node: dependencyNode, range });
+      allRequiredPeerDependencies[peerDependencyName].push({ fromPackageJson: dependencyPackageJson, range });
     }
   }
 
@@ -232,8 +234,8 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
             file: packageJsonPath,
             message:
               `[1] Package ${packageName} has conflicting inherited ${peerDependencyName} peer dependencies.\n\t` +
-              `Dependency ${peerRequirement.node.packageJson.name} requires '${peerRequirement.range}' but ` +
-              `dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}'.`,
+              `Dependency ${peerRequirement.fromPackageJson.name} requires '${peerRequirement.range}' but ` +
+              `dependency ${mostStrictPeerRequirement.fromPackageJson.name} requires '${mostStrictPeerRequirement.range}'.`,
           });
         }
       }
@@ -255,7 +257,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
           file: packageJsonPath,
           message:
             `[2] Package ${packageName} dependency on ${peerDependencyName} '${packageDependencyRange}' does not satisfy inherited peer dependencies.\n\t` +
-            `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
+            `Dependency ${mostStrictPeerRequirement.fromPackageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
         });
       }
     }
@@ -268,7 +270,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
         file: packageJsonPath,
         message:
           `[3] Package ${packageName} is missing required ${peerDependencyName} dependency.\n\t` +
-          `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
+          `Dependency ${mostStrictPeerRequirement.fromPackageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
         fixer: getAddDependencyTypeFixer({
           packageJsonPath,
           dependencyType: "peerDependencies",
@@ -293,7 +295,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
           file: packageJsonPath,
           message:
             `[4] Package ${packageName} peer dependency on ${peerDependencyName} '${packagePeerDependencyRange}' is not strict enough.\n\t` +
-            `Dependency ${mostStrictPeerRequirement.node.packageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
+            `Dependency ${mostStrictPeerRequirement.fromPackageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
           fixer: getAddDependencyTypeFixer({
             packageJsonPath,
             dependencyType: "peerDependencies",
