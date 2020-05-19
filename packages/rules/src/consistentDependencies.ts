@@ -44,7 +44,7 @@ function checkDeps(context: Context, block: "dependencies" | "devDependencies" |
   if (JSON.stringify(dependencies) !== JSON.stringify(expectedDependencies)) {
     context.addError({
       file: packagePath,
-      message: `Inconsitent ${block} with root in package.json`,
+      message: `Inconsistent ${block} with root in package.json`,
       longMessage: diff(expectedDependencies, dependencies, { expand: true }),
       fixer: () => {
         const newPackageJson = { ...packageJson };

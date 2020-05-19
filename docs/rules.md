@@ -8,7 +8,7 @@ To add your own custom rules see `writing-custom-rules.md`
 
 [source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/alphabeticalDependencies.ts)
 
-Makes sure that all dependency blocks are orderded alphabetically.
+Makes sure that all dependency blocks are ordered alphabetically.
 
 ### Example
 
@@ -16,7 +16,7 @@ Makes sure that all dependency blocks are orderded alphabetically.
 module.exports = {
   rules: {
     ":alphabetical-dependencies": true,
-  }
+  },
 };
 ```
 
@@ -28,8 +28,8 @@ Disallow problematic dependencies.
 
 ### Options
 
-* `bannedDependencies`
-  - An array of depedency names to ban
+- `bannedDependencies`
+  - An array of dependency names to ban
 
 ### Example
 
@@ -38,10 +38,10 @@ module.exports = {
   rules: {
     ":banned-dependencies": {
       options: {
-        bannedDependencies: ["lodash"]
-      }
-    }
-  }
+        bannedDependencies: ["lodash"],
+      },
+    },
+  },
 };
 ```
 
@@ -56,11 +56,10 @@ Enforce dependency versions are consistent with workspace root.
 ```javascript
 module.exports = {
   rules: {
-    ":consistent-dependencies": true
-  }
+    ":consistent-dependencies": true,
+  },
 };
 ```
-
 
 ## Nested Workspaces
 
@@ -74,8 +73,8 @@ In particular, this ensures that nested workspaces (e.g. `packages/group/*`) are
 ```javascript
 module.exports = {
   rules: {
-    ":nested-workspaces": true
-  }
+    ":nested-workspaces": true,
+  },
 };
 ```
 
@@ -83,17 +82,17 @@ module.exports = {
 
 [source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/fileContents.ts)
 
-Enforce each package has a file with certain contents enforced by either a template or generator.
+Enforce that each package has a file with certain contents enforced by either a template or generator.
 
 ### Options
 
-* `file`
+- `file`
   - Name of the file
-* `generator` (Optional)
+- `generator` (Optional)
   - Function that can generate the file
-* `template` (Optional)
+- `template` (Optional)
   - Expected file contents
-* `templateFile` (Optional)
+- `templateFile` (Optional)
   - Path to a file to use as a template
 
 Exactly one of `generator`, `template`, or `templateFile` needs to be specified.
@@ -105,10 +104,10 @@ module.exports = {
   rules: {
     "file-contents": {
       options: {
-        templateFile: "./templates/jest.config.js"
-      }
-    }
-  }
+        templateFile: "./templates/jest.config.js",
+      },
+    },
+  },
 };
 ```
 
@@ -120,9 +119,9 @@ Ensures that packages satisfy peer dependency requirements declared by their dep
 
 ### Options
 
-* `skipUnparseableRanges`
+- `skipUnparseableRanges`
   - If true, warn and skip dependency ranges that are unparseable. Otherwise, throw. Default is false.
-* `dependencyWhitelist`
+- `dependencyWhitelist`
   - An array of package names indicating which peer dependencies must be satisfied.
 
 ### Example
@@ -133,13 +132,10 @@ module.exports = {
     ":must-satisfy-peer-dependencies": {
       options: {
         skipUnparseableRanges: false,
-        dependencyWhitelist: [
-          "react",
-          "react-dom"
-        ]
-      }
-    }
-  }
+        dependencyWhitelist: ["react", "react-dom"],
+      },
+    },
+  },
 };
 ```
 
@@ -151,9 +147,9 @@ Standardize arbitrary entries in package.json.
 
 ### Options
 
-* `entries`
+- `entries`
   - An object of expected key value pairs for the package.json
-* `entriesExists`
+- `entriesExists`
   - An array of expected keys to exist in package.json (without any value enforcement)
 
 ### Example
@@ -164,14 +160,12 @@ module.exports = {
     ":package-entry": {
       options: {
         entries: {
-          "author": "Eric L Anderson (https://github.com/ericanderson)"
+          author: "Eric L Anderson (https://github.com/ericanderson)",
         },
-        entriesExists: [
-          "bugs"
-        ]
-      }
-    }
-  }
+        entriesExists: ["bugs"],
+      },
+    },
+  },
 };
 ```
 
@@ -183,7 +177,7 @@ Standardize entry order in package.json.
 
 ### Options
 
-* `order` (Optional)
+- `order` (Optional)
   - Either a comparator function on keys or an array of expected package order. If a a key is missing from this array, it will be at the bottom of the package.json. If missing, uses a default ordering found below.
 
 ### Example
@@ -218,11 +212,11 @@ module.exports = {
           "peerDependencies",
           "devDependencies",
           "optionalDependencies",
-          "publishConfig"
-        ]
-      }
-    }
-  }
+          "publishConfig",
+        ],
+      },
+    },
+  },
 };
 ```
 
@@ -230,11 +224,11 @@ module.exports = {
 
 [source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/packageScript.ts)
 
-Standardize package scripts. This is a seperate rule from Package Entries to make it easy to have multiple package script rules apply to one package.
+Standardize package scripts. This is a separate rule from Package Entries to make it easy to have multiple package script rules apply to one package.
 
 ### Options
 
-* `scripts`
+- `scripts`
   - An object of expected key value pairs for the scripts block
 
 ### Example
@@ -245,9 +239,9 @@ module.exports = {
     ":package-script": {
       options: {
         scripts: {
-          "clean": "rm -rf build lib node_modules *.tgz",
-          "compile": "../../node_modules/.bin/tsc",
-          "goodbye": {
+          clean: "rm -rf build lib node_modules *.tgz",
+          compile: "../../node_modules/.bin/tsc",
+          goodbye: {
             options: [undefined],
             fixValue: undefined, // fix removes value
           },
@@ -256,12 +250,12 @@ module.exports = {
           },
           "any-of-these-auto-fix-to-c": {
             options: ["a", "b", "c"],
-            fixValue: "c"
-          }
-        }
-      }
-    }
-  }
+            fixValue: "c",
+          },
+        },
+      },
+    },
+  },
 };
 ```
 
@@ -273,11 +267,11 @@ Special case of the File Contents rule for typescript configs. Using a template 
 
 ### Options
 
-* `generator` (Optional)
+- `generator` (Optional)
   - Function that can generate the config
-* `template` (Optional)
+- `template` (Optional)
   - Expected config contents
-* `templateFile` (Optional)
+- `templateFile` (Optional)
   - Path to a file to use as a template
 
 Exactly one of `generator`, `template`, or `templateFile` needs to be specified.
@@ -289,10 +283,10 @@ module.exports = {
   rules: {
     ":standard-tsconfig": {
       options: {
-        templateFile: "./templates/tsconfig.json"
-      }
-    }
-  }
+        templateFile: "./templates/tsconfig.json",
+      },
+    },
+  },
 };
 ```
 
@@ -310,7 +304,7 @@ Standardize dependency versions across packages
   - Map of dependency name to version
 - `peerDependencies` (Optional)
   - Map of dependency name to version
-- `optionalDdependencies` (Optional)
+- `optionalDependencies` (Optional)
   - Map of dependency name to version
 
 ### Example
@@ -328,4 +322,3 @@ module.exports = {
   },
 };
 ```
-

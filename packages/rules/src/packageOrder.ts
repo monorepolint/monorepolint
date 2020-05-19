@@ -56,10 +56,10 @@ export const packageOrder = {
 
     const order: string[] | OrderFunction = opts === undefined ? defaultKeyOrder : opts.order;
 
-    const compartor = isOrderFunction(order) ? order(context) : createCompartor(order);
+    const comparator = isOrderFunction(order) ? order(context) : createComparator(order);
 
     const actualOrder = Object.keys(packageJson);
-    const expectedOrder = actualOrder.slice().sort(compartor); // sort mutates, so we need to copy the previous result
+    const expectedOrder = actualOrder.slice().sort(comparator); // sort mutates, so we need to copy the previous result
 
     if (!arrayOrderCompare(actualOrder, expectedOrder)) {
       context.addError({
@@ -91,7 +91,7 @@ function arrayOrderCompare(a: ReadonlyArray<string>, b: ReadonlyArray<string>) {
   return true;
 }
 
-function createCompartor(order: ReadonlyArray<string>) {
+function createComparator(order: ReadonlyArray<string>) {
   return (a: string, b: string) => {
     const aIndex = order.indexOf(a);
     const bIndex = order.indexOf(b);
