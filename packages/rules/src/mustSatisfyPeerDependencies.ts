@@ -254,7 +254,12 @@ export const MATCH_MAJOR_VERSION_RANGE = /^(?:\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d
 export const RANGE_REGEX = /^(\*|x|>=\d+(?:\.\d+|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?|\^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?( \|\| \^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?)*)$/;
 
 interface IPeerDependencyRequirement {
-  fromPackageJson: PackageJson;
+  fromPackageName: string;
+  range: ValidRange;
+}
+
+interface IResolvedPeerDependencyRequirement {
+  fromPeerDependencyRequirements: IPeerDependencyRequirement[];
   range: ValidRange;
 }
 
@@ -316,26 +321,41 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
       if (allRequiredPeerDependencies[peerDependencyName] == null) {
         allRequiredPeerDependencies[peerDependencyName] = [];
       }
-      allRequiredPeerDependencies[peerDependencyName].push({ fromPackageJson: dependencyPackageJson, range });
+      allRequiredPeerDependencies[peerDependencyName].push({ fromPackageName: dependencyPackageJson.name!, range });
     }
   }
 
   for (const [peerDependencyName, peerDependencyRequirements] of Object.entries(allRequiredPeerDependencies)) {
     // for each inherited peer dependency, determine the strictest range
-    let mostStrictPeerRequirement: IPeerDependencyRequirement = peerDependencyRequirements[0];
+    let mostStrictPeerRequirement: IResolvedPeerDependencyRequirement = {
+      fromPeerDependencyRequirements: [peerDependencyRequirements[0]],
+      range: peerDependencyRequirements[0].range,
+    };
     for (const peerRequirement of peerDependencyRequirements) {
-      if (peerRequirement === mostStrictPeerRequirement) {
+      if (doesASatisfyB(mostStrictPeerRequirement.range, peerRequirement.range)) {
         continue;
+      } else if (doesASatisfyB(peerRequirement.range, mostStrictPeerRequirement.range)) {
+        mostStrictPeerRequirement = {
+          fromPeerDependencyRequirements: [peerRequirement],
+          range: peerRequirement.range,
+        };
       } else {
-        if (doesASatisfyB(peerRequirement.range, mostStrictPeerRequirement.range)) {
-          mostStrictPeerRequirement = peerRequirement;
-        } else if (!doesASatisfyB(mostStrictPeerRequirement.range, peerRequirement.range)) {
+        const maybeIntersection = findIntersection(peerRequirement.range, mostStrictPeerRequirement.range);
+        if (maybeIntersection !== undefined) {
+          mostStrictPeerRequirement = {
+            fromPeerDependencyRequirements: [
+              ...mostStrictPeerRequirement.fromPeerDependencyRequirements,
+              peerRequirement,
+            ],
+            range: maybeIntersection,
+          };
+        } else {
           context.addError({
             file: packageJsonPath,
             message:
               `[1] Package ${packageName} has conflicting inherited ${peerDependencyName} peer dependencies.\n\t` +
-              `Dependency ${peerRequirement.fromPackageJson.name} requires '${peerRequirement.range}' but ` +
-              `dependency ${mostStrictPeerRequirement.fromPackageJson.name} requires '${mostStrictPeerRequirement.range}'.`,
+              `Dependency ${peerRequirement.fromPackageName} requires '${peerRequirement.range}' but\n\t` +
+              getMostStrictStatement(mostStrictPeerRequirement),
           });
         }
       }
@@ -357,7 +377,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
           file: packageJsonPath,
           message:
             `[2] Package ${packageName} dependency on ${peerDependencyName} '${packageDependencyRange}' does not satisfy inherited peer dependencies.\n\t` +
-            `Dependency ${mostStrictPeerRequirement.fromPackageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
+            getMostStrictStatement(mostStrictPeerRequirement),
         });
       }
     }
@@ -370,7 +390,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
         file: packageJsonPath,
         message:
           `[3] Package ${packageName} is missing required ${peerDependencyName} dependency.\n\t` +
-          `Dependency ${mostStrictPeerRequirement.fromPackageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
+          getMostStrictStatement(mostStrictPeerRequirement),
         fixer: getAddDependencyTypeFixer({
           packageJsonPath,
           dependencyType: "peerDependencies",
@@ -395,7 +415,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
           file: packageJsonPath,
           message:
             `[4] Package ${packageName} peer dependency on ${peerDependencyName} '${packagePeerDependencyRange}' is not strict enough.\n\t` +
-            `Dependency ${mostStrictPeerRequirement.fromPackageJson.name} requires '${mostStrictPeerRequirement.range}' or stricter.`,
+            getMostStrictStatement(mostStrictPeerRequirement),
           fixer: getAddDependencyTypeFixer({
             packageJsonPath,
             dependencyType: "peerDependencies",
@@ -425,6 +445,125 @@ function shouldSkipPackage({
     return true;
   }
   return false;
+}
+
+function getMostStrictStatement(mostStrictPeerRequirement: IResolvedPeerDependencyRequirement) {
+  if (mostStrictPeerRequirement.fromPeerDependencyRequirements.length === 1) {
+    const dependencyName = mostStrictPeerRequirement.fromPeerDependencyRequirements[0].fromPackageName;
+    return `Dependency ${dependencyName} requires '${mostStrictPeerRequirement.range}'.`;
+  } else {
+    const dependencyNames = mostStrictPeerRequirement.fromPeerDependencyRequirements
+      .map(peerDependencyRequirement => peerDependencyRequirement.fromPackageName)
+      .join(", ");
+    const dependencyRequirements = mostStrictPeerRequirement.fromPeerDependencyRequirements
+      .map(peerDependencyRequirement => `'${peerDependencyRequirement.range}'`)
+      .join(", ");
+    return (
+      `Dependencies [${dependencyNames}] require [${dependencyRequirements}] respectively, ` +
+      `resolving to '${mostStrictPeerRequirement.range}'.`
+    );
+  }
+}
+
+/**
+ * Given two version ranges, find the maximum intersecting range
+ * of `a` and `b`. `findIntersection(a,b)` should return the same
+ * result as `findIntersection(b,a)`.
+ *
+ * NOTE: This code assumes that input version ranges match `RANGE_REGEX`.
+ * Additionally, major version ranges must not be repeated in union ranges.
+ * e.g. `^15.0.5 || ^16.0.0` is permitted, but `15.0.5 || 15.0.999` is not.
+ *
+ * EXAMPLES:
+ * findIntersection("15.1.0", "*") => "15.1.0"
+ * findIntersection("^15", "*") => "^15"
+ * findIntersection(">=15", "*") => ">=15"
+ * findIntersection("*", "*") => "*"
+ * findIntersection("15.1.0", ">=1") => "15.1.0"
+ * findIntersection("^15", ">=1") => "^15"
+ * findIntersection(">=15", ">=1") => ">=15"
+ * findIntersection("15.1.0", "^15") => "15.1.0"
+ * findIntersection("^15.2", "^15") => "^15.2"
+ * findIntersection("14", "^15") => undefined
+ * findIntersection("15.1.0", "^15 || ^16") => "15.1.0"
+ * findIntersection("^15.2", "^15 || ^16") => "^15.2"
+ * findIntersection("14", "^15 || ^16") => undefined
+ * findIntersection("^15.2 || ^16", "^15 || ^16.4") => "^15.2 || ^16.4"
+ *
+ * @param a version range that matches `RANGE_REGEX`
+ * @param b version range that matches `RANGE_REGEX`
+ * @returns the maximum intersecting `ValidRange`, or `undefined` if there is no intersection
+ */
+export function findIntersection(a: ValidRange, b: ValidRange): ValidRange | undefined {
+  if (doesASatisfyB(a, b)) {
+    return a;
+  } else if (doesASatisfyB(b, a)) {
+    return b;
+  }
+
+  // It's safe to assume that `isAnyVersionRange(a)` and `isAnyVersionRange(b)` are false,
+  // since a `MATCH_ANY_VERSION_RANGE` would have been satisfied by anything.
+  if (isAnyVersionRange(a) || isAnyVersionRange(b)) {
+    throw new Error();
+  }
+
+  const aVersions = a.includes("||") ? a.split("||").map(s => s.trim()) : [a];
+  const bVersions = b.includes("||") ? b.split("||").map(s => s.trim()) : [b];
+
+  const aIsGreaterOrEqualVersionRange = isGreaterOrEqualVersionRange(a);
+  const bIsGreaterOrEqualVersionRange = isGreaterOrEqualVersionRange(b);
+  if (aIsGreaterOrEqualVersionRange && bIsGreaterOrEqualVersionRange) {
+    // If the ranges were equal, they'd both satisfy each other.
+    // Otherwise, the higher range should have satisfied the lower range.
+    throw new Error();
+  }
+
+  if (aIsGreaterOrEqualVersionRange) {
+    const aSemVer = coerce(a)!;
+    // keep every version where `bSemVer` is >= `aSemVer`
+    const compatibleBVersions = bVersions.filter(bVersion => {
+      const bSemVer = coerce(bVersion)!;
+      return bSemVer.compare(aSemVer) !== -1;
+    });
+    if (compatibleBVersions.length === 0) {
+      return undefined;
+    }
+    return compatibleBVersions.join(" || ") as ValidRange;
+  }
+  if (bIsGreaterOrEqualVersionRange) {
+    const bSemVer = coerce(b)!;
+    // keep every version where `aSemVer` is >= `bSemVer`
+    const compatibleAVersions = aVersions.filter(aVersion => {
+      const aSemVer = coerce(aVersion)!;
+      return aSemVer.compare(bSemVer) !== -1;
+    });
+    if (compatibleAVersions.length === 0) {
+      return undefined;
+    }
+    return compatibleAVersions.join(" || ") as ValidRange;
+  }
+
+  const compatibleVersions = aVersions
+    .map(aVersion => {
+      const aSemVer = coerce(aVersion)!;
+      const majorMatchingBVersion = bVersions.find(m => coerce(m)!.major === aSemVer.major);
+      if (majorMatchingBVersion === undefined) {
+        // there is no intersecting `b` major version for this `a` major version
+        return undefined;
+      }
+      if (doesASatisfyB(aVersion as ValidRange, majorMatchingBVersion as ValidRange)) {
+        return aVersion;
+      } else if (doesASatisfyB(majorMatchingBVersion as ValidRange, aVersion as ValidRange)) {
+        return majorMatchingBVersion;
+      } else {
+        return undefined;
+      }
+    })
+    .filter(aVersion => aVersion !== undefined);
+  if (compatibleVersions.length === 0) {
+    return undefined;
+  }
+  return compatibleVersions.join(" || ") as ValidRange;
 }
 
 /**
@@ -464,6 +603,10 @@ function shouldSkipPackage({
  * @returns `true` if `a` is more strict than or equal to `b`, `false` otherwise
  */
 export function doesASatisfyB(a: ValidRange, b: ValidRange): boolean {
+  if (a === b) {
+    return true;
+  }
+
   const aIsAnyVersionRange = isAnyVersionRange(a);
   const bIsAnyVersionRange = isAnyVersionRange(b);
   if (bIsAnyVersionRange) {
