@@ -47,7 +47,7 @@
     "@types/jest": "^24.0.0",
     "@types/mock-fs": "^3.6.30",
     "@types/node": "^12.7.4",
-    "gh-pages": "^2.0.1",
+    "gh-pages": "^3.0.0",
     "husky": "^3.0.5",
     "jest": "^24.9.0",
     "lerna": "^3.6.0",
