@@ -8,10 +8,10 @@
 import { Context, RuleModule } from "@monorepolint/core";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
 import * as r from "runtypes";
-import { coerce } from "semver";
+import { coerce, SemVer } from "semver";
 
 export const Options = r.Record({
-  matchDependencyVersions: r.Dictionary(r.String),
+  matchDependencyVersions: r.Dictionary(r.Union(r.String, r.Array(r.String))),
 });
 
 export type Options = r.Static<typeof Options>;
@@ -25,7 +25,11 @@ function checkConsistentVersions(context: Context, options: Options) {
   for (const [dependencyPackageName, expectedPackageDependencyValue] of Object.entries(
     options.matchDependencyVersions
   )) {
-    ensurePackageIsCorrectVersion(context, dependencyPackageName, expectedPackageDependencyValue);
+    if (Array.isArray(expectedPackageDependencyValue)) {
+      ensurePackageMatchesSomeVersion(context, dependencyPackageName, expectedPackageDependencyValue);
+    } else {
+      ensurePackageIsCorrectVersion(context, dependencyPackageName, expectedPackageDependencyValue);
+    }
   }
 }
 
@@ -76,6 +80,60 @@ const ensurePackageIsCorrectVersion = (
           input.devDependencies![dependencyPackageName] = expectedPackageDependencyValue;
           return input;
         }),
+    });
+  }
+};
+
+const ensurePackageMatchesSomeVersion = (
+  context: Context,
+  dependencyPackageName: string,
+  acceptedPackageDependencyValues: string[]
+) => {
+  const packageJson = context.getPackageJson();
+  const packageJsonPath = context.getPackageJsonPath();
+
+  const acceptedPackageDependencyVersions: SemVer[] = acceptedPackageDependencyValues.map(
+    acceptedPackageDependencyValue => {
+      const acceptedPackageDependencyVersion = coerce(acceptedPackageDependencyValue);
+      if (acceptedPackageDependencyVersion == null) {
+        throw new Error(
+          `Malformed accepted package dependency version defined in monorepolint configuration: ${dependencyPackageName} @ '${acceptedPackageDependencyValue}'`
+        );
+      }
+      return acceptedPackageDependencyVersion;
+    }
+  );
+
+  const actualPackageDependencyValue = packageJson.dependencies && packageJson.dependencies[dependencyPackageName];
+  const actualPackageDependencyVersion = coerce(actualPackageDependencyValue);
+  if (
+    actualPackageDependencyVersion != null &&
+    !acceptedPackageDependencyVersions.some(
+      acceptedPackageDependencyVersion => actualPackageDependencyVersion.raw === acceptedPackageDependencyVersion.raw
+    )
+  ) {
+    context.addError({
+      file: packageJsonPath,
+      message: `Expected dependency on ${dependencyPackageName} to match a version defined in monorepolint configuration '${JSON.stringify(
+        acceptedPackageDependencyValues
+      )}', got '${actualPackageDependencyValue}' instead.`,
+    });
+  }
+
+  const actualPackageDevDependencyValue =
+    packageJson.devDependencies && packageJson.devDependencies[dependencyPackageName];
+  const actualPackageDevDependencyVersion = coerce(actualPackageDevDependencyValue);
+  if (
+    actualPackageDevDependencyVersion != null &&
+    !acceptedPackageDependencyVersions.some(
+      acceptedPackageDependencyVersion => actualPackageDevDependencyVersion.raw === acceptedPackageDependencyVersion.raw
+    )
+  ) {
+    context.addError({
+      file: packageJsonPath,
+      message: `Expected devDependency on ${dependencyPackageName} to match a version defined in monorepolint configuration '${JSON.stringify(
+        acceptedPackageDependencyValues
+      )}', got '${actualPackageDevDependencyValue}' instead.`,
     });
   }
 };
