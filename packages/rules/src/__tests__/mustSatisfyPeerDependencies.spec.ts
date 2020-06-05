@@ -71,33 +71,24 @@ describe("mustSatisfyPeerDependencies", () => {
       verbose: false,
       silent: true,
     });
-
-    function checkAndSpy(options: Options) {
-      const addErrorSpy = jest.spyOn(workspaceContext, "addError");
-      check(options);
-      return { addErrorSpy };
-    }
+    const addErrorSpy = jest.spyOn(workspaceContext, "addError");
 
     function check(options: Options) {
       mustSatisfyPeerDependencies.check(workspaceContext, options);
     }
 
-    function addPackageJson(filePath: string, packageJson: PackageJson) {
-      const dirPath = path.resolve(cwd!, path.dirname(filePath));
-      const resolvedFilePath = path.resolve(cwd!, filePath);
+    return { addErrorSpy, check };
+  }
 
-      makeDirectoryRecursively(dirPath);
-      writeJson(resolvedFilePath, packageJson);
-      return getPackageJsonReader(resolvedFilePath);
-    }
+  function addPackageJson(filePath: string, packageJson: PackageJson) {
+    const dirPath = path.resolve(cwd!, path.dirname(filePath));
+    const resolvedFilePath = path.resolve(cwd!, filePath);
 
-    function getPackageJsonReader(resolvedFilePath: string) {
-      return (): PackageJson => {
-        return readJson(resolvedFilePath);
-      };
-    }
-
-    return { addPackageJson, workspaceContext, check, checkAndSpy };
+    makeDirectoryRecursively(dirPath);
+    writeJson(resolvedFilePath, packageJson);
+    return (): PackageJson => {
+      return readJson(resolvedFilePath);
+    };
   }
 
   describe("regex tests", () => {
@@ -811,7 +802,7 @@ describe("mustSatisfyPeerDependencies", () => {
   });
 
   it("Flags overloaded dependency (entry in regular dependencies and peer dependencies)", async () => {
-    const { addPackageJson, checkAndSpy } = makeWorkspace();
+    const { addErrorSpy, check } = makeWorkspace();
 
     const testPackageJson = {
       name: "test",
@@ -829,7 +820,7 @@ describe("mustSatisfyPeerDependencies", () => {
     };
     addPackageJson("./greatLib/package.json", greatLibPackageJson);
 
-    const { addErrorSpy } = checkAndSpy({});
+    check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
       `[0] Package ${testPackageJson.name} has overloaded greatLib dependencies.\n\t` +
@@ -838,7 +829,7 @@ describe("mustSatisfyPeerDependencies", () => {
   });
 
   it("Flags conflicting peer dependencies", async () => {
-    const { addPackageJson, check, checkAndSpy } = makeWorkspace();
+    const { addErrorSpy, check } = makeWorkspace();
 
     const testPackageJson = {
       name: "test",
@@ -879,7 +870,7 @@ describe("mustSatisfyPeerDependencies", () => {
     };
     addPackageJson("./ccc/package.json", cccPackageJson);
 
-    const { addErrorSpy } = checkAndSpy({});
+    check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
       `[1] Package ${testPackageJson.name} has conflicting inherited greatLib peer dependencies.\n\t` +
@@ -899,7 +890,7 @@ describe("mustSatisfyPeerDependencies", () => {
   });
 
   it("Flags unsatisfied peer dependencies (test package has regular dep)", async () => {
-    const { addPackageJson, check, checkAndSpy } = makeWorkspace();
+    const { addErrorSpy, check } = makeWorkspace();
 
     const testPackageJson = {
       name: "test",
@@ -940,7 +931,7 @@ describe("mustSatisfyPeerDependencies", () => {
     };
     addPackageJson("./ccc/package.json", cccPackageJson);
 
-    const { addErrorSpy } = checkAndSpy({});
+    check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
       `[2] Package ${testPackageJson.name} dependency on greatLib '${testPackageJson.dependencies.greatLib}' does not satisfy inherited peer dependencies.\n\t` +
@@ -958,7 +949,7 @@ describe("mustSatisfyPeerDependencies", () => {
   });
 
   it("Flags missing peer dependencies (NO regular dependency present)", async () => {
-    const { addPackageJson, check, checkAndSpy } = makeWorkspace(true);
+    const { addErrorSpy, check } = makeWorkspace(true);
 
     const testPackageJson = {
       name: "test",
@@ -994,7 +985,7 @@ describe("mustSatisfyPeerDependencies", () => {
     };
     addPackageJson("./ccc/package.json", cccPackageJson);
 
-    const { addErrorSpy } = checkAndSpy({});
+    check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
       `[3] Package ${testPackageJson.name} is missing required greatLib dependency.\n\t` +
@@ -1015,7 +1006,7 @@ describe("mustSatisfyPeerDependencies", () => {
   });
 
   it("Flags unsatisfied peer dependencies (test package has peer dep)", async () => {
-    const { addPackageJson, check, checkAndSpy } = makeWorkspace(true);
+    const { addErrorSpy, check } = makeWorkspace(true);
 
     const testPackageJson = {
       name: "test",
@@ -1054,7 +1045,7 @@ describe("mustSatisfyPeerDependencies", () => {
     };
     addPackageJson("./ccc/package.json", cccPackageJson);
 
-    const { addErrorSpy } = checkAndSpy({});
+    check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
       `[4] Package ${testPackageJson.name} peer dependency on greatLib '${testPackageJson.peerDependencies.greatLib}' is not strict enough.\n\t` +
@@ -1073,7 +1064,7 @@ describe("mustSatisfyPeerDependencies", () => {
   });
 
   it("Honors dependencyWhitelist", async () => {
-    const { addPackageJson, check, checkAndSpy } = makeWorkspace();
+    const { addErrorSpy, check } = makeWorkspace();
 
     const testPackageJson = {
       name: "test",
@@ -1112,14 +1103,14 @@ describe("mustSatisfyPeerDependencies", () => {
     };
     addPackageJson("./bbb/package.json", bbbPackageJson);
 
-    const { addErrorSpy } = checkAndSpy({ dependencyWhitelist: ["startHere"] });
+    check({ dependencyWhitelist: ["startHere"] });
     expect(addErrorSpy).toHaveBeenCalledTimes(0);
     check({ dependencyWhitelist: ["startHere", "greatLib"] });
     expect(addErrorSpy).toHaveBeenCalledTimes(2);
   });
 
   it("Honors dependencyBlacklist", async () => {
-    const { addPackageJson, check, checkAndSpy } = makeWorkspace();
+    const { addErrorSpy, check } = makeWorkspace();
 
     const testPackageJson = {
       name: "test",
@@ -1158,7 +1149,7 @@ describe("mustSatisfyPeerDependencies", () => {
     };
     addPackageJson("./bbb/package.json", bbbPackageJson);
 
-    const { addErrorSpy } = checkAndSpy({ dependencyBlacklist: ["greatLib"] });
+    check({ dependencyBlacklist: ["greatLib"] });
     expect(addErrorSpy).toHaveBeenCalledTimes(0);
     addErrorSpy.mockReset();
 
