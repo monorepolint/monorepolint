@@ -14,7 +14,7 @@ export const Options = r.Record({
   matchDependencyVersions: r.Dictionary(r.String),
 });
 
-type Options = r.Static<typeof Options>;
+export type Options = r.Static<typeof Options>;
 
 export const consistentVersions: RuleModule<typeof Options> = {
   check: checkConsistentVersions,
