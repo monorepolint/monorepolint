@@ -155,4 +155,64 @@ describe("consistentVersions", () => {
       expect(readTestPackageJson().devDependencies!.both).toEqual(requiredBothVersion);
     });
   });
+
+  describe("Multiple accepted versions tests", () => {
+    let testPackageJson: PackageJson;
+
+    beforeEach(() => {
+      testPackageJson = {
+        name: "test",
+        dependencies: {
+          greatLib: "^15",
+          both: "1",
+        },
+        peerDependencies: {
+          whatever: "15",
+        },
+        devDependencies: {
+          else: "27.2.1",
+          both: "1",
+        },
+      };
+    });
+
+    it("Accepts a match when multiple versions are configured", async () => {
+      const { addErrorSpy, check } = makeWorkspace();
+      addPackageJson("./package.json", testPackageJson);
+
+      expect(addErrorSpy).toHaveBeenCalledTimes(0);
+      check({ matchDependencyVersions: { greatLib: [testPackageJson.dependencies!.greatLib] } });
+      expect(addErrorSpy).toHaveBeenCalledTimes(0);
+      check({ matchDependencyVersions: { greatLib: ["1", "2", testPackageJson.dependencies!.greatLib] } });
+      expect(addErrorSpy).toHaveBeenCalledTimes(0);
+      check({ matchDependencyVersions: { greatLib: ["1", "2", testPackageJson.dependencies!.greatLib, "99", "100"] } });
+      expect(addErrorSpy).toHaveBeenCalledTimes(0);
+      check({ matchDependencyVersions: { greatLib: [testPackageJson.dependencies!.greatLib, "99", "100"] } });
+      expect(addErrorSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it("Errors when version does not match", async () => {
+      const { addErrorSpy, check } = makeWorkspace();
+      addPackageJson("./package.json", testPackageJson);
+
+      expect(addErrorSpy).toHaveBeenCalledTimes(0);
+      check({ matchDependencyVersions: { greatLib: ["1", "2"] } });
+      expect(addErrorSpy).toHaveBeenCalledTimes(1);
+      addErrorSpy.mockReset();
+
+      expect(addErrorSpy).toHaveBeenCalledTimes(0);
+      check({ matchDependencyVersions: { both: ["99", "100"] } });
+      expect(addErrorSpy).toHaveBeenCalledTimes(2);
+      expect(addErrorSpy.mock.calls[0][0].message).toEqual(
+        `Expected dependency on both to match one of '["99","100"]', got '${
+          testPackageJson.dependencies!.both
+        }' instead.`
+      );
+      expect(addErrorSpy.mock.calls[1][0].message).toEqual(
+        `Expected devDependency on both to match one of '["99","100"]', got '${
+          testPackageJson.devDependencies!.both
+        }' instead.`
+      );
+    });
+  });
 });
