@@ -204,12 +204,12 @@ describe("consistentVersions", () => {
       check({ matchDependencyVersions: { both: ["99", "100"] } });
       expect(addErrorSpy).toHaveBeenCalledTimes(2);
       expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-        `Expected dependency on both to match a version defined in monorepolint configuration '["99","100"]', got '${
+        `Expected dependency on both to match one of '["99","100"]', got '${
           testPackageJson.dependencies!.both
         }' instead.`
       );
       expect(addErrorSpy.mock.calls[1][0].message).toEqual(
-        `Expected devDependency on both to match a version defined in monorepolint configuration '["99","100"]', got '${
+        `Expected devDependency on both to match one of '["99","100"]', got '${
           testPackageJson.devDependencies!.both
         }' instead.`
       );

@@ -108,13 +108,13 @@ const ensurePackageMatchesSomeVersion = (
   const actualPackageDependencyVersion = coerce(actualPackageDependencyValue);
   if (
     actualPackageDependencyVersion != null &&
-    !acceptedPackageDependencyVersions.some(
-      acceptedPackageDependencyVersion => actualPackageDependencyVersion.raw === acceptedPackageDependencyVersion.raw
+    acceptedPackageDependencyVersions.every(
+      acceptedPackageDependencyVersion => actualPackageDependencyVersion.raw !== acceptedPackageDependencyVersion.raw
     )
   ) {
     context.addError({
       file: packageJsonPath,
-      message: `Expected dependency on ${dependencyPackageName} to match a version defined in monorepolint configuration '${JSON.stringify(
+      message: `Expected dependency on ${dependencyPackageName} to match one of '${JSON.stringify(
         acceptedPackageDependencyValues
       )}', got '${actualPackageDependencyValue}' instead.`,
     });
@@ -125,13 +125,13 @@ const ensurePackageMatchesSomeVersion = (
   const actualPackageDevDependencyVersion = coerce(actualPackageDevDependencyValue);
   if (
     actualPackageDevDependencyVersion != null &&
-    !acceptedPackageDependencyVersions.some(
-      acceptedPackageDependencyVersion => actualPackageDevDependencyVersion.raw === acceptedPackageDependencyVersion.raw
+    acceptedPackageDependencyVersions.every(
+      acceptedPackageDependencyVersion => actualPackageDevDependencyVersion.raw !== acceptedPackageDependencyVersion.raw
     )
   ) {
     context.addError({
       file: packageJsonPath,
-      message: `Expected devDependency on ${dependencyPackageName} to match a version defined in monorepolint configuration '${JSON.stringify(
+      message: `Expected devDependency on ${dependencyPackageName} to match one of '${JSON.stringify(
         acceptedPackageDependencyValues
       )}', got '${actualPackageDevDependencyValue}' instead.`,
     });
