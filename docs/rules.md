@@ -61,6 +61,36 @@ module.exports = {
 };
 ```
 
+## Consistent Versions
+
+[source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/consistentVersions.ts)
+
+Ensure that all packages use the same version of a dependency, when present in either `dependencies` or `devDependencies`.
+Note that this is different from [require-dependency](#require-dependency) which will require the dependency to exist
+for all packages, not just enforce consistent versions when present.
+
+### Options
+
+- `matchDependencyVersions`
+  - Map from dependency name to version
+
+### Example
+
+```javascript
+module.exports = {
+  rules: {
+    ":consistent-versions": {
+      options: {
+        matchDependencyVersions: {
+          "@types/react": "^16.9.19",
+          "@types/react-dom": "^16.9.5",
+        }
+      },
+    },
+  },
+};
+```
+
 ## Nested Workspaces
 
 [source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/nestedWorkspaces.ts)
@@ -290,11 +320,11 @@ module.exports = {
 };
 ```
 
-## Standardized Dependency Versions
+## Require Dependency
 
 [source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/requireDependency.ts)
 
-Standardize dependency versions across packages
+Require all packages to declare dependencies with specified versions.
 
 ### Options
 
