@@ -18,6 +18,11 @@ module.exports = {
           position: 'left',
         },
         {
+          to: 'blog/',
+          label: 'Blog',
+          position: 'left',
+        },
+        {
           href: 'https://github.com/monorepolint/monorepolint',
           label: 'GitHub',
           position: 'right',
