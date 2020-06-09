@@ -4,9 +4,6 @@ defaults: &defaults
   working_directory: ~/repo
 
 executors:
-  node8:
-    docker:
-      - image: circleci/node:8.12
   node10:
     docker:
       - image: circleci/node:10.13
@@ -19,9 +16,6 @@ workflows:
   build:
     jobs:
       - build_and_test:
-          name: build_node8
-          executor: node8
-      - build_and_test:
           name: build_node10
           executor: node10
       - build_and_test:
@@ -29,7 +23,6 @@ workflows:
           executor: node12
       - deploy_prerelease:
           requires:
-            - build_node8
             - build_node10
             - build_node12
           filters:
