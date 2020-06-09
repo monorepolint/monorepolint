@@ -1,9 +1,12 @@
-# Getting Started
+---
+title: Getting Started
+---
 
 Install using yarn or your favorite package manager.
 
-```
-λ yarn install monorepolint
+```shell
+$ yarn install monorepolint
+...
 ```
 
 Add an initial `.monorepolint.config.ts` in the root folder of your monorepo.
@@ -19,8 +22,8 @@ module.exports = {
 
 Find non standard packages.
 
-```
-λ yarn monorepolint check
+```shell
+$ yarn monorepolint check
 
   @monorepo/packageA
     Error! Inconsistent dependencies with root in package.json
@@ -31,8 +34,8 @@ Find non standard packages.
 
 And standardize them.
 
-```
-λ yarn monorepolint check --fix
+```shell
+$ yarn monorepolint check --fix
 
   @monorepo/packageA
     Fixed! Inconsistent dependencies with root in package.json
@@ -43,6 +46,6 @@ And standardize them.
 
 ## Next steps
 
-- Understand how the config works in config.md
-- Add more built in rules from rules.md
-- Write custom rules - writing-custom-rules
+- [Understand how the config works in config.md](./config.md)
+- Add more built in rules
+- [Write custom rules](./writing-custom-rules.md)
