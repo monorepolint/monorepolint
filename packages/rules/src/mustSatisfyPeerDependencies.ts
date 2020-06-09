@@ -453,10 +453,10 @@ function getMostStrictStatement(mostStrictPeerRequirement: IResolvedPeerDependen
     return `Dependency ${dependencyName} requires '${mostStrictPeerRequirement.range}'.`;
   } else {
     const dependencyNames = mostStrictPeerRequirement.fromPeerDependencyRequirements
-      .map(peerDependencyRequirement => peerDependencyRequirement.fromPackageName)
+      .map((peerDependencyRequirement) => peerDependencyRequirement.fromPackageName)
       .join(", ");
     const dependencyRequirements = mostStrictPeerRequirement.fromPeerDependencyRequirements
-      .map(peerDependencyRequirement => `'${peerDependencyRequirement.range}'`)
+      .map((peerDependencyRequirement) => `'${peerDependencyRequirement.range}'`)
       .join(", ");
     return (
       `Dependencies [${dependencyNames}] require [${dependencyRequirements}] respectively, ` +
@@ -507,8 +507,8 @@ export function findIntersection(a: ValidRange, b: ValidRange): ValidRange | und
     throw new Error();
   }
 
-  const aVersions = a.includes("||") ? a.split("||").map(s => s.trim()) : [a];
-  const bVersions = b.includes("||") ? b.split("||").map(s => s.trim()) : [b];
+  const aVersions = a.includes("||") ? a.split("||").map((s) => s.trim()) : [a];
+  const bVersions = b.includes("||") ? b.split("||").map((s) => s.trim()) : [b];
 
   const aIsGreaterOrEqualVersionRange = isGreaterOrEqualVersionRange(a);
   const bIsGreaterOrEqualVersionRange = isGreaterOrEqualVersionRange(b);
@@ -521,7 +521,7 @@ export function findIntersection(a: ValidRange, b: ValidRange): ValidRange | und
   if (aIsGreaterOrEqualVersionRange) {
     const aSemVer = coerce(a)!;
     // keep every version where `bSemVer` is >= `aSemVer`
-    const compatibleBVersions = bVersions.filter(bVersion => {
+    const compatibleBVersions = bVersions.filter((bVersion) => {
       const bSemVer = coerce(bVersion)!;
       return bSemVer.compare(aSemVer) !== -1;
     });
@@ -533,7 +533,7 @@ export function findIntersection(a: ValidRange, b: ValidRange): ValidRange | und
   if (bIsGreaterOrEqualVersionRange) {
     const bSemVer = coerce(b)!;
     // keep every version where `aSemVer` is >= `bSemVer`
-    const compatibleAVersions = aVersions.filter(aVersion => {
+    const compatibleAVersions = aVersions.filter((aVersion) => {
       const aSemVer = coerce(aVersion)!;
       return aSemVer.compare(bSemVer) !== -1;
     });
@@ -544,9 +544,9 @@ export function findIntersection(a: ValidRange, b: ValidRange): ValidRange | und
   }
 
   const compatibleVersions = aVersions
-    .map(aVersion => {
+    .map((aVersion) => {
       const aSemVer = coerce(aVersion)!;
-      const majorMatchingBVersion = bVersions.find(m => coerce(m)!.major === aSemVer.major);
+      const majorMatchingBVersion = bVersions.find((m) => coerce(m)!.major === aSemVer.major);
       if (majorMatchingBVersion === undefined) {
         // there is no intersecting `b` major version for this `a` major version
         return undefined;
@@ -559,7 +559,7 @@ export function findIntersection(a: ValidRange, b: ValidRange): ValidRange | und
         return undefined;
       }
     })
-    .filter(aVersion => aVersion !== undefined);
+    .filter((aVersion) => aVersion !== undefined);
   if (compatibleVersions.length === 0) {
     return undefined;
   }
@@ -617,8 +617,8 @@ export function doesASatisfyB(a: ValidRange, b: ValidRange): boolean {
     return false;
   }
 
-  const aVersions = a.includes("||") ? a.split("||").map(s => s.trim()) : [a];
-  const bVersions = b.includes("||") ? b.split("||").map(s => s.trim()) : [b];
+  const aVersions = a.includes("||") ? a.split("||").map((s) => s.trim()) : [a];
+  const bVersions = b.includes("||") ? b.split("||").map((s) => s.trim()) : [b];
 
   const aIsGreaterOrEqualVersionRange = isGreaterOrEqualVersionRange(a);
   const bIsGreaterOrEqualVersionRange = isGreaterOrEqualVersionRange(b);
@@ -629,7 +629,7 @@ export function doesASatisfyB(a: ValidRange, b: ValidRange): boolean {
     return aSemVer.compare(bSemVer) !== -1;
   } else if (bIsGreaterOrEqualVersionRange) {
     const bSemVer = coerce(b)!;
-    return aVersions.every(aVersion => {
+    return aVersions.every((aVersion) => {
       const aSemVer = coerce(aVersion)!;
       // `a` satisfies `b` so long as `aSemVer` is greater than or equal to `bSemVer`
       return aSemVer.compare(bSemVer) !== -1;
@@ -640,9 +640,9 @@ export function doesASatisfyB(a: ValidRange, b: ValidRange): boolean {
     return false;
   }
 
-  return aVersions.every(aVersion => {
+  return aVersions.every((aVersion) => {
     const aSemVer = coerce(aVersion)!;
-    const majorMatchingBVersion = bVersions.find(m => coerce(m)!.major === aSemVer.major);
+    const majorMatchingBVersion = bVersions.find((m) => coerce(m)!.major === aSemVer.major);
     if (majorMatchingBVersion === undefined) {
       // `a` permits a major version that is not permitted by `b`, therefore `a` is "less strict"
       return false;
@@ -702,7 +702,7 @@ function getAddDependencyTypeFixer({
   version: string;
 }) {
   return () => {
-    mutateJson<PackageJson>(packageJsonPath, packageJson => {
+    mutateJson<PackageJson>(packageJsonPath, (packageJson) => {
       if (packageJson[dependencyType] == null) {
         packageJson[dependencyType] = {};
       }
