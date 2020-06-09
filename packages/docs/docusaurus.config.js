@@ -1,6 +1,6 @@
 module.exports = {
   title: 'monorepolint',
-  tagline: 'monorepos consistency made easy',
+  tagline: 'monorepo consistency made easy',
   url: 'https://monorepolint.com',
   baseUrl: '/',
   favicon: 'img/favicon.ico',
@@ -45,7 +45,7 @@ module.exports = {
             },
             {
               label: 'Discord',
-              href: 'https://discordapp.com/invite/monorepolint',
+              href: 'https://discord.gg/s7DQmr5',
             },
             {
               label: 'Twitter',
