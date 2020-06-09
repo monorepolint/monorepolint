@@ -70,7 +70,7 @@ describe("requireDependency", () => {
   });
 
   function makeWorkspace({ fix }: { fix: boolean }) {
-    const dir: tmp.DirResult = tmp.dirSync();
+    const dir: tmp.DirResult = tmp.dirSync({ unsafeCleanup: true });
     cleanupJobs.push(() => dir.removeCallback());
 
     const workspaceContext = new WorkspaceContext(dir.name, {

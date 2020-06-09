@@ -49,7 +49,7 @@ describe("mustSatisfyPeerDependencies", () => {
   let cwd: string | undefined;
 
   beforeEach(() => {
-    const dir = tmp.dirSync();
+    const dir = tmp.dirSync({ unsafeCleanup: true });
     cleanupJobs.push(() => dir.removeCallback());
     cwd = dir.name;
 
