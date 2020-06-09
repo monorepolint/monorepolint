@@ -5,18 +5,22 @@
  *
  */
 
+const DOCS = "@monorepolint/docs";
+
 module.exports = {
   rules: {
     ":standard-tsconfig": {
       options: {
         templateFile: "./templates/tsconfig.json"
-      }
+      },
+      excludePackages: [DOCS],
     },
     ":file-contents": {
       options: {
         file: "jest.config.js",
         templateFile: "./templates/jest.config.js"
-      }
+      },
+      excludePackages: [DOCS],
     },
     ":package-script": {
       options: {
@@ -29,7 +33,8 @@ module.exports = {
             "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
           test: "../../node_modules/.bin/jest --colors --passWithNoTests"
         }
-      }
+      },
+      excludePackages: [DOCS],
     },
     ":package-order": true,
     ":alphabetical-dependencies": true,
