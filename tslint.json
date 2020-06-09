@@ -16,6 +16,7 @@
     // Disable recommended rules
     "interface-name": false,
     "object-literal-sort-keys": false,
+    "array-type": false,
 
     // prettier handles these
     "object-literal-key-quotes": false,

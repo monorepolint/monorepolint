@@ -48,14 +48,15 @@ export const packageEntry = {
         const entryDiff = diff(JSON.stringify(value) + "\n", (JSON.stringify(packageJson[key]) || "") + "\n");
         if (
           (typeof value !== "object" && value !== packageJson[key]) ||
-          (entryDiff == null || !entryDiff.includes("Compared values have no visual difference"))
+          entryDiff == null ||
+          !entryDiff.includes("Compared values have no visual difference")
         ) {
           context.addError({
             file: context.getPackageJsonPath(),
             message: `Expected standardized entry for '${key}'`,
             longMessage: entryDiff,
             fixer: () => {
-              mutateJson<PackageJson>(context.getPackageJsonPath(), input => {
+              mutateJson<PackageJson>(context.getPackageJsonPath(), (input) => {
                 input[key] = value;
                 return input;
               });

@@ -97,9 +97,9 @@ function makeGenerator(template: any, excludedReferences: ReadonlyArray<string> 
 
     deps
       .filter(
-        name => nameToDirectory.has(name) && !excludedReferences.some(excludedRef => minimatch(name, excludedRef))
+        (name) => nameToDirectory.has(name) && !excludedReferences.some((excludedRef) => minimatch(name, excludedRef))
       )
-      .forEach(packageName => {
+      .forEach((packageName) => {
         template.references.push({
           path: path.relative(context.packageDir, nameToDirectory.get(packageName)!),
         });

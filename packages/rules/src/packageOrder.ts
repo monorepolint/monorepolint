@@ -69,7 +69,7 @@ export const packageOrder = {
         fixer: () => {
           const expectedPackageJson: Record<string, any> = {};
 
-          expectedOrder.forEach(key => {
+          expectedOrder.forEach((key) => {
             expectedPackageJson[key] = packageJson[key];
           });
 

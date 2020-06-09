@@ -58,7 +58,7 @@ const ensurePackageIsCorrectVersion = (
       file: packageJsonPath,
       message: `Expected dependency on ${dependencyPackageName} to match version defined in monorepolint configuration '${expectedPackageDependencyValue}', got '${actualPackageDependencyValue}' instead.`,
       fixer: () =>
-        mutateJson<PackageJson>(packageJsonPath, input => {
+        mutateJson<PackageJson>(packageJsonPath, (input) => {
           input.dependencies![dependencyPackageName] = expectedPackageDependencyValue;
           return input;
         }),
@@ -76,7 +76,7 @@ const ensurePackageIsCorrectVersion = (
       file: packageJsonPath,
       message: `Expected devDependency on ${dependencyPackageName} to match version defined in monorepolint configuration '${expectedPackageDependencyValue}', got '${actualPackageDevDependencyValue}' instead`,
       fixer: () =>
-        mutateJson<PackageJson>(packageJsonPath, input => {
+        mutateJson<PackageJson>(packageJsonPath, (input) => {
           input.devDependencies![dependencyPackageName] = expectedPackageDependencyValue;
           return input;
         }),
@@ -93,7 +93,7 @@ const ensurePackageMatchesSomeVersion = (
   const packageJsonPath = context.getPackageJsonPath();
 
   const acceptedPackageDependencyVersions: SemVer[] = acceptedPackageDependencyValues.map(
-    acceptedPackageDependencyValue => {
+    (acceptedPackageDependencyValue) => {
       const acceptedPackageDependencyVersion = coerce(acceptedPackageDependencyValue);
       if (acceptedPackageDependencyVersion == null) {
         throw new Error(
@@ -109,7 +109,7 @@ const ensurePackageMatchesSomeVersion = (
   if (
     actualPackageDependencyVersion != null &&
     acceptedPackageDependencyVersions.every(
-      acceptedPackageDependencyVersion => actualPackageDependencyVersion.raw !== acceptedPackageDependencyVersion.raw
+      (acceptedPackageDependencyVersion) => actualPackageDependencyVersion.raw !== acceptedPackageDependencyVersion.raw
     )
   ) {
     context.addError({
@@ -126,7 +126,8 @@ const ensurePackageMatchesSomeVersion = (
   if (
     actualPackageDevDependencyVersion != null &&
     acceptedPackageDependencyVersions.every(
-      acceptedPackageDependencyVersion => actualPackageDevDependencyVersion.raw !== acceptedPackageDependencyVersion.raw
+      (acceptedPackageDependencyVersion) =>
+        actualPackageDevDependencyVersion.raw !== acceptedPackageDependencyVersion.raw
     )
   ) {
     context.addError({

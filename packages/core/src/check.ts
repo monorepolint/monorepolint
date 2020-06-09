@@ -21,7 +21,7 @@ export function check(resolvedConfig: ResolvedConfig, cwd = process.cwd(), paths
   const workspaceContext = new WorkspaceContext(workspaceDir, resolvedConfig);
 
   if (paths !== undefined) {
-    const resolvedPaths = paths.map(p => pathDirname(pathResolve(p)));
+    const resolvedPaths = paths.map((p) => pathDirname(pathResolve(p)));
 
     for (const path of resolvedPaths) {
       if (workspaceDir === path) {
@@ -66,11 +66,11 @@ function checkPackage(context: Context) {
  * @param ruleConfig
  */
 export function shouldSkipPackage(context: Context, ruleConfig: ResolvedRule) {
-  const exclude = (ruleConfig.excludePackages || []).some(a => minimatch(context.getName(), a));
+  const exclude = (ruleConfig.excludePackages || []).some((a) => minimatch(context.getName(), a));
   const include =
     ruleConfig.includePackages === undefined
       ? true
-      : ruleConfig.includePackages.some(a => minimatch(context.getName(), a));
+      : ruleConfig.includePackages.some((a) => minimatch(context.getName(), a));
 
   if (context.getWorkspaceContext() === context && !ruleConfig.includeWorkspaceRoot) {
     return true;

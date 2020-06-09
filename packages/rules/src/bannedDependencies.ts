@@ -90,7 +90,7 @@ function checkBanned(
       file: packagePath,
       message:
         `Found ${violations.length} banned dependencies in '${block}' block of package.json:\n\t` +
-        violations.map(v => `'${v}'`).join(", "),
+        violations.map((v) => `'${v}'`).join(", "),
       longMessage: diff(newPackageJson[block], dependencies, { expand: true }),
       fixer: () => {
         writeJson(packagePath, newPackageJson);

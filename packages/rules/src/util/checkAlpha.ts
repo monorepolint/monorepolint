@@ -33,7 +33,7 @@ export function checkAlpha(
       fixer: () => {
         const expectedDependencies: Record<string, string> = {};
 
-        expectedOrder.forEach(dep => {
+        expectedOrder.forEach((dep) => {
           expectedDependencies[dep] = blockToSort[dep];
         });
 
