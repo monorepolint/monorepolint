@@ -25,7 +25,7 @@ module.exports = {
     ":package-script": {
       options: {
         scripts: {
-          clean: "rm -rf build lib node_modules *.tgz",
+          clean: "rm -rf build lib node_modules *.tgz tsconfig.tsbuildinfo",
           "compile:typescript": "../../node_modules/.bin/tsc",
           "lint:typescript":
             "../../node_modules/.bin/tslint --config ../../tslint.json --project .",

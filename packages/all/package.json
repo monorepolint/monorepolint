@@ -3,7 +3,7 @@
   "version": "0.4.0",
   "license": "MIT",
   "scripts": {
-    "clean": "rm -rf build lib node_modules *.tgz",
+    "clean": "rm -rf build lib node_modules *.tgz tsconfig.tsbuildinfo",
     "compile:typescript": "../../node_modules/.bin/tsc",
     "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
     "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
