@@ -212,7 +212,7 @@ export const MATCH_ANY_VERSION_RANGE = /^(\*|x)$/;
  *
  * More info: https://docs.npmjs.com/about-semantic-versioning
  */
-export const MATCH_GREATER_OR_EQUAL_VERSION_RANGE = /^>=\d+(?:\.\d+|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?$/;
+export const MATCH_GREATER_OR_EQUAL_VERSION_RANGE = /^>= ?\d+(?:\.\d+|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?$/;
 
 /**
  * This regex allows any of the following formats:
@@ -251,7 +251,7 @@ export const MATCH_MAJOR_VERSION_RANGE = /^(?:\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d
  *
  * TODO: accept minor pins `~4.2.1`
  */
-export const RANGE_REGEX = /^(\*|x|>=\d+(?:\.\d+|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?|\^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?( \|\| \^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?)*)$/;
+export const RANGE_REGEX = /^(\*|x|>= ?\d+(?:\.\d+|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?|\^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?( \|\| \^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?)*)$/;
 
 interface IPeerDependencyRequirement {
   fromPackageName: string;
