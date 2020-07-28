@@ -127,7 +127,7 @@ export class PackageContext implements Context {
       return;
     }
     // tslint:disable-next-line:no-console
-    console.warn(this.getMessage(str, depth));
+    console.log(this.getMessage(str, depth));
   }
 
   private printError(str: string, depth: number = this.depth + 1) {
