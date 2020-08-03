@@ -126,9 +126,9 @@ export class PackageContext implements Context {
     if (this.resolvedConfig.silent) {
       return;
     }
-    // tslint:disable-next-line:no-console
     // In nodejs, `console.warn` is an alias for `console.error`,
-    // which is undesirable for unfixable or unimportant warnings. 
+    // which is undesirable for unfixable or unimportant warnings.
+    // tslint:disable-next-line:no-console
     console.log(this.getMessage(str, depth));
   }
 
