@@ -13,8 +13,11 @@ import minimatch from "minimatch";
 import * as path from "path";
 import * as r from "runtypes";
 
+const DEFAULT_TSCONFIG_FILENAME = "tsconfig.json";
+
 const Options = r
   .Partial({
+    file: r.String,
     generator: r.Function,
     template: r.Record({}).Or(r.String),
     templateFile: r.String,
@@ -39,7 +42,8 @@ export type Options = r.Static<typeof Options>;
 
 export const standardTsconfig = {
   check: function expectStandardTsconfig(context: Context, opts: Options) {
-    const fullPath = path.resolve(context.packageDir, "tsconfig.json");
+    const tsconfigFileName = opts.file ?? DEFAULT_TSCONFIG_FILENAME;
+    const fullPath = path.resolve(context.packageDir, tsconfigFileName);
     const generator = getGenerator(context, opts);
     const expectedContent = generator(context);
 

@@ -6,6 +6,8 @@ Special case of the File Contents rule for typescript configs. Using a template 
 
 ### Options
 
+- `file` (Optional)
+  - Name of the file. Defaults to `tsconfig.json`.
 - `generator` (Optional)
   - Function that can generate the config
 - `template` (Optional)
