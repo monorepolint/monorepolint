@@ -6,8 +6,12 @@ Special case of the File Contents rule for typescript configs. Using a template 
 
 ### Options
 
+- `file` (Optional)
+  - Name of the file. Defaults to `tsconfig.json`.
 - `generator` (Optional)
   - Function that can generate the config
+- `tsconfigReferenceFile` (Optional)
+  - String to append to each project reference path. Useful if project references have a non-standard `tsconfig.json` path. Ex: `tsconfig.build.json`.
 - `template` (Optional)
   - Expected config contents
 - `templateFile` (Optional)
