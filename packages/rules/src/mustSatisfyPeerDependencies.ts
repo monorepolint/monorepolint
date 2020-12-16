@@ -10,6 +10,7 @@ import { mutateJson, PackageJson } from "@monorepolint/utils";
 import path from "path";
 import * as r from "runtypes";
 import { coerce } from "semver";
+import { resolveDependencyManifest } from "./util/resolveDependencyManifest";
 
 const Options = r.Union(
   r.Partial({
@@ -297,7 +298,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
     ? [...Object.keys(packageDependencies), ...Object.keys(packageDevDependencies)]
     : Object.keys(packageDependencies);
   for (const dependency of allDependencies) {
-    const dependencyPackageJsonPath = require.resolve(`${dependency}/package.json`, {
+    const dependencyPackageJsonPath = resolveDependencyManifest(dependency, {
       paths: [path.dirname(packageJsonPath)],
     });
     const dependencyPackageJson: PackageJson = require(dependencyPackageJsonPath);

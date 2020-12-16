@@ -4,6 +4,7 @@
 
 import { PackageJson } from "@monorepolint/utils";
 import path from "path";
+import { resolveDependencyManifest } from "./resolveDependencyManifest";
 
 /** Interface for a node in a package dependency graph. */
 export interface IPackageDependencyGraphNode {
@@ -60,7 +61,7 @@ export class PackageDependencyGraphService implements IPackageDependencyGraphSer
         for (const dependency of dependencies) {
           node.dependencies.set(
             dependency,
-            visit(require.resolve(`${dependency}/package.json`, { paths: [node.paths.rootDirectory] }), nextDepth)
+            visit(resolveDependencyManifest(dependency, { paths: [node.paths.rootDirectory] }), nextDepth)
           );
         }
       }
