@@ -38,7 +38,9 @@ export interface Options {
   readonly silent?: boolean;
 }
 
-export type Checker<T extends Runtype> = (context: Context, args: r.Static<T>) => void;
+export type Checker<T extends Runtype> =
+  | ((context: Context, args: r.Static<T>) => void)
+  | ((context: Context, args: r.Static<T>) => Promise<void>);
 export type ResolvedRule = RuleModule & RuleEntry;
 export interface ResolvedConfig extends Options {
   readonly rules: ReadonlyArray<ResolvedRule>;
