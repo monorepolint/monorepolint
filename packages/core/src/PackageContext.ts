@@ -9,15 +9,8 @@ import { PackageJson, readJson } from "@monorepolint/utils";
 import chalk from "chalk";
 import * as path from "path";
 import { ResolvedConfig } from "./Config";
-import { Context } from "./Context";
+import { AddErrorOptions, Context, Failure } from "./Context";
 import { WorkspaceContext } from "./WorkspaceContext";
-
-interface FailureOptions {
-  file: string;
-  message: string;
-  longMessage?: string;
-  fixer?: () => void;
-}
 
 // Right now, this stuff is done serially so we are writing less code to support that. Later we may want to redo this.
 export class PackageContext implements Context {
@@ -46,7 +39,7 @@ export class PackageContext implements Context {
     return readJson(this.getPackageJsonPath());
   }
 
-  public addWarning({ message, longMessage }: FailureOptions) {
+  public addWarning({ message, longMessage }: Failure) {
     this.printName();
 
     this.printWarning(`${chalk.yellow("Warning!")}: ${message}`);
@@ -63,7 +56,7 @@ export class PackageContext implements Context {
     }
   }
 
-  public addError({ file, message, longMessage, fixer }: FailureOptions) {
+  public addError({ file, message, longMessage, fixer }: AddErrorOptions) {
     this.printName();
 
     const shortFile = path.relative(this.packageDir, file);
