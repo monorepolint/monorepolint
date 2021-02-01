@@ -9,8 +9,12 @@ import { PackageJson, readJson } from "@monorepolint/utils";
 import chalk from "chalk";
 import * as path from "path";
 import { ResolvedConfig } from "./Config";
-import { AddErrorOptions, Context, Failure } from "./Context";
+import { AddErrorAsyncOptions, AddErrorOptions, Context, Failure } from "./Context";
 import { WorkspaceContext } from "./WorkspaceContext";
+
+interface AddErrorSyncOrAsyncOptions extends AddErrorOptions {
+  fixer?: AddErrorAsyncOptions["fixer"] | AddErrorOptions["fixer"];
+}
 
 // Right now, this stuff is done serially so we are writing less code to support that. Later we may want to redo this.
 export class PackageContext implements Context {
@@ -56,13 +60,21 @@ export class PackageContext implements Context {
     }
   }
 
-  public addError({ file, message, longMessage, fixer }: AddErrorOptions) {
+  public addError(options: AddErrorOptions) {
+    this.addErrorSyncOrAsync(options);
+  }
+
+  public async addErrorAsync(options: AddErrorAsyncOptions): Promise<void> {
+    this.addErrorSyncOrAsync(options);
+  }
+
+  private async addErrorSyncOrAsync({ file, message, longMessage, fixer }: AddErrorSyncOrAsyncOptions): Promise<void> {
     this.printName();
 
     const shortFile = path.relative(this.packageDir, file);
 
     if (this.resolvedConfig.fix && fixer) {
-      fixer();
+      await fixer();
       this.print(`${chalk.green("Fixed!")} ${chalk.magenta(shortFile)}: ${message}`);
     } else {
       this.setFailed();
