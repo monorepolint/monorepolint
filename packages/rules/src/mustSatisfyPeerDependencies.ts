@@ -8,9 +8,9 @@
 import { Context, RuleModule } from "@monorepolint/core";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
 import path from "path";
+import resolvePackagePath from "resolve-package-path";
 import * as r from "runtypes";
 import { coerce } from "semver";
-import { resolveDependencyManifest } from "./util/resolveDependencyManifest";
 
 const Options = r.Union(
   r.Partial({
@@ -298,9 +298,10 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
     ? [...Object.keys(packageDependencies), ...Object.keys(packageDevDependencies)]
     : Object.keys(packageDependencies);
   for (const dependency of allDependencies) {
-    const dependencyPackageJsonPath = resolveDependencyManifest(dependency, {
-      paths: [path.dirname(packageJsonPath)],
-    });
+    const dependencyPackageJsonPath = resolvePackagePath(dependency, path.dirname(packageJsonPath));
+    if (dependencyPackageJsonPath == null) {
+      throw new Error(`Could not resolve ${dependency} from ${path.dirname(packageJsonPath)}`);
+    }
     const dependencyPackageJson: PackageJson = require(dependencyPackageJsonPath);
     const requiredPeerDependencies = dependencyPackageJson.peerDependencies;
     if (requiredPeerDependencies == null) {
