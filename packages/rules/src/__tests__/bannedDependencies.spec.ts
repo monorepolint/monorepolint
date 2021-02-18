@@ -102,15 +102,15 @@ describe("bannedDependencies", () => {
         ccc: "0.0.1",
       },
     });
-    addFile("./aaa/package.json", aaaPackageJson);
+    addFile("./node_modules/aaa/package.json", aaaPackageJson);
     const bbbPackageJson = jsonToString({
       dependencies: {
         ddd: "0.0.1",
       },
     });
-    addFile("./aaa/bbb/package.json", bbbPackageJson);
-    addFile("./aaa/bbb/ddd/package.json", EMPTY_PACKAGE);
-    addFile("./aaa/ccc/package.json", EMPTY_PACKAGE);
+    addFile("./node_modules/aaa/node_modules/bbb/package.json", bbbPackageJson);
+    addFile("./node_modules/aaa/node_modules/bbb/node_modules/ddd/package.json", EMPTY_PACKAGE);
+    addFile("./node_modules/aaa/node_modules/ccc/package.json", EMPTY_PACKAGE);
 
     expect(checkAndSpy({ bannedTransitiveDependencies: ["ccc", "ddd"] }).addErrorSpy).toHaveBeenCalledTimes(2);
   });

@@ -834,7 +834,7 @@ describe("mustSatisfyPeerDependencies", () => {
     const greatLibPackageJson = {
       name: "greatLib",
     };
-    addPackageJson("./greatLib/package.json", greatLibPackageJson);
+    addPackageJson("./node_modules/greatLib/package.json", greatLibPackageJson);
 
     check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
@@ -870,21 +870,21 @@ describe("mustSatisfyPeerDependencies", () => {
         greatestLib: "100",
       },
     };
-    addPackageJson("./aaa/package.json", aaaPackageJson);
+    addPackageJson("./node_modules/aaa/package.json", aaaPackageJson);
     const bbbPackageJson = {
       name: "b",
       peerDependencies: {
         greatLib: "16",
       },
     };
-    addPackageJson("./bbb/package.json", bbbPackageJson);
+    addPackageJson("./node_modules/bbb/package.json", bbbPackageJson);
     const cccPackageJson = {
       name: "c",
       peerDependencies: {
         greatestLib: "200",
       },
     };
-    addPackageJson("./ccc/package.json", cccPackageJson);
+    addPackageJson("./node_modules/ccc/package.json", cccPackageJson);
 
     check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
@@ -924,28 +924,28 @@ describe("mustSatisfyPeerDependencies", () => {
     const greatLibPackageJson = {
       name: "greatLib",
     };
-    addPackageJson("./greatLib/package.json", greatLibPackageJson);
+    addPackageJson("./node_modules/greatLib/package.json", greatLibPackageJson);
     const aaaPackageJson = {
       name: "a",
       peerDependencies: {
         greatLib: "^15.2 || ^16",
       },
     };
-    addPackageJson("./aaa/package.json", aaaPackageJson);
+    addPackageJson("./node_modules/aaa/package.json", aaaPackageJson);
     const bbbPackageJson = {
       name: "b",
       peerDependencies: {
         greatLib: "^15.2.3 || ^16",
       },
     };
-    addPackageJson("./bbb/package.json", bbbPackageJson);
+    addPackageJson("./node_modules/bbb/package.json", bbbPackageJson);
     const cccPackageJson = {
       name: "c",
       peerDependencies: {
         greatLib: "^15.8",
       },
     };
-    addPackageJson("./ccc/package.json", cccPackageJson);
+    addPackageJson("./node_modules/ccc/package.json", cccPackageJson);
 
     check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
@@ -985,21 +985,21 @@ describe("mustSatisfyPeerDependencies", () => {
         greatLib: "15 || ^16.2",
       },
     };
-    addPackageJson("./aaa/package.json", aaaPackageJson);
+    addPackageJson("./node_modules/aaa/package.json", aaaPackageJson);
     const bbbPackageJson = {
       name: "b",
       peerDependencies: {
         greatLib: "^16",
       },
     };
-    addPackageJson("./bbb/package.json", bbbPackageJson);
+    addPackageJson("./node_modules/bbb/package.json", bbbPackageJson);
     const cccPackageJson = {
       name: "c",
       peerDependencies: {
         greatestLib: "100",
       },
     };
-    addPackageJson("./ccc/package.json", cccPackageJson);
+    addPackageJson("./node_modules/ccc/package.json", cccPackageJson);
 
     check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
@@ -1045,21 +1045,21 @@ describe("mustSatisfyPeerDependencies", () => {
         greatLib: "15 || ^16",
       },
     };
-    addPackageJson("./aaa/package.json", aaaPackageJson);
+    addPackageJson("./node_modules/aaa/package.json", aaaPackageJson);
     const bbbPackageJson = {
       name: "b",
       peerDependencies: {
         greatLib: "^16",
       },
     };
-    addPackageJson("./bbb/package.json", bbbPackageJson);
+    addPackageJson("./node_modules/bbb/package.json", bbbPackageJson);
     const cccPackageJson = {
       name: "c",
       peerDependencies: {
         greatLib: "^16.2",
       },
     };
-    addPackageJson("./ccc/package.json", cccPackageJson);
+    addPackageJson("./node_modules/ccc/package.json", cccPackageJson);
 
     check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
@@ -1099,25 +1099,25 @@ describe("mustSatisfyPeerDependencies", () => {
     const startHerePackageJson = {
       name: "startHere",
     };
-    addPackageJson("./startHere/package.json", startHerePackageJson);
+    addPackageJson("./node_modules/startHere/package.json", startHerePackageJson);
     const greatLibPackageJson = {
       name: "greatLib",
     };
-    addPackageJson("./greatLib/package.json", greatLibPackageJson);
+    addPackageJson("./node_modules/greatLib/package.json", greatLibPackageJson);
     const aaaPackageJson = {
       name: "a",
       peerDependencies: {
         greatLib: "15",
       },
     };
-    addPackageJson("./aaa/package.json", aaaPackageJson);
+    addPackageJson("./node_modules/aaa/package.json", aaaPackageJson);
     const bbbPackageJson = {
       name: "b",
       peerDependencies: {
         greatLib: "16",
       },
     };
-    addPackageJson("./bbb/package.json", bbbPackageJson);
+    addPackageJson("./node_modules/bbb/package.json", bbbPackageJson);
 
     check({ dependencyWhitelist: ["startHere"] });
     expect(addErrorSpy).toHaveBeenCalledTimes(0);
@@ -1145,25 +1145,25 @@ describe("mustSatisfyPeerDependencies", () => {
     const startHerePackageJson = {
       name: "startHere",
     };
-    addPackageJson("./startHere/package.json", startHerePackageJson);
+    addPackageJson("./node_modules/startHere/package.json", startHerePackageJson);
     const greatLibPackageJson = {
       name: "greatLib",
     };
-    addPackageJson("./greatLib/package.json", greatLibPackageJson);
+    addPackageJson("./node_modules/greatLib/package.json", greatLibPackageJson);
     const aaaPackageJson = {
       name: "a",
       peerDependencies: {
         greatLib: "15",
       },
     };
-    addPackageJson("./aaa/package.json", aaaPackageJson);
+    addPackageJson("./node_modules/aaa/package.json", aaaPackageJson);
     const bbbPackageJson = {
       name: "b",
       peerDependencies: {
         greatLib: "16",
       },
     };
-    addPackageJson("./bbb/package.json", bbbPackageJson);
+    addPackageJson("./node_modules/bbb/package.json", bbbPackageJson);
 
     check({ dependencyBlacklist: ["greatLib"] });
     expect(addErrorSpy).toHaveBeenCalledTimes(0);
