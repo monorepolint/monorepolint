@@ -47,7 +47,7 @@ function getVersion(): string {
   return JSON.parse(fs.readFileSync(path.join(__dirname, "../package.json"), "utf-8")).version;
 }
 
-function handleCheck(args: Options) {
+async function handleCheck(args: Options) {
   // tslint:disable:no-console
   console.log("monorepolint (mrl) v" + getVersion());
   console.log();
@@ -56,7 +56,9 @@ function handleCheck(args: Options) {
   const config = Config.check(require(configPath));
   const resolvedConfig = resolveConfig(config, args, findWorkspaceDir(process.cwd())!);
 
-  if (!check(resolvedConfig, process.cwd(), args.paths)) {
+  const checkResult = await check(resolvedConfig, process.cwd(), args.paths);
+
+  if (!checkResult) {
     console.error();
 
     const execPath = process.env.npm_execpath;

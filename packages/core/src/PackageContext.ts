@@ -9,14 +9,11 @@ import { PackageJson, readJson } from "@monorepolint/utils";
 import chalk from "chalk";
 import * as path from "path";
 import { ResolvedConfig } from "./Config";
-import { Context } from "./Context";
+import { AddErrorAsyncOptions, AddErrorOptions, Context, Failure } from "./Context";
 import { WorkspaceContext } from "./WorkspaceContext";
 
-interface FailureOptions {
-  file: string;
-  message: string;
-  longMessage?: string;
-  fixer?: () => void;
+interface AddErrorSyncOrAsyncOptions extends AddErrorOptions {
+  fixer?: AddErrorAsyncOptions["fixer"] | AddErrorOptions["fixer"];
 }
 
 // Right now, this stuff is done serially so we are writing less code to support that. Later we may want to redo this.
@@ -46,7 +43,7 @@ export class PackageContext implements Context {
     return readJson(this.getPackageJsonPath());
   }
 
-  public addWarning({ message, longMessage }: FailureOptions) {
+  public addWarning({ message, longMessage }: Failure) {
     this.printName();
 
     this.printWarning(`${chalk.yellow("Warning!")}: ${message}`);
@@ -63,13 +60,21 @@ export class PackageContext implements Context {
     }
   }
 
-  public addError({ file, message, longMessage, fixer }: FailureOptions) {
+  public addError(options: AddErrorOptions) {
+    this.addErrorSyncOrAsync(options);
+  }
+
+  public async addErrorAsync(options: AddErrorAsyncOptions): Promise<void> {
+    this.addErrorSyncOrAsync(options);
+  }
+
+  private async addErrorSyncOrAsync({ file, message, longMessage, fixer }: AddErrorSyncOrAsyncOptions): Promise<void> {
     this.printName();
 
     const shortFile = path.relative(this.packageDir, file);
 
     if (this.resolvedConfig.fix && fixer) {
-      fixer();
+      await fixer();
       this.print(`${chalk.green("Fixed!")} ${chalk.magenta(shortFile)}: ${message}`);
     } else {
       this.setFailed();

@@ -12,7 +12,11 @@ import { ResolvedConfig, ResolvedRule } from "./Config";
 import { Context } from "./Context";
 import { WorkspaceContext } from "./WorkspaceContext";
 
-export function check(resolvedConfig: ResolvedConfig, cwd = process.cwd(), paths?: ReadonlyArray<string>): boolean {
+export async function check(
+  resolvedConfig: ResolvedConfig,
+  cwd = process.cwd(),
+  paths?: ReadonlyArray<string>
+): Promise<boolean> {
   const workspaceDir = findWorkspaceDir(cwd);
   if (workspaceDir === undefined) {
     throw new Error(`Unable to find a workspace from ${cwd}`);
@@ -25,25 +29,25 @@ export function check(resolvedConfig: ResolvedConfig, cwd = process.cwd(), paths
 
     for (const path of resolvedPaths) {
       if (workspaceDir === path) {
-        checkPackage(workspaceContext);
+        await checkPackage(workspaceContext);
       } else {
-        checkPackage(workspaceContext.createChildContext(path));
+        await checkPackage(workspaceContext.createChildContext(path));
       }
     }
   } else if (workspaceDir === cwd) {
-    checkPackage(workspaceContext);
+    await checkPackage(workspaceContext);
 
     for (const packageDir of workspaceContext.getWorkspacePackageDirs()) {
-      checkPackage(workspaceContext.createChildContext(packageDir));
+      await checkPackage(workspaceContext.createChildContext(packageDir));
     }
   } else {
-    checkPackage(workspaceContext.createChildContext(cwd));
+    await checkPackage(workspaceContext.createChildContext(cwd));
   }
 
   return !workspaceContext.failed;
 }
 
-function checkPackage(context: Context) {
+async function checkPackage(context: Context): Promise<void> {
   if (context.resolvedConfig.verbose) {
     // tslint:disable-next-line:no-console
     console.log(`Starting check against ${context.getName()}`);
@@ -54,7 +58,10 @@ function checkPackage(context: Context) {
     }
 
     ruleConfig.optionsRuntype.check(ruleConfig.options);
-    ruleConfig.check(context, ruleConfig.options);
+
+    // Although check functions can be asynchronous, run them serially to
+    // prevent overlapping CLI output.
+    await ruleConfig.check(context, ruleConfig.options);
   }
   context.finish();
 }

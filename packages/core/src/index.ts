@@ -5,7 +5,7 @@
  *
  */
 
-export { Context, Failure } from "./Context";
+export { AddErrorOptions, Context, Failure } from "./Context";
 export { Config, RuleModule, Checker, Options, ResolvedConfig, ResolvedRule, RuleEntry } from "./Config";
 export { check } from "./check";
 export { PackageContext } from "./PackageContext";

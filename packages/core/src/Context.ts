@@ -15,6 +15,15 @@ export interface Failure {
   longMessage?: string | null;
   fixer?: () => void;
 }
+
+export interface AddErrorOptions extends Failure {
+  file: string;
+}
+
+export interface AddErrorAsyncOptions extends AddErrorOptions {
+  fixer?: () => Promise<void>;
+}
+
 export interface Context {
   readonly depth: number;
   readonly failed: boolean;
@@ -28,7 +37,8 @@ export interface Context {
 
   getPackageJson(): PackageJson;
   addWarning(opts: Failure): void;
-  addError(opts: Failure): void;
+  addError(opts: AddErrorOptions): void;
+  addErrorAsync(opts: AddErrorAsyncOptions): Promise<void>;
 
   isFailure(): boolean;
 
