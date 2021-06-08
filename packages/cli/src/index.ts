@@ -49,8 +49,8 @@ function getVersion(): string {
 
 async function handleCheck(args: Options) {
   // tslint:disable:no-console
-  console.log("monorepolint (mrl) v" + getVersion());
-  console.log();
+  console.debug("monorepolint (mrl) v" + getVersion());
+  console.debug();
 
   const configPath = path.resolve(process.cwd(), ".monorepolint.config.ts");
   const config = Config.check(require(configPath));
