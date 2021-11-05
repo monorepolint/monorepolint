@@ -523,10 +523,17 @@ export function findIntersection(a: ValidRange, b: ValidRange): ValidRange | und
   if (aIsGreaterOrEqualVersionRange) {
     const aSemVer = coerce(a)!;
     // keep every version where `bSemVer` is >= `aSemVer`
-    const compatibleBVersions = bVersions.filter((bVersion) => {
-      const bSemVer = coerce(bVersion)!;
-      return bSemVer.compare(aSemVer) !== -1;
-    });
+    // where bVersion has an operator, we need to adjust the version to take into
+    // account aVersion, e.g. if a is >=15.2.3 and b is ^15, then the intersection is actually ^15.2.3
+    const compatibleBVersions = bVersions
+      .map((bVersion) => {
+        const bSemVer = coerce(bVersion)!;
+        if (bVersion.startsWith("^") && bSemVer.major >= aSemVer.major) {
+          return `^${bSemVer.compare(aSemVer) >= 0 ? bSemVer.raw : aSemVer.raw}`;
+        }
+        return bSemVer.compare(aSemVer) !== -1 ? bVersion : undefined;
+      })
+      .filter((bVersion): bVersion is string => bVersion != null);
     if (compatibleBVersions.length === 0) {
       return undefined;
     }
@@ -535,10 +542,17 @@ export function findIntersection(a: ValidRange, b: ValidRange): ValidRange | und
   if (bIsGreaterOrEqualVersionRange) {
     const bSemVer = coerce(b)!;
     // keep every version where `aSemVer` is >= `bSemVer`
-    const compatibleAVersions = aVersions.filter((aVersion) => {
-      const aSemVer = coerce(aVersion)!;
-      return aSemVer.compare(bSemVer) !== -1;
-    });
+    // where aVersion has an operator, we need to adjust the version to take into
+    // account bVersion, e.g. if b is >=15.2.3 and a is ^15, then the intersection is actually ^15.2.3
+    const compatibleAVersions = aVersions
+      .map((aVersion) => {
+        const aSemVer = coerce(aVersion)!;
+        if (aVersion.startsWith("^") && aSemVer.major >= bSemVer.major) {
+          return `^${aSemVer.compare(bSemVer) >= 0 ? aSemVer.raw : bSemVer.raw}`;
+        }
+        return aSemVer.compare(bSemVer) !== -1 ? aVersion : undefined;
+      })
+      .filter((aVersion): aVersion is string => aVersion != null);
     if (compatibleAVersions.length === 0) {
       return undefined;
     }
@@ -673,10 +687,16 @@ export function doesASatisfyB(a: ValidRange, b: ValidRange): boolean {
   });
 }
 
+/**
+ * Returns true if the version evaluates to 'any', e.g. * or x
+ */
 function isAnyVersionRange(version: string): boolean {
   return MATCH_ANY_VERSION_RANGE.test(version);
 }
 
+/**
+ * Retruns true if the version begins with '>='
+ */
 function isGreaterOrEqualVersionRange(version: string): boolean {
   return MATCH_GREATER_OR_EQUAL_VERSION_RANGE.test(version);
 }

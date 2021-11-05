@@ -735,6 +735,9 @@ describe("mustSatisfyPeerDependencies", () => {
       const greaterOrEqualVersion3 = ">=100";
       expect(findIntersection(majorVersion, greaterOrEqualVersion3)).toBeUndefined();
       expect(findIntersection(greaterOrEqualVersion3, majorVersion)).toBeUndefined();
+      const greaterOrEqualVersion4 = ">=15.2.3";
+      expect(findIntersection(majorVersion, greaterOrEqualVersion4)).toEqual("^15.2.3");
+      expect(findIntersection(greaterOrEqualVersion4, majorVersion)).toEqual("^15.2.3");
     });
 
     it("greater or equal vs greater or equal", () => {
