@@ -28,7 +28,7 @@ export function checkAlpha(
   if (!arrayOrderCompare(actualOrder, expectedOrder)) {
     context.addError({
       file: packagePath,
-      message: `Incorrect order of ${block} in package.json`,
+      message: `Incorrect order of ${block} in ${packageJson.name}'s package.json`,
       longMessage: diff(expectedOrder, actualOrder, { expand: true }),
       fixer: () => {
         const expectedDependencies: Record<string, string> = {};
