@@ -15,6 +15,7 @@ import { Failure, PackageContext } from "@monorepolint/core";
 import { alphabeticalScripts } from "../alphabeticalScripts";
 
 const PACKAGE_SCRIPTS_SORTED = jsonToString({
+  name: "foo-lib",
   scripts: {
     a: "a-",
     b: "b-",
@@ -23,6 +24,7 @@ const PACKAGE_SCRIPTS_SORTED = jsonToString({
 });
 
 const PACKAGE_SCRIPTS_UNSORTED = jsonToString({
+  name: "foo-lib",
   scripts: {
     c: "c-",
     a: "a-",
@@ -58,7 +60,7 @@ describe("alphabeticalScripts", () => {
       const failure: Failure = spy.mock.calls[0][0];
       expect(failure.file).toBe("package.json");
       expect(failure.fixer).not.toBeUndefined();
-      expect(failure.message).toBe("Incorrect order of scripts in package.json");
+      expect(failure.message).toBe("Incorrect order of scripts in foo-lib's package.json");
 
       expect(mockFiles.get("package.json")).toEqual(PACKAGE_SCRIPTS_SORTED);
     });
