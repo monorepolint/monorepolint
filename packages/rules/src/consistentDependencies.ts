@@ -10,21 +10,25 @@ import { writeJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 import * as r from "runtypes";
 
-const Options = r.Undefined;
-type Options = r.Static<typeof Options>;
+const Options = r
+  .Record({
+    ignoredDependencies: r.Array(r.String).Or(r.Undefined),
+  })
+  .Or(r.Undefined);
+export type Options = r.Static<typeof Options>;
 
 const skippedVersions = ["*", "latest"];
 
 export const consistentDependencies = {
-  check: function expectConsistentDependencies(context: Context) {
-    checkDeps(context, "dependencies");
-    checkDeps(context, "devDependencies");
+  check: function expectConsistentDependencies(context: Context, args: Options) {
+    checkDeps(context, args, "dependencies");
+    checkDeps(context, args, "devDependencies");
     // we don't check peer deps since they can be more lenient
   },
   optionsRuntype: Options,
 } as RuleModule<typeof Options>;
 
-function checkDeps(context: Context, block: "dependencies" | "devDependencies" | "peerDependencies") {
+function checkDeps(context: Context, args: Options, block: "dependencies" | "devDependencies" | "peerDependencies") {
   const packageJson = context.getPackageJson();
   const packagePath = context.getPackageJsonPath();
   const dependencies = packageJson[block];
@@ -32,13 +36,19 @@ function checkDeps(context: Context, block: "dependencies" | "devDependencies" |
   const workspacePackageJson = context.getWorkspaceContext().getPackageJson();
   const workspaceDependencies = workspacePackageJson[block];
 
-  if (dependencies === undefined || workspaceDependencies === undefined) {
+  const ignoredDeps = args?.ignoredDependencies ?? [];
+  const depsToCheck =
+    workspaceDependencies == null || ignoredDeps.length === 0
+      ? workspaceDependencies
+      : omit(workspaceDependencies, ignoredDeps);
+
+  if (dependencies === undefined || depsToCheck === undefined) {
     return;
   }
 
   const expectedDependencies = {
     ...dependencies,
-    ...filterKeys(workspaceDependencies, dependencies),
+    ...filterKeys(depsToCheck, dependencies),
   };
 
   if (JSON.stringify(dependencies) !== JSON.stringify(expectedDependencies)) {
@@ -65,4 +75,15 @@ function filterKeys(ob: Record<string, string>, filterOb: Record<string, string>
   }
 
   return newOb;
+}
+
+function omit<T>(obj: Record<string, T>, keysToOmit: readonly string[]): Record<string, T> {
+  const newObj: Record<string, T> = {};
+
+  const filtered = Object.entries(obj).filter(([key]) => !keysToOmit.includes(key));
+  for (const [key, value] of filtered) {
+    newObj[key] = value;
+  }
+
+  return newObj;
 }

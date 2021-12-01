@@ -8,7 +8,7 @@ import { WorkspaceContext } from "@monorepolint/core";
 import { readFileSync, writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
-import { consistentDependencies } from "../consistentDependencies";
+import { consistentDependencies, Options } from "../consistentDependencies";
 import { makeDirectoryRecursively } from "../util/makeDirectory";
 import { jsonToString } from "./utils";
 
@@ -68,10 +68,10 @@ describe("consistentDependencies", () => {
       silent: true,
     });
 
-    function checkAndSpy(q: string) {
+    function checkAndSpy(q: string, opts?: Options) {
       const context = workspaceContext.createChildContext(path.resolve(dir.name, q));
       const addErrorSpy = jest.spyOn(context, "addError");
-      consistentDependencies.check(context, undefined);
+      consistentDependencies.check(context, opts);
       return { context, addErrorSpy };
     }
 
@@ -123,5 +123,14 @@ describe("consistentDependencies", () => {
 
     const contents = readFile("./packages/wrong/package.json");
     expect(contents).toEqual(PACKAGE_CHILD_WITH_RIGHT_VERSION);
+  });
+
+  it("ignores ignored dependencies", () => {
+    const { addFile, checkAndSpy } = makeWorkspace({ fix: false });
+    addFile("./package.json", PACKAGE_ROOT);
+    addFile("./packages/wrong/package.json", PACKAGE_CHILD_WITH_WRONG_VERSION);
+
+    const ignored = checkAndSpy("./packages/wrong", { ignoredDependencies: ["foo"] });
+    expect(ignored.addErrorSpy).toHaveBeenCalledTimes(0);
   });
 });
