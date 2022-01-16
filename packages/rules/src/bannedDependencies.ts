@@ -107,14 +107,14 @@ function checkTransitives(
   const graphService = new PackageDependencyGraphService();
   const root = graphService.buildDependencyGraph(path.resolve(context.getPackageJsonPath()));
   for (const { dependencies, importPath } of graphService.traverse(root)) {
-    for (const [dependency, dependencyNode] of dependencies) {
+    for (const [dependency] of dependencies) {
       if (bannedDependencies.includes(dependency)) {
         // Remove the starting package since it's obvious in CLI output.
         const [, ...importPathWithoutRoot] = importPath;
         const pathing = [...importPathWithoutRoot.map(nameOrPackageJsonPath), dependency].join(" -> ");
 
         context.addError({
-          file: dependencyNode.paths.packageJsonPath,
+          file: root.paths.packageJsonPath,
           message: `Banned transitive dependencies in repo: ${pathing}`,
         });
       }
