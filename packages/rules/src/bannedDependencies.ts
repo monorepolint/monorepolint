@@ -11,7 +11,7 @@ import diff from "jest-diff";
 import minimatch from "minimatch";
 import path from "path";
 import * as r from "runtypes";
-import { PackageDependencyGraphService } from "./util/packageDependencyGraphService";
+import { IPackageDependencyGraphNode, PackageDependencyGraphService } from "./util/packageDependencyGraphService";
 
 const Options = r.Union(
   r
@@ -106,14 +106,22 @@ function checkTransitives(
 ) {
   const graphService = new PackageDependencyGraphService();
   const root = graphService.buildDependencyGraph(path.resolve(context.getPackageJsonPath()));
-  for (const { dependencies } of graphService.traverse(root)) {
+  for (const { dependencies, importPath } of graphService.traverse(root)) {
     for (const [dependency, dependencyNode] of dependencies) {
       if (bannedDependencies.includes(dependency)) {
+        // Remove the starting package since it's obvious in CLI output.
+        const [, ...importPathWithoutRoot] = importPath;
+        const pathing = [...importPathWithoutRoot.map(nameOrPackageJsonPath), dependency].join(" -> ");
+
         context.addError({
           file: dependencyNode.paths.packageJsonPath,
-          message: `Banned transitive dependencies in repo: ${dependency}`,
+          message: `Banned transitive dependencies in repo: ${pathing}`,
         });
       }
     }
   }
+}
+
+function nameOrPackageJsonPath(node: IPackageDependencyGraphNode): string {
+  return node.packageJson.name ?? node.paths.packageJsonPath;
 }
