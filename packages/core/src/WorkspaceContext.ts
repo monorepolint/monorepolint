@@ -5,13 +5,14 @@
  *
  */
 
-import { getWorkspacePackageDirs } from "@monorepolint/utils";
+import { getPackageNameToDir, getWorkspacePackageDirs } from "@monorepolint/utils";
 import { ResolvedConfig } from "./Config";
 import { Context } from "./Context";
 import { PackageContext } from "./PackageContext";
 
 // Right now, this stuff is done serially so we are writing less code to support that. Later we may want to redo this.
 export class WorkspaceContext extends PackageContext {
+  public packageNameToDir: Map<string, string> | undefined;
   constructor(packageDir: string, opts: ResolvedConfig, parent?: Context) {
     super(packageDir, opts, parent);
   }
@@ -22,5 +23,10 @@ export class WorkspaceContext extends PackageContext {
 
   public createChildContext(dir: string) {
     return new PackageContext(dir, this.resolvedConfig, this);
+  }
+
+  public getPackageNameToDir() {
+    this.packageNameToDir = this.packageNameToDir ?? getPackageNameToDir(this.packageDir);
+    return this.packageNameToDir;
   }
 }
