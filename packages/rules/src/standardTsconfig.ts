@@ -6,7 +6,6 @@
  */
 
 import { Context, RuleModule } from "@monorepolint/core";
-import { getPackageNameToDir } from "@monorepolint/utils";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import diff from "jest-diff";
 import minimatch from "minimatch";
@@ -95,7 +94,7 @@ function makeGenerator(template: any, excludedReferences: ReadonlyArray<string> 
       references: [],
     }; // make a copy and ensure we have a references array
 
-    const nameToDirectory = getPackageNameToDir(context.getWorkspaceContext().packageDir);
+    const nameToDirectory = context.getWorkspaceContext().getPackageNameToDir();
 
     const packageJson = context.getPackageJson();
     const deps = [...Object.keys(packageJson.dependencies || {}), ...Object.keys(packageJson.devDependencies || {})];
