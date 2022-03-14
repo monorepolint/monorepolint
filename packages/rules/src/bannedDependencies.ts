@@ -6,7 +6,6 @@
  */
 
 import { Context, RuleModule } from "@monorepolint/core";
-import { writeJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 import minimatch from "minimatch";
 import path from "path";
@@ -93,7 +92,7 @@ function checkBanned(
         violations.map((v) => `'${v}'`).join(", "),
       longMessage: diff(newPackageJson[block], dependencies, { expand: true }),
       fixer: () => {
-        writeJson(packagePath, newPackageJson);
+        context.host.writeJson(packagePath, newPackageJson);
       },
     });
   }

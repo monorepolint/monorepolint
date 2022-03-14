@@ -37,7 +37,7 @@ export const Options = r.Union(
 
 export type Options = r.Static<typeof Options>;
 
-export const packageEntry = {
+export const packageEntry: RuleModule<typeof Options> = {
   check: function expectPackageEntry(context: Context, options: Options) {
     const packageJson = context.getPackageJson();
 
@@ -56,7 +56,7 @@ export const packageEntry = {
             message: `Expected standardized entry for '${key}'`,
             longMessage: entryDiff,
             fixer: () => {
-              mutateJson<PackageJson>(context.getPackageJsonPath(), (input) => {
+              mutateJson<PackageJson>(context.getPackageJsonPath(), context.host, (input) => {
                 input[key] = value;
                 return input;
               });
@@ -78,4 +78,4 @@ export const packageEntry = {
     }
   },
   optionsRuntype: Options,
-} as RuleModule<typeof Options>;
+};

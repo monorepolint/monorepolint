@@ -6,7 +6,7 @@
  */
 
 import { WorkspaceContext } from "@monorepolint/core";
-import { PackageJson, readJson, writeJson } from "@monorepolint/utils";
+import { Host, PackageJson, SimpleHost } from "@monorepolint/utils";
 import * as path from "path";
 import * as tmp from "tmp";
 import { consistentVersions, Options } from "../consistentVersions";
@@ -35,29 +35,34 @@ describe("consistentVersions", () => {
   });
 
   function makeWorkspace(fix = false) {
-    const workspaceContext = new WorkspaceContext(cwd!, {
-      rules: [],
-      fix,
-      verbose: false,
-      silent: true,
-    });
+    const host: Host = new SimpleHost();
+    const workspaceContext = new WorkspaceContext(
+      cwd!,
+      {
+        rules: [],
+        fix,
+        verbose: false,
+        silent: true,
+      },
+      host
+    );
     const addErrorSpy = jest.spyOn(workspaceContext, "addError");
 
     function check(options: Options = { matchDependencyVersions: {} }) {
       consistentVersions.check(workspaceContext, options);
     }
 
-    return { addErrorSpy, check };
+    return { addErrorSpy, check, host };
   }
 
-  function addPackageJson(filePath: string, packageJson: PackageJson) {
+  function addPackageJson(host: Host, filePath: string, packageJson: PackageJson) {
     const dirPath = path.resolve(cwd!, path.dirname(filePath));
     const resolvedFilePath = path.resolve(cwd!, filePath);
 
     makeDirectoryRecursively(dirPath);
-    writeJson(resolvedFilePath, packageJson);
+    host.writeJson(resolvedFilePath, packageJson);
     return (): PackageJson => {
-      return readJson(resolvedFilePath);
+      return host.readJson(resolvedFilePath);
     };
   }
 
@@ -82,8 +87,8 @@ describe("consistentVersions", () => {
     });
 
     it("Does nothing when arguments are empty", async () => {
-      const { addErrorSpy, check } = makeWorkspace();
-      addPackageJson("./package.json", testPackageJson);
+      const { addErrorSpy, check, host } = makeWorkspace();
+      addPackageJson(host, "./package.json", testPackageJson);
 
       check();
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
@@ -92,8 +97,8 @@ describe("consistentVersions", () => {
     });
 
     it("Fixes packages that have an incorrect dependency version", async () => {
-      const { addErrorSpy, check } = makeWorkspace(true);
-      const readTestPackageJson = addPackageJson("./package.json", testPackageJson);
+      const { addErrorSpy, check, host } = makeWorkspace(true);
+      const readTestPackageJson = addPackageJson(host, "./package.json", testPackageJson);
 
       const requiredGreatLibVersion = "1.2.3";
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
@@ -105,8 +110,8 @@ describe("consistentVersions", () => {
     });
 
     it("Ignores packages that have a correct dependency version", async () => {
-      const { addErrorSpy, check } = makeWorkspace();
-      addPackageJson("./package.json", testPackageJson);
+      const { addErrorSpy, check, host } = makeWorkspace();
+      addPackageJson(host, "./package.json", testPackageJson);
 
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
       check({
@@ -119,8 +124,8 @@ describe("consistentVersions", () => {
     });
 
     it("Fixes packages that have an incorrect devDependency version", async () => {
-      const { addErrorSpy, check } = makeWorkspace(true);
-      const readTestPackageJson = addPackageJson("./package.json", testPackageJson);
+      const { addErrorSpy, check, host } = makeWorkspace(true);
+      const readTestPackageJson = addPackageJson(host, "./package.json", testPackageJson);
 
       const requiredElseLibVersion = "1.2.3";
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
@@ -130,8 +135,8 @@ describe("consistentVersions", () => {
     });
 
     it("Ignores packages that have a correct devDependency version", async () => {
-      const { addErrorSpy, check } = makeWorkspace();
-      addPackageJson("./package.json", testPackageJson);
+      const { addErrorSpy, check, host } = makeWorkspace();
+      addPackageJson(host, "./package.json", testPackageJson);
 
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
       check({
@@ -144,8 +149,8 @@ describe("consistentVersions", () => {
     });
 
     it("Fixes packages that have an incorrect dependency and devDependency versions", async () => {
-      const { addErrorSpy, check } = makeWorkspace(true);
-      const readTestPackageJson = addPackageJson("./package.json", testPackageJson);
+      const { addErrorSpy, check, host } = makeWorkspace(true);
+      const readTestPackageJson = addPackageJson(host, "./package.json", testPackageJson);
 
       const requiredBothVersion = "1.2.3";
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
@@ -177,8 +182,8 @@ describe("consistentVersions", () => {
     });
 
     it("Accepts a match when multiple versions are configured", async () => {
-      const { addErrorSpy, check } = makeWorkspace();
-      addPackageJson("./package.json", testPackageJson);
+      const { addErrorSpy, check, host } = makeWorkspace();
+      addPackageJson(host, "./package.json", testPackageJson);
 
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
       check({ matchDependencyVersions: { greatLib: [testPackageJson.dependencies!.greatLib] } });
@@ -192,8 +197,8 @@ describe("consistentVersions", () => {
     });
 
     it("Errors when version does not match", async () => {
-      const { addErrorSpy, check } = makeWorkspace();
-      addPackageJson("./package.json", testPackageJson);
+      const { addErrorSpy, check, host } = makeWorkspace();
+      addPackageJson(host, "./package.json", testPackageJson);
 
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
       check({ matchDependencyVersions: { greatLib: ["1", "2"] } });

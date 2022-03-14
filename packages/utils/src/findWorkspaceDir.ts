@@ -7,13 +7,13 @@
 
 import { existsSync } from "fs";
 import * as path from "path";
+import { Host } from "./Host";
 import { PackageJson } from "./PackageJson";
-import { readJson } from "./readJson";
 
-export function findWorkspaceDir(dir: string): string | undefined {
+export function findWorkspaceDir(host: Pick<Host, "readJson">, dir: string): string | undefined {
   const packagePath = path.join(dir, "package.json");
   if (existsSync(packagePath)) {
-    const packageJson = readJson(packagePath) as PackageJson;
+    const packageJson = host.readJson(packagePath) as PackageJson;
     if (packageJson.workspaces !== undefined) {
       return dir;
     }
@@ -24,5 +24,5 @@ export function findWorkspaceDir(dir: string): string | undefined {
     return undefined;
   }
 
-  return findWorkspaceDir(nextDir);
+  return findWorkspaceDir(host, nextDir);
 }

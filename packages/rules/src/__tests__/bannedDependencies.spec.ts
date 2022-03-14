@@ -5,6 +5,7 @@
  *
  */
 import { WorkspaceContext } from "@monorepolint/core";
+import { SimpleHost } from "@monorepolint/utils";
 import { writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
@@ -37,12 +38,16 @@ describe("bannedDependencies", () => {
   });
 
   function makeWorkspace() {
-    const workspaceContext = new WorkspaceContext(cwd!, {
-      rules: [],
-      fix: false,
-      verbose: false,
-      silent: true,
-    });
+    const workspaceContext = new WorkspaceContext(
+      cwd!,
+      {
+        rules: [],
+        fix: false,
+        verbose: false,
+        silent: true,
+      },
+      new SimpleHost()
+    );
 
     function checkAndSpy(options: Options) {
       const addErrorSpy = jest.spyOn(workspaceContext, "addError");

@@ -8,13 +8,17 @@
 import { existsSync } from "fs";
 import glob from "glob";
 import { join as pathJoin, resolve as pathResolve } from "path";
+import { Host } from "./Host";
 import { PackageJson } from "./PackageJson";
-import { readJson } from "./readJson";
 
-export function getWorkspacePackageDirs(workspaceDir: string, resolvePaths: boolean = false) {
+export function getWorkspacePackageDirs(
+  host: Pick<Host, "readJson">,
+  workspaceDir: string,
+  resolvePaths: boolean = false
+) {
   const ret: string[] = [];
 
-  const packageJson: PackageJson = readJson(pathJoin(workspaceDir, "package.json"));
+  const packageJson: PackageJson = host.readJson(pathJoin(workspaceDir, "package.json"));
 
   if (packageJson.workspaces === undefined) {
     throw new Error("Invalid workspaceDir: " + workspaceDir);

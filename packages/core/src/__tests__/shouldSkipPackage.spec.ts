@@ -5,6 +5,7 @@
  *
  */
 
+import { SimpleHost } from "@monorepolint/utils";
 import { shouldSkipPackage } from "../check";
 import { ResolvedConfig } from "../Config";
 import { WorkspaceContext } from "../WorkspaceContext";
@@ -15,7 +16,7 @@ describe("shouldSkipPackage", () => {
     verbose: false,
     fix: false,
   };
-  const workspaceContext = new WorkspaceContext(".", resolvedConfig);
+  const workspaceContext = new WorkspaceContext(".", resolvedConfig, new SimpleHost());
   jest.spyOn(workspaceContext, "getName").mockImplementation(() => "root");
 
   const fooContext = createChild(workspaceContext, "packages/foo", "@foo/bar");

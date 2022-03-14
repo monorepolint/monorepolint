@@ -6,7 +6,7 @@
  */
 
 import { Context, RuleModule } from "@monorepolint/core";
-import { mutateJson, PackageJson } from "@monorepolint/utils";
+import { Host, mutateJson, PackageJson } from "@monorepolint/utils";
 import path from "path";
 import resolvePackagePath from "resolve-package-path";
 import * as r from "runtypes";
@@ -398,6 +398,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
           dependencyType: "peerDependencies",
           dependencyName: peerDependencyName,
           version: mostStrictPeerRequirement.range,
+          host: context.host,
         }),
       });
     }
@@ -423,6 +424,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
             dependencyType: "peerDependencies",
             dependencyName: peerDependencyName,
             version: mostStrictPeerRequirement.range,
+            host: context.host,
           }),
         });
       }
@@ -717,14 +719,16 @@ function getAddDependencyTypeFixer({
   dependencyType,
   dependencyName,
   version,
+  host,
 }: {
   packageJsonPath: string;
   dependencyType: IDependencyType;
   dependencyName: string;
   version: string;
+  host: Host;
 }) {
   return () => {
-    mutateJson<PackageJson>(packageJsonPath, (packageJson) => {
+    mutateJson<PackageJson>(packageJsonPath, host, (packageJson) => {
       if (packageJson[dependencyType] == null) {
         packageJson[dependencyType] = {};
       }

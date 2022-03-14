@@ -13,6 +13,7 @@ const mockFiles: Map<string, string> = createMockFiles();
 
 import { Context, Failure, PackageContext } from "@monorepolint/core";
 import { packageOrder } from "../packageOrder";
+import { SimpleHost } from "@monorepolint/utils";
 
 const PACKAGE_UNORDERED =
   JSON.stringify(
@@ -91,12 +92,16 @@ describe("expectPackageOrder", () => {
   });
 
   describe("fix: true", () => {
-    const context = new PackageContext(".", {
-      rules: [],
-      fix: true,
-      verbose: false,
-      silent: true,
-    });
+    const context = new PackageContext(
+      ".",
+      {
+        rules: [],
+        fix: true,
+        verbose: false,
+        silent: true,
+      },
+      new SimpleHost()
+    );
     const spy = jest.spyOn(context, "addError");
 
     afterEach(() => {

@@ -5,7 +5,7 @@
  *
  */
 
-import { PackageJson } from "@monorepolint/utils";
+import { Host, PackageJson } from "@monorepolint/utils";
 import { ResolvedConfig } from "./Config";
 import { WorkspaceContext } from "./WorkspaceContext";
 
@@ -30,6 +30,7 @@ export interface Context {
   readonly packageDir: string;
   readonly parent?: Context;
   readonly resolvedConfig: ResolvedConfig;
+  readonly host: Host;
 
   getName(): string;
 

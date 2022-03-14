@@ -6,7 +6,6 @@
  */
 
 import { Context, RuleModule } from "@monorepolint/core";
-import { writeJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 import * as r from "runtypes";
 
@@ -59,7 +58,7 @@ function checkDeps(context: Context, args: Options, block: "dependencies" | "dev
       fixer: () => {
         const newPackageJson = { ...packageJson };
         newPackageJson[block] = expectedDependencies;
-        writeJson(packagePath, newPackageJson);
+        context.host.writeJson(packagePath, newPackageJson);
       },
     });
   }

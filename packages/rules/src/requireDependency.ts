@@ -39,7 +39,7 @@ export const requireDependency = {
           file: packageJsonPath,
           message: `No ${type} block, cannot add required ${type}.`,
           fixer: () => {
-            mutateJson<PackageJson>(packageJsonPath, (input) => {
+            mutateJson<PackageJson>(packageJsonPath, context.host, (input) => {
               input[type] = options[type];
               return input;
             });
@@ -55,7 +55,7 @@ export const requireDependency = {
             message: `Expected dependency ${dep}@${version}`,
             longMessage: diff(`${dep}@${version}\n`, `${dep}@${packageJson[type][dep] || "missing"}\n`)!,
             fixer: () => {
-              mutateJson<PackageJson>(packageJsonPath, (input) => {
+              mutateJson<PackageJson>(packageJsonPath, context.host, (input) => {
                 input[type] = { ...input[type], [dep]: version };
                 return input;
               });

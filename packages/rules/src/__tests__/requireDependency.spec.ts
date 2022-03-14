@@ -5,6 +5,7 @@
  *
  */
 import { WorkspaceContext } from "@monorepolint/core";
+import { SimpleHost } from "@monorepolint/utils";
 import { readFileSync, writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
@@ -73,12 +74,16 @@ describe("requireDependency", () => {
     const dir: tmp.DirResult = tmp.dirSync({ unsafeCleanup: true });
     cleanupJobs.push(() => dir.removeCallback());
 
-    const workspaceContext = new WorkspaceContext(dir.name, {
-      rules: [],
-      fix,
-      verbose: false,
-      silent: true,
-    });
+    const workspaceContext = new WorkspaceContext(
+      dir.name,
+      {
+        rules: [],
+        fix,
+        verbose: false,
+        silent: true,
+      },
+      new SimpleHost()
+    );
 
     function checkAndSpy(q: string) {
       const context = workspaceContext.createChildContext(path.resolve(dir.name, q));

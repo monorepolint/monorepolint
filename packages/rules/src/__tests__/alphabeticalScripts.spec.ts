@@ -13,6 +13,7 @@ const mockFiles: Map<string, string> = createMockFiles();
 
 import { Failure, PackageContext } from "@monorepolint/core";
 import { alphabeticalScripts } from "../alphabeticalScripts";
+import { SimpleHost } from "@monorepolint/utils";
 
 const PACKAGE_SCRIPTS_SORTED = jsonToString({
   name: "foo-lib",
@@ -38,12 +39,16 @@ describe("alphabeticalScripts", () => {
   });
 
   describe("fix: true", () => {
-    const context = new PackageContext(".", {
-      rules: [],
-      fix: true,
-      verbose: false,
-      silent: true,
-    });
+    const context = new PackageContext(
+      ".",
+      {
+        rules: [],
+        fix: true,
+        verbose: false,
+        silent: true,
+      },
+      new SimpleHost()
+    );
     const spy = jest.spyOn(context, "addError");
 
     afterEach(() => {

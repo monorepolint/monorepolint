@@ -6,7 +6,6 @@
  */
 
 import { Context } from "@monorepolint/core";
-import { writeJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 
 export function checkAlpha(
@@ -39,7 +38,7 @@ export function checkAlpha(
 
         const newPackageJson = { ...packageJson };
         newPackageJson[block] = expectedDependencies;
-        writeJson(packagePath, newPackageJson);
+        context.host.writeJson(packagePath, newPackageJson);
       },
     });
   }

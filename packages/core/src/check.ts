@@ -5,7 +5,7 @@
  *
  */
 
-import { findWorkspaceDir } from "@monorepolint/utils";
+import { findWorkspaceDir, Host } from "@monorepolint/utils";
 import minimatch from "minimatch";
 import { dirname as pathDirname, resolve as pathResolve } from "path";
 import { ResolvedConfig, ResolvedRule } from "./Config";
@@ -14,15 +14,16 @@ import { WorkspaceContext } from "./WorkspaceContext";
 
 export async function check(
   resolvedConfig: ResolvedConfig,
+  host: Host,
   cwd = process.cwd(),
   paths?: ReadonlyArray<string>
 ): Promise<boolean> {
-  const workspaceDir = findWorkspaceDir(cwd);
+  const workspaceDir = findWorkspaceDir(host, cwd);
   if (workspaceDir === undefined) {
     throw new Error(`Unable to find a workspace from ${cwd}`);
   }
 
-  const workspaceContext = new WorkspaceContext(workspaceDir, resolvedConfig);
+  const workspaceContext = new WorkspaceContext(workspaceDir, resolvedConfig, host);
 
   if (paths !== undefined) {
     const resolvedPaths = paths.map((p) => pathDirname(pathResolve(p)));

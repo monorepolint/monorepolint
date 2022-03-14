@@ -5,7 +5,7 @@
  *
  */
 
-import { PackageJson, readJson } from "@monorepolint/utils";
+import { PackageJson, Host } from "@monorepolint/utils";
 import chalk from "chalk";
 import * as path from "path";
 import { ResolvedConfig } from "./Config";
@@ -26,6 +26,7 @@ export class PackageContext implements Context {
   constructor(
     public readonly packageDir: string,
     public readonly resolvedConfig: ResolvedConfig,
+    public readonly host: Host,
     public readonly parent?: Context
   ) {
     this.depth = this.parent ? this.parent.depth + 1 : 0;
@@ -40,7 +41,7 @@ export class PackageContext implements Context {
   }
 
   public getPackageJson(): PackageJson {
-    return readJson(this.getPackageJsonPath());
+    return this.host.readJson(this.getPackageJsonPath());
   }
 
   public addWarning({ message, longMessage }: Failure) {

@@ -6,7 +6,7 @@
  */
 
 import { check, Config, Options, resolveConfig } from "@monorepolint/core";
-import { findWorkspaceDir } from "@monorepolint/utils";
+import { CachingHost, SimpleHost, findWorkspaceDir } from "@monorepolint/utils";
 import chalk from "chalk";
 import * as fs from "fs";
 import * as path from "path";
@@ -51,12 +51,14 @@ async function handleCheck(args: Options) {
   // tslint:disable:no-console
   console.log("monorepolint (mrl) v" + getVersion());
   console.log();
+  const host = process.env.MRL_CACHING_HOST === "true" ? new CachingHost() : new SimpleHost();
 
   const configPath = path.resolve(process.cwd(), ".monorepolint.config.ts");
   const config = Config.check(require(configPath));
-  const resolvedConfig = resolveConfig(config, args, findWorkspaceDir(process.cwd())!);
+  const resolvedConfig = resolveConfig(config, args, findWorkspaceDir(host, process.cwd())!);
 
-  const checkResult = await check(resolvedConfig, process.cwd(), args.paths);
+  const checkResult = await check(resolvedConfig, host, process.cwd(), args.paths);
+  await host.flush();
 
   if (!checkResult) {
     console.error();

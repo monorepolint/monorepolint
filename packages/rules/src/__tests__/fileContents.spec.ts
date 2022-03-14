@@ -14,6 +14,7 @@ const mockFiles: Map<string, string> = createMockFiles();
 import { Failure, PackageContext } from "@monorepolint/core";
 import * as path from "path";
 import { fileContents } from "../fileContents";
+import { SimpleHost } from "@monorepolint/utils";
 
 const EXPECTED_FOO_FILE = "hello world";
 
@@ -23,12 +24,16 @@ describe("fileContents", () => {
   });
 
   describe("fix: true", () => {
-    const context = new PackageContext(".", {
-      rules: [],
-      fix: true,
-      verbose: false,
-      silent: true,
-    });
+    const context = new PackageContext(
+      ".",
+      {
+        rules: [],
+        fix: true,
+        verbose: false,
+        silent: true,
+      },
+      new SimpleHost()
+    );
     const spy = jest.spyOn(context, "addError");
 
     afterEach(() => {

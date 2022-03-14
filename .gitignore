@@ -9,3 +9,4 @@ node_modules
 .DS_Store
 yarn-error.log
 tsconfig.tsbuildinfo
+isolate-0x*-v8.log

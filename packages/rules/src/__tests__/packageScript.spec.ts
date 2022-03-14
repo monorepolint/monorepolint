@@ -13,6 +13,7 @@ const mockFiles: Map<string, string> = createMockFiles();
 
 import { Failure, PackageContext } from "@monorepolint/core";
 import { packageScript } from "../packageScript";
+import { SimpleHost } from "@monorepolint/utils";
 
 const json = (a: unknown) => JSON.stringify(a, undefined, 2) + "\n";
 
@@ -39,12 +40,17 @@ describe("expectPackageScript", () => {
   });
 
   describe("fix: false", () => {
-    const context = new PackageContext(".", {
-      rules: [],
-      fix: false,
-      verbose: false,
-      silent: true,
-    });
+    const host = new SimpleHost();
+    const context = new PackageContext(
+      ".",
+      {
+        rules: [],
+        fix: false,
+        verbose: false,
+        silent: true,
+      },
+      host
+    );
 
     const spy = jest.spyOn(context, "addError");
 
@@ -71,12 +77,16 @@ describe("expectPackageScript", () => {
   });
 
   describe("fix: true", () => {
-    const context = new PackageContext(".", {
-      rules: [],
-      fix: true,
-      verbose: false,
-      silent: true,
-    });
+    const context = new PackageContext(
+      ".",
+      {
+        rules: [],
+        fix: true,
+        verbose: false,
+        silent: true,
+      },
+      new SimpleHost()
+    );
     const spy = jest.spyOn(context, "addError");
 
     afterEach(() => {

@@ -13,7 +13,7 @@
     "clean": "rm -rf build lib node_modules *.tgz tsconfig.tsbuildinfo",
     "compile:typescript": "../../node_modules/.bin/tsc",
     "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
-    "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
+    "jest:watch": "../../node_modules/.bin/jest --watch",
     "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests",
     "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch"

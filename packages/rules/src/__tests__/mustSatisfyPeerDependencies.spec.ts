@@ -6,7 +6,7 @@
  */
 
 import { WorkspaceContext } from "@monorepolint/core";
-import { PackageJson, readJson, writeJson } from "@monorepolint/utils";
+import { Host, PackageJson, SimpleHost } from "@monorepolint/utils";
 import * as path from "path";
 import * as tmp from "tmp";
 import {
@@ -65,29 +65,34 @@ describe("mustSatisfyPeerDependencies", () => {
   });
 
   function makeWorkspace(fix = false) {
-    const workspaceContext = new WorkspaceContext(cwd!, {
-      rules: [],
-      fix,
-      verbose: false,
-      silent: true,
-    });
+    const host: Host = new SimpleHost();
+    const workspaceContext = new WorkspaceContext(
+      cwd!,
+      {
+        rules: [],
+        fix,
+        verbose: false,
+        silent: true,
+      },
+      host
+    );
     const addErrorSpy = jest.spyOn(workspaceContext, "addError");
 
     function check(options: Options) {
       mustSatisfyPeerDependencies.check(workspaceContext, options);
     }
 
-    return { addErrorSpy, check };
+    return { addErrorSpy, check, host };
   }
 
-  function addPackageJson(filePath: string, packageJson: PackageJson) {
+  function addPackageJson(host: Host, filePath: string, packageJson: PackageJson) {
     const dirPath = path.resolve(cwd!, path.dirname(filePath));
     const resolvedFilePath = path.resolve(cwd!, filePath);
 
     makeDirectoryRecursively(dirPath);
-    writeJson(resolvedFilePath, packageJson);
+    host.writeJson(resolvedFilePath, packageJson);
     return (): PackageJson => {
-      return readJson(resolvedFilePath);
+      return host.readJson(resolvedFilePath);
     };
   }
 
@@ -821,7 +826,7 @@ describe("mustSatisfyPeerDependencies", () => {
   });
 
   it("Flags overloaded dependency (entry in regular dependencies and peer dependencies)", async () => {
-    const { addErrorSpy, check } = makeWorkspace();
+    const { addErrorSpy, check, host } = makeWorkspace();
 
     const testPackageJson = {
       name: "test",
@@ -832,12 +837,12 @@ describe("mustSatisfyPeerDependencies", () => {
         greatLib: "15",
       },
     };
-    addPackageJson("./package.json", testPackageJson);
+    addPackageJson(host, "./package.json", testPackageJson);
 
     const greatLibPackageJson = {
       name: "greatLib",
     };
-    addPackageJson("./node_modules/greatLib/package.json", greatLibPackageJson);
+    addPackageJson(host, "./node_modules/greatLib/package.json", greatLibPackageJson);
 
     check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
@@ -848,7 +853,7 @@ describe("mustSatisfyPeerDependencies", () => {
   });
 
   it("Flags conflicting peer dependencies", async () => {
-    const { addErrorSpy, check } = makeWorkspace();
+    const { addErrorSpy, check, host } = makeWorkspace();
 
     const testPackageJson = {
       name: "test",
@@ -864,7 +869,7 @@ describe("mustSatisfyPeerDependencies", () => {
         ccc: "0.0.1",
       },
     };
-    addPackageJson("./package.json", testPackageJson);
+    addPackageJson(host, "./package.json", testPackageJson);
 
     const aaaPackageJson = {
       name: "a",
@@ -873,21 +878,21 @@ describe("mustSatisfyPeerDependencies", () => {
         greatestLib: "100",
       },
     };
-    addPackageJson("./node_modules/aaa/package.json", aaaPackageJson);
+    addPackageJson(host, "./node_modules/aaa/package.json", aaaPackageJson);
     const bbbPackageJson = {
       name: "b",
       peerDependencies: {
         greatLib: "16",
       },
     };
-    addPackageJson("./node_modules/bbb/package.json", bbbPackageJson);
+    addPackageJson(host, "./node_modules/bbb/package.json", bbbPackageJson);
     const cccPackageJson = {
       name: "c",
       peerDependencies: {
         greatestLib: "200",
       },
     };
-    addPackageJson("./node_modules/ccc/package.json", cccPackageJson);
+    addPackageJson(host, "./node_modules/ccc/package.json", cccPackageJson);
 
     check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
@@ -909,7 +914,7 @@ describe("mustSatisfyPeerDependencies", () => {
   });
 
   it("Flags unsatisfied peer dependencies (test package has regular dep)", async () => {
-    const { addErrorSpy, check } = makeWorkspace();
+    const { addErrorSpy, check, host } = makeWorkspace();
 
     const testPackageJson = {
       name: "test",
@@ -922,33 +927,33 @@ describe("mustSatisfyPeerDependencies", () => {
         ccc: "0.0.1",
       },
     };
-    addPackageJson("./package.json", testPackageJson);
+    addPackageJson(host, "./package.json", testPackageJson);
 
     const greatLibPackageJson = {
       name: "greatLib",
     };
-    addPackageJson("./node_modules/greatLib/package.json", greatLibPackageJson);
+    addPackageJson(host, "./node_modules/greatLib/package.json", greatLibPackageJson);
     const aaaPackageJson = {
       name: "a",
       peerDependencies: {
         greatLib: "^15.2 || ^16",
       },
     };
-    addPackageJson("./node_modules/aaa/package.json", aaaPackageJson);
+    addPackageJson(host, "./node_modules/aaa/package.json", aaaPackageJson);
     const bbbPackageJson = {
       name: "b",
       peerDependencies: {
         greatLib: "^15.2.3 || ^16",
       },
     };
-    addPackageJson("./node_modules/bbb/package.json", bbbPackageJson);
+    addPackageJson(host, "./node_modules/bbb/package.json", bbbPackageJson);
     const cccPackageJson = {
       name: "c",
       peerDependencies: {
         greatLib: "^15.8",
       },
     };
-    addPackageJson("./node_modules/ccc/package.json", cccPackageJson);
+    addPackageJson(host, "./node_modules/ccc/package.json", cccPackageJson);
 
     check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
@@ -968,7 +973,7 @@ describe("mustSatisfyPeerDependencies", () => {
   });
 
   it("Flags missing peer dependencies (NO regular dependency present)", async () => {
-    const { addErrorSpy, check } = makeWorkspace(true);
+    const { addErrorSpy, check, host } = makeWorkspace(true);
 
     const testPackageJson = {
       name: "test",
@@ -980,7 +985,7 @@ describe("mustSatisfyPeerDependencies", () => {
         ccc: "0.0.1",
       },
     };
-    const readTestPackageJson = addPackageJson("./package.json", testPackageJson);
+    const readTestPackageJson = addPackageJson(host, "./package.json", testPackageJson);
 
     const aaaPackageJson = {
       name: "a",
@@ -988,21 +993,21 @@ describe("mustSatisfyPeerDependencies", () => {
         greatLib: "15 || ^16.2",
       },
     };
-    addPackageJson("./node_modules/aaa/package.json", aaaPackageJson);
+    addPackageJson(host, "./node_modules/aaa/package.json", aaaPackageJson);
     const bbbPackageJson = {
       name: "b",
       peerDependencies: {
         greatLib: "^16",
       },
     };
-    addPackageJson("./node_modules/bbb/package.json", bbbPackageJson);
+    addPackageJson(host, "./node_modules/bbb/package.json", bbbPackageJson);
     const cccPackageJson = {
       name: "c",
       peerDependencies: {
         greatestLib: "100",
       },
     };
-    addPackageJson("./node_modules/ccc/package.json", cccPackageJson);
+    addPackageJson(host, "./node_modules/ccc/package.json", cccPackageJson);
 
     check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
@@ -1025,7 +1030,7 @@ describe("mustSatisfyPeerDependencies", () => {
   });
 
   it("Flags unsatisfied peer dependencies (test package has peer dep)", async () => {
-    const { addErrorSpy, check } = makeWorkspace(true);
+    const { addErrorSpy, check, host } = makeWorkspace(true);
 
     const testPackageJson = {
       name: "test",
@@ -1040,7 +1045,7 @@ describe("mustSatisfyPeerDependencies", () => {
         ccc: "0.0.1",
       },
     };
-    const readTestPackageJson = addPackageJson("./package.json", testPackageJson);
+    const readTestPackageJson = addPackageJson(host, "./package.json", testPackageJson);
 
     const aaaPackageJson = {
       name: "a",
@@ -1048,21 +1053,21 @@ describe("mustSatisfyPeerDependencies", () => {
         greatLib: "15 || ^16",
       },
     };
-    addPackageJson("./node_modules/aaa/package.json", aaaPackageJson);
+    addPackageJson(host, "./node_modules/aaa/package.json", aaaPackageJson);
     const bbbPackageJson = {
       name: "b",
       peerDependencies: {
         greatLib: "^16",
       },
     };
-    addPackageJson("./node_modules/bbb/package.json", bbbPackageJson);
+    addPackageJson(host, "./node_modules/bbb/package.json", bbbPackageJson);
     const cccPackageJson = {
       name: "c",
       peerDependencies: {
         greatLib: "^16.2",
       },
     };
-    addPackageJson("./node_modules/ccc/package.json", cccPackageJson);
+    addPackageJson(host, "./node_modules/ccc/package.json", cccPackageJson);
 
     check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
@@ -1083,7 +1088,7 @@ describe("mustSatisfyPeerDependencies", () => {
   });
 
   it("Honors dependencyWhitelist", async () => {
-    const { addErrorSpy, check } = makeWorkspace();
+    const { addErrorSpy, check, host } = makeWorkspace();
 
     const testPackageJson = {
       name: "test",
@@ -1097,30 +1102,30 @@ describe("mustSatisfyPeerDependencies", () => {
         greatLib: "15",
       },
     };
-    addPackageJson("./package.json", testPackageJson);
+    addPackageJson(host, "./package.json", testPackageJson);
 
     const startHerePackageJson = {
       name: "startHere",
     };
-    addPackageJson("./node_modules/startHere/package.json", startHerePackageJson);
+    addPackageJson(host, "./node_modules/startHere/package.json", startHerePackageJson);
     const greatLibPackageJson = {
       name: "greatLib",
     };
-    addPackageJson("./node_modules/greatLib/package.json", greatLibPackageJson);
+    addPackageJson(host, "./node_modules/greatLib/package.json", greatLibPackageJson);
     const aaaPackageJson = {
       name: "a",
       peerDependencies: {
         greatLib: "15",
       },
     };
-    addPackageJson("./node_modules/aaa/package.json", aaaPackageJson);
+    addPackageJson(host, "./node_modules/aaa/package.json", aaaPackageJson);
     const bbbPackageJson = {
       name: "b",
       peerDependencies: {
         greatLib: "16",
       },
     };
-    addPackageJson("./node_modules/bbb/package.json", bbbPackageJson);
+    addPackageJson(host, "./node_modules/bbb/package.json", bbbPackageJson);
 
     check({ dependencyWhitelist: ["startHere"] });
     expect(addErrorSpy).toHaveBeenCalledTimes(0);
@@ -1129,7 +1134,7 @@ describe("mustSatisfyPeerDependencies", () => {
   });
 
   it("Honors dependencyBlacklist", async () => {
-    const { addErrorSpy, check } = makeWorkspace();
+    const { addErrorSpy, check, host } = makeWorkspace();
 
     const testPackageJson = {
       name: "test",
@@ -1143,30 +1148,30 @@ describe("mustSatisfyPeerDependencies", () => {
         greatLib: "15",
       },
     };
-    addPackageJson("./package.json", testPackageJson);
+    addPackageJson(host, "./package.json", testPackageJson);
 
     const startHerePackageJson = {
       name: "startHere",
     };
-    addPackageJson("./node_modules/startHere/package.json", startHerePackageJson);
+    addPackageJson(host, "./node_modules/startHere/package.json", startHerePackageJson);
     const greatLibPackageJson = {
       name: "greatLib",
     };
-    addPackageJson("./node_modules/greatLib/package.json", greatLibPackageJson);
+    addPackageJson(host, "./node_modules/greatLib/package.json", greatLibPackageJson);
     const aaaPackageJson = {
       name: "a",
       peerDependencies: {
         greatLib: "15",
       },
     };
-    addPackageJson("./node_modules/aaa/package.json", aaaPackageJson);
+    addPackageJson(host, "./node_modules/aaa/package.json", aaaPackageJson);
     const bbbPackageJson = {
       name: "b",
       peerDependencies: {
         greatLib: "16",
       },
     };
-    addPackageJson("./node_modules/bbb/package.json", bbbPackageJson);
+    addPackageJson(host, "./node_modules/bbb/package.json", bbbPackageJson);
 
     check({ dependencyBlacklist: ["greatLib"] });
     expect(addErrorSpy).toHaveBeenCalledTimes(0);

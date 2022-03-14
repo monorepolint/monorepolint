@@ -13,6 +13,7 @@ const mockFiles: Map<string, string> = createMockFiles();
 
 import { Failure, PackageContext } from "@monorepolint/core";
 import { packageEntry } from "../packageEntry";
+import { SimpleHost } from "@monorepolint/utils";
 
 const PACKAGE_MISSING_ENTRY =
   JSON.stringify(
@@ -61,12 +62,16 @@ describe("expectPackageEntries", () => {
   });
 
   describe("fix: true", () => {
-    const context = new PackageContext(".", {
-      rules: [],
-      fix: true,
-      verbose: false,
-      silent: true,
-    });
+    const context = new PackageContext(
+      ".",
+      {
+        rules: [],
+        fix: true,
+        verbose: false,
+        silent: true,
+      },
+      new SimpleHost()
+    );
     const spy = jest.spyOn(context, "addError");
 
     afterEach(() => {
