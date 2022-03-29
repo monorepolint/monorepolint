@@ -22,6 +22,7 @@ const Options = r
     template: r.Record({}).Or(r.String),
     templateFile: r.String,
     excludedReferences: r.Array(r.String).Or(r.Undefined),
+    additionalReferences: r.Array(r.String).Or(r.Undefined),
   })
   .withConstraint(({ generator, template, templateFile }) => {
     let count = 0;
@@ -79,15 +80,20 @@ function getGenerator(context: Context, opts: Options) {
     const fullPath = path.resolve(workspacePackageDir, opts.templateFile);
     const template = JSON.parse(readFileSync(fullPath, "utf-8"));
 
-    return makeGenerator(template, opts.excludedReferences, opts.tsconfigReferenceFile);
+    return makeGenerator(template, opts.excludedReferences, opts.additionalReferences, opts.tsconfigReferenceFile);
   } else if (opts.template) {
-    return makeGenerator(opts.template, opts.excludedReferences, opts.tsconfigReferenceFile);
+    return makeGenerator(opts.template, opts.excludedReferences, opts.additionalReferences, opts.tsconfigReferenceFile);
   } else {
     throw new Error("Unable to make generator");
   }
 }
 
-function makeGenerator(template: any, excludedReferences: ReadonlyArray<string> = [], tsconfigReferenceFile?: string) {
+function makeGenerator(
+  template: any,
+  excludedReferences: ReadonlyArray<string> = [],
+  additionalReferences: ReadonlyArray<string> = [],
+  tsconfigReferenceFile?: string
+) {
   return function generator(context: Context) {
     template = {
       ...template,
@@ -111,6 +117,12 @@ function makeGenerator(template: any, excludedReferences: ReadonlyArray<string> 
           path: path.relative(context.packageDir, absoluteReferencePath),
         });
       });
+
+    additionalReferences.forEach((additionalReference) => {
+      template.references.push({
+        path: additionalReference,
+      });
+    });
 
     return JSON.stringify(template, undefined, 2) + "\n";
   };
