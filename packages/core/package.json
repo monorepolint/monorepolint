@@ -21,14 +21,14 @@
   },
   "dependencies": {
     "@monorepolint/utils": "^0.4.0",
-    "camelcase": "^6.0.0",
-    "chalk": "^4.1.0",
-    "minimatch": "^3.0.4",
+    "camelcase": "^6.3.0",
+    "chalk": "^5.0.1",
+    "minimatch": "^5.0.1",
     "runtypes": "^4.0.0",
-    "tslib": "^2.0.0"
+    "tslib": "^2.3.1"
   },
   "devDependencies": {
-    "@types/minimatch": "^3.0.3"
+    "@types/minimatch": "^3.0.5"
   },
   "publishConfig": {
     "access": "public"
