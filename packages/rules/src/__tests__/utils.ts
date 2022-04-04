@@ -6,7 +6,7 @@
  */
 
 import { AddErrorOptions, WorkspaceContext } from "@monorepolint/core";
-import { Host } from "@monorepolint/utils";
+import { CachingHost, Host, SimpleHost } from "@monorepolint/utils";
 import * as path from "path";
 import * as tmp from "tmp";
 
@@ -118,3 +118,8 @@ class DefaultTestingWorkspace implements TestingWorkspace {
 }
 
 export type AddErrorSpy = jest.SpyInstance<void, [AddErrorOptions]>;
+
+export const HOST_FACTORIES: Array<{ name: string; make: () => Host }> = [
+  { name: "SimpleHost", make: () => new SimpleHost() },
+  { name: "CachingHost", make: () => new CachingHost() },
+];

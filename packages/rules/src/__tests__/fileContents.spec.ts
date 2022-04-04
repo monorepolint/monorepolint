@@ -6,14 +6,13 @@
  */
 
 // tslint:disable:no-console
-import { createTestingWorkspace, TestingWorkspace } from "./utils";
+import { createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils";
 import { AddErrorOptions, Failure } from "@monorepolint/core";
 import { fileContents } from "../fileContents";
-import { SimpleHost } from "@monorepolint/utils";
 
 const EXPECTED_FOO_FILE = "hello world";
 
-describe("fileContents", () => {
+describe.each(HOST_FACTORIES)("fileContents ($name)", (hostFactory) => {
   describe("fix: true", () => {
     let workspace: TestingWorkspace;
     let spy: jest.SpyInstance<void, [AddErrorOptions]>;
@@ -21,7 +20,7 @@ describe("fileContents", () => {
     beforeEach(async () => {
       workspace = await createTestingWorkspace({
         fixFlag: true,
-        host: new SimpleHost(),
+        host: hostFactory.make(),
       });
       workspace.writeFile("shared/foo-template.txt", EXPECTED_FOO_FILE);
 

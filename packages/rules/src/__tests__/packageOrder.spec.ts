@@ -6,10 +6,9 @@
  */
 
 // tslint:disable:no-console
-import { AddErrorSpy, createTestingWorkspace, TestingWorkspace } from "./utils";
+import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils";
 import { Context, Failure } from "@monorepolint/core";
 import { packageOrder } from "../packageOrder";
-import { SimpleHost } from "@monorepolint/utils";
 
 const PACKAGE_UNORDERED =
   JSON.stringify(
@@ -82,7 +81,7 @@ const PACKAGE_ORDERED_UNKOWN_KEYS =
     2
   ) + "\n";
 
-describe("expectPackageOrder", () => {
+describe.each(HOST_FACTORIES)("expectPackageOrder ($name)", (hostFactory) => {
   describe("fix: true", () => {
     let workspace: TestingWorkspace;
     let spy: AddErrorSpy;
@@ -91,7 +90,7 @@ describe("expectPackageOrder", () => {
     beforeEach(async () => {
       workspace = await createTestingWorkspace({
         fixFlag: true,
-        host: new SimpleHost(),
+        host: hostFactory.make(),
       });
       context = workspace.context; // minimizing delta
 

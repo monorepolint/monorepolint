@@ -9,8 +9,7 @@
 
 import { Context, Failure } from "@monorepolint/core";
 import { packageScript } from "../packageScript";
-import { SimpleHost } from "@monorepolint/utils";
-import { AddErrorSpy, createTestingWorkspace, TestingWorkspace } from "./utils";
+import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils";
 
 const json = (a: unknown) => JSON.stringify(a, undefined, 2) + "\n";
 
@@ -31,7 +30,7 @@ const PACKAGE_WITH_SCRIPTS = json({
   },
 });
 
-describe("expectPackageScript", () => {
+describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
   describe("fix: false", () => {
     let workspace: TestingWorkspace;
     let spy: AddErrorSpy;
@@ -39,7 +38,7 @@ describe("expectPackageScript", () => {
     beforeEach(async () => {
       workspace = await createTestingWorkspace({
         fixFlag: false,
-        host: new SimpleHost(),
+        host: hostFactory.make(),
       });
 
       spy = jest.spyOn(workspace.context, "addError");
@@ -75,7 +74,7 @@ describe("expectPackageScript", () => {
     beforeEach(async () => {
       workspace = await createTestingWorkspace({
         fixFlag: true,
-        host: new SimpleHost(),
+        host: hostFactory.make(),
       });
 
       spy = jest.spyOn(workspace.context, "addError");

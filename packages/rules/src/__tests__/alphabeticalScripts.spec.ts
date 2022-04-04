@@ -6,10 +6,9 @@
  */
 
 // tslint:disable:no-console
-import { AddErrorSpy, createTestingWorkspace, jsonToString, TestingWorkspace } from "./utils";
+import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, jsonToString, TestingWorkspace } from "./utils";
 import { Context, Failure } from "@monorepolint/core";
 import { alphabeticalScripts } from "../alphabeticalScripts";
-import { SimpleHost } from "@monorepolint/utils";
 import { createIncorrectOrderErrorMessage } from "../util/checkAlpha";
 
 const PACKAGE_SCRIPTS_SORTED = jsonToString({
@@ -30,7 +29,7 @@ const PACKAGE_SCRIPTS_UNSORTED = jsonToString({
   },
 });
 
-describe("alphabeticalScripts", () => {
+describe.each(HOST_FACTORIES)("alphabeticalScripts ($name)", (hostFactory) => {
   describe("fix: true", () => {
     let workspace: TestingWorkspace;
     let spy: AddErrorSpy;
@@ -39,7 +38,7 @@ describe("alphabeticalScripts", () => {
     beforeEach(async () => {
       workspace = await createTestingWorkspace({
         fixFlag: true,
-        host: new SimpleHost(),
+        host: hostFactory.make(),
       });
       context = workspace.context; // minimizing delta
 

@@ -9,8 +9,7 @@
 
 import { Context, Failure } from "@monorepolint/core";
 import { createExpectedEntryErrorMessage, createStandardizedEntryErrorMessage, packageEntry } from "../packageEntry";
-import { SimpleHost } from "@monorepolint/utils";
-import { AddErrorSpy, createTestingWorkspace, TestingWorkspace } from "./utils";
+import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils";
 
 const PACKAGE_MISSING_ENTRY =
   JSON.stringify(
@@ -53,7 +52,7 @@ const PACKAGE_REPOSITORY =
     2
   ) + "\n";
 
-describe("expectPackageEntries", () => {
+describe.each(HOST_FACTORIES)("expectPackageEntries ($name)", (hostFactory) => {
   describe("fix: true", () => {
     let workspace: TestingWorkspace;
     let spy: AddErrorSpy;
@@ -62,7 +61,7 @@ describe("expectPackageEntries", () => {
     beforeEach(async () => {
       workspace = await createTestingWorkspace({
         fixFlag: true,
-        host: new SimpleHost(),
+        host: hostFactory.make(),
       });
       context = workspace.context; // minimizing delta
 
