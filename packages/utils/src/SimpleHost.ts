@@ -13,11 +13,9 @@ export class SimpleHost implements Host {
   constructor(private fs: typeof realFs = realFs) {}
   mkdir(directoryPath: string, opts?: { recursive: boolean }): void {
     this.fs.mkdirSync(directoryPath, { recursive: opts?.recursive ?? false });
-    throw new Error("Method not implemented.");
   }
   rmdir(directoryPath: string): void {
     this.fs.rmdirSync(directoryPath);
-    throw new Error("Method not implemented.");
   }
 
   exists(path: string): boolean {

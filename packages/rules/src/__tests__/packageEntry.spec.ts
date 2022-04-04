@@ -6,14 +6,11 @@
  */
 
 // tslint:disable:no-console
-import { createMockFiles } from "./utils";
 
-// done first since this also mocks 'fs'
-const mockFiles: Map<string, string> = createMockFiles();
-
-import { Failure, PackageContext } from "@monorepolint/core";
-import { packageEntry } from "../packageEntry";
+import { Context, Failure } from "@monorepolint/core";
+import { createExpectedEntryErrorMessage, createStandardizedEntryErrorMessage, packageEntry } from "../packageEntry";
 import { SimpleHost } from "@monorepolint/utils";
+import { AddErrorSpy, createTestingWorkspace, TestingWorkspace } from "./utils";
 
 const PACKAGE_MISSING_ENTRY =
   JSON.stringify(
@@ -57,29 +54,27 @@ const PACKAGE_REPOSITORY =
   ) + "\n";
 
 describe("expectPackageEntries", () => {
-  afterEach(() => {
-    mockFiles.clear();
-  });
-
   describe("fix: true", () => {
-    const context = new PackageContext(
-      ".",
-      {
-        rules: [],
-        fix: true,
-        verbose: false,
-        silent: true,
-      },
-      new SimpleHost()
-    );
-    const spy = jest.spyOn(context, "addError");
+    let workspace: TestingWorkspace;
+    let spy: AddErrorSpy;
+    let context: Context;
+
+    beforeEach(async () => {
+      workspace = await createTestingWorkspace({
+        fixFlag: true,
+        host: new SimpleHost(),
+      });
+      context = workspace.context; // minimizing delta
+
+      spy = jest.spyOn(workspace.context, "addError");
+    });
 
     afterEach(() => {
       spy.mockClear();
     });
 
     it("fixes missing entries", () => {
-      mockFiles.set("package.json", PACKAGE_MISSING_ENTRY);
+      workspace.writeFile("package.json", PACKAGE_MISSING_ENTRY);
 
       packageEntry.check(context, {
         entries: {
@@ -91,15 +86,19 @@ describe("expectPackageEntries", () => {
       expect(spy).toHaveBeenCalledTimes(1);
 
       const failure: Failure = spy.mock.calls[0][0];
-      expect(failure.file).toBe("package.json");
-      expect(failure.fixer).not.toBeUndefined();
-      expect(failure.message).toBe("Expected standardized entry for 'license'");
+      expect(failure).toMatchObject(
+        workspace.failureMatcher({
+          file: "package.json",
+          hasFixer: true,
+          message: createStandardizedEntryErrorMessage("license"),
+        })
+      );
 
-      expect(mockFiles.get("package.json")).toEqual(PACKAGE_LICENSE);
+      expect(workspace.readFile("package.json")).toEqual(PACKAGE_LICENSE);
     });
 
     it("fixes missing nested entries", () => {
-      mockFiles.set("package.json", PACKAGE_MISSING_ENTRY);
+      workspace.writeFile("package.json", PACKAGE_MISSING_ENTRY);
 
       packageEntry.check(context, {
         entries: {
@@ -114,15 +113,19 @@ describe("expectPackageEntries", () => {
       expect(spy).toHaveBeenCalledTimes(1);
 
       const failure: Failure = spy.mock.calls[0][0];
-      expect(failure.file).toBe("package.json");
-      expect(failure.fixer).not.toBeUndefined();
-      expect(failure.message).toBe("Expected standardized entry for 'repository'");
+      expect(failure).toMatchObject(
+        workspace.failureMatcher({
+          file: "package.json",
+          hasFixer: true,
+          message: createStandardizedEntryErrorMessage("repository"),
+        })
+      );
 
-      expect(mockFiles.get("package.json")).toEqual(PACKAGE_REPOSITORY);
+      expect(workspace.readFile("package.json")).toEqual(PACKAGE_REPOSITORY);
     });
 
     it("doesn't error for nested entries that are defined", () => {
-      mockFiles.set("package.json", PACKAGE_REPOSITORY);
+      workspace.writeFile("package.json", PACKAGE_REPOSITORY);
 
       packageEntry.check(context, {
         entries: {
@@ -135,11 +138,11 @@ describe("expectPackageEntries", () => {
       });
 
       expect(spy).toHaveBeenCalledTimes(0);
-      expect(mockFiles.get("package.json")).toEqual(PACKAGE_REPOSITORY);
+      expect(workspace.readFile("package.json")).toEqual(PACKAGE_REPOSITORY);
     });
 
     it("errors for keys that are missing", () => {
-      mockFiles.set("package.json", PACKAGE_REPOSITORY);
+      workspace.writeFile("package.json", PACKAGE_REPOSITORY);
 
       packageEntry.check(context, {
         entries: undefined,
@@ -149,14 +152,18 @@ describe("expectPackageEntries", () => {
       expect(spy).toHaveBeenCalledTimes(1);
 
       const failure: Failure = spy.mock.calls[0][0];
-      expect(failure.file).toBe("package.json");
-      expect(failure.fixer).toBeUndefined();
-      expect(failure.message).toBe("Expected entry for 'bugs' to exist");
-      expect(mockFiles.get("package.json")).toEqual(PACKAGE_REPOSITORY);
+      expect(failure).toMatchObject(
+        workspace.failureMatcher({
+          file: "package.json",
+          hasFixer: false,
+          message: createExpectedEntryErrorMessage("bugs"),
+        })
+      );
+      expect(workspace.readFile("package.json")).toEqual(PACKAGE_REPOSITORY);
     });
 
     it("handles both entries and entriesExist", () => {
-      mockFiles.set("package.json", PACKAGE_MISSING_ENTRY);
+      workspace.writeFile("package.json", PACKAGE_MISSING_ENTRY);
 
       packageEntry.check(context, {
         entries: {
@@ -171,16 +178,24 @@ describe("expectPackageEntries", () => {
       expect(spy).toHaveBeenCalledTimes(2);
 
       const failure: Failure = spy.mock.calls[0][0];
-      expect(failure.file).toBe("package.json");
-      expect(failure.fixer).not.toBeUndefined();
-      expect(failure.message).toBe("Expected standardized entry for 'repository'");
+      expect(failure).toMatchObject(
+        workspace.failureMatcher({
+          file: "package.json",
+          hasFixer: true,
+          message: createStandardizedEntryErrorMessage("repository"),
+        })
+      );
 
       const failure2: Failure = spy.mock.calls[1][0];
-      expect(failure2.file).toBe("package.json");
-      expect(failure2.fixer).toBeUndefined();
-      expect(failure2.message).toBe("Expected entry for 'bugs' to exist");
+      expect(failure2).toMatchObject(
+        workspace.failureMatcher({
+          file: "package.json",
+          hasFixer: false,
+          message: createExpectedEntryErrorMessage("bugs"),
+        })
+      );
 
-      expect(mockFiles.get("package.json")).toEqual(PACKAGE_REPOSITORY);
+      expect(workspace.readFile("package.json")).toEqual(PACKAGE_REPOSITORY);
     });
   });
 });

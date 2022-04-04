@@ -53,7 +53,7 @@ export const packageEntry: RuleModule<typeof Options> = {
         ) {
           context.addError({
             file: context.getPackageJsonPath(),
-            message: `Expected standardized entry for '${key}'`,
+            message: createStandardizedEntryErrorMessage(key),
             longMessage: entryDiff,
             fixer: () => {
               mutateJson<PackageJson>(context.getPackageJsonPath(), context.host, (input) => {
@@ -71,7 +71,7 @@ export const packageEntry: RuleModule<typeof Options> = {
         if (packageJson[key] === undefined) {
           context.addError({
             file: context.getPackageJsonPath(),
-            message: `Expected entry for '${key}' to exist`,
+            message: createExpectedEntryErrorMessage(key),
           });
         }
       }
@@ -79,3 +79,11 @@ export const packageEntry: RuleModule<typeof Options> = {
   },
   optionsRuntype: Options,
 };
+
+export function createStandardizedEntryErrorMessage(key: string) {
+  return `Expected standardized entry for '${key}'`;
+}
+
+export function createExpectedEntryErrorMessage(key: string) {
+  return `Expected entry for '${key}' to exist`;
+}

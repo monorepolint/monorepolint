@@ -6,14 +6,11 @@
  */
 
 // tslint:disable:no-console
-import { createMockFiles } from "./utils";
 
-// done first since this also mocks 'fs'
-const mockFiles: Map<string, string> = createMockFiles();
-
-import { Failure, PackageContext } from "@monorepolint/core";
+import { Context, Failure } from "@monorepolint/core";
 import { packageScript } from "../packageScript";
 import { SimpleHost } from "@monorepolint/utils";
+import { AddErrorSpy, createTestingWorkspace, TestingWorkspace } from "./utils";
 
 const json = (a: unknown) => JSON.stringify(a, undefined, 2) + "\n";
 
@@ -35,33 +32,23 @@ const PACKAGE_WITH_SCRIPTS = json({
 });
 
 describe("expectPackageScript", () => {
-  afterEach(() => {
-    mockFiles.clear();
-  });
-
   describe("fix: false", () => {
-    const host = new SimpleHost();
-    const context = new PackageContext(
-      ".",
-      {
-        rules: [],
-        fix: false,
-        verbose: false,
-        silent: true,
-      },
-      host
-    );
+    let workspace: TestingWorkspace;
+    let spy: AddErrorSpy;
 
-    const spy = jest.spyOn(context, "addError");
+    beforeEach(async () => {
+      workspace = await createTestingWorkspace({
+        fixFlag: false,
+        host: new SimpleHost(),
+      });
 
-    afterEach(() => {
-      spy.mockClear();
+      spy = jest.spyOn(workspace.context, "addError");
     });
 
     it("handles an empty script section", () => {
-      mockFiles.set("package.json", PACKAGE_WITHOUT_SCRIPTS);
+      workspace.writeFile("package.json", PACKAGE_WITHOUT_SCRIPTS);
 
-      packageScript.check(context, {
+      packageScript.check(workspace.context, {
         scripts: {
           foo: "bar",
         },
@@ -70,31 +57,33 @@ describe("expectPackageScript", () => {
       expect(spy).toHaveBeenCalledTimes(1);
 
       const failure: Failure = spy.mock.calls[0][0];
-      expect(failure.file).toBe("package.json");
-      expect(failure.fixer).not.toBeUndefined();
-      expect(failure.message).toBe("No scripts block in package.json");
+      expect(failure).toMatchObject(
+        workspace.failureMatcher({
+          file: "package.json",
+          hasFixer: true,
+          message: "No scripts block in package.json",
+        })
+      );
     });
   });
 
   describe("fix: true", () => {
-    const context = new PackageContext(
-      ".",
-      {
-        rules: [],
-        fix: true,
-        verbose: false,
-        silent: true,
-      },
-      new SimpleHost()
-    );
-    const spy = jest.spyOn(context, "addError");
+    let workspace: TestingWorkspace;
+    let spy: AddErrorSpy;
+    let context: Context;
 
-    afterEach(() => {
-      spy.mockClear();
+    beforeEach(async () => {
+      workspace = await createTestingWorkspace({
+        fixFlag: true,
+        host: new SimpleHost(),
+      });
+
+      spy = jest.spyOn(workspace.context, "addError");
+      context = workspace.context; // minimizing delta
     });
 
     it("fixes an empty script section", () => {
-      mockFiles.set("package.json", PACKAGE_WITHOUT_SCRIPTS);
+      workspace.writeFile("package.json", PACKAGE_WITHOUT_SCRIPTS);
 
       packageScript.check(context, {
         scripts: {
@@ -105,15 +94,19 @@ describe("expectPackageScript", () => {
       expect(spy).toHaveBeenCalledTimes(1);
 
       const failure: Failure = spy.mock.calls[0][0];
-      expect(failure.file).toBe("package.json");
-      expect(failure.fixer).not.toBeUndefined();
-      expect(failure.message).toBe("No scripts block in package.json");
+      expect(failure).toMatchObject(
+        workspace.failureMatcher({
+          file: "package.json",
+          hasFixer: true,
+          message: "No scripts block in package.json",
+        })
+      );
 
-      expect(JSON.parse(mockFiles.get("package.json")!).scripts).toEqual({});
+      expect(JSON.parse(workspace.readFile("package.json")!).scripts).toEqual({});
     });
 
     it("adds a script", () => {
-      mockFiles.set("package.json", PACKAGE_WITH_SCRIPTS);
+      workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
 
       packageScript.check(context, {
         scripts: {
@@ -124,15 +117,21 @@ describe("expectPackageScript", () => {
       expect(spy).toHaveBeenCalledTimes(1);
 
       const failure: Failure = spy.mock.calls[0][0];
-      expect(failure.file).toBe("package.json");
-      expect(failure.fixer).not.toBeUndefined();
-      expect(failure.message).toMatch(`Expected standardized script entry for '${MISSING_SCRIPT_NAME}'`);
+      expect(failure).toMatchObject(
+        workspace.failureMatcher({
+          file: "package.json",
+          hasFixer: true,
+          message: expect.stringContaining(`Expected standardized script entry for '${MISSING_SCRIPT_NAME}'`),
+        })
+      );
 
-      expect(JSON.parse(mockFiles.get("package.json")!).scripts[MISSING_SCRIPT_NAME]).toEqual(MISSING_SCRIPT_VALUE);
+      expect(JSON.parse(workspace.readFile("package.json")!).scripts[MISSING_SCRIPT_NAME]).toEqual(
+        MISSING_SCRIPT_VALUE
+      );
     });
 
     it("does nothing if the value exists", () => {
-      mockFiles.set("package.json", PACKAGE_WITH_SCRIPTS);
+      workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
 
       packageScript.check(context, {
         scripts: {
@@ -142,13 +141,13 @@ describe("expectPackageScript", () => {
 
       expect(spy).not.toHaveBeenCalled();
 
-      expect(JSON.parse(mockFiles.get("package.json")!).scripts).toEqual({
+      expect(JSON.parse(workspace.readFile("package.json")!).scripts).toEqual({
         [SCRIPT_NAME]: SCRIPT_VALUE,
       });
     });
 
     it("errors if long form is used and no value matches and there is no fixValue", () => {
-      mockFiles.set("package.json", PACKAGE_WITH_SCRIPTS);
+      workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
 
       packageScript.check(context, {
         scripts: {
@@ -165,7 +164,7 @@ describe("expectPackageScript", () => {
     });
 
     it("uses the fixValue for fixing if provided", () => {
-      mockFiles.set("package.json", PACKAGE_WITH_SCRIPTS);
+      workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
 
       packageScript.check(context, {
         scripts: {
@@ -181,14 +180,14 @@ describe("expectPackageScript", () => {
       expect(errors.length).toBe(1);
       expect(errors[0][0].fixer).toBeDefined();
 
-      expect(JSON.parse(mockFiles.get("package.json")!).scripts).toEqual({
+      expect(JSON.parse(workspace.readFile("package.json")!).scripts).toEqual({
         [SCRIPT_NAME]: SCRIPT_VALUE,
         foo: "a",
       });
     });
 
     it("can fix to empty", () => {
-      mockFiles.set("package.json", PACKAGE_WITH_SCRIPTS);
+      workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
 
       packageScript.check(context, {
         scripts: {
@@ -204,11 +203,11 @@ describe("expectPackageScript", () => {
       expect(errors.length).toBe(1);
       expect(errors[0][0].fixer).toBeDefined();
 
-      expect(JSON.parse(mockFiles.get("package.json")!).scripts).toEqual({});
+      expect(JSON.parse(workspace.readFile("package.json")!).scripts).toEqual({});
     });
 
     it("can allow only empty", () => {
-      mockFiles.set("package.json", PACKAGE_WITH_SCRIPTS);
+      workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
 
       packageScript.check(context, {
         scripts: {
@@ -224,7 +223,7 @@ describe("expectPackageScript", () => {
       expect(errors.length).toBe(1);
       expect(errors[0][0].fixer).toBeDefined();
 
-      expect(JSON.parse(mockFiles.get("package.json")!).scripts).toEqual({});
+      expect(JSON.parse(workspace.readFile("package.json")!).scripts).toEqual({});
     });
   });
 });

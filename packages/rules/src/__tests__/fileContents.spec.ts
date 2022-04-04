@@ -6,46 +6,32 @@
  */
 
 // tslint:disable:no-console
-import { createMockFiles } from "./utils";
-
-// done first since this also mocks 'fs'
-const mockFiles: Map<string, string> = createMockFiles();
-
-import { Failure, PackageContext } from "@monorepolint/core";
-import * as path from "path";
+import { createTestingWorkspace, TestingWorkspace } from "./utils";
+import { AddErrorOptions, Failure } from "@monorepolint/core";
 import { fileContents } from "../fileContents";
 import { SimpleHost } from "@monorepolint/utils";
 
 const EXPECTED_FOO_FILE = "hello world";
 
 describe("fileContents", () => {
-  afterEach(() => {
-    mockFiles.clear();
-  });
-
   describe("fix: true", () => {
-    const context = new PackageContext(
-      ".",
-      {
-        rules: [],
-        fix: true,
-        verbose: false,
-        silent: true,
-      },
-      new SimpleHost()
-    );
-    const spy = jest.spyOn(context, "addError");
+    let workspace: TestingWorkspace;
+    let spy: jest.SpyInstance<void, [AddErrorOptions]>;
 
-    afterEach(() => {
-      spy.mockClear();
+    beforeEach(async () => {
+      workspace = await createTestingWorkspace({
+        fixFlag: true,
+        host: new SimpleHost(),
+      });
+      workspace.writeFile("shared/foo-template.txt", EXPECTED_FOO_FILE);
+
+      spy = jest.spyOn(workspace.context, "addError");
     });
 
     it("fixes missing file", () => {
-      mockFiles.set(path.resolve(context.getWorkspaceContext().packageDir, "foo-template.txt"), EXPECTED_FOO_FILE);
-
-      fileContents.check(context, {
+      fileContents.check(workspace.context, {
         file: "foo.txt",
-        templateFile: "foo-template.txt",
+        templateFile: "shared/foo-template.txt",
         generator: undefined,
         template: undefined,
       });
@@ -53,20 +39,19 @@ describe("fileContents", () => {
       expect(spy).toHaveBeenCalledTimes(1);
 
       const failure: Failure = spy.mock.calls[0][0];
-      expect(failure.file).toBe("foo.txt");
-      expect(failure.fixer).not.toBeUndefined();
-      expect(failure.message).toBe("Expect file contents to match");
+      expect(failure).toMatchObject(
+        workspace.failureMatcher({
+          file: "foo.txt",
+          hasFixer: true,
+          message: "Expect file contents to match",
+        })
+      );
 
-      expect(mockFiles.get("foo.txt")).toEqual(EXPECTED_FOO_FILE);
+      expect(workspace.readFile("foo.txt")).toEqual(EXPECTED_FOO_FILE);
     });
 
     it("fixes missing nested file", () => {
-      mockFiles.set(
-        path.resolve(context.getWorkspaceContext().packageDir, "shared/foo-template.txt"),
-        EXPECTED_FOO_FILE
-      );
-
-      fileContents.check(context, {
+      fileContents.check(workspace.context, {
         file: "nested/foo.txt",
         templateFile: "shared/foo-template.txt",
         generator: undefined,
@@ -76,12 +61,15 @@ describe("fileContents", () => {
       expect(spy).toHaveBeenCalledTimes(1);
 
       const failure: Failure = spy.mock.calls[0][0];
-      expect(failure.file).toBe("nested/foo.txt");
-      expect(failure.fixer).not.toBeUndefined();
-      expect(failure.message).toBe("Expect file contents to match");
+      expect(failure).toMatchObject(
+        workspace.failureMatcher({
+          file: "nested/foo.txt",
+          hasFixer: true,
+          message: "Expect file contents to match",
+        })
+      );
 
-      expect(mockFiles.get("nested")).not.toBeUndefined();
-      expect(mockFiles.get("nested/foo.txt")).toEqual(EXPECTED_FOO_FILE);
+      expect(workspace.readFile("nested/foo.txt")).toEqual(EXPECTED_FOO_FILE);
     });
   });
 });
