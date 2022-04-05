@@ -19,7 +19,7 @@ module.exports = {
   rules: {
     ":banned-dependencies": {
       options: {
-        bannedDependencies: { exact: ["lodash"], glob: ["lodash-*"]
+        bannedDependencies: { exact: ["lodash"], glob: ["lodash-*"] }
       },
     },
   },

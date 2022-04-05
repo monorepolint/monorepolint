@@ -9,16 +9,32 @@ import { makeRe } from "micromatch";
 import { nanosecondsToSanity } from "./nanosecondsToSanity";
 import { Table } from "./Table";
 
-const cache = new Map<readonly string[], Map<string, boolean>>();
+// This file requires a LOT of caching to be performant. We have three layers to avoid work.
+
+/**
+ * Multimap cache of whether a needle was found in the glob haystack. Short circuits many
+ * individual checks against the globs.
+ */
+const cache = new Map</* haystack */ readonly string[], Map</* needle */ string, /* result */ boolean>>();
+
+/**
+ * Multimap cache of whether a needle matches a glob. Allows us to avoid regexp's.
+ */
+const singleMatcherCache = new Map</* glob */ string, Map</* needle */ string, /* result*/ boolean>>();
+
+/**
+ * Cache of glob to regular expression. Compiling the regular expression is expensive.
+ */
+const compiledGlobCache = new Map</* glob */ string, RegExp>();
+
 let haystackMiss = 0;
 let haystackHit = 0;
-let singleMatcherSaves = 0;
 
 let matchTime = BigInt(0);
 
-const singleMatcherCache = new Map<string, Map<string, boolean>>();
 let singleMatcherHits = 0;
 let singleMatcherMisses = 0;
+let singleMatcherSaves = 0; // hits + hits you would have had if the haystack didn't save you
 
 interface MatchesAnyGlob {
   (needle: string, haystack: readonly string[]): boolean | undefined;
@@ -38,7 +54,8 @@ export const matchesAnyGlob: MatchesAnyGlob = function matchesAnyGlobFunc(needle
     haystackMiss++;
     result = false;
     for (const pattern of haystack) {
-      //   result = needleInPattern(needle, pattern);
+      //   result = needleInPattern(needle, pattern); // commented out as a reminder to update both
+      // BEGIN INLINE of needleInPattern
       let patternCache = singleMatcherCache.get(pattern);
       if (patternCache === undefined) {
         patternCache = new Map<string, boolean>();
@@ -46,7 +63,7 @@ export const matchesAnyGlob: MatchesAnyGlob = function matchesAnyGlobFunc(needle
       }
 
       // N.B. true/false/undefined
-      result = patternCache.get(needle);
+      result = patternCache.get(needle); // only thing different from the inline is we need to reuse `result`
       if (result === undefined) {
         let regexp = compiledGlobCache.get(pattern);
         if (regexp === undefined) {
@@ -61,6 +78,7 @@ export const matchesAnyGlob: MatchesAnyGlob = function matchesAnyGlobFunc(needle
         singleMatcherHits++;
         singleMatcherSaves++;
       }
+      // END INLINE of needleInPattern
       if (result) break;
     }
     cacheForHaystack!.set(needle, result);
@@ -88,11 +106,9 @@ matchesAnyGlob.printStats = () => {
   table.addRow("Single Glob Misses", "" + singleMatcherMisses);
   table.addRow("Single Glob Saves", "" + singleMatcherSaves);
   table.addRow("Total Time", nanosecondsToSanity(matchTime, 6));
-  //   table.addRow("")
+
   table.print();
 };
-
-const compiledGlobCache = new Map<string, RegExp>();
 
 /**
  * @deprecated Don't use this directly. We manually inline it above

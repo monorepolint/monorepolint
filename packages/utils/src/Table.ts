@@ -7,7 +7,7 @@
 // tslint:disable:no-console
 import { nanosecondsToSanity } from "./nanosecondsToSanity";
 
-type QQ<HB, FB, H, F> = (HB extends true ? { header: H } : { header?: H }) &
+type HeaderFooterHelper<HB, FB, H, F> = (HB extends true ? { header: H } : { header?: H }) &
   (FB extends true ? { footer: F } : { footer?: F });
 
 type WithAlignemnt = { alignment?: "right" | "left" };
@@ -22,9 +22,11 @@ type BaseStringCellConfig = { type: "string" } & WithAlignemnt;
 
 type BigIntColumnConfig<H, F> = WithAlignemnt &
   BaseBigIntCellConfig &
-  QQ<H, F, string, AggregateFooterConfig | StaticFooterConfig>;
+  HeaderFooterHelper<H, F, string, AggregateFooterConfig | StaticFooterConfig>;
 
-type StringColumnConfig<H, F> = WithAlignemnt & BaseStringCellConfig & QQ<H, F, string, StaticFooterConfig>;
+type StringColumnConfig<H, F> = WithAlignemnt &
+  BaseStringCellConfig &
+  HeaderFooterHelper<H, F, string, StaticFooterConfig>;
 
 type AggregateFooterConfig = {
   aggregate: "sum" | "average";
