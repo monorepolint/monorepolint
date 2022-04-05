@@ -16,6 +16,10 @@ Special case of the File Contents rule for typescript configs. Using a template 
   - Expected config contents
 - `templateFile` (Optional)
   - Path to a file to use as a template
+- `excludedReferences` (Optional)
+  - List of references to exclude
+- `additionalReferences` (Optional)
+  - List of additional references to include beyond the ones coming from explicit dependencies in `package.json`
 
 Exactly one of `generator`, `template`, or `templateFile` needs to be specified.
 
