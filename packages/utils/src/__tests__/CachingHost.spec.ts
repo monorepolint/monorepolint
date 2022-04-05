@@ -6,7 +6,6 @@
  */
 
 import { CachingHost } from "../CachingHost";
-import * as memfs from "memfs";
 import * as realfs from "fs";
 import * as path from "path";
 import * as os from "os";
@@ -14,20 +13,6 @@ import * as os from "os";
 interface TestCase<T> {
   getFs: () => T;
   createTmpDir: () => string;
-}
-
-// tslint:disable:max-classes-per-file
-class VirtualMemoryTestCase implements TestCase<ReturnType<typeof memfs.Volume.fromJSON>> {
-  private fs = memfs.Volume.fromJSON({});
-  getFs = () => {
-    return this.fs;
-  };
-
-  createTmpDir = () => {
-    const rndPath = "/tmp/" + (Math.random() + 1).toString(36).substring(7);
-    this.fs.mkdirpSync(rndPath);
-    return rndPath;
-  };
 }
 
 class RealFsTestCase implements TestCase<typeof realfs> {
@@ -40,10 +25,7 @@ class RealFsTestCase implements TestCase<typeof realfs> {
 }
 
 describe(CachingHost, () => {
-  describe.each([
-    ["memfs", new VirtualMemoryTestCase()],
-    ["fs", new RealFsTestCase()],
-  ])("%s", (testCaseName, testCase) => {
+  describe.each([["fs", new RealFsTestCase()]])("%s", (_testCaseName, testCase) => {
     let baseDir: string;
     let fs: ReturnType<typeof testCase.getFs>;
 
@@ -143,12 +125,7 @@ describe(CachingHost, () => {
 
       expectSymlinkTarget(SYMLINK_JSON_PATH, FILE_JSON_PATH);
 
-      if (testCaseName !== "memfs") {
-        // This test doesnt work in a virtual fs
-        expect(host.readFile(SYMLINK_JSON_PATH, { encoding: "utf-8" })).toEqual("hmm");
-      } else {
-        expect(true).toBeTruthy();
-      }
+      expect(host.readFile(SYMLINK_JSON_PATH, { encoding: "utf-8" })).toEqual("hmm");
     });
 
     it("handles writing symlinks properly if you read it first", async () => {
@@ -174,12 +151,7 @@ describe(CachingHost, () => {
 
       expectSymlinkTarget(SYMLINK_JSON_PATH, FILE_JSON_PATH);
 
-      if (testCaseName !== "memfs") {
-        // This test doesnt work in a virtual fs
-        expect(host.readFile(SYMLINK_JSON_PATH, { encoding: "utf-8" })).toEqual("hmm");
-      } else {
-        expect(true).toBeTruthy();
-      }
+      expect(host.readFile(SYMLINK_JSON_PATH, { encoding: "utf-8" })).toEqual("hmm");
     });
 
     it("handles creating new symlinks", async () => {
@@ -206,12 +178,7 @@ describe(CachingHost, () => {
 
       expectSymlinkTarget(SYMLINK_JSON_PATH, FILE_JSON_PATH);
 
-      if (testCaseName !== "memfs") {
-        // This test doesnt work in a virtual fs
-        expect(host.readFile(SYMLINK_JSON_PATH, { encoding: "utf-8" })).toEqual("hmm");
-      } else {
-        expect(true).toBeTruthy();
-      }
+      expect(host.readFile(SYMLINK_JSON_PATH, { encoding: "utf-8" })).toEqual("hmm");
     });
 
     it("makes directories", async () => {
