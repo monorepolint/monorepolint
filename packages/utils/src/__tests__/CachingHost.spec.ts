@@ -81,6 +81,14 @@ describe(CachingHost, () => {
       expect(stat.isSymbolicLink() && fs.readlinkSync(src)).toEqual(target);
     }
 
+    it("Answers exists() properly", async () => {
+      expect.assertions(2);
+      await realfs.promises.writeFile(path.join(baseDir, "b.txt"), "hi", { encoding: "utf-8" });
+      const host = new CachingHost(fs as any);
+      expect(host.exists(path.join(baseDir, "b.txt"))).toBe(true);
+      expect(host.exists(path.join(baseDir, "nosuchfile.txt"))).toBe(false);
+    });
+
     it("properly handles deletes", async () => {
       expect.assertions(2);
       const host = new CachingHost(fs as any);

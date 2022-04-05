@@ -6,108 +6,141 @@
  */
 
 import { Context, RuleModule } from "@monorepolint/core";
-import diff from "jest-diff";
-import minimatch from "minimatch";
+import { matchesAnyGlob } from "@monorepolint/utils";
+import { AggregateTiming } from "@monorepolint/utils";
 import path from "path";
 import * as r from "runtypes";
 import { IPackageDependencyGraphNode, PackageDependencyGraphService } from "./util/packageDependencyGraphService";
 
-const Options = r.Union(
-  r
-    .Record({
-      bannedDependencies: r.Array(r.String),
-    })
-    .And(
-      r.Partial({
-        bannedTransitiveDependencies: r.Undefined,
-      })
-    ),
-  r
-    .Record({
-      bannedTransitiveDependencies: r.Array(r.String),
-    })
-    .And(
-      r.Partial({
-        bannedDependencies: r.Undefined,
-      })
-    ),
+// FIXME: This rule is messed. bannedTransitiveDependencies doesnt glob
+
+const bannedDepGlobsField = r.Union(
+  r.Array(r.String),
   r.Record({
-    bannedDependencies: r.Array(r.String),
+    glob: r.Array(r.String).optional(),
+    exact: r.Array(r.String).optional(),
+  })
+);
+
+const Options = r.Union(
+  r.Record({
+    bannedDependencies: bannedDepGlobsField,
+    bannedTransitiveDependencies: r.Undefined.optional(),
+  }),
+
+  r.Record({
+    bannedDependencies: bannedDepGlobsField.optional(),
     bannedTransitiveDependencies: r.Array(r.String),
+  }),
+
+  r.Record({
+    bannedDependencies: bannedDepGlobsField.optional(),
+    bannedTransitiveDependencies: r.Array(r.String).optional(),
   })
 );
 
 export type Options = r.Static<typeof Options>;
 
-export const bannedDependencies: RuleModule<typeof Options> = {
-  check: function expectAllowedDependencies(context: Context, opts: Options) {
-    // tslint:disable-next-line:no-shadowed-variable
-    const { bannedDependencies, bannedTransitiveDependencies } = opts;
+/**
+ * We use this locally to avoid making a billion sets. Because check is called once per package
+ * (with the exact same config object reference) we can save quite a bit of time by reusing this cache.
+ */
+const setCache = new Map<ReadonlyArray<string>, Set<string>>();
 
-    if (bannedDependencies) {
-      checkBanned(context, bannedDependencies, "dependencies");
-      checkBanned(context, bannedDependencies, "devDependencies");
-      checkBanned(context, bannedDependencies, "peerDependencies");
+const aggregateTiming = new AggregateTiming(":bannedDependencies stats");
+
+export const bannedDependencies: RuleModule<typeof Options> & {
+  printStats: () => void;
+} = {
+  check: function expectAllowedDependencies(context, opts, extra) {
+    aggregateTiming.start(extra?.id ?? "unknown id");
+
+    const packageJson = context.getPackageJson();
+    const packagePath = context.getPackageJsonPath();
+
+    const curDeps = packageJson.dependencies && Object.keys(packageJson.dependencies);
+    const curDevDeps = packageJson.devDependencies && Object.keys(packageJson.devDependencies);
+    const curPeerDeps = packageJson.peerDependencies && Object.keys(packageJson.peerDependencies);
+
+    const { bannedDependencies: banned, bannedTransitiveDependencies: transitives } = opts;
+
+    const globs = banned && (Array.isArray(banned) ? banned : banned.glob);
+    const exacts = banned && (Array.isArray(banned) ? undefined : banned.exact);
+
+    const violations = new Set<string>();
+
+    if (globs) {
+      if (curDeps) populateProblemsGlobs(globs, curDeps, violations);
+      if (curDevDeps) populateProblemsGlobs(globs, curDevDeps, violations);
+      if (curPeerDeps) populateProblemsGlobs(globs, curPeerDeps, violations);
     }
 
-    if (bannedTransitiveDependencies) {
-      checkTransitives(context, bannedTransitiveDependencies);
+    if (exacts) {
+      let set = setCache.get(exacts);
+      if (set === undefined) {
+        set = new Set(exacts);
+        setCache.set(exacts, set);
+      }
+      if (curDeps) populateProblemsExact(set, curDeps, violations);
+      if (curDevDeps) populateProblemsExact(set, curDevDeps, violations);
+      if (curPeerDeps) populateProblemsExact(set, curPeerDeps, violations);
     }
+
+    if (violations.size > 0) {
+      context.addError({
+        file: packagePath,
+        message:
+          `Found ${violations.size} banned dependencies of package.json:\n\t` +
+          Array.from(violations)
+            .map((v) => `'${v}'`)
+            .join(", "),
+      });
+    }
+
+    if (transitives) {
+      let set = setCache.get(transitives);
+      if (set === undefined) {
+        set = new Set(transitives);
+        setCache.set(transitives, set);
+      }
+      checkTransitives(context, set);
+    }
+
+    aggregateTiming.stop();
   },
   optionsRuntype: Options,
+  printStats: () => {
+    aggregateTiming.printResults();
+  },
 };
 
-function checkBanned(
-  context: Context,
-  // tslint:disable-next-line:no-shadowed-variable
-  bannedDependencies: ReadonlyArray<string>,
-  block: "dependencies" | "devDependencies" | "peerDependencies"
-) {
-  const packageJson = context.getPackageJson();
-  const packagePath = context.getPackageJsonPath();
-
-  const dependencies = packageJson[block];
-
-  if (dependencies === undefined) {
-    return;
-  }
-
-  const newPackageJson = { ...packageJson };
-  const violations: string[] = [];
-
-  for (const dependency of Object.keys(dependencies)) {
-    for (const bannedDependency of bannedDependencies) {
-      if (minimatch(dependency, bannedDependency)) {
-        violations.push(dependency);
-        delete newPackageJson[block]![dependency];
-      }
+function populateProblemsExact(banned: Set<string>, dependencies: ReadonlyArray<string>, violations: Set<string>) {
+  for (const dependency of dependencies) {
+    if (banned.has(dependency)) {
+      violations.add(dependency);
     }
-  }
-
-  if (violations.length > 0) {
-    context.addError({
-      file: packagePath,
-      message:
-        `Found ${violations.length} banned dependencies in '${block}' block of package.json:\n\t` +
-        violations.map((v) => `'${v}'`).join(", "),
-      longMessage: diff(newPackageJson[block], dependencies, { expand: true }),
-      fixer: () => {
-        context.host.writeJson(packagePath, newPackageJson);
-      },
-    });
   }
 }
 
-function checkTransitives(
-  context: Context,
-  // tslint:disable-next-line: no-shadowed-variable
-  bannedDependencies: ReadonlyArray<string>
+function populateProblemsGlobs(
+  bannedDependencyGlobs: ReadonlyArray<string>,
+  dependencies: ReadonlyArray<string>,
+  violations: Set<string>
 ) {
+  for (const dependency of dependencies) {
+    if (matchesAnyGlob(dependency, bannedDependencyGlobs)) {
+      violations.add(dependency);
+    }
+  }
+}
+
+// This function is slow. God help you if you use this on a big repo
+function checkTransitives(context: Context, banned: Set<string>) {
   const graphService = new PackageDependencyGraphService();
-  const root = graphService.buildDependencyGraph(path.resolve(context.getPackageJsonPath()));
+  const root = graphService.buildDependencyGraph(path.resolve(context.getPackageJsonPath()), context.host);
   for (const { dependencies, importPath } of graphService.traverse(root)) {
     for (const [dependency] of dependencies) {
-      if (bannedDependencies.includes(dependency)) {
+      if (banned.has(dependency)) {
         // Remove the starting package since it's obvious in CLI output.
         const [, ...importPathWithoutRoot] = importPath;
         const pathing = [...importPathWithoutRoot.map(nameOrPackageJsonPath), dependency].join(" -> ");

@@ -5,14 +5,13 @@
  *
  */
 
-import { existsSync } from "fs";
 import * as path from "path";
 import { Host } from "./Host";
 import { PackageJson } from "./PackageJson";
 
-export function findWorkspaceDir(host: Pick<Host, "readJson">, dir: string): string | undefined {
+export function findWorkspaceDir(host: Pick<Host, "readJson" | "exists">, dir: string): string | undefined {
   const packagePath = path.join(dir, "package.json");
-  if (existsSync(packagePath)) {
+  if (host.exists(packagePath)) {
     const packageJson = host.readJson(packagePath) as PackageJson;
     if (packageJson.workspaces !== undefined) {
       return dir;

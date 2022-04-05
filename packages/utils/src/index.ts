@@ -13,3 +13,8 @@ export { getPackageNameToDir } from "./getPackageNameToDir";
 export { Host } from "./Host";
 export { SimpleHost } from "./SimpleHost";
 export { CachingHost } from "./CachingHost";
+export { matchesAnyGlob } from "./matchesAnyGlob";
+export { nanosecondsToSanity } from "./nanosecondsToSanity";
+export { AggregateTiming } from "./AggregateTiming";
+export { Timing } from "./Timing";
+export { Table } from "./Table";

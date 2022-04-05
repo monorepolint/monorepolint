@@ -13,12 +13,17 @@ import { PackageContext } from "./PackageContext";
 // Right now, this stuff is done serially so we are writing less code to support that. Later we may want to redo this.
 export class WorkspaceContext extends PackageContext {
   private packageNameToDir: Map<string, string> | undefined;
+  private workspacePackageDirsCache: string[] | undefined;
+
   constructor(packageDir: string, opts: ResolvedConfig, host: Host, parent?: Context) {
     super(packageDir, opts, host, parent);
   }
 
   public getWorkspacePackageDirs() {
-    return getWorkspacePackageDirs(this.host, this.packageDir);
+    this.workspacePackageDirsCache =
+      this.workspacePackageDirsCache ?? getWorkspacePackageDirs(this.host, this.packageDir);
+
+    return this.workspacePackageDirsCache;
   }
 
   public createChildContext(dir: string) {

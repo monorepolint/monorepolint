@@ -47,6 +47,7 @@ interface BaseNode<T extends string> {
   fullPath: string;
   tombstone?: boolean;
   parent?: DirNode | DirStubNode;
+  needsFlush: boolean;
 }
 interface DirNode extends BaseNode<"dir"> {
   stub?: false;
@@ -128,7 +129,12 @@ export class CachingHost implements Host {
   #replaceNode(node: DirNode, newNode: Omit<DirTombstoneNode, "fullPath" | "parent" | "dir">): DirTombstoneNode;
   #replaceNode(node: Node, partialNewNode: Omit<Node, "fullPath" | "parent">): Node {
     if (!node.parent) throw new Error("Cannot replace root node");
-    const newNode = { ...partialNewNode, fullPath: node.fullPath, parent: node.parent, dir: (node as any).dir } as Node;
+    const newNode = {
+      ...partialNewNode,
+      fullPath: node.fullPath,
+      parent: node.parent,
+      dir: (node as any).dir,
+    } as Node;
     node.parent.dir.set(path.basename(node.fullPath), newNode);
     return newNode;
   }
@@ -165,11 +171,30 @@ export class CachingHost implements Host {
     let node: SymlinkNode | FileStubNode | DirStubNode;
 
     if (stat.isDirectory()) {
-      node = { fullPath: canonicalPath, type: "dir", stub: true, dir: new Map(), parent };
+      node = {
+        fullPath: canonicalPath,
+        type: "dir",
+        stub: true,
+        dir: new Map(),
+        parent,
+        needsFlush: false,
+      };
     } else if (stat.isSymbolicLink()) {
-      node = { fullPath: canonicalPath, type: "symlink", symlink: this.fs.readlinkSync(canonicalPath), parent };
+      node = {
+        fullPath: canonicalPath,
+        type: "symlink",
+        symlink: this.fs.readlinkSync(canonicalPath),
+        parent,
+        needsFlush: false,
+      };
     } else if (stat.isFile()) {
-      node = { fullPath: canonicalPath, type: "file", stub: true, parent };
+      node = {
+        fullPath: canonicalPath,
+        type: "file",
+        stub: true,
+        parent,
+        needsFlush: false,
+      };
     } else {
       throw new Error(`what is not a file nor symlink nor directory? nothing we care about: ${canonicalPath}`);
     }
@@ -256,6 +281,7 @@ export class CachingHost implements Host {
         fullPath: filePath,
         parent: node,
         dir: new Map(),
+        needsFlush: true,
       });
       return;
     }
@@ -288,7 +314,11 @@ export class CachingHost implements Host {
     }
 
     if (node.dir.size === 0) {
-      this.#replaceNode(node, { type: "dir", tombstone: true });
+      this.#replaceNode(node, {
+        type: "dir",
+        tombstone: true,
+        needsFlush: true,
+      });
     } else {
       throw new Error("directory not empty");
     }
@@ -296,7 +326,7 @@ export class CachingHost implements Host {
 
   exists(filePath: string): boolean {
     const node = this.#getNode(filePath); // canonicalizes for us
-    return !!(node && node.tombstone);
+    return !!node && !node.tombstone;
   }
 
   readFile(filePath: string, opts?: undefined): Buffer;
@@ -315,7 +345,11 @@ export class CachingHost implements Host {
     assertNoTombstone(node);
 
     if (node.stub) {
-      node = this.#replaceNode(node, { type: "file", file: this.fs.readFileSync(filePath) });
+      node = this.#replaceNode(node, {
+        type: "file",
+        file: this.fs.readFileSync(filePath),
+        needsFlush: false,
+      });
     }
 
     if (!opts) {
@@ -342,6 +376,7 @@ export class CachingHost implements Host {
       this.#replaceNode(existingNode, {
         file: fileContentsAsBuffer,
         type: "file",
+        needsFlush: true,
       });
       return;
     }
@@ -356,6 +391,7 @@ export class CachingHost implements Host {
       fullPath: canonicalPath,
       parent: maybeDirNode,
       file: fileContentsAsBuffer,
+      needsFlush: true,
     });
   }
 
@@ -364,7 +400,11 @@ export class CachingHost implements Host {
     const node = this.#getNode(canonicalPath);
     if (!node || (node.type === "file" && node.tombstone === true)) return;
     assertNotType(node, "dir");
-    this.#replaceNode(node, { type: "file", tombstone: true });
+    this.#replaceNode(node, {
+      type: "file",
+      tombstone: true,
+      needsFlush: true,
+    });
   }
 
   readJson(filePath: string) {
@@ -372,10 +412,13 @@ export class CachingHost implements Host {
   }
 
   writeJson(filePath: string, o: object): void {
-    return this.writeFile(filePath, JSON.stringify(o, undefined, 2) + "\n", { encoding: "utf-8" });
+    return this.writeFile(filePath, JSON.stringify(o, undefined, 2) + "\n", {
+      encoding: "utf-8",
+    });
   }
 
   async #flushFileNode(node: FileNode | FileStubNode | FileTombstoneNode): Promise<unknown> {
+    // FIXME all tombstones need a flush, so we can get rid of needsFlush for them
     if (node.tombstone) {
       try {
         await this.fs.promises.access(node.fullPath);
@@ -384,7 +427,7 @@ export class CachingHost implements Host {
         // should only throw if file doesnt exist which is no op
         return;
       }
-    } else if (node.stub === true) {
+    } else if (node.stub === true || node.needsFlush === false) {
       return;
     } else {
       // we dont do things with file stubs
@@ -393,6 +436,7 @@ export class CachingHost implements Host {
   }
 
   async #flushSymlinkNode(node: SymlinkNode) {
+    if (!node.needsFlush) return;
     try {
       const linkValue = await this.fs.promises.readlink(node.fullPath);
       if (linkValue === node.symlink) {
@@ -405,7 +449,7 @@ export class CachingHost implements Host {
   }
 
   async #flushDirNode(node: DirNode | DirStubNode | DirTombstoneNode): Promise<unknown> {
-    if (!node.tombstone) {
+    if (!node.tombstone && node.needsFlush) {
       try {
         await this.fs.promises.access(node.fullPath); // throws if the file doesnt exist
       } catch (e) {
