@@ -6,13 +6,13 @@ defaults: &defaults
 executors:
   node16:
     docker:
-      - image: circleci/node:16
+      - image: cimg/node:16.15
   node14:
     docker:
-      - image: circleci/node:14
-  node12:
+      - image: cimg/node:14.19
+  node18:
     docker:
-      - image: circleci/node:12
+      - image: cimg/node:18.0
 
 workflows:
   version: 2
@@ -25,13 +25,13 @@ workflows:
           name: build_node14
           executor: node14
       - build_and_test:
-          name: build_node12
-          executor: node12
+          name: build_node18
+          executor: node18
       - deploy_prerelease:
           requires:
             - build_node16
             - build_node14
-            - build_node12
+            - build_node18
           filters:
             branches:
               only: master
@@ -41,7 +41,7 @@ jobs:
     <<: *defaults
     parameters:
       executor:
-        default: node12
+        default: node18
         type: string
     executor: "<< parameters.executor >>"
 
@@ -53,7 +53,7 @@ jobs:
   
   deploy_prerelease:
     <<: *defaults
-    executor: node12
+    executor: node18
     steps:
       - prepare
 

@@ -7,10 +7,12 @@ module.exports = {
   organizationName: 'monorepolint', // Usually your GitHub org/user name.
   projectName: 'monorepolint', // Usually your repo name.
   themeConfig: {
-    sidebarCollapsible: false,
+    colorMode: {
+      defaultMode: 'dark'
+    },
     navbar: {
       title: 'monorepolint',
-      links: [
+      items: [
         {
           to: 'docs/',
           activeBasePath: 'docs',
@@ -80,8 +82,8 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
+          sidebarCollapsible: false,
           // It is recommended to set document id as docs home page (`docs/` path).
-          homePageId: 'getting-started',
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
