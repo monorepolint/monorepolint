@@ -49,8 +49,8 @@ jobs:
       - prepare
         
       # run tests!
-      - run: yarn ci
-  
+      - run: pnpm run ci
+
   deploy_prerelease:
     <<: *defaults
     executor: node18
@@ -62,23 +62,26 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
           name: Publish package
-          command: yarn publish:prerelease
+          command: pnpm run publish:prerelease
 
 commands:
   prepare:
     steps:
       - checkout
 
+      - run: npm install -g pnpm
+      - run: pnpm config set store-dir ~/.pnpm-store
+
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "yarn.lock" }}
+          - v2-dependencies-{{ checksum "pnpm-lock.yaml" }}
           # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          - v2-dependencies-
 
-      - run: yarn install
+      - run: pnpm install
 
       - save_cache:
           paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "yarn.lock" }}  
+            - "~/.pnpm-store"
+          key: v2-dependencies-{{ checksum "pnpm-lock.yaml" }} 
