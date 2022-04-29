@@ -6,10 +6,10 @@ defaults: &defaults
 executors:
   node16:
     docker:
-      - image: circleci/node:16
+      - image: cimg/node:16.15
   node14:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:14.19
   node18:
     docker:
       - image: cimg/node:18.0
