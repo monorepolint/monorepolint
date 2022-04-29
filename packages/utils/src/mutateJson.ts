@@ -5,11 +5,10 @@
  *
  */
 
-import { readJson } from "./readJson";
-import { writeJson } from "./writeJson";
+import { Host } from "./Host";
 
-export function mutateJson<T extends object>(path: string, mutator: (f: T) => T) {
-  let file: T = readJson(path);
+export function mutateJson<T extends object>(path: string, host: Host, mutator: (f: T) => T) {
+  let file: T = host.readJson(path);
   file = mutator(file);
-  writeJson(path, file);
+  host.writeJson(path, file);
 }

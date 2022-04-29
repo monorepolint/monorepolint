@@ -2,7 +2,7 @@
  * @license Copyright 2019 Palantir Technologies, Inc. All rights reserved.
  */
 
-import { PackageJson } from "@monorepolint/utils";
+import { Host, PackageJson } from "@monorepolint/utils";
 import path from "path";
 import resolvePackagePath from "resolve-package-path";
 
@@ -19,7 +19,7 @@ export interface IPackageDependencyGraphNode {
 /** Service abstraction for constructing and traversing package dependency graphs. */
 export interface IPackageDependencyGraphService {
   /** Construct a graph of package dependencies. */
-  buildDependencyGraph(packageJsonPath: string, maxDepth?: number): IPackageDependencyGraphNode;
+  buildDependencyGraph(packageJsonPath: string, host: Host, maxDepth?: number): IPackageDependencyGraphNode;
 
   /** Traverse a package dependency graph. */
   traverse(
@@ -34,15 +34,18 @@ export interface IPackageDependencyGraphService {
 /** Default implementation of the package dependency graph service. */
 export class PackageDependencyGraphService implements IPackageDependencyGraphService {
   /** Construct a graph of package dependencies and return the root node. */
-  public buildDependencyGraph(startPackageJsonPath: string, maxDepth?: number): IPackageDependencyGraphNode {
+  public buildDependencyGraph(
+    startPackageJsonPath: string,
+    host: Host,
+    maxDepth?: number
+  ): IPackageDependencyGraphNode {
     const nodes = new Map<string, IPackageDependencyGraphNode>();
-
     const visit = (packageJsonPath: string, currentDepth: number): IPackageDependencyGraphNode => {
       if (nodes.has(packageJsonPath)) {
         return nodes.get(packageJsonPath)!;
       }
 
-      const packageJson: PackageJson = require(packageJsonPath);
+      const packageJson: PackageJson = host.readJson(packageJsonPath);
       const node: IPackageDependencyGraphNode = {
         packageJson,
         dependencies: new Map<string, IPackageDependencyGraphNode>(),

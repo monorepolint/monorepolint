@@ -6,19 +6,23 @@
  */
 
 import { check, Config, Options, resolveConfig } from "@monorepolint/core";
-import { findWorkspaceDir } from "@monorepolint/utils";
+import { CachingHost, SimpleHost, findWorkspaceDir, Timing } from "@monorepolint/utils";
 import chalk from "chalk";
 import * as fs from "fs";
 import * as path from "path";
 import yargs from "yargs";
 
+const timing = new Timing("CLI Timing Data");
+
 export default function run() {
+  timing.start("Register ts-node");
   try {
     // tslint:disable-next-line:no-implicit-dependencies
     require("ts-node").register();
   } catch (err) {
     // no ts-node, no problem
   }
+  timing.stop();
   yargs
     .command(
       "check [--verbose] [--fix] [--paths <paths>...]",
@@ -28,6 +32,9 @@ export default function run() {
           type: "boolean",
         },
         fix: {
+          type: "boolean",
+        },
+        stats: {
           type: "boolean",
         },
         paths: {
@@ -52,11 +59,27 @@ async function handleCheck(args: Options) {
   console.log("monorepolint (mrl) v" + getVersion());
   console.log();
 
-  const configPath = path.resolve(process.cwd(), ".monorepolint.config.ts");
-  const config = Config.check(require(configPath));
-  const resolvedConfig = resolveConfig(config, args, findWorkspaceDir(process.cwd())!);
+  if (process.env.MRL_CACHING_HOST === "true") {
+    console.log("++++ USING EXPERIMENTAL CACHING HOST");
+  }
+  const host = process.env.MRL_CACHING_HOST === "true" ? new CachingHost() : new SimpleHost();
 
-  const checkResult = await check(resolvedConfig, process.cwd(), args.paths);
+  const configPath = path.resolve(process.cwd(), ".monorepolint.config.ts");
+  timing.start("Read/compile config");
+  const unverifiedConfig = require(configPath);
+  timing.start("Verify config");
+  const config = Config.check(unverifiedConfig);
+  timing.start("Resolve config");
+  const resolvedConfig = resolveConfig(config, args, findWorkspaceDir(host, process.cwd())!);
+  timing.start("Run Checks");
+  const checkResult = await check(resolvedConfig, host, process.cwd(), args.paths, args.stats);
+  timing.start("Flush host");
+  await host.flush();
+  timing.stop();
+
+  if (args.stats) {
+    timing.printResults();
+  }
 
   if (!checkResult) {
     console.error();

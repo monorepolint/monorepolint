@@ -5,6 +5,7 @@
  *
  */
 import { WorkspaceContext } from "@monorepolint/core";
+import { SimpleHost } from "@monorepolint/utils";
 import { writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
@@ -37,12 +38,16 @@ describe("bannedDependencies", () => {
   });
 
   function makeWorkspace() {
-    const workspaceContext = new WorkspaceContext(cwd!, {
-      rules: [],
-      fix: false,
-      verbose: false,
-      silent: true,
-    });
+    const workspaceContext = new WorkspaceContext(
+      cwd!,
+      {
+        rules: [],
+        fix: false,
+        verbose: false,
+        silent: true,
+      },
+      new SimpleHost()
+    );
 
     function checkAndSpy(options: Options) {
       const addErrorSpy = jest.spyOn(workspaceContext, "addError");
@@ -83,6 +88,75 @@ describe("bannedDependencies", () => {
     addErrorSpy2.mockReset();
 
     const { addErrorSpy: addErrorSpy3 } = checkAndSpy({ bannedDependencies: ["ccc", "ddd"] });
+    expect(addErrorSpy3).toHaveBeenCalledTimes(1);
+    addErrorSpy3.mockReset();
+  });
+
+  it("Flags banned dependencies correctly w legacy globs", async () => {
+    const { addFile, checkAndSpy } = makeWorkspace();
+    const rootPackageJson = jsonToString({
+      dependencies: {
+        aaa: "0.0.1",
+        ccc: "0.0.1",
+      },
+    });
+    addFile("./package.json", rootPackageJson);
+
+    const { addErrorSpy: addErrorSpy1 } = checkAndSpy({ bannedDependencies: ["c*c"] });
+    expect(addErrorSpy1).toHaveBeenCalledTimes(1);
+    addErrorSpy1.mockReset();
+
+    const { addErrorSpy: addErrorSpy2 } = checkAndSpy({ bannedDependencies: ["d*d"] });
+    expect(addErrorSpy2).toHaveBeenCalledTimes(0);
+    addErrorSpy2.mockReset();
+
+    const { addErrorSpy: addErrorSpy3 } = checkAndSpy({ bannedDependencies: ["c*c", "d*d"] });
+    expect(addErrorSpy3).toHaveBeenCalledTimes(1);
+    addErrorSpy3.mockReset();
+  });
+
+  it("Flags banned dependencies correctly w new globs", async () => {
+    const { addFile, checkAndSpy } = makeWorkspace();
+    const rootPackageJson = jsonToString({
+      dependencies: {
+        aaa: "0.0.1",
+        ccc: "0.0.1",
+      },
+    });
+    addFile("./package.json", rootPackageJson);
+
+    const { addErrorSpy: addErrorSpy1 } = checkAndSpy({ bannedDependencies: { glob: ["c*c"] } });
+    expect(addErrorSpy1).toHaveBeenCalledTimes(1);
+    addErrorSpy1.mockReset();
+
+    const { addErrorSpy: addErrorSpy2 } = checkAndSpy({ bannedDependencies: { glob: ["d*d"] } });
+    expect(addErrorSpy2).toHaveBeenCalledTimes(0);
+    addErrorSpy2.mockReset();
+
+    const { addErrorSpy: addErrorSpy3 } = checkAndSpy({ bannedDependencies: { glob: ["c*c", "d*d"] } });
+    expect(addErrorSpy3).toHaveBeenCalledTimes(1);
+    addErrorSpy3.mockReset();
+  });
+
+  it("Flags banned dependencies correctly w exact", async () => {
+    const { addFile, checkAndSpy } = makeWorkspace();
+    const rootPackageJson = jsonToString({
+      dependencies: {
+        aaa: "0.0.1",
+        ccc: "0.0.1",
+      },
+    });
+    addFile("./package.json", rootPackageJson);
+
+    const { addErrorSpy: addErrorSpy1 } = checkAndSpy({ bannedDependencies: { exact: ["ccc"] } });
+    expect(addErrorSpy1).toHaveBeenCalledTimes(1);
+    addErrorSpy1.mockReset();
+
+    const { addErrorSpy: addErrorSpy2 } = checkAndSpy({ bannedDependencies: { exact: ["ddd"] } });
+    expect(addErrorSpy2).toHaveBeenCalledTimes(0);
+    addErrorSpy2.mockReset();
+
+    const { addErrorSpy: addErrorSpy3 } = checkAndSpy({ bannedDependencies: { exact: ["ccc", "ddd"] } });
     expect(addErrorSpy3).toHaveBeenCalledTimes(1);
     addErrorSpy3.mockReset();
   });

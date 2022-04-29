@@ -5,6 +5,7 @@
  *
  */
 
+import { SimpleHost } from "@monorepolint/utils";
 import { shouldSkipPackage } from "../check";
 import { ResolvedConfig } from "../Config";
 import { WorkspaceContext } from "../WorkspaceContext";
@@ -15,7 +16,7 @@ describe("shouldSkipPackage", () => {
     verbose: false,
     fix: false,
   };
-  const workspaceContext = new WorkspaceContext(".", resolvedConfig);
+  const workspaceContext = new WorkspaceContext(".", resolvedConfig, new SimpleHost());
   jest.spyOn(workspaceContext, "getName").mockImplementation(() => "root");
 
   const fooContext = createChild(workspaceContext, "packages/foo", "@foo/bar");
@@ -26,6 +27,8 @@ describe("shouldSkipPackage", () => {
       excludePackages: [fooContext.getName(), "other"],
       includePackages: [fooContext.getName()],
       optionsRuntype: {} as any,
+      name: "idk",
+      id: "idc",
     });
 
     expect(actual).toEqual(true);
@@ -36,6 +39,8 @@ describe("shouldSkipPackage", () => {
       check: () => true,
       includePackages: [],
       optionsRuntype: {} as any,
+      name: "idk",
+      id: "idc",
     });
 
     expect(actual).toEqual(true);
@@ -45,6 +50,8 @@ describe("shouldSkipPackage", () => {
     const actual = shouldSkipPackage(fooContext, {
       check: () => true,
       optionsRuntype: {} as any,
+      name: "idk",
+      id: "idc",
     });
 
     expect(actual).toEqual(false);
@@ -54,6 +61,8 @@ describe("shouldSkipPackage", () => {
     const actual = shouldSkipPackage(workspaceContext, {
       check: () => true,
       optionsRuntype: {} as any,
+      name: "idk",
+      id: "idc",
     });
 
     expect(actual).toEqual(true);
@@ -64,6 +73,8 @@ describe("shouldSkipPackage", () => {
       check: () => true,
       excludePackages: ["@foo/*", "other"],
       optionsRuntype: {} as any,
+      name: "idk",
+      id: "idc",
     });
 
     expect(actual).toEqual(true);
@@ -74,6 +85,8 @@ describe("shouldSkipPackage", () => {
       check: () => true,
       includePackages: ["@foo/*", "other"],
       optionsRuntype: {} as any,
+      name: "idk",
+      id: "idc",
     });
 
     expect(actual).toEqual(true);

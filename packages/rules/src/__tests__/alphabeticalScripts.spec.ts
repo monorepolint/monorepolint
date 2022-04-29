@@ -6,13 +6,10 @@
  */
 
 // tslint:disable:no-console
-import { createMockFiles, jsonToString } from "./utils";
-
-// done first since this also mocks 'fs'
-const mockFiles: Map<string, string> = createMockFiles();
-
-import { Failure, PackageContext } from "@monorepolint/core";
+import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, jsonToString, TestingWorkspace } from "./utils";
+import { Context, Failure } from "@monorepolint/core";
 import { alphabeticalScripts } from "../alphabeticalScripts";
+import { createIncorrectOrderErrorMessage } from "../util/checkAlpha";
 
 const PACKAGE_SCRIPTS_SORTED = jsonToString({
   name: "foo-lib",
@@ -32,41 +29,43 @@ const PACKAGE_SCRIPTS_UNSORTED = jsonToString({
   },
 });
 
-describe("alphabeticalScripts", () => {
-  afterEach(() => {
-    mockFiles.clear();
-  });
-
+describe.each(HOST_FACTORIES)("alphabeticalScripts ($name)", (hostFactory) => {
   describe("fix: true", () => {
-    const context = new PackageContext(".", {
-      rules: [],
-      fix: true,
-      verbose: false,
-      silent: true,
-    });
-    const spy = jest.spyOn(context, "addError");
+    let workspace: TestingWorkspace;
+    let spy: AddErrorSpy;
+    let context: Context;
 
-    afterEach(() => {
-      spy.mockClear();
+    beforeEach(async () => {
+      workspace = await createTestingWorkspace({
+        fixFlag: true,
+        host: hostFactory.make(),
+      });
+      context = workspace.context; // minimizing delta
+
+      spy = jest.spyOn(workspace.context, "addError");
     });
 
     it("fixes unsorted scripts", () => {
-      mockFiles.set("package.json", PACKAGE_SCRIPTS_UNSORTED);
+      workspace.writeFile("package.json", PACKAGE_SCRIPTS_UNSORTED);
 
       alphabeticalScripts.check(context, undefined);
 
       expect(spy).toHaveBeenCalledTimes(1);
 
       const failure: Failure = spy.mock.calls[0][0];
-      expect(failure.file).toBe("package.json");
-      expect(failure.fixer).not.toBeUndefined();
-      expect(failure.message).toBe("Incorrect order of scripts in foo-lib's package.json");
+      expect(failure).toMatchObject(
+        workspace.failureMatcher({
+          file: "package.json",
+          hasFixer: true,
+          message: createIncorrectOrderErrorMessage("scripts", "foo-lib"),
+        })
+      );
 
-      expect(mockFiles.get("package.json")).toEqual(PACKAGE_SCRIPTS_SORTED);
+      expect(workspace.readFile("package.json")).toEqual(PACKAGE_SCRIPTS_SORTED);
     });
 
     it("does nothing if already sorted", () => {
-      mockFiles.set("package.json", PACKAGE_SCRIPTS_SORTED);
+      workspace.writeFile("package.json", PACKAGE_SCRIPTS_SORTED);
 
       alphabeticalScripts.check(context, undefined);
 

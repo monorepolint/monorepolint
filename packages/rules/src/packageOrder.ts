@@ -6,7 +6,6 @@
  */
 
 import { Context, RuleModule } from "@monorepolint/core";
-import { writeJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 import * as r from "runtypes";
 
@@ -73,7 +72,7 @@ export const packageOrder = {
             expectedPackageJson[key] = packageJson[key];
           });
 
-          writeJson(packagePath, expectedPackageJson);
+          context.host.writeJson(packagePath, expectedPackageJson);
         },
       });
     }

@@ -39,7 +39,7 @@ export const packageScript = {
         file: context.getPackageJsonPath(),
         message: MSG_NO_SCRIPTS_BLOCK,
         fixer: () => {
-          mutateJson<PackageJson>(context.getPackageJsonPath(), (input) => {
+          mutateJson<PackageJson>(context.getPackageJsonPath(), context.host, (input) => {
             input.scripts = {};
             return input;
           });
@@ -75,7 +75,7 @@ export const packageScript = {
         if (fixValue !== false && (fixValue !== undefined || fixToEmpty === true)) {
           const q = fixValue;
           fixer = () => {
-            mutateJson<PackageJson>(context.getPackageJsonPath(), (input) => {
+            mutateJson<PackageJson>(context.getPackageJsonPath(), context.host, (input) => {
               if (fixToEmpty && q === undefined) {
                 delete input.scripts![name];
               } else {

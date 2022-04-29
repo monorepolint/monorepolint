@@ -6,7 +6,6 @@
  */
 
 import { Context } from "@monorepolint/core";
-import { writeJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 
 export function checkAlpha(
@@ -28,7 +27,7 @@ export function checkAlpha(
   if (!arrayOrderCompare(actualOrder, expectedOrder)) {
     context.addError({
       file: packagePath,
-      message: `Incorrect order of ${block} in ${packageJson.name}'s package.json`,
+      message: createIncorrectOrderErrorMessage(block, packageJson.name!),
       longMessage: diff(expectedOrder, actualOrder, { expand: true }),
       fixer: () => {
         const expectedDependencies: Record<string, string> = {};
@@ -39,7 +38,7 @@ export function checkAlpha(
 
         const newPackageJson = { ...packageJson };
         newPackageJson[block] = expectedDependencies;
-        writeJson(packagePath, newPackageJson);
+        context.host.writeJson(packagePath, newPackageJson);
       },
     });
   }
@@ -53,4 +52,8 @@ function arrayOrderCompare(a: ReadonlyArray<string>, b: ReadonlyArray<string>) {
   }
 
   return true;
+}
+
+export function createIncorrectOrderErrorMessage(block: string, packageName: string) {
+  return `Incorrect order of ${block} in ${packageName}'s package.json`;
 }

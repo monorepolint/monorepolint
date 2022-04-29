@@ -58,7 +58,7 @@ const ensurePackageIsCorrectVersion = (
       file: packageJsonPath,
       message: `Expected dependency on ${dependencyPackageName} to match version defined in monorepolint configuration '${expectedPackageDependencyValue}', got '${actualPackageDependencyValue}' instead.`,
       fixer: () =>
-        mutateJson<PackageJson>(packageJsonPath, (input) => {
+        mutateJson<PackageJson>(packageJsonPath, context.host, (input) => {
           input.dependencies![dependencyPackageName] = expectedPackageDependencyValue;
           return input;
         }),
@@ -76,7 +76,7 @@ const ensurePackageIsCorrectVersion = (
       file: packageJsonPath,
       message: `Expected devDependency on ${dependencyPackageName} to match version defined in monorepolint configuration '${expectedPackageDependencyValue}', got '${actualPackageDevDependencyValue}' instead`,
       fixer: () =>
-        mutateJson<PackageJson>(packageJsonPath, (input) => {
+        mutateJson<PackageJson>(packageJsonPath, context.host, (input) => {
           input.devDependencies![dependencyPackageName] = expectedPackageDependencyValue;
           return input;
         }),

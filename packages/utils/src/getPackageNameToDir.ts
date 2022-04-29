@@ -7,20 +7,20 @@
 
 import { join as pathJoin } from "path";
 import { getWorkspacePackageDirs } from "./getWorkspacePackageDirs";
+import { Host } from "./Host";
 import { PackageJson } from "./PackageJson";
-import { readJson } from "./readJson";
 
 /**
  * returns a map of package names to their directories in the workspace.
  * if `resolvePaths` is true, the returned directory names are absolute paths
  * resolved against the `workspaceDir`.
  */
-export function getPackageNameToDir(workspaceDir: string, resolvePaths: boolean = false) {
+export function getPackageNameToDir(host: Pick<Host, "readJson">, workspaceDir: string, resolvePaths: boolean = false) {
   const ret = new Map<string, string>();
 
-  for (const packageDir of getWorkspacePackageDirs(workspaceDir, resolvePaths)) {
+  for (const packageDir of getWorkspacePackageDirs(host, workspaceDir, resolvePaths)) {
     const packagePath = pathJoin(packageDir, "package.json");
-    const { name } = readJson(packagePath) as PackageJson;
+    const { name } = host.readJson(packagePath) as PackageJson;
     if (name === undefined) {
       throw new Error(`Package needs a name: ${packagePath}`);
     }

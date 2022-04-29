@@ -23,13 +23,10 @@
     "@monorepolint/utils": "^0.4.0",
     "camelcase": "^6.0.0",
     "chalk": "^4.1.0",
-    "minimatch": "^3.0.4",
-    "runtypes": "^4.0.0",
-    "tslib": "^2.0.0"
+    "runtypes": "^6.5.1",
+    "tslib": "^2.3.1"
   },
-  "devDependencies": {
-    "@types/minimatch": "^3.0.3"
-  },
+  "devDependencies": {},
   "publishConfig": {
     "access": "public"
   },

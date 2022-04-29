@@ -6,9 +6,8 @@
  */
 
 import { Context, RuleModule } from "@monorepolint/core";
-import { existsSync, readFileSync, writeFileSync } from "fs";
+import { matchesAnyGlob } from "@monorepolint/utils";
 import diff from "jest-diff";
-import minimatch from "minimatch";
 import * as path from "path";
 import * as r from "runtypes";
 
@@ -48,7 +47,9 @@ export const standardTsconfig = {
     const generator = getGenerator(context, opts);
     const expectedContent = generator(context);
 
-    const actualContent = existsSync(fullPath) ? readFileSync(fullPath, "utf-8") : undefined;
+    const actualContent = context.host.exists(fullPath)
+      ? context.host.readFile(fullPath, { encoding: "utf-8" })
+      : undefined;
 
     if (expectedContent === undefined) {
       context.addWarning({
@@ -64,7 +65,9 @@ export const standardTsconfig = {
         message: "Expect file contents to match",
         longMessage: diff(expectedContent, actualContent, { expand: true }),
         fixer: () => {
-          writeFileSync(fullPath, expectedContent);
+          context.host.writeFile(fullPath, expectedContent, {
+            encoding: "utf-8",
+          });
         },
       });
     }
@@ -78,7 +81,7 @@ function getGenerator(context: Context, opts: Options) {
   } else if (opts.templateFile) {
     const { packageDir: workspacePackageDir } = context.getWorkspaceContext();
     const fullPath = path.resolve(workspacePackageDir, opts.templateFile);
-    const template = JSON.parse(readFileSync(fullPath, "utf-8"));
+    const template = JSON.parse(context.host.readFile(fullPath, { encoding: "utf-8" }));
 
     return makeGenerator(template, opts.excludedReferences, opts.additionalReferences, opts.tsconfigReferenceFile);
   } else if (opts.template) {
@@ -90,8 +93,8 @@ function getGenerator(context: Context, opts: Options) {
 
 function makeGenerator(
   template: any,
-  excludedReferences: ReadonlyArray<string> = [],
-  additionalReferences: ReadonlyArray<string> = [],
+  excludedReferences: ReadonlyArray<string> | undefined,
+  additionalReferences: ReadonlyArray<string> | undefined,
   tsconfigReferenceFile?: string
 ) {
   return function generator(context: Context) {
@@ -105,24 +108,24 @@ function makeGenerator(
     const packageJson = context.getPackageJson();
     const deps = [...Object.keys(packageJson.dependencies || {}), ...Object.keys(packageJson.devDependencies || {})];
 
-    deps
-      .filter(
-        (name) => nameToDirectory.has(name) && !excludedReferences.some((excludedRef) => minimatch(name, excludedRef))
-      )
-      .forEach((packageName) => {
-        const packageDir = nameToDirectory.get(packageName)!;
+    for (const dep of deps) {
+      const packageDir = nameToDirectory.get(dep);
+      if (packageDir !== undefined && (excludedReferences === undefined || matchesAnyGlob(dep, excludedReferences))) {
         const absoluteReferencePath =
           tsconfigReferenceFile !== undefined ? path.join(packageDir, tsconfigReferenceFile) : packageDir;
         template.references.push({
           path: path.relative(context.packageDir, absoluteReferencePath),
         });
-      });
+      }
+    }
 
-    additionalReferences.forEach((additionalReference) => {
-      template.references.push({
-        path: additionalReference,
-      });
-    });
+    if (additionalReferences) {
+      for (const additionalReference of additionalReferences) {
+        template.references.push({
+          path: additionalReference,
+        });
+      }
+    }
 
     return JSON.stringify(template, undefined, 2) + "\n";
   };

@@ -13,7 +13,7 @@
     "clean": "rm -rf build lib node_modules *.tgz tsconfig.tsbuildinfo",
     "compile:typescript": "../../node_modules/.bin/tsc",
     "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
-    "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
+    "jest:watch": "../../node_modules/.bin/jest --watch",
     "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "test": "../../node_modules/.bin/jest --colors --passWithNoTests",
     "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch"
@@ -23,14 +23,13 @@
     "@monorepolint/utils": "^0.4.0",
     "globby": "^11.0.1",
     "jest-diff": "^26.0.1",
-    "minimatch": "^3.0.4",
     "resolve-package-path": "^3.1.0",
-    "runtypes": "^4.0.0",
-    "semver": "^7.3.2"
+    "runtypes": "^6.5.1",
+    "semver": "^7.3.2",
+    "tslib": "^2.3.1"
   },
   "devDependencies": {
     "@types/jest-diff": "^24.3.0",
-    "@types/minimatch": "^3.0.3",
     "@types/semver": "^7.2.0",
     "@types/tmp": "^0.2.0",
     "tmp": "^0.2.1"
