@@ -69,7 +69,7 @@ commands:
     steps:
       - checkout
 
-      - run: npm install -g pnpm
+      - run: sudo npm install -g pnpm
       - run: pnpm config set store-dir ~/.pnpm-store
 
       # Download and cache dependencies
