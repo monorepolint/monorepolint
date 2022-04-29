@@ -12,7 +12,7 @@ executors:
       - image: circleci/node:14
   node18:
     docker:
-      - image: circleci/node:18
+      - image: cimg/node:18.0
 
 workflows:
   version: 2
