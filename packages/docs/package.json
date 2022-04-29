@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "docusaurus": "docusaurus",
-    "start": "docusaurus start",
     "build": "docusaurus build",
-    "swizzle": "docusaurus swizzle",
+    "clear": "docusaurus clear",
     "deploy": "docusaurus deploy",
+    "docusaurus": "docusaurus",
     "serve": "docusaurus serve",
-    "clear": "docusaurus clear"
+    "start": "docusaurus start",
+    "swizzle": "docusaurus swizzle"
   },
   "dependencies": {
     "@docusaurus/core": "^2.0.0-beta.0",
