@@ -1,5 +1,6 @@
 ---
 title: Getting Started
+slug: /
 ---
 
 Install using yarn or your favorite package manager.

@@ -1,5 +1,5 @@
 ---
-id: new-webpage
+slug: new-webpage
 title: New Webpage + Docs
 author: Eric Anderson
 author_title: Front End Architect @ Palantir
