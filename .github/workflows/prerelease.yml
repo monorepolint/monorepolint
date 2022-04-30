@@ -18,20 +18,18 @@ jobs:
     runs-on: ${{matrix.platform}}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - uses: pnpm/action-setup@v2.0.1
       with:
         version: latest-6
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         registry-url: 'https://registry.npmjs.org'
         cache: 'pnpm'
-    
-    # - run: echo '//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN  }}' > ${{ github.workspace }}/.npmrc
 
     - run: npm whoami
       env:
