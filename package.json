@@ -38,8 +38,8 @@
     "lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' -l",
     "lint:typescript": "pnpm run -r --no-bail lint:typescript",
     "prePublish": "npm-run-all clean compile lint test",
-    "publish:release": "pnpm run prePublish && lerna publish --force-publish",
-    "publish:prerelease": "pnpm run prePublish && lerna publish --force-publish --canary minor --yes",
+    "publish:release": "pnpm run prePublish && lerna publish --no-verify-access --force-publish",
+    "publish:prerelease": "pnpm run prePublish && lerna publish --no-verify-access --force-publish --canary minor --yes",
     "test": "pnpm run -r test"
   },
   "devDependencies": {
