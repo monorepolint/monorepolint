@@ -1,4 +1,4 @@
-name: CI
+name: prerelease
 
 on:
   push:
@@ -29,6 +29,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
+    
+    - run: echo '//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN  }}' > ${{ github.workspace }}/.npmrc
+
+    - run: npm whoami
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     
     - run: pnpm install
 
