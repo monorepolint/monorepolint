@@ -54,7 +54,8 @@ export async function check(
     packagesChecked++;
     await checkPackage(workspaceContext, stats);
 
-    for (const packageDir of workspaceContext.getWorkspacePackageDirs()) {
+    const workspacePackageDirs = await workspaceContext.getWorkspacePackageDirs();
+    for (const packageDir of workspacePackageDirs) {
       packagesChecked++;
       await checkPackage(workspaceContext.createChildContext(packageDir), stats);
     }

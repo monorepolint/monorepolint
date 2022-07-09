@@ -41,11 +41,11 @@ const Options = r
 export type Options = r.Static<typeof Options>;
 
 export const standardTsconfig = {
-  check: function expectStandardTsconfig(context: Context, opts: Options) {
+  check: async function expectStandardTsconfig(context: Context, opts: Options) {
     const tsconfigFileName = opts.file ?? DEFAULT_TSCONFIG_FILENAME;
     const fullPath = path.resolve(context.packageDir, tsconfigFileName);
     const generator = getGenerator(context, opts);
-    const expectedContent = generator(context);
+    const expectedContent = await generator(context);
 
     const actualContent = context.host.exists(fullPath)
       ? context.host.readFile(fullPath, { encoding: "utf-8" })
@@ -97,13 +97,13 @@ function makeGenerator(
   additionalReferences: ReadonlyArray<string> | undefined,
   tsconfigReferenceFile?: string
 ) {
-  return function generator(context: Context) {
+  return async function generator(context: Context) {
     template = {
       ...template,
       references: [],
     }; // make a copy and ensure we have a references array
 
-    const nameToDirectory = context.getWorkspaceContext().getPackageNameToDir();
+    const nameToDirectory = await context.getWorkspaceContext().getPackageNameToDir();
 
     const packageJson = context.getPackageJson();
     const deps = [...Object.keys(packageJson.dependencies || {}), ...Object.keys(packageJson.devDependencies || {})];

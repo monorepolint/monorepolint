@@ -7,7 +7,7 @@
 
 import { existsSync } from "fs";
 import glob from "glob";
-import path, { join as pathJoin, resolve as pathResolve } from "path";
+import { join as pathJoin, resolve as pathResolve } from "path";
 import { Host } from "./Host";
 import { PackageJson } from "./PackageJson";
 import findPNPMWorkspacePackages from "@pnpm/find-workspace-packages";

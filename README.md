@@ -167,4 +167,4 @@ module.exports = {
 
 ### I added a new package but I can't get it to work with the local monorepo.lint.ts. What?
 
-The way yarn workspaces function, in order to get the right symlinks in `node_modules/@monorepolint/whatever` you need to run `pnpm` again.
+The way pnpm workspaces function, in order to get the right symlinks in `node_modules/@monorepolint/whatever` you need to run `pnpm` again.

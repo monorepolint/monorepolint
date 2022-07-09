@@ -19,9 +19,9 @@ export class WorkspaceContext extends PackageContext {
     super(packageDir, opts, host, parent);
   }
 
-  public getWorkspacePackageDirs() {
+  public async getWorkspacePackageDirs() {
     this.workspacePackageDirsCache =
-      this.workspacePackageDirsCache ?? getWorkspacePackageDirs(this.host, this.packageDir);
+      this.workspacePackageDirsCache ?? (await getWorkspacePackageDirs(this.host, this.packageDir));
 
     return this.workspacePackageDirsCache;
   }
@@ -30,8 +30,8 @@ export class WorkspaceContext extends PackageContext {
     return new PackageContext(dir, this.resolvedConfig, this.host, this);
   }
 
-  public getPackageNameToDir() {
-    this.packageNameToDir = this.packageNameToDir ?? getPackageNameToDir(this.host, this.packageDir);
+  public async getPackageNameToDir() {
+    this.packageNameToDir = this.packageNameToDir ?? (await getPackageNameToDir(this.host, this.packageDir));
     return this.packageNameToDir;
   }
 }

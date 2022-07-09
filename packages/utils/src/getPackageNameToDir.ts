@@ -15,10 +15,15 @@ import { PackageJson } from "./PackageJson";
  * if `resolvePaths` is true, the returned directory names are absolute paths
  * resolved against the `workspaceDir`.
  */
-export function getPackageNameToDir(host: Pick<Host, "readJson">, workspaceDir: string, resolvePaths: boolean = false) {
+export async function getPackageNameToDir(
+  host: Pick<Host, "readJson">,
+  workspaceDir: string,
+  resolvePaths: boolean = false
+) {
   const ret = new Map<string, string>();
 
-  for (const packageDir of getWorkspacePackageDirs(host, workspaceDir, resolvePaths)) {
+  const workspacePackages = await getWorkspacePackageDirs(host, workspaceDir, resolvePaths);
+  for (const packageDir of workspacePackages) {
     const packagePath = pathJoin(packageDir, "package.json");
     const { name } = host.readJson(packagePath) as PackageJson;
     if (name === undefined) {
