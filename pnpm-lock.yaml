@@ -137,6 +137,7 @@ importers:
     specifiers:
       '@pnpm/find-workspace-dir': ^3.0.3
       '@pnpm/find-workspace-packages': ^3.1.42
+      '@pnpm/logger': ^4.0.0
       '@types/glob': ^7.1.1
       '@types/micromatch': ^2.3.31
       '@types/node': ^14.0.12
@@ -145,7 +146,8 @@ importers:
       tslib: ^2.3.1
     dependencies:
       '@pnpm/find-workspace-dir': 3.0.3
-      '@pnpm/find-workspace-packages': 3.1.53
+      '@pnpm/find-workspace-packages': 3.1.53_@pnpm+logger@4.0.0
+      '@pnpm/logger': 4.0.0
       glob: registry.npmjs.org/glob/7.2.0
       micromatch: registry.npmjs.org/micromatch/4.0.5
       tslib: registry.npmjs.org/tslib/2.4.0
@@ -223,25 +225,26 @@ packages:
       load-json-file: 6.2.0
     dev: false
 
-  /@pnpm/cli-utils/0.6.61:
+  /@pnpm/cli-utils/0.6.61_@pnpm+logger@4.0.0:
     resolution: {integrity: sha512-6RBPadEYZKEOo0tKHisO/xnClF9l2B6yEOAEGZtZDrXSmAQHkmrLe64UPEjmhGKuEowMAX+3lmJSC/0DWFfb4w==}
     engines: {node: '>=12.17'}
     peerDependencies:
       '@pnpm/logger': ^4.0.0
     dependencies:
       '@pnpm/cli-meta': 2.0.3
-      '@pnpm/config': 13.14.2
-      '@pnpm/default-reporter': 8.6.3
+      '@pnpm/config': 13.14.2_@pnpm+logger@4.0.0
+      '@pnpm/default-reporter': 8.6.3_@pnpm+logger@4.0.0
       '@pnpm/error': 2.1.0
-      '@pnpm/manifest-utils': 2.1.11
-      '@pnpm/package-is-installable': 5.0.14
+      '@pnpm/logger': 4.0.0
+      '@pnpm/manifest-utils': 2.1.11_@pnpm+logger@4.0.0
+      '@pnpm/package-is-installable': 5.0.14_@pnpm+logger@4.0.0
       '@pnpm/read-project-manifest': 2.0.14
       '@pnpm/types': 7.11.0
       chalk: 4.1.2
       load-json-file: 6.2.0
     dev: false
 
-  /@pnpm/config/13.14.2:
+  /@pnpm/config/13.14.2_@pnpm+logger@4.0.0:
     resolution: {integrity: sha512-jy4LPqqJADaMNvC0UHLjcrGDatUO/mUxaiv95ClHeZTcFXriaeG84HtzYGOIWU29ysv+XXMHMMdCQzDoAgkGHw==}
     engines: {node: '>=12.17'}
     dependencies:
@@ -249,7 +252,7 @@ packages:
       '@pnpm/error': 2.1.0
       '@pnpm/global-bin-dir': 3.0.1
       '@pnpm/npm-conf': 1.0.4
-      '@pnpm/pnpmfile': 1.2.7
+      '@pnpm/pnpmfile': 1.2.7_@pnpm+logger@4.0.0
       '@pnpm/read-project-manifest': 2.0.14
       '@pnpm/types': 7.11.0
       camelcase: 6.3.0
@@ -268,24 +271,26 @@ packages:
     engines: {node: '>=12.17'}
     dev: false
 
-  /@pnpm/core-loggers/6.1.5:
+  /@pnpm/core-loggers/6.1.5_@pnpm+logger@4.0.0:
     resolution: {integrity: sha512-tIpC0xvHa0vihzUm0VJ/FAHNZKGcxxhQDoCk+PUCJ9v9ZLAaFQiGEmwya03Ei0Gy+btURC1yRQmZRBXuRGj5rQ==}
     engines: {node: '>=12.17'}
     peerDependencies:
       '@pnpm/logger': ^4.0.0
     dependencies:
+      '@pnpm/logger': 4.0.0
       '@pnpm/types': 7.11.0
     dev: false
 
-  /@pnpm/default-reporter/8.6.3:
+  /@pnpm/default-reporter/8.6.3_@pnpm+logger@4.0.0:
     resolution: {integrity: sha512-5e/cg+V7+FdtbShCr9h6YSYIrG6KyxIM3kJIsLguNPpRydoS/uoAA+lZCaa2wL3gspC2hmFhJVnzFgHEQrbLQA==}
     engines: {node: '>=12.17'}
     peerDependencies:
       '@pnpm/logger': ^4.0.0
     dependencies:
-      '@pnpm/config': 13.14.2
-      '@pnpm/core-loggers': 6.1.5
+      '@pnpm/config': 13.14.2_@pnpm+logger@4.0.0
+      '@pnpm/core-loggers': 6.1.5_@pnpm+logger@4.0.0
       '@pnpm/error': 2.1.0
+      '@pnpm/logger': 4.0.0
       '@pnpm/render-peer-issues': 1.1.3
       '@pnpm/types': 7.11.0
       ansi-diff: 1.1.1
@@ -318,11 +323,11 @@ packages:
       find-up: 5.0.0
     dev: false
 
-  /@pnpm/find-workspace-packages/3.1.53:
+  /@pnpm/find-workspace-packages/3.1.53_@pnpm+logger@4.0.0:
     resolution: {integrity: sha512-WTimFwEM33e37aCjhJuwzBocGRL24f9m7OMjQ6/YEHZIIc6IJd17FxAtp+eXW/rRrbttZ8oM7fuRjDPz43bfDQ==}
     engines: {node: '>=12.17'}
     dependencies:
-      '@pnpm/cli-utils': 0.6.61
+      '@pnpm/cli-utils': 0.6.61_@pnpm+logger@4.0.0
       '@pnpm/constants': 5.0.0
       '@pnpm/types': 7.11.0
       find-packages: 8.0.14
@@ -354,11 +359,19 @@ packages:
       '@pnpm/types': 7.11.0
     dev: false
 
-  /@pnpm/manifest-utils/2.1.11:
+  /@pnpm/logger/4.0.0:
+    resolution: {integrity: sha512-SIShw+k556e7S7tLZFVSIHjCdiVog1qWzcKW2RbLEHPItdisAFVNIe34kYd9fMSswTlSRLS/qRjw3ZblzWmJ9Q==}
+    engines: {node: '>=12.17'}
+    dependencies:
+      bole: 4.0.0
+      ndjson: 2.0.0
+    dev: false
+
+  /@pnpm/manifest-utils/2.1.11_@pnpm+logger@4.0.0:
     resolution: {integrity: sha512-V3YdTThC2ZnDAkKmdA0682l5nmp37S/OB0YWDeBEkDSHPNPzsGyfIMp4UcqJJ5Yg+VHhxVmkTgPFMAQ8Z9RWgw==}
     engines: {node: '>=12.17'}
     dependencies:
-      '@pnpm/core-loggers': 6.1.5
+      '@pnpm/core-loggers': 6.1.5_@pnpm+logger@4.0.0
       '@pnpm/error': 2.1.0
       '@pnpm/types': 7.11.0
     transitivePeerDependencies:
@@ -380,29 +393,31 @@ packages:
       config-chain: 1.1.13
     dev: false
 
-  /@pnpm/package-is-installable/5.0.14:
+  /@pnpm/package-is-installable/5.0.14_@pnpm+logger@4.0.0:
     resolution: {integrity: sha512-XDMRaSy+byrDn2m38Mtvmpvhc/BtEM21Csf7JptxgQ654lNeclPnjp+z3VnL3Qc2peA+3UbwDwF5q6fmRZKY9g==}
     engines: {node: '>=12.17'}
     peerDependencies:
       '@pnpm/logger': ^4.0.0
     dependencies:
-      '@pnpm/core-loggers': 6.1.5
+      '@pnpm/core-loggers': 6.1.5_@pnpm+logger@4.0.0
       '@pnpm/error': 2.1.0
+      '@pnpm/logger': 4.0.0
       '@pnpm/types': 7.11.0
       execa: /safe-execa/0.1.1
       mem: 8.1.1
       semver: 7.3.7
     dev: false
 
-  /@pnpm/pnpmfile/1.2.7:
+  /@pnpm/pnpmfile/1.2.7_@pnpm+logger@4.0.0:
     resolution: {integrity: sha512-NjQirXo7JtKBzew+SIw5/dw+FVPXPL8IHpAX0ukakptGmGZrNfHdLHikWiCg2uS6SzuTjeQcArqdnMM3t+jdZA==}
     engines: {node: '>=12.17'}
     peerDependencies:
       '@pnpm/logger': ^4.0.0
     dependencies:
-      '@pnpm/core-loggers': 6.1.5
+      '@pnpm/core-loggers': 6.1.5_@pnpm+logger@4.0.0
       '@pnpm/error': 2.1.0
       '@pnpm/lockfile-types': 3.2.1
+      '@pnpm/logger': 4.0.0
       '@pnpm/types': 7.11.0
       chalk: 4.1.2
       path-absolute: 1.0.1
@@ -541,6 +556,13 @@ packages:
     engines: {node: '>=4'}
     dependencies:
       is-windows: 1.0.2
+    dev: false
+
+  /bole/4.0.0:
+    resolution: {integrity: sha512-Bk/2qoyOSlwU1dnDFk/oPM2FCNKAlYlBHfpAgwGX+K9HUtxSvmIAQCmMWMOvE6BlHHRCwsH1MxJe/r1ieodxqQ==}
+    dependencies:
+      fast-safe-stringify: 2.1.1
+      individual: 3.0.0
     dev: false
 
   /boxen/5.1.2:
@@ -719,6 +741,10 @@ packages:
       micromatch: 4.0.5
     dev: false
 
+  /fast-safe-stringify/2.1.1:
+    resolution: {integrity: sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==}
+    dev: false
+
   /fastq/1.8.0:
     resolution: {integrity: sha512-SMIZoZdLh/fgofivvIkmknUXyPnvxRE3DhtZ5Me3Mrsk5gyPL42F0xr51TdRXskBxHfMp+07bcYzfsYEsSQA9Q==}
     dependencies:
@@ -798,6 +824,14 @@ packages:
     engines: {node: '>=0.8.19'}
     dev: false
 
+  /individual/3.0.0:
+    resolution: {integrity: sha512-rUY5vtT748NMRbEMrTNiFfy29BgGZwGXUi2NFUVMWQrogSLzlJvQV9eeMWi+g1aVaQ53tpyLAQtd5x/JH0Nh1g==}
+    dev: false
+
+  /inherits/2.0.4:
+    resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
+    dev: false
+
   /ini/1.3.8:
     resolution: {integrity: sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==}
     dev: false
@@ -870,6 +904,10 @@ packages:
 
   /json-parse-even-better-errors/2.3.1:
     resolution: {integrity: sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==}
+    dev: false
+
+  /json-stringify-safe/5.0.1:
+    resolution: {integrity: sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==}
     dev: false
 
   /json5/2.2.1:
@@ -953,6 +991,22 @@ packages:
   /mimic-fn/3.1.0:
     resolution: {integrity: sha512-Ysbi9uYW9hFyfrThdDEQuykN4Ey6BuwPD2kpI5ES/nFTDn/98yxYNLZJcgUAKPT/mcrLLKaGzJR9YVxJrIdASQ==}
     engines: {node: '>=8'}
+    dev: false
+
+  /minimist/1.2.6:
+    resolution: {integrity: sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==}
+    dev: false
+
+  /ndjson/2.0.0:
+    resolution: {integrity: sha512-nGl7LRGrzugTtaFcJMhLbpzJM6XdivmbkdlaGcrk/LXg2KL/YBC6z1g70xh0/al+oFuVFP8N8kiWRucmeEH/qQ==}
+    engines: {node: '>=10'}
+    hasBin: true
+    dependencies:
+      json-stringify-safe: 5.0.1
+      minimist: 1.2.6
+      readable-stream: 3.6.0
+      split2: 3.2.2
+      through2: 4.0.2
     dev: false
 
   /normalize-path/3.0.0:
@@ -1104,6 +1158,15 @@ packages:
       strip-bom: 4.0.0
     dev: false
 
+  /readable-stream/3.6.0:
+    resolution: {integrity: sha512-BViHy7LKeTz4oNnkcLJ+lVSL6vpiFeX6/d3oSH8zCW7UxP2onchk+vTGB143xuFjHS3deTgkKoXXymXqymiIdA==}
+    engines: {node: '>= 6'}
+    dependencies:
+      inherits: 2.0.4
+      string_decoder: 1.3.0
+      util-deprecate: 1.0.2
+    dev: false
+
   /realpath-missing/1.1.0:
     resolution: {integrity: sha512-wnWtnywepjg/eHIgWR97R7UuM5i+qHLA195qdN9UPKvcMqfn60+67S8sPPW3vDlSEfYHoFkKU8IvpCNty3zQvQ==}
     engines: {node: '>=10'}
@@ -1127,6 +1190,10 @@ packages:
     resolution: {integrity: sha512-sy+H0pQofO95VDmFLzyaw9xNJU4KTRSwQIGM6+iG3SypAtCiLDzpeG8sJrNCWn2Up9km+KhkvTdbkrdy+yzZdw==}
     dependencies:
       tslib: 2.4.0
+    dev: false
+
+  /safe-buffer/5.2.1:
+    resolution: {integrity: sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==}
     dev: false
 
   /safe-execa/0.1.1:
@@ -1173,6 +1240,12 @@ packages:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
 
+  /split2/3.2.2:
+    resolution: {integrity: sha512-9NThjpgZnifTkJpzTZ7Eue85S49QwpNhZTq6GRJwObb6jnLFNGB7Qm73V5HewTROPyxD0C29xqmaI68bQtV+hg==}
+    dependencies:
+      readable-stream: 3.6.0
+    dev: false
+
   /stacktracey/2.1.8:
     resolution: {integrity: sha512-Kpij9riA+UNg7TnphqjH7/CzctQ/owJGNbFkfEeve4Z4uxT5+JapVLFXcsurIfN34gnTWZNJ/f7NMG0E8JDzTw==}
     dependencies:
@@ -1195,6 +1268,12 @@ packages:
       emoji-regex: 8.0.0
       is-fullwidth-code-point: 3.0.0
       strip-ansi: 6.0.1
+    dev: false
+
+  /string_decoder/1.3.0:
+    resolution: {integrity: sha512-hkRX8U1WjJFd8LsDJ2yQ/wWWxaopEsABU1XfkM8A+j0+85JAGppt16cr1Whg6KIbb4okU6Mql6BOj+uup/wKeA==}
+    dependencies:
+      safe-buffer: 5.2.1
     dev: false
 
   /strip-ansi/6.0.1:
@@ -1226,6 +1305,12 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       has-flag: 4.0.0
+    dev: false
+
+  /through2/4.0.2:
+    resolution: {integrity: sha512-iOqSav00cVxEEICeD7TjLB1sueEL+81Wpzp2bY17uZjZN0pWZPuo4suZ/61VujxmqSGFfgOcNuTZ85QJwNZQpw==}
+    dependencies:
+      readable-stream: 3.6.0
     dev: false
 
   /to-regex-range/5.0.1:
@@ -1268,6 +1353,10 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       crypto-random-string: 2.0.0
+    dev: false
+
+  /util-deprecate/1.0.2:
+    resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: false
 
   /which/2.0.2:
