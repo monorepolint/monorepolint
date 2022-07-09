@@ -19,7 +19,7 @@ export async function check(
   reportStats?: boolean
 ): Promise<boolean> {
   const checkStart = process.hrtime.bigint();
-  const workspaceDir = findWorkspaceDir(host, cwd);
+  const workspaceDir = await findWorkspaceDir(host, cwd);
   if (workspaceDir === undefined) {
     throw new Error(`Unable to find a workspace from ${cwd}`);
   }

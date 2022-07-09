@@ -7,11 +7,12 @@
 
 import { existsSync } from "fs";
 import glob from "glob";
-import { join as pathJoin, resolve as pathResolve } from "path";
+import path, { join as pathJoin, resolve as pathResolve } from "path";
 import { Host } from "./Host";
 import { PackageJson } from "./PackageJson";
+import findPNPMWorkspacePackages from "@pnpm/find-workspace-packages";
 
-export function getWorkspacePackageDirs(
+export async function getWorkspacePackageDirs(
   host: Pick<Host, "readJson">,
   workspaceDir: string,
   resolvePaths: boolean = false
@@ -21,7 +22,13 @@ export function getWorkspacePackageDirs(
   const packageJson: PackageJson = host.readJson(pathJoin(workspaceDir, "package.json"));
 
   if (packageJson.workspaces === undefined) {
-    throw new Error("Invalid workspaceDir: " + workspaceDir);
+    // We may be in a monorepo that uses PNPM and may not define workspaces in the root package.json
+    const workspacePackages = await findPNPMWorkspacePackages(workspaceDir);
+    if (workspacePackages.length === 0) {
+      throw new Error("Invalid workspaceDir: " + workspaceDir);
+    }
+    ret.push(...workspacePackages.map((project) => pathJoin(project.dir, "package.json")));
+    return ret;
   }
 
   const packageGlobs = Array.isArray(packageJson.workspaces)
