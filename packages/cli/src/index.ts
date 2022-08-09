@@ -70,7 +70,8 @@ async function handleCheck(args: Options) {
   timing.start("Verify config");
   const config = Config.check(unverifiedConfig);
   timing.start("Resolve config");
-  const resolvedConfig = resolveConfig(config, args, findWorkspaceDir(host, process.cwd())!);
+  const workspaceDir = await findWorkspaceDir(host, process.cwd());
+  const resolvedConfig = resolveConfig(config, args, workspaceDir!);
   timing.start("Run Checks");
   const checkResult = await check(resolvedConfig, host, process.cwd(), args.paths, args.stats);
   timing.start("Flush host");

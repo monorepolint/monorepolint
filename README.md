@@ -137,15 +137,15 @@ module.exports = {
 1. Get in there:
 
    ```sh
-   yarn
-   yarn compile:watch
+   pnpm
+   pnpm compile:watch
    ```
 
 2. Edit your files
 3. Test your changes:
 
    ```sh
-   yarn ci
+   pnpm ci
    ```
 
 4. Submit a pull request
@@ -158,7 +158,7 @@ module.exports = {
 
   ```shell
   sudo gem install --pre github_changelog_generator
-  yarn run changelog
+  pnpm run changelog
   ```
 
 3. Submit a pull request
@@ -167,4 +167,4 @@ module.exports = {
 
 ### I added a new package but I can't get it to work with the local monorepo.lint.ts. What?
 
-The way yarn workspaces function, in order to get the right symlinks in `node_modules/@monorepolint/whatever` you need to run `yarn` again.
+The way pnpm workspaces function, in order to get the right symlinks in `node_modules/@monorepolint/whatever` you need to run `pnpm` again.

@@ -18,6 +18,9 @@
     "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch"
   },
   "dependencies": {
+    "@pnpm/find-workspace-dir": "^3.0.3",
+    "@pnpm/find-workspace-packages": "^3.1.42",
+    "@pnpm/logger": "^4.0.0",
     "glob": "^7.1.3",
     "micromatch": "^4.0.5",
     "tslib": "^2.3.1"

@@ -19,7 +19,7 @@ export async function check(
   reportStats?: boolean
 ): Promise<boolean> {
   const checkStart = process.hrtime.bigint();
-  const workspaceDir = findWorkspaceDir(host, cwd);
+  const workspaceDir = await findWorkspaceDir(host, cwd);
   if (workspaceDir === undefined) {
     throw new Error(`Unable to find a workspace from ${cwd}`);
   }
@@ -54,7 +54,8 @@ export async function check(
     packagesChecked++;
     await checkPackage(workspaceContext, stats);
 
-    for (const packageDir of workspaceContext.getWorkspacePackageDirs()) {
+    const workspacePackageDirs = await workspaceContext.getWorkspacePackageDirs();
+    for (const packageDir of workspacePackageDirs) {
       packagesChecked++;
       await checkPackage(workspaceContext.createChildContext(packageDir), stats);
     }
