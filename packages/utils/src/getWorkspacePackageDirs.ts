@@ -27,7 +27,7 @@ export async function getWorkspacePackageDirs(
     if (workspacePackages.length === 0) {
       throw new Error("Invalid workspaceDir: " + workspaceDir);
     }
-    ret.push(...workspacePackages.map((project) => pathJoin(project.dir, "package.json")));
+    ret.push(...workspacePackages.map((project) => project.dir));
     return ret;
   }
 
