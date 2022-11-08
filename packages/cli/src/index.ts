@@ -45,6 +45,7 @@ export default function run() {
       handleCheck
     )
     .demandCommand(1, "At least one command required")
+    .strictCommands()
     .help()
     .showHelpOnFail(true)
     .parse();
