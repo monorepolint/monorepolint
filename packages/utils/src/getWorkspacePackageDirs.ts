@@ -13,24 +13,26 @@ import { PackageJson } from "./PackageJson";
 import findPNPMWorkspacePackages from "@pnpm/find-workspace-packages";
 
 export async function getWorkspacePackageDirs(
-  host: Pick<Host, "readJson">,
+  host: Pick<Host, "readJson" | "exists">,
   workspaceDir: string,
   resolvePaths: boolean = false
 ) {
-  const ret: string[] = [];
-
   const packageJson: PackageJson = host.readJson(pathJoin(workspaceDir, "package.json"));
 
-  if (packageJson.workspaces === undefined) {
-    // We may be in a monorepo that uses PNPM and may not define workspaces in the root package.json
+  const isPnpmWorkspace = host.exists(pathJoin(workspaceDir, "pnpm-workspace.yaml"));
+  if (isPnpmWorkspace) {
     const workspacePackages = await findPNPMWorkspacePackages(workspaceDir);
     if (workspacePackages.length === 0) {
       throw new Error("Invalid workspaceDir: " + workspaceDir);
     }
-    ret.push(...workspacePackages.map((project) => project.dir));
-    return ret;
+    return workspacePackages.map((project) => project.dir).filter((d) => d != workspaceDir);
   }
 
+  if (!packageJson.workspaces) {
+    throw new Error("Unsupported! Monorepo is not backed by either pnpm nor yarn workspaces.");
+  }
+
+  const ret: string[] = [];
   const packageGlobs = Array.isArray(packageJson.workspaces)
     ? packageJson.workspaces
     : packageJson.workspaces.packages || [];

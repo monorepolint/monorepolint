@@ -16,7 +16,7 @@ import { PackageJson } from "./PackageJson";
  * resolved against the `workspaceDir`.
  */
 export async function getPackageNameToDir(
-  host: Pick<Host, "readJson">,
+  host: Pick<Host, "readJson" | "exists">,
   workspaceDir: string,
   resolvePaths: boolean = false
 ) {
