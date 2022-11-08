@@ -24,6 +24,10 @@ export interface AddErrorAsyncOptions extends AddErrorOptions {
   fixer?: () => Promise<void>;
 }
 
+export interface AddErrorSyncOrAsyncOptions extends AddErrorOptions {
+  fixer?: AddErrorAsyncOptions["fixer"] | AddErrorOptions["fixer"];
+}
+
 export interface Context {
   readonly depth: number;
   readonly failed: boolean;

@@ -5,8 +5,9 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/core";
+import { Context, RuleModule } from "@monorepolint/config";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
+import { createNewRuleConversion } from "./util/createNewRuleConversion";
 import diff from "jest-diff";
 import * as r from "runtypes";
 
@@ -101,3 +102,5 @@ export const packageScript = {
   },
   optionsRuntype: Options,
 } as RuleModule<typeof Options>;
+
+export const PackageScript = createNewRuleConversion("PackageScript", packageScript);

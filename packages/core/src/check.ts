@@ -7,9 +7,9 @@
 
 import { findWorkspaceDir, Host, matchesAnyGlob, nanosecondsToSanity, Table } from "@monorepolint/utils";
 import { dirname as pathDirname, resolve as pathResolve } from "path";
-import { ResolvedConfig, ResolvedRule } from "./Config";
-import { Context } from "./Context";
-import { WorkspaceContext } from "./WorkspaceContext";
+import { ResolvedConfig, ResolvedRule } from "@monorepolint/config";
+import { Context } from "@monorepolint/config";
+import { WorkspaceContextImpl } from "./WorkspaceContext";
 
 export async function check(
   resolvedConfig: ResolvedConfig,
@@ -24,12 +24,18 @@ export async function check(
     throw new Error(`Unable to find a workspace from ${cwd}`);
   }
 
-  const workspaceContext = new WorkspaceContext(workspaceDir, resolvedConfig, host);
+  const workspaceContext = new WorkspaceContextImpl(workspaceDir, resolvedConfig, host);
 
   // Validate config once
   const checkConfigStart = process.hrtime.bigint();
   for (const ruleConfig of resolvedConfig.rules) {
-    ruleConfig.optionsRuntype.check(ruleConfig.options);
+    try {
+      ruleConfig.optionsRuntype.check(ruleConfig.ruleEntry.options);
+    } catch (e) {
+      // tslint:disable-next-line:no-console
+      console.log(`Error when validating config for ${ruleConfig.id}.`, e);
+      throw e;
+    }
   }
   const checkConfigEnd = process.hrtime.bigint();
 
@@ -175,7 +181,7 @@ async function checkPackage(
 
     // Although check functions can be asynchronous, run them serially to
     // prevent overlapping CLI output.
-    await ruleConfig.check(context, ruleConfig.options, { id: ruleConfig.id });
+    await ruleConfig.check(context);
     data.totalTime += process.hrtime.bigint();
   }
   context.finish();
@@ -207,7 +213,7 @@ let excludesCost = BigInt(0);
 export function shouldSkipPackage(context: Context, ruleConfig: ResolvedRule) {
   // Short circuit the expensive globs
   if (
-    !ruleConfig.includeWorkspaceRoot && // run cheaper checks first
+    !ruleConfig.ruleEntry.includeWorkspaceRoot && // run cheaper checks first
     context.getWorkspaceContext() === context
   ) {
     return true;
@@ -215,14 +221,18 @@ export function shouldSkipPackage(context: Context, ruleConfig: ResolvedRule) {
 
   excludesCost -= process.hrtime.bigint();
   const exclude =
-    ruleConfig.excludePackages !== undefined ? matchesAnyGlob(context.getName(), ruleConfig.excludePackages) : false;
+    ruleConfig.ruleEntry.excludePackages !== undefined
+      ? matchesAnyGlob(context.getName(), ruleConfig.ruleEntry.excludePackages)
+      : false;
   excludesCost += process.hrtime.bigint();
 
   if (exclude) return true;
 
   includesCost -= process.hrtime.bigint();
   const include =
-    ruleConfig.includePackages === undefined ? true : matchesAnyGlob(context.getName(), ruleConfig.includePackages);
+    ruleConfig.ruleEntry.includePackages === undefined
+      ? true
+      : matchesAnyGlob(context.getName(), ruleConfig.ruleEntry.includePackages);
   includesCost += process.hrtime.bigint();
 
   if (!include) return true;

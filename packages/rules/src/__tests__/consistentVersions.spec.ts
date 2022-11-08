@@ -5,7 +5,7 @@
  *
  */
 
-import { WorkspaceContext } from "@monorepolint/core";
+import { WorkspaceContextImpl } from "@monorepolint/core";
 import { Host, PackageJson, SimpleHost } from "@monorepolint/utils";
 import * as path from "path";
 import * as tmp from "tmp";
@@ -36,7 +36,7 @@ describe("consistentVersions", () => {
 
   function makeWorkspace(fix = false) {
     const host: Host = new SimpleHost();
-    const workspaceContext = new WorkspaceContext(
+    const workspaceContext = new WorkspaceContextImpl(
       cwd!,
       {
         rules: [],

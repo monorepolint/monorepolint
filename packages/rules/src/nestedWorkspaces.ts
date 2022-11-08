@@ -5,10 +5,11 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/core";
+import { Context, RuleModule } from "@monorepolint/config";
 import globby from "globby";
 import path from "path";
 import * as r from "runtypes";
+import { createNewRuleConversion } from "./util/createNewRuleConversion";
 
 export const Options = r.Undefined;
 
@@ -57,3 +58,5 @@ export const nestedWorkspaces: RuleModule<typeof Options> = {
   },
   optionsRuntype: Options,
 };
+
+export const NestedWorkspaces = createNewRuleConversion("NestedWorkspaces", nestedWorkspaces);

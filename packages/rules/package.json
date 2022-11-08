@@ -19,6 +19,7 @@
     "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch"
   },
   "dependencies": {
+    "@monorepolint/config": "^0.4.0",
     "@monorepolint/core": "^0.4.0",
     "@monorepolint/utils": "^0.4.0",
     "globby": "^11.0.1",

@@ -5,9 +5,7 @@
  *
  */
 
-export { AddErrorOptions, Context, Failure } from "./Context";
-export { Config, RuleModule, Checker, Options, ResolvedConfig, ResolvedRule, RuleEntry } from "./Config";
 export { check } from "./check";
-export { PackageContext } from "./PackageContext";
-export { WorkspaceContext } from "./WorkspaceContext";
+export { PackageContextImpl } from "./PackageContext"; // exposed for rule tests
+export { WorkspaceContextImpl } from "./WorkspaceContext"; // exposed for rule tests
 export { resolveConfig } from "./resolveConfig";

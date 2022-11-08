@@ -5,7 +5,7 @@
  *
  */
 
-import { Context } from "@monorepolint/core";
+import { Context } from "@monorepolint/config";
 import diff from "jest-diff";
 
 export function checkAlpha(

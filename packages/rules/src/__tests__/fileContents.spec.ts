@@ -7,7 +7,7 @@
 
 // tslint:disable:no-console
 import { createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils";
-import { AddErrorOptions, Failure } from "@monorepolint/core";
+import { AddErrorOptions, Failure } from "@monorepolint/config";
 import { fileContents } from "../fileContents";
 
 const EXPECTED_FOO_FILE = "hello world";

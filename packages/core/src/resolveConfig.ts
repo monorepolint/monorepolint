@@ -10,12 +10,36 @@ import * as path from "path";
 import { ValidationError } from "runtypes";
 import { __importDefault } from "tslib";
 
-import { Config, Options, ResolvedConfig, ResolvedRule, RuleEntry, RuleModule } from "./Config";
+import {
+  Config,
+  LegacyConfig,
+  LegacyRules,
+  Options,
+  ResolvedConfig,
+  ResolvedRule,
+  RuleEntry,
+  RuleModule,
+} from "@monorepolint/config";
 
-export function resolveConfig(config: Config, options: Options, workspaceRootDir: string): ResolvedConfig {
+export function resolveConfig(
+  config: Config | LegacyConfig,
+  options: Options,
+  workspaceRootDir: string
+): ResolvedConfig {
   try {
     const rules: ResolvedRule[] = [];
-    for (let [type, ruleEntries] of Object.entries(config.rules)) {
+    let legacyRules: LegacyRules;
+    if (Config.guard(config)) {
+      // new style
+      for (const e of config.rules) {
+        rules.push(e);
+      }
+      legacyRules = config.legacyRules ?? {};
+    } else {
+      legacyRules = config.rules ?? {};
+    }
+
+    for (let [type, ruleEntries] of Object.entries(legacyRules)) {
       if (ruleEntries === false) {
         continue;
       }
@@ -34,7 +58,7 @@ export function resolveConfig(config: Config, options: Options, workspaceRootDir
     };
   } catch (err) {
     // tslint:disable-next-line:no-console
-    console.error(`Unexpected error: ${err}`);
+    console.error(`Unexpected error`, err);
     return process.exit(10);
   }
 }
@@ -45,11 +69,16 @@ function resolveRule(type: string, workspaceRootDir: string, ruleEntry: RuleEntr
   try {
     ruleModule.optionsRuntype.check(ruleEntry.options);
 
+    const id = ruleEntry.id ?? `${type} :: ${index}`;
     const ret: ResolvedRule = {
-      ...ruleModule,
-      ...ruleEntry,
+      ruleEntry: ruleEntry as any,
+      optionsRuntype: ruleModule.optionsRuntype,
+      printStats: () => ruleModule.printStats?.(),
+      check: async (context) => {
+        return ruleModule.check(context, ruleEntry.options, { id });
+      },
       name: type,
-      id: ruleEntry.id ?? `${type} :: ${index}`,
+      id,
     };
 
     return ret;

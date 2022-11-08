@@ -4,7 +4,7 @@
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
-import { WorkspaceContext } from "@monorepolint/core";
+import { WorkspaceContextImpl } from "@monorepolint/core";
 import { SimpleHost } from "@monorepolint/utils";
 import { readFileSync, writeFileSync } from "fs";
 import * as path from "path";
@@ -62,7 +62,7 @@ describe("consistentDependencies", () => {
     const dir: tmp.DirResult = tmp.dirSync({ unsafeCleanup: true });
     cleanupJobs.push(() => dir.removeCallback());
 
-    const workspaceContext = new WorkspaceContext(
+    const workspaceContext = new WorkspaceContextImpl(
       dir.name,
       {
         rules: [],

@@ -5,10 +5,11 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/core";
+import { Context, RuleModule } from "@monorepolint/config";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
 import diff from "jest-diff";
 import * as r from "runtypes";
+import { createNewRuleConversion } from "./util/createNewRuleConversion";
 
 const Options = r.Partial({
   dependencies: r.Dictionary(r.String),
@@ -67,3 +68,5 @@ export const requireDependency = {
   },
   optionsRuntype: Options,
 } as RuleModule<typeof Options>;
+
+export const RequireDependency = createNewRuleConversion("RequireDependency", requireDependency);

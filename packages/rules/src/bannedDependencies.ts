@@ -5,11 +5,12 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/core";
+import { Context, RuleModule } from "@monorepolint/config";
 import { matchesAnyGlob } from "@monorepolint/utils";
 import { AggregateTiming } from "@monorepolint/utils";
 import path from "path";
 import * as r from "runtypes";
+import { createNewRuleConversion } from "./util/createNewRuleConversion";
 import { IPackageDependencyGraphNode, PackageDependencyGraphService } from "./util/packageDependencyGraphService";
 
 // FIXME: This rule is messed. bannedTransitiveDependencies doesnt glob
@@ -113,6 +114,7 @@ export const bannedDependencies: RuleModule<typeof Options> & {
     aggregateTiming.printResults();
   },
 };
+export const BannedDependencies = createNewRuleConversion("BannedDependencies", bannedDependencies);
 
 function populateProblemsExact(banned: Set<string>, dependencies: ReadonlyArray<string>, violations: Set<string>) {
   for (const dependency of dependencies) {

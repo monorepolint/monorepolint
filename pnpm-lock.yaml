@@ -61,6 +61,7 @@ importers:
 
   packages/cli:
     specifiers:
+      '@monorepolint/config': ^0.4.0
       '@monorepolint/core': ^0.4.0
       '@monorepolint/utils': ^0.4.0
       '@types/yargs': ^17.0.13
@@ -68,6 +69,7 @@ importers:
       tslib: 2.3.1
       yargs: ^17.6.2
     dependencies:
+      '@monorepolint/config': link:../config
       '@monorepolint/core': link:../core
       '@monorepolint/utils': link:../utils
       chalk: 4.1.2
@@ -76,7 +78,7 @@ importers:
     devDependencies:
       '@types/yargs': 17.0.13
 
-  packages/core:
+  packages/config:
     specifiers:
       '@monorepolint/utils': ^0.4.0
       camelcase: ^6.0.0
@@ -84,6 +86,22 @@ importers:
       runtypes: ^6.5.1
       tslib: ^2.3.1
     dependencies:
+      '@monorepolint/utils': link:../utils
+      camelcase: 6.3.0
+      chalk: 4.1.2
+      runtypes: 6.5.1
+      tslib: 2.4.0
+
+  packages/core:
+    specifiers:
+      '@monorepolint/config': ^0.4.0
+      '@monorepolint/utils': ^0.4.0
+      camelcase: ^6.0.0
+      chalk: ^4.1.0
+      runtypes: ^6.5.1
+      tslib: ^2.3.1
+    dependencies:
+      '@monorepolint/config': link:../config
       '@monorepolint/utils': link:../utils
       camelcase: 6.3.0
       chalk: 4.1.2
@@ -106,6 +124,7 @@ importers:
 
   packages/rules:
     specifiers:
+      '@monorepolint/config': ^0.4.0
       '@monorepolint/core': ^0.4.0
       '@monorepolint/utils': ^0.4.0
       '@types/jest-diff': ^24.3.0
@@ -119,6 +138,7 @@ importers:
       tmp: ^0.2.1
       tslib: ^2.3.1
     dependencies:
+      '@monorepolint/config': link:../config
       '@monorepolint/core': link:../core
       '@monorepolint/utils': link:../utils
       globby: 11.1.0

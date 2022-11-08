@@ -8,20 +8,23 @@
 import { PackageJson, Host } from "@monorepolint/utils";
 import chalk from "chalk";
 import * as path from "path";
-import { ResolvedConfig } from "./Config";
-import { AddErrorAsyncOptions, AddErrorOptions, Context, Failure } from "./Context";
-import { WorkspaceContext } from "./WorkspaceContext";
-
-interface AddErrorSyncOrAsyncOptions extends AddErrorOptions {
-  fixer?: AddErrorAsyncOptions["fixer"] | AddErrorOptions["fixer"];
-}
+import {
+  AddErrorAsyncOptions,
+  AddErrorOptions,
+  AddErrorSyncOrAsyncOptions,
+  Context,
+  Failure,
+  PackageContext,
+  ResolvedConfig,
+  WorkspaceContext,
+} from "@monorepolint/config";
 
 // Right now, this stuff is done serially so we are writing less code to support that. Later we may want to redo this.
-export class PackageContext implements Context {
+export class PackageContextImpl implements PackageContext {
   public depth: number;
   public failed = false;
 
-  protected printedName = false;
+  public printedName = false;
 
   constructor(
     public readonly packageDir: string,
