@@ -7,8 +7,8 @@
 
 import { SimpleHost } from "@monorepolint/utils";
 import { shouldSkipPackage } from "../check";
-import { ResolvedConfig } from "../Config";
-import { WorkspaceContext } from "../WorkspaceContext";
+import { ResolvedConfig } from "@monorepolint/config";
+import { WorkspaceContextImpl } from "../WorkspaceContext";
 
 describe("shouldSkipPackage", () => {
   const resolvedConfig: ResolvedConfig = {
@@ -16,7 +16,7 @@ describe("shouldSkipPackage", () => {
     verbose: false,
     fix: false,
   };
-  const workspaceContext = new WorkspaceContext(".", resolvedConfig, new SimpleHost());
+  const workspaceContext = new WorkspaceContextImpl(".", resolvedConfig, new SimpleHost());
   jest.spyOn(workspaceContext, "getName").mockImplementation(() => "root");
 
   const fooContext = createChild(workspaceContext, "packages/foo", "@foo/bar");
@@ -24,8 +24,10 @@ describe("shouldSkipPackage", () => {
   it("should skip if specified in excludePackages no matter what", () => {
     const actual = shouldSkipPackage(fooContext, {
       check: () => true,
-      excludePackages: [fooContext.getName(), "other"],
-      includePackages: [fooContext.getName()],
+      ruleEntry: {
+        excludePackages: [fooContext.getName(), "other"],
+        includePackages: [fooContext.getName()],
+      },
       optionsRuntype: {} as any,
       name: "idk",
       id: "idc",
@@ -37,7 +39,9 @@ describe("shouldSkipPackage", () => {
   it("should skip if includes is specified but package is not", () => {
     const actual = shouldSkipPackage(fooContext, {
       check: () => true,
-      includePackages: [],
+      ruleEntry: {
+        includePackages: [],
+      },
       optionsRuntype: {} as any,
       name: "idk",
       id: "idc",
@@ -49,6 +53,7 @@ describe("shouldSkipPackage", () => {
   it("should not skip if excludes and includes are omitted", () => {
     const actual = shouldSkipPackage(fooContext, {
       check: () => true,
+      ruleEntry: {},
       optionsRuntype: {} as any,
       name: "idk",
       id: "idc",
@@ -60,6 +65,7 @@ describe("shouldSkipPackage", () => {
   it("should skip root by default", () => {
     const actual = shouldSkipPackage(workspaceContext, {
       check: () => true,
+      ruleEntry: {},
       optionsRuntype: {} as any,
       name: "idk",
       id: "idc",
@@ -71,7 +77,9 @@ describe("shouldSkipPackage", () => {
   it("should skip properly with globs", () => {
     const actual = shouldSkipPackage(workspaceContext, {
       check: () => true,
-      excludePackages: ["@foo/*", "other"],
+      ruleEntry: {
+        excludePackages: ["@foo/*", "other"],
+      },
       optionsRuntype: {} as any,
       name: "idk",
       id: "idc",
@@ -83,7 +91,9 @@ describe("shouldSkipPackage", () => {
   it("should properly not skip with globs", () => {
     const actual = shouldSkipPackage(workspaceContext, {
       check: () => true,
-      includePackages: ["@foo/*", "other"],
+      ruleEntry: {
+        excludePackages: ["@foo/*", "other"],
+      },
       optionsRuntype: {} as any,
       name: "idk",
       id: "idc",
@@ -93,7 +103,7 @@ describe("shouldSkipPackage", () => {
   });
 });
 
-function createChild(c: WorkspaceContext, path: string, name: string) {
+function createChild(c: WorkspaceContextImpl, path: string, name: string) {
   const ret = c.createChildContext(path);
   jest.spyOn(ret, "getName").mockImplementation(() => name);
   return ret;

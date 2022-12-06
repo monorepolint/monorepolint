@@ -4,7 +4,7 @@
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
-import { WorkspaceContext } from "@monorepolint/core";
+import { WorkspaceContextImpl } from "@monorepolint/core";
 import { SimpleHost } from "@monorepolint/utils";
 import { writeFileSync } from "fs";
 import * as path from "path";
@@ -57,7 +57,7 @@ describe("nestedWorkspaces", () => {
 
   function makeWorkspace() {
     const host = new SimpleHost();
-    const workspaceContext = new WorkspaceContext(
+    const workspaceContext = new WorkspaceContextImpl(
       cwd!,
       {
         rules: [],

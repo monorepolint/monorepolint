@@ -5,7 +5,8 @@
  *
  */
 
-import { AddErrorOptions, WorkspaceContext } from "@monorepolint/core";
+import { AddErrorOptions, WorkspaceContext } from "@monorepolint/config";
+import { WorkspaceContextImpl } from "@monorepolint/core";
 import { CachingHost, Host, SimpleHost } from "@monorepolint/utils";
 import * as path from "path";
 import * as tmp from "tmp";
@@ -41,7 +42,7 @@ export async function createTestingWorkspace(inboundOpts: TestingWorkspaceOpts) 
 
   return new DefaultTestingWorkspace(
     { ...opts, rootPath },
-    new WorkspaceContext(rootPath, { fix: opts.fixFlag, rules: [] }, opts.host)
+    new WorkspaceContextImpl(rootPath, { fix: opts.fixFlag, rules: [] }, opts.host)
   );
 }
 

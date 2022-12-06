@@ -5,9 +5,10 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/core";
+import { Context, RuleModule } from "@monorepolint/config";
 import { matchesAnyGlob } from "@monorepolint/utils";
 import diff from "jest-diff";
+import { createNewRuleConversion } from "./util/createNewRuleConversion";
 import * as path from "path";
 import * as r from "runtypes";
 
@@ -38,7 +39,7 @@ const Options = r
     return count === 1 || "Expect one of { generator, template, templateFile }";
   });
 
-export type Options = r.Static<typeof Options>;
+export interface Options extends r.Static<typeof Options> {}
 
 export const standardTsconfig = {
   check: async function expectStandardTsconfig(context: Context, opts: Options) {
@@ -74,6 +75,8 @@ export const standardTsconfig = {
   },
   optionsRuntype: Options,
 } as RuleModule<typeof Options>;
+
+export const StandardTsConfig = createNewRuleConversion("StandardTsconfig", standardTsconfig);
 
 function getGenerator(context: Context, opts: Options) {
   if (opts.generator) {

@@ -7,7 +7,7 @@
 
 // tslint:disable:no-console
 
-import { Context, Failure } from "@monorepolint/core";
+import { Context, Failure } from "@monorepolint/config";
 import { packageScript } from "../packageScript";
 import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils";
 

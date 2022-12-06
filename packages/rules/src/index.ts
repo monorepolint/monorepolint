@@ -5,16 +5,16 @@
  *
  */
 
-export { alphabeticalDependencies } from "./alphabeticalDependencies";
-export { alphabeticalScripts } from "./alphabeticalScripts";
-export { bannedDependencies } from "./bannedDependencies";
-export { consistentDependencies } from "./consistentDependencies";
-export { consistentVersions } from "./consistentVersions";
-export { fileContents } from "./fileContents";
-export { mustSatisfyPeerDependencies } from "./mustSatisfyPeerDependencies";
-export { packageOrder } from "./packageOrder";
-export { packageEntry } from "./packageEntry";
-export { packageScript } from "./packageScript";
-export { standardTsconfig } from "./standardTsconfig";
-export { nestedWorkspaces } from "./nestedWorkspaces";
-export { requireDependency } from "./requireDependency";
+export { alphabeticalDependencies, AlphabeticalDependencies } from "./alphabeticalDependencies";
+export { alphabeticalScripts, AlphabeticalScripts } from "./alphabeticalScripts";
+export { bannedDependencies, BannedDependencies } from "./bannedDependencies";
+export { consistentDependencies, ConsistentDependencies } from "./consistentDependencies";
+export { consistentVersions, ConsistentVersions } from "./consistentVersions";
+export { fileContents, FileContents } from "./fileContents";
+export { mustSatisfyPeerDependencies, MustSatisfyPeerDependencies } from "./mustSatisfyPeerDependencies";
+export { packageOrder, PackageOrder } from "./packageOrder";
+export { packageEntry, PackageEntry } from "./packageEntry";
+export { packageScript, PackageScript } from "./packageScript";
+export { standardTsconfig, StandardTsConfig } from "./standardTsconfig";
+export { nestedWorkspaces, NestedWorkspaces } from "./nestedWorkspaces";
+export { requireDependency, RequireDependency } from "./requireDependency";

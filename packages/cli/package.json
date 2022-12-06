@@ -23,14 +23,15 @@
     "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch"
   },
   "dependencies": {
+    "@monorepolint/config": "^0.4.0",
     "@monorepolint/core": "^0.4.0",
     "@monorepolint/utils": "^0.4.0",
     "chalk": "^4.1.0",
     "tslib": "2.3.1",
-    "yargs": "^15.3.1"
+    "yargs": "^17.6.2"
   },
   "devDependencies": {
-    "@types/yargs": "^15.0.5"
+    "@types/yargs": "^17.0.13"
   },
   "publishConfig": {
     "access": "public"

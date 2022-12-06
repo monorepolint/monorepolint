@@ -9,6 +9,8 @@ import * as r from "runtypes";
 import { Runtype } from "runtypes/lib/runtype";
 import { Context } from "./Context";
 
+// TODO: extract all these types to their own files
+
 export const RuleEntry = r.Partial({
   options: r.Unknown,
   excludePackages: r.Array(r.String),
@@ -16,14 +18,9 @@ export const RuleEntry = r.Partial({
   includeWorkspaceRoot: r.Boolean,
   id: r.String.optional(),
 });
-export type RuleEntry<T = unknown> = r.Static<typeof RuleEntry> & {
+export interface RuleEntry<T = unknown> extends r.Static<typeof RuleEntry> {
   options?: T;
-};
-
-export const Config = r.Record({
-  rules: r.Dictionary(RuleEntry.Or(r.Array(RuleEntry).Or(r.Boolean))),
-});
-export type Config = r.Static<typeof Config>;
+}
 
 export const RuleModule = r.Record({
   check: r.Function,
@@ -35,6 +32,32 @@ export interface RuleModule<T extends Runtype = Runtype> extends r.Static<typeof
   optionsRuntype: T;
 }
 
+export interface NewRuleModule<T extends Runtype = Runtype> {
+  check: (context: Context) => Promise<unknown> | unknown;
+  name: string;
+  id: string;
+  optionsRuntype: T;
+  printStats?: () => void;
+  ruleEntry: RuleEntry<r.Static<T>>;
+}
+
+export const LegacyRules = r.Dictionary(RuleEntry.Or(r.Array(RuleEntry)).Or(r.Boolean));
+export type LegacyRules = r.Static<typeof LegacyRules>;
+
+export const Config = r.Record({
+  rules: r.Array(r.Unknown),
+  legacyRules: LegacyRules.optional(),
+});
+export interface Config extends r.Static<typeof Config> {
+  rules: NewRuleModule[];
+}
+
+export const LegacyConfig = r.Record({
+  rules: LegacyRules.optional(),
+});
+
+export interface LegacyConfig extends r.Static<typeof LegacyConfig> {}
+
 export interface Options {
   readonly verbose?: boolean;
   readonly fix?: boolean;
@@ -44,12 +67,12 @@ export interface Options {
 }
 
 // TODO: Make the extra param required. I'm not doing it now because this change is hard enough to read
-
 export type Checker<T extends Runtype> =
   | ((context: Context, args: r.Static<T>, extra?: { id: string }) => void)
   | ((context: Context, args: r.Static<T>, extra?: { id: string }) => Promise<void>);
 
-export type ResolvedRule<T = unknown> = RuleModule & RuleEntry<T> & { name: string; id: string };
+export interface ResolvedRule<T extends Runtype = Runtype> extends NewRuleModule<T> {}
+
 export interface ResolvedConfig extends Options {
   readonly rules: ReadonlyArray<ResolvedRule>;
 }

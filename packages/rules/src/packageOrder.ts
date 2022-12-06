@@ -5,9 +5,10 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/core";
+import { Context, RuleModule } from "@monorepolint/config";
 import diff from "jest-diff";
 import * as r from "runtypes";
+import { createNewRuleConversion } from "./util/createNewRuleConversion";
 
 type OrderFunction = (context: Context) => (a: string, b: string) => number;
 
@@ -79,6 +80,8 @@ export const packageOrder = {
   },
   optionsRuntype: Options,
 } as RuleModule<typeof Options>;
+
+export const PackageOrder = createNewRuleConversion("PackageOrder", packageOrder);
 
 function arrayOrderCompare(a: ReadonlyArray<string>, b: ReadonlyArray<string>) {
   for (let index = 0; index < a.length; index++) {

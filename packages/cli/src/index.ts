@@ -5,7 +5,8 @@
  *
  */
 
-import { check, Config, Options, resolveConfig } from "@monorepolint/core";
+import { check, resolveConfig } from "@monorepolint/core";
+import { Config, LegacyConfig, Options } from "@monorepolint/config";
 import { CachingHost, SimpleHost, findWorkspaceDir, Timing } from "@monorepolint/utils";
 import chalk from "chalk";
 import * as fs from "fs";
@@ -45,6 +46,7 @@ export default function run() {
       handleCheck
     )
     .demandCommand(1, "At least one command required")
+    .strictCommands()
     .help()
     .showHelpOnFail(true)
     .parse();
@@ -64,11 +66,29 @@ async function handleCheck(args: Options) {
   }
   const host = process.env.MRL_CACHING_HOST === "true" ? new CachingHost() : new SimpleHost();
 
-  const configPath = path.resolve(process.cwd(), ".monorepolint.config.ts");
+  const configFilesToTry = [
+    path.resolve(process.cwd(), ".monorepolint.config.ts"),
+    path.resolve(process.cwd(), ".monorepolint.config.js"),
+  ];
+
   timing.start("Read/compile config");
-  const unverifiedConfig = require(configPath);
+  let unverifiedConfig;
+  for (const configPath of configFilesToTry) {
+    try {
+      unverifiedConfig = require(configPath);
+      break;
+    } catch (e) {
+      if (!(e instanceof Error && e.message.startsWith("Cannot find module"))) {
+        console.log(e);
+      }
+      continue;
+    }
+  }
+  if (unverifiedConfig === undefined) {
+    throw new Error("Unable to find a usable config file");
+  }
   timing.start("Verify config");
-  const config = Config.check(unverifiedConfig);
+  const config: Config | LegacyConfig = Config.Or(LegacyConfig).check(unverifiedConfig) as any;
   timing.start("Resolve config");
   const workspaceDir = await findWorkspaceDir(host, process.cwd());
   const resolvedConfig = resolveConfig(config, args, workspaceDir!);

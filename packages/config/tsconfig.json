@@ -6,12 +6,6 @@
   },
   "references": [
     {
-      "path": "../config"
-    },
-    {
-      "path": "../core"
-    },
-    {
       "path": "../utils"
     }
   ]

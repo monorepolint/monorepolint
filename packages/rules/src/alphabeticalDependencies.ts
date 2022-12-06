@@ -5,9 +5,10 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/core";
+import { Context, RuleModule } from "@monorepolint/config";
 import * as r from "runtypes";
 import { checkAlpha } from "./util/checkAlpha";
+import { createNewRuleConversion } from "./util/createNewRuleConversion";
 
 const Options = r.Undefined;
 
@@ -19,3 +20,5 @@ export const alphabeticalDependencies: RuleModule<typeof Options> = {
   },
   optionsRuntype: Options,
 };
+
+export const AlphabeticalDependencies = createNewRuleConversion("AlphabetialDependencies", alphabeticalDependencies);

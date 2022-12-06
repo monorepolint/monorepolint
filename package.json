@@ -1,5 +1,5 @@
 {
-  "name": "monorepolint",
+  "name": "@monorepolint/root",
   "author": "Eric L Anderson (https://github.com/ericanderson)",
   "contributors": [
     "Mac Lockard (https://github.com/maclockard)"
@@ -11,11 +11,6 @@
     "packages": [
       "packages/*"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "packages/*/src/**/*.{ts,tsx}": [
@@ -40,7 +35,8 @@
     "prePublish": "npm-run-all clean compile lint test",
     "publish:release": "pnpm run prePublish && lerna publish --no-verify-access --force-publish",
     "publish:prerelease": "pnpm run prePublish && lerna publish --no-verify-access --force-publish --canary minor --yes",
-    "test": "pnpm run -r test"
+    "test": "pnpm run -r test",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@monorepolint/cli": "workspace:*",
@@ -49,10 +45,10 @@
     "@types/mock-fs": "^4.10.0",
     "@types/node": "^14.0.12",
     "gh-pages": "^3.0.0",
-    "husky": "^4.2.5",
+    "husky": "^8.0.1",
     "jest": "^27.5.1",
     "lerna": "^4.0.0",
-    "lint-staged": "^10.2.9",
+    "lint-staged": "^13.0.3",
     "mock-fs": "^4.7.0",
     "node-notifier": "^10.0.1",
     "npm-run-all": "^4.1.5",

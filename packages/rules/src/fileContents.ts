@@ -5,11 +5,11 @@
  *
  */
 
-import { Context } from "@monorepolint/core";
-import { RuleModule } from "@monorepolint/core";
+import { Context, RuleModule } from "@monorepolint/config";
 import diff from "jest-diff";
 import * as path from "path";
 import * as r from "runtypes";
+import { createNewRuleConversion } from "./util/createNewRuleConversion";
 
 const Options = r.Union(
   r.Record({
@@ -89,3 +89,5 @@ function getExpectedContents(context: Context, opts: Options) {
     return opts.template;
   }
 }
+
+export const FileContents = createNewRuleConversion("FileContents", fileContents);

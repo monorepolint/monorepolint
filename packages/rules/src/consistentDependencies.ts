@@ -5,9 +5,10 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/core";
+import { Context, RuleModule } from "@monorepolint/config";
 import diff from "jest-diff";
 import * as r from "runtypes";
+import { createNewRuleConversion } from "./util/createNewRuleConversion";
 
 const Options = r
   .Record({
@@ -26,6 +27,8 @@ export const consistentDependencies = {
   },
   optionsRuntype: Options,
 } as RuleModule<typeof Options>;
+
+export const ConsistentDependencies = createNewRuleConversion("ConsistentDependencies", consistentDependencies);
 
 function checkDeps(context: Context, args: Options, block: "dependencies" | "devDependencies" | "peerDependencies") {
   const packageJson = context.getPackageJson();

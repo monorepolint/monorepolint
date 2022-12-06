@@ -7,7 +7,7 @@
 
 // tslint:disable:no-console
 import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, jsonToString, TestingWorkspace } from "./utils";
-import { Context, Failure } from "@monorepolint/core";
+import { Context, Failure } from "@monorepolint/config";
 import { alphabeticalScripts } from "../alphabeticalScripts";
 import { createIncorrectOrderErrorMessage } from "../util/checkAlpha";
 
