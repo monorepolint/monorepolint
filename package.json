@@ -37,10 +37,8 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@babel/preset-typescript": "^7.18.6",
     "@monorepolint/cli": "workspace:*",
     "@monorepolint/internal-mrl-config": "workspace:*",
-    "@types/jest": "^27.4.1",
     "@types/mock-fs": "^4.10.0",
     "@types/node": "^18.11.11",
     "gh-pages": "^3.0.0",
