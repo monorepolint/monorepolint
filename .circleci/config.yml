@@ -7,9 +7,9 @@ executors:
   node16:
     docker:
       - image: cimg/node:16.15
-  node14:
+  node19:
     docker:
-      - image: cimg/node:14.19
+      - image: cimg/node:19.0
   node18:
     docker:
       - image: cimg/node:18.0
