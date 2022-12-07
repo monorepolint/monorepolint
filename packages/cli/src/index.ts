@@ -82,20 +82,39 @@ async function handleCheck(args: Options) {
 
   timing.start("Read/compile config");
   let unverifiedConfig;
+  let foundConfig = undefined;
+  let importError: unknown = undefined;
   for (const configPath of configFilesToTry) {
+    if (!fs.existsSync(configPath)) {
+      continue;
+    }
+    foundConfig = configPath;
     try {
       unverifiedConfig = (await import(configPath)).default;
       break;
     } catch (e) {
+      importError = e;
       if (!(e instanceof Error && e.message.startsWith("Cannot find module"))) {
         console.log(e);
       }
-      continue;
+      break;
     }
   }
   if (unverifiedConfig === undefined) {
-    throw new Error("Unable to find a usable config file");
+    if (importError) {
+      throw new AggregateError(
+        [importError],
+        `File exists ('${foundConfig}') but could not be imported due to error: ${(importError as any)?.message}`
+      );
+    } else if (foundConfig) {
+      throw new Error(`File exists ('${foundConfig}') and was imported but the default export was undefined`);
+    } else {
+      throw new Error(
+        `Unable to find a usable config file. Tried: \n${configFilesToTry.map((a) => `  - ${a}`).join("\n")}`
+      );
+    }
   }
+
   timing.start("Verify config");
   const config: Config | LegacyConfig = Config.Or(LegacyConfig).check(unverifiedConfig) as any;
   timing.start("Resolve config");

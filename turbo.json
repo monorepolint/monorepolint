@@ -32,6 +32,13 @@
     "check": {
       "dependsOn": ["build", "test", "lint"],
       "outputs": []
+    },
+    "//#compile:watch": {
+      "cache": false
+    },
+    "dev": {
+      "cache": false,
+      "dependsOn": ["//#compile:watch"]
     }
   }
 }

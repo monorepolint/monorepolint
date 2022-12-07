@@ -9,10 +9,12 @@
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --colors --passWithNoTests --watch"
   },
   "dependencies": {
-    "@monorepolint/cli": "^0.4.0",
-    "@monorepolint/core": "^0.4.0",
-    "@monorepolint/rules": "^0.4.0",
-    "@monorepolint/utils": "^0.4.0"
+    "@monorepolint/cli": "workspace:*",
+    "@monorepolint/core": "workspace:*",
+    "@monorepolint/rules": "workspace:*",
+    "@monorepolint/internal-mrl-config": "workspace:*",
+    "@monorepolint/utils": "workspace:*",
+    "@monorepolint/config": "workspace:*"
   },
   "devDependencies": {
     "@types/jest": "^29.2.4",
