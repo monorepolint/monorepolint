@@ -37,8 +37,8 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@monorepolint/cli": "workspace:*",
-    "@monorepolint/internal-mrl-config": "workspace:*",
+    "@monorepolint/cli": "^0.4.0",
+    "@monorepolint/internal-mrl-config": "^0.4.0",
     "@types/mock-fs": "^4.10.0",
     "@types/node": "^18.11.11",
     "gh-pages": "^3.0.0",
