@@ -15,15 +15,10 @@ export const Options = r.Record({
   scripts: r.Dictionary(
     r.Union(
       r.String,
-      r
-        .Record({
-          options: r.Array(r.String.Or(r.Undefined)),
-        })
-        .And(
-          r.Partial({
-            fixValue: r.Union(r.String, r.Undefined, r.Literal(false)),
-          })
-        )
+      r.Record({
+        options: r.Array(r.String.Or(r.Undefined)),
+        fixValue: r.Union(r.String, r.Undefined, r.Literal(false)).optional(),
+      })
     )
   ), // string => string
 });

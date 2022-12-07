@@ -57,7 +57,7 @@ function getVersion(): string {
   return JSON.parse(
     fs.readFileSync(
       new URL("../../package.json", import.meta.url),
-      //path.join(__dirname, "../package.json"),
+      // path.join(__dirname, "../package.json"),
       "utf-8"
     )
   ).version;

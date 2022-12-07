@@ -10,6 +10,8 @@ import * as Rules from "@monorepolint/rules";
 
 const DOCS = "@monorepolint/docs";
 
+// const DELETE_SCRIPT_ENTRTY =  { options:[], fixValue: undefined } as const;
+
 /** @type {import("./packages/config").Config} */
 const config = {
   rules: [
@@ -31,8 +33,12 @@ const config = {
         scripts: {
           clean: "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
           "compile-typescript": "../../node_modules/.bin/tsc --build",
-          "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
-          "test:watch": "NODE_OPTIONS=--experimental-vm-modules ../../node_modules/.bin/jest --colors --passWithNoTests --watch",
+          "lint:typescript": { options: [undefined], fixValue: undefined },
+          jest: { options: [undefined], fixValue: undefined }, // this syntax needs work :(
+          "jest:watch": { options: [undefined], fixValue: undefined },
+          "lint": { options: [undefined], fixValue: undefined },
+          "test:watch":
+            "NODE_OPTIONS=--experimental-vm-modules ../../node_modules/.bin/jest --colors --passWithNoTests --watch",
           test: "NODE_OPTIONS=--experimental-vm-modules ../../node_modules/.bin/jest --colors --passWithNoTests",
         },
       },

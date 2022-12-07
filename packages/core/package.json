@@ -18,10 +18,6 @@
   "scripts": {
     "clean": "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
     "compile-typescript": "../../node_modules/.bin/tsc --build",
-    "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
-    "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
-    "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
-    "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "test": "NODE_OPTIONS=--experimental-vm-modules ../../node_modules/.bin/jest --colors --passWithNoTests",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules ../../node_modules/.bin/jest --colors --passWithNoTests --watch",
     "transpile-typescript": "tsup --config ../../tsup.config.cjs"

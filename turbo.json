@@ -25,7 +25,7 @@
     "lint": {
       "outputs": []
     },
-    "deploy": {
+    "check": {
       "dependsOn": ["build", "test", "lint"],
       "outputs": []
     }
