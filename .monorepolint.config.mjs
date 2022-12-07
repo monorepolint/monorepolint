@@ -6,53 +6,6 @@
  */
 
 // @ts-check
-import * as Rules from "@monorepolint/rules";
+import config from "@monorepolint/internal-mrl-config";
 
-const DOCS = "@monorepolint/docs";
-
-// const DELETE_SCRIPT_ENTRTY =  { options:[], fixValue: undefined } as const;
-
-/** @type {import("./packages/config").Config} */
-const config = {
-  rules: [
-    new Rules.StandardTsConfig({
-      options: {
-        templateFile: "./templates/tsconfig.json",
-      },
-      excludePackages: [DOCS],
-    }),
-    new Rules.FileContents({
-      options: {
-        file: "jest.config.cjs",
-        templateFile: "./templates/jest.config.cjs",
-      },
-      excludePackages: [DOCS],
-    }),
-    new Rules.PackageScript({
-      options: {
-        scripts: {
-          clean: "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
-          "compile-typescript": "../../node_modules/.bin/tsc --build",
-          "lint:typescript": { options: [undefined], fixValue: undefined },
-          jest: { options: [undefined], fixValue: undefined }, // this syntax needs work :(
-          "jest:watch": { options: [undefined], fixValue: undefined },
-          "lint": { options: [undefined], fixValue: undefined },
-          "test:watch":
-            "NODE_OPTIONS=--experimental-vm-modules ../../node_modules/.bin/jest --colors --passWithNoTests --watch",
-          test: "NODE_OPTIONS=--experimental-vm-modules ../../node_modules/.bin/jest --colors --passWithNoTests",
-        },
-      },
-      excludePackages: [DOCS],
-    }),
-    new Rules.PackageOrder({}),
-    new Rules.AlphabeticalDependencies({}),
-    new Rules.AlphabeticalScripts({}),
-    new Rules.ConsistentDependencies({}),
-    new Rules.BannedDependencies({
-      options: {
-        bannedDependencies: ["lodash"],
-      },
-    }),
-  ],
-};
 export default config;

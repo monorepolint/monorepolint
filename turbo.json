@@ -22,6 +22,10 @@
       "outputs": [],
       "inputs": ["src/**/*.tsx", "src/**/*.ts", "tsconfig.json", "../../jest.config.base.js"]
     },
+    "//#check-mrl": {
+      "dependsOn": ["@monorepolint/internal-mrl-config#transpile-typescript"],
+      "inputs": ["package.json", "packages/*/package.json"]
+    },
     "lint": {
       "outputs": []
     },

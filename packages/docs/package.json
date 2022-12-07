@@ -29,5 +29,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "typescript": "^4.9.3",
+    "@types/jest": "^27.4.1",
+    "prettier": "^2.8.0",
+    "ts-jest": "^29.0.3",
+    "jest": "^29.3.1"
   }
 }
