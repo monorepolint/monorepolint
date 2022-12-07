@@ -5,8 +5,7 @@
  *
  */
 
-import { Host } from "./Host";
-
+import { Host } from "./Host.js";
 export function mutateJson<T extends object>(path: string, host: Host, mutator: (f: T) => T) {
   let file: T = host.readJson(path);
   file = mutator(file);

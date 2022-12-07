@@ -7,11 +7,11 @@
 
 import { Context, RuleModule } from "@monorepolint/config";
 import { Host, mutateJson, PackageJson } from "@monorepolint/utils";
-import path from "path";
-import resolvePackagePath from "resolve-package-path";
+import * as path from "node:path";
 import * as r from "runtypes";
 import { coerce } from "semver";
-import { createNewRuleConversion } from "./util/createNewRuleConversion";
+import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
+import * as module from "node:module";
 
 const Options = r.Union(
   r.Partial({
@@ -304,7 +304,8 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
     ? [...Object.keys(packageDependencies), ...Object.keys(packageDevDependencies)]
     : Object.keys(packageDependencies);
   for (const dependency of allDependencies) {
-    const dependencyPackageJsonPath = resolvePackagePath(dependency, path.dirname(packageJsonPath));
+    const require = module.createRequire(path.dirname(packageJsonPath));
+    const dependencyPackageJsonPath = require.resolve(dependency);
     if (dependencyPackageJsonPath == null) {
       throw new Error(`Could not resolve ${dependency} from ${path.dirname(packageJsonPath)}`);
     }

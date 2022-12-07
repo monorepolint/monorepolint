@@ -8,9 +8,8 @@
 // tslint:disable:no-console
 
 import { Context, Failure } from "@monorepolint/config";
-import { createExpectedEntryErrorMessage, createStandardizedEntryErrorMessage, packageEntry } from "../packageEntry";
-import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils";
-
+import { createExpectedEntryErrorMessage, createStandardizedEntryErrorMessage, packageEntry } from "../packageEntry.js";
+import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
 const PACKAGE_MISSING_ENTRY =
   JSON.stringify(
     {

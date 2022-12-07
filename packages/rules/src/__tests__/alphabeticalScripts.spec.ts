@@ -6,10 +6,10 @@
  */
 
 // tslint:disable:no-console
-import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, jsonToString, TestingWorkspace } from "./utils";
+import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, jsonToString, TestingWorkspace } from "./utils.js";
 import { Context, Failure } from "@monorepolint/config";
-import { alphabeticalScripts } from "../alphabeticalScripts";
-import { createIncorrectOrderErrorMessage } from "../util/checkAlpha";
+import { alphabeticalScripts } from "../alphabeticalScripts.js";
+import { createIncorrectOrderErrorMessage } from "../util/checkAlpha.js";
 
 const PACKAGE_SCRIPTS_SORTED = jsonToString({
   name: "foo-lib",

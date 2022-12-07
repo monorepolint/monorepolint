@@ -5,6 +5,5 @@
  *
  */
 
-import { Context } from "./Context";
-
+import { Context } from "./Context.js";
 export type PackageContext = Context;

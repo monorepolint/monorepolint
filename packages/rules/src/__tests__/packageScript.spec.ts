@@ -8,9 +8,8 @@
 // tslint:disable:no-console
 
 import { Context, Failure } from "@monorepolint/config";
-import { packageScript } from "../packageScript";
-import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils";
-
+import { packageScript } from "../packageScript.js";
+import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
 const json = (a: unknown) => JSON.stringify(a, undefined, 2) + "\n";
 
 const PACKAGE_WITHOUT_SCRIPTS = json({

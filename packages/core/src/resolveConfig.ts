@@ -52,6 +52,9 @@ export function resolveConfig(
       }
     }
 
+    if (rules.length === 0) {
+      throw new Error("No rules!? Did you make a mistake?");
+    }
     return {
       ...options,
       rules,
@@ -98,18 +101,21 @@ function resolveRule(type: string, workspaceRootDir: string, ruleEntry: RuleEntr
     return process.exit(10);
   }
 }
-
+import * as module from "node:module";
 function loadRuleModule(type: string, workspaceRootDir: string) {
   let mod: any;
   if (type.startsWith(":")) {
+    const require = module.createRequire(import.meta.url);
     // if the type starts with `:`, its a built in rule so should be imported from `@monorepolint/rules`
     const ruleVariable = camelCase(type.slice(1));
     // tslint:disable-next-line:no-implicit-dependencies
     mod = require("@monorepolint/rules")[ruleVariable];
   } else if (type.startsWith(".")) {
+    const require = module.createRequire(workspaceRootDir);
     // if the type starts with `.` then the rule should be a default export from a local file
     mod = __importDefault(require(path.resolve(workspaceRootDir, type))).default;
   } else if (type.includes(":")) {
+    const require = module.createRequire(workspaceRootDir);
     // if the type includes `:`, then we should import a const rather than default
     const [packageName, ruleVariable] = type.split(":");
     mod = require(require.resolve(packageName, { paths: [workspaceRootDir] }))[camelCase(ruleVariable)];

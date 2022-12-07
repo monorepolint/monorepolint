@@ -14,11 +14,11 @@
   },
   "lint-staged": {
     "packages/*/src/**/*.{ts,tsx}": [
-      "prettier --write",
-      "tslint -c tslint.json --fix"
+      "prettier --write"
     ]
   },
   "scripts": {
+    "//compile-types": "tsc --build packages/all",
     "changelog": "rm -rf '/tmp/github-changelog-http-cache' && github_changelog_generator",
     "ci": "npm-run-all clean compile lint test",
     "clean": "pnpm run -r clean && rm -rf node_modules && pnpm install",
@@ -39,14 +39,15 @@
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.18.6",
     "@monorepolint/cli": "workspace:*",
     "@monorepolint/rules": "workspace:*",
     "@types/jest": "^27.4.1",
     "@types/mock-fs": "^4.10.0",
-    "@types/node": "^14.0.12",
+    "@types/node": "^18.11.11",
     "gh-pages": "^3.0.0",
     "husky": "^8.0.1",
-    "jest": "^27.5.1",
+    "jest": "^29.3.1",
     "lerna": "^4.0.0",
     "lint-staged": "^13.0.3",
     "mock-fs": "^4.7.0",
@@ -54,10 +55,11 @@
     "npm-run-all": "^4.1.5",
     "prettier": "~2.0.5",
     "semver": "^7.3.2",
-    "ts-jest": "^27.1.4",
-    "ts-node": "^10.7.0",
+    "ts-jest": "^29.0.3",
+    "ts-node": "^10.9.1",
     "tslint": "^6.1.2",
-    "typescript": "^4.6.3"
+    "turbo": "^1.6.3",
+    "typescript": "^4.9.3"
   },
   "optionalDependencies": {
     "fsevents": "^2.1.3"

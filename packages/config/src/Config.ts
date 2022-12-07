@@ -6,9 +6,7 @@
  */
 
 import * as r from "runtypes";
-import { Runtype } from "runtypes/lib/runtype";
-import { Context } from "./Context";
-
+import { Context } from "./Context.js";
 // TODO: extract all these types to their own files
 
 export const RuleEntry = r.Partial({
@@ -27,12 +25,12 @@ export const RuleModule = r.Record({
   optionsRuntype: r.Unknown,
   printStats: r.Function.optional(),
 });
-export interface RuleModule<T extends Runtype = Runtype> extends r.Static<typeof RuleModule> {
+export interface RuleModule<T extends r.Runtype = r.Runtype> extends r.Static<typeof RuleModule> {
   check: Checker<T>;
   optionsRuntype: T;
 }
 
-export interface NewRuleModule<T extends Runtype = Runtype> {
+export interface NewRuleModule<T extends r.Runtype = r.Runtype> {
   check: (context: Context) => Promise<unknown> | unknown;
   name: string;
   id: string;
@@ -67,11 +65,11 @@ export interface Options {
 }
 
 // TODO: Make the extra param required. I'm not doing it now because this change is hard enough to read
-export type Checker<T extends Runtype> =
+export type Checker<T extends r.Runtype> =
   | ((context: Context, args: r.Static<T>, extra?: { id: string }) => void)
   | ((context: Context, args: r.Static<T>, extra?: { id: string }) => Promise<void>);
 
-export interface ResolvedRule<T extends Runtype = Runtype> extends NewRuleModule<T> {}
+export interface ResolvedRule<T extends r.Runtype = r.Runtype> extends NewRuleModule<T> {}
 
 export interface ResolvedConfig extends Options {
   readonly rules: ReadonlyArray<ResolvedRule>;

@@ -90,7 +90,7 @@ module.exports = {
       {
         options: {
           clean: "rm -rf build",
-          "compile:typescript": "../../node_modules/.bin/tsc",
+          "compile-typescript": "../../node_modules/.bin/tsc",
           "lint:typescript":
             "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
           "test:watch":

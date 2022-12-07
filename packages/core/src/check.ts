@@ -9,8 +9,7 @@ import { findWorkspaceDir, Host, matchesAnyGlob, nanosecondsToSanity, Table } fr
 import { dirname as pathDirname, resolve as pathResolve } from "path";
 import { ResolvedConfig, ResolvedRule } from "@monorepolint/config";
 import { Context } from "@monorepolint/config";
-import { WorkspaceContextImpl } from "./WorkspaceContext";
-
+import { WorkspaceContextImpl } from "./WorkspaceContext.js";
 export async function check(
   resolvedConfig: ResolvedConfig,
   host: Host,

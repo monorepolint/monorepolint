@@ -6,9 +6,9 @@
  */
 
 import { SimpleHost } from "@monorepolint/utils";
-import { shouldSkipPackage } from "../check";
+import { shouldSkipPackage } from "../check.js";
 import { ResolvedConfig } from "@monorepolint/config";
-import { WorkspaceContextImpl } from "../WorkspaceContext";
+import { WorkspaceContextImpl } from "../WorkspaceContext.js";
 
 describe("shouldSkipPackage", () => {
   const resolvedConfig: ResolvedConfig = {

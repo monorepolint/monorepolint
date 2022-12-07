@@ -6,11 +6,10 @@
  */
 
 import { Context, RuleModule } from "@monorepolint/config";
-import diff from "jest-diff";
+import { diff } from "jest-diff";
 import * as path from "path";
 import * as r from "runtypes";
-import { createNewRuleConversion } from "./util/createNewRuleConversion";
-
+import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
 const Options = r.Union(
   r.Record({
     file: r.String,

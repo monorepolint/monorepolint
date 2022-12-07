@@ -6,9 +6,9 @@
  */
 
 // tslint:disable:no-console
-import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils";
+import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
 import { Context, Failure } from "@monorepolint/config";
-import { packageOrder } from "../packageOrder";
+import { packageOrder } from "../packageOrder.js";
 
 const PACKAGE_UNORDERED =
   JSON.stringify(

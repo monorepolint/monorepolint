@@ -7,33 +7,40 @@
   ],
   "url": "https://github.com/monorepolint/monorepolint",
   "license": "MIT",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./build/types/index.d.ts",
+      "import": "./build/js/index.js",
+      "require": "./build/js/index.cjs"
+    }
+  },
   "scripts": {
-    "clean": "rm -rf build lib node_modules *.tgz tsconfig.tsbuildinfo",
-    "compile:typescript": "../../node_modules/.bin/tsc",
+    "clean": "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
+    "compile-typescript": "../../node_modules/.bin/tsc --build",
     "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
     "jest:watch": "../../node_modules/.bin/jest --watch",
     "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
-    "test": "../../node_modules/.bin/jest --colors --passWithNoTests",
-    "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch"
+    "test": "NODE_OPTIONS=--experimental-vm-modules ../../node_modules/.bin/jest --colors --passWithNoTests",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules ../../node_modules/.bin/jest --colors --passWithNoTests --watch",
+    "transpile-typescript": "tsup --config ../../tsup.config.cjs"
   },
   "dependencies": {
     "@monorepolint/config": "^0.4.0",
     "@monorepolint/core": "^0.4.0",
     "@monorepolint/utils": "^0.4.0",
-    "globby": "^11.0.1",
-    "jest-diff": "^26.0.1",
-    "resolve-package-path": "^3.1.0",
-    "runtypes": "^6.5.1",
-    "semver": "^7.3.2",
+    "globby": "^13.1.2",
+    "jest-diff": "^29.3.1",
+    "resolve-package-path": "^4.0.3",
+    "runtypes": "^6.6.0",
+    "semver": "^7.3.8",
     "tslib": "^2.3.1"
   },
   "devDependencies": {
-    "@types/jest-diff": "^24.3.0",
     "@types/semver": "^7.2.0",
     "@types/tmp": "^0.2.0",
-    "tmp": "^0.2.1"
+    "tmp": "^0.2.1",
+    "tsup": "^6.5.0"
   },
   "publishConfig": {
     "access": "public"

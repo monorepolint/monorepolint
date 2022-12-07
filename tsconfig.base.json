@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es2018",
-    "module": "commonjs",
-    "lib": ["es2018"],
+    "target": "es2020",
+    "module": "es2020",
+    "lib": ["ES2021"],
+    "moduleResolution": "Node16",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
@@ -13,8 +14,10 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "allowSyntheticDefaultImports": false,
+    "esModuleInterop": true,
+    "skipLibCheck": false,
+    "emitDeclarationOnly": true
   },
   "references": []
 }

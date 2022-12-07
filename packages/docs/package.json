@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "docusaurus build",
+    "buildold": "docusaurus build",
     "clear": "docusaurus clear",
     "deploy": "docusaurus deploy",
     "docusaurus": "docusaurus",

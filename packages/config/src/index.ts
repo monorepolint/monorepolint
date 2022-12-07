@@ -16,7 +16,7 @@ export {
   ResolvedRule,
   RuleModule,
   NewRuleModule,
-} from "./Config";
-export { PackageContext } from "./PackageContext";
-export { WorkspaceContext } from "./WorkspaceContext";
-export { AddErrorAsyncOptions, AddErrorOptions, AddErrorSyncOrAsyncOptions, Context, Failure } from "./Context";
+} from "./Config.js";
+export { PackageContext } from "./PackageContext.js";
+export { WorkspaceContext } from "./WorkspaceContext.js";
+export { AddErrorAsyncOptions, AddErrorOptions, AddErrorSyncOrAsyncOptions, Context, Failure } from "./Context.js";

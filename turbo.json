@@ -1,0 +1,33 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["transpile-typescript", "compile-typescript"],
+      "inputs": ["src/**/*", "tsconfig.json"],
+      "outputs": []
+    },
+    "clean": {},
+    "transpile-typescript": {
+      "dependsOn": ["^transpile-typescript"],
+      "inputs": ["src/**/*", "../../tsup.config.cjs", "tsconfig.json"],
+      "outputs": ["build/js/**"]
+    },
+    "compile-typescript": {
+      "dependsOn": ["^compile-typescript"],
+      "inputs": ["src/**/*", "tsconfig.json", "../../tsconfig.base.json"],
+      "outputs": ["build/types/**"]
+    },
+    "test": {
+      "dependsOn": ["transpile-typescript", "compile-typescript"],
+      "outputs": [],
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "tsconfig.json", "../../jest.config.base.js"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "deploy": {
+      "dependsOn": ["build", "test", "lint"],
+      "outputs": []
+    }
+  }
+}

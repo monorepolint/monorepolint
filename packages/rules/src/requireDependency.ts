@@ -7,10 +7,9 @@
 
 import { Context, RuleModule } from "@monorepolint/config";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
-import diff from "jest-diff";
+import { diff } from "jest-diff";
 import * as r from "runtypes";
-import { createNewRuleConversion } from "./util/createNewRuleConversion";
-
+import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
 const Options = r.Partial({
   dependencies: r.Dictionary(r.String),
   devDependencies: r.Dictionary(r.String),

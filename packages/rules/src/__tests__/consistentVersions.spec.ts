@@ -9,8 +9,8 @@ import { WorkspaceContextImpl } from "@monorepolint/core";
 import { Host, PackageJson, SimpleHost } from "@monorepolint/utils";
 import * as path from "path";
 import * as tmp from "tmp";
-import { consistentVersions, Options } from "../consistentVersions";
-import { makeDirectoryRecursively } from "../util/makeDirectory";
+import { consistentVersions, Options } from "../consistentVersions.js";
+import { makeDirectoryRecursively } from "../util/makeDirectory.js";
 
 describe("consistentVersions", () => {
   tmp.setGracefulCleanup();

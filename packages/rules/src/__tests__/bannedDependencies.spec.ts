@@ -9,10 +9,9 @@ import { SimpleHost } from "@monorepolint/utils";
 import { writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
-import { bannedDependencies, Options } from "../bannedDependencies";
-import { makeDirectoryRecursively } from "../util/makeDirectory";
-import { jsonToString } from "./utils";
-
+import { bannedDependencies, Options } from "../bannedDependencies.js";
+import { makeDirectoryRecursively } from "../util/makeDirectory.js";
+import { jsonToString } from "./utils.js";
 const EMPTY_PACKAGE = jsonToString({});
 
 describe("bannedDependencies", () => {

@@ -5,8 +5,7 @@
  *
  */
 // tslint:disable:no-console
-import { Table } from "./Table";
-
+import { Table } from "./Table.js";
 export class Timing {
   #starts: Array<{ name?: string; start: bigint }> = [];
   constructor(private title: string) {

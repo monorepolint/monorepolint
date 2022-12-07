@@ -6,10 +6,9 @@
  */
 
 import { Context, RuleModule } from "@monorepolint/config";
-import diff from "jest-diff";
+import { diff } from "jest-diff";
 import * as r from "runtypes";
-import { createNewRuleConversion } from "./util/createNewRuleConversion";
-
+import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
 const Options = r
   .Record({
     ignoredDependencies: r.Array(r.String).Or(r.Undefined),

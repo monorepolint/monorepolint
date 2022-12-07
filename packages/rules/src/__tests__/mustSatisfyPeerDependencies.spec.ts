@@ -19,8 +19,8 @@ import {
   mustSatisfyPeerDependencies,
   Options,
   RANGE_REGEX,
-} from "../mustSatisfyPeerDependencies";
-import { makeDirectoryRecursively } from "../util/makeDirectory";
+} from "../mustSatisfyPeerDependencies.js";
+import { makeDirectoryRecursively } from "../util/makeDirectory.js";
 
 const doesASatisfyB = (a: string, b: string) => {
   if (!isValidRange(a)) {

@@ -7,8 +7,8 @@
 
 import { Context, RuleModule } from "@monorepolint/config";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
-import { createNewRuleConversion } from "./util/createNewRuleConversion";
-import diff from "jest-diff";
+import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
+import { diff } from "jest-diff";
 import * as r from "runtypes";
 
 export const Options = r.Record({

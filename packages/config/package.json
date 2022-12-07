@@ -7,26 +7,35 @@
   ],
   "url": "https://github.com/monorepolint/monorepolint",
   "license": "MIT",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./build/types/index.d.ts",
+      "import": "./build/js/index.js",
+      "require": "./build/js/index.cjs"
+    }
+  },
   "scripts": {
-    "clean": "rm -rf build lib node_modules *.tgz tsconfig.tsbuildinfo",
-    "compile:typescript": "../../node_modules/.bin/tsc",
+    "clean": "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
+    "compile-typescript": "../../node_modules/.bin/tsc --build",
     "jest": "../../node_modules/.bin/jest --config ../../jest.config.js",
     "jest:watch": "../../node_modules/.bin/jest --config ../../jest.config.js --watch",
     "lint": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
     "lint:typescript": "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
-    "test": "../../node_modules/.bin/jest --colors --passWithNoTests",
-    "test:watch": "../../node_modules/.bin/jest --colors --passWithNoTests --watch"
+    "test": "NODE_OPTIONS=--experimental-vm-modules ../../node_modules/.bin/jest --colors --passWithNoTests",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules ../../node_modules/.bin/jest --colors --passWithNoTests --watch",
+    "transpile-typescript": "tsup --config ../../tsup.config.cjs"
   },
   "dependencies": {
     "@monorepolint/utils": "^0.4.0",
     "camelcase": "^6.0.0",
-    "chalk": "^4.1.0",
-    "runtypes": "^6.5.1",
+    "chalk": "^5.1.2",
+    "runtypes": "^6.6.0",
     "tslib": "^2.3.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "tsup": "^6.5.0"
+  },
   "publishConfig": {
     "access": "public"
   },

@@ -9,10 +9,9 @@ import { SimpleHost } from "@monorepolint/utils";
 import { writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
-import { nestedWorkspaces } from "../nestedWorkspaces";
-import { makeDirectoryRecursively } from "../util/makeDirectory";
-import { jsonToString } from "./utils";
-
+import { nestedWorkspaces } from "../nestedWorkspaces.js";
+import { makeDirectoryRecursively } from "../util/makeDirectory.js";
+import { jsonToString } from "./utils.js";
 const EMPTY_PACKAGE = jsonToString({});
 
 const PACKAGE_ROOT_WITH_PACKAGES_STAR = jsonToString({
