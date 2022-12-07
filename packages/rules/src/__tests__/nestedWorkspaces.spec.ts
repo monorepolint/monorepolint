@@ -12,6 +12,8 @@ import * as tmp from "tmp";
 import { nestedWorkspaces } from "../nestedWorkspaces.js";
 import { makeDirectoryRecursively } from "../util/makeDirectory.js";
 import { jsonToString } from "./utils.js";
+import { describe, expect, it, beforeEach, afterEach, jest } from "@jest/globals";
+
 const EMPTY_PACKAGE = jsonToString({});
 
 const PACKAGE_ROOT_WITH_PACKAGES_STAR = jsonToString({

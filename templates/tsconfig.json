@@ -5,5 +5,6 @@
     "rootDir": "./src",
     "declarationDir": "./build/types",
     "tsBuildInfoFile": "./build/tsconfig.tsbuildinfo"
-  }
+  },
+  "include": ["src"]
 }

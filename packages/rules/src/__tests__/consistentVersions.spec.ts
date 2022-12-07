@@ -11,6 +11,7 @@ import * as path from "path";
 import * as tmp from "tmp";
 import { consistentVersions, Options } from "../consistentVersions.js";
 import { makeDirectoryRecursively } from "../util/makeDirectory.js";
+import { describe, expect, it, beforeEach, afterEach, jest } from "@jest/globals";
 
 describe("consistentVersions", () => {
   tmp.setGracefulCleanup();

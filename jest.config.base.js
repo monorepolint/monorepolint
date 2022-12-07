@@ -1,9 +1,13 @@
 // @ts-check
 /** @type {import('jest').Config} */
 module.exports = {
-  preset: "ts-jest/presets/default",
+  preset: "ts-jest/presets/default-esm",
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
+    
+    // Hack for chalk
+    '#ansi-styles': 'ansi-styles/index.js',
+    '#supports-color': 'supports-color/index.js',
   },
   moduleFileExtensions: ["js", "ts", "tsx", "cjs", "cts"],
   transform: {
@@ -15,7 +19,7 @@ module.exports = {
       },
     ],
   },
-  // transformIgnorePatterns: ["node_modules/(?!(@monorepolint|find-up))"],
+  transformIgnorePatterns: ["node_modules/(?!(find-up))"],
 
   clearMocks: true,
 

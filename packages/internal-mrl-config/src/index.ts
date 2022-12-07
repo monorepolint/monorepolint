@@ -60,6 +60,7 @@ const config: Config = {
           prettier: "^2.8.0",
           "ts-jest": "^29.0.3",
           jest: "^29.3.1",
+          "@jest/globals": "^29.3.1",
           tslib: "^2.4.1",
         },
       },

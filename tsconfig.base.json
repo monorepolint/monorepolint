@@ -16,8 +16,10 @@
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": false,
     "esModuleInterop": true,
-    "skipLibCheck": false,
-    "emitDeclarationOnly": true
+    "skipLibCheck": true, // some dep is killing us here. This used to be false :(
+    "emitDeclarationOnly": true,
+    "allowJs": true, // we leverage this for transpiling during jest :(
+    "types": ["node"]
   },
   "references": []
 }

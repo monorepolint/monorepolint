@@ -12,6 +12,8 @@ import * as tmp from "tmp";
 import { requireDependency } from "../requireDependency.js";
 import { makeDirectoryRecursively } from "../util/makeDirectory.js";
 import { jsonToString } from "./utils.js";
+import { describe, expect, it, afterEach, jest } from "@jest/globals";
+
 const PACKAGE_ROOT = jsonToString({
   workspaces: {
     packages: ["packages/*"],

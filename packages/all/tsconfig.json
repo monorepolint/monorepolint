@@ -6,12 +6,21 @@
     "declarationDir": "./build/types",
     "tsBuildInfoFile": "./build/tsconfig.tsbuildinfo"
   },
+  "include": [
+    "src"
+  ],
   "references": [
     {
       "path": "../cli"
     },
     {
+      "path": "../config"
+    },
+    {
       "path": "../core"
+    },
+    {
+      "path": "../internal-mrl-config"
     },
     {
       "path": "../rules"

@@ -8,7 +8,8 @@
 import { AddErrorOptions, WorkspaceContext } from "@monorepolint/config";
 import { WorkspaceContextImpl } from "@monorepolint/core";
 import { CachingHost, Host, SimpleHost } from "@monorepolint/utils";
-import * as path from "path";
+import { expect, jest } from "@jest/globals";
+import * as path from "node:path";
 import * as tmp from "tmp";
 
 export function jsonToString(obj: {}) {
@@ -118,7 +119,7 @@ class DefaultTestingWorkspace implements TestingWorkspace {
   }
 }
 
-export type AddErrorSpy = jest.SpyInstance<void, [AddErrorOptions]>;
+export type AddErrorSpy = jest.SpiedFunction<(options: AddErrorOptions) => void>;
 
 export const HOST_FACTORIES: Array<{ name: string; make: () => Host }> = [
   { name: "SimpleHost", make: () => new SimpleHost() },

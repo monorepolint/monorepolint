@@ -10,6 +10,8 @@
 import { Context, Failure } from "@monorepolint/config";
 import { createExpectedEntryErrorMessage, createStandardizedEntryErrorMessage, packageEntry } from "../packageEntry.js";
 import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
+import { describe, expect, it, beforeEach, afterEach, jest } from "@jest/globals";
+
 const PACKAGE_MISSING_ENTRY =
   JSON.stringify(
     {
