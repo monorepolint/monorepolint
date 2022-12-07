@@ -22,15 +22,15 @@ workflows:
           name: build_node16
           executor: node16
       - build_and_test:
-          name: build_node14
-          executor: node14
+          name: build_node19
+          executor: node19
       - build_and_test:
           name: build_node18
           executor: node18
       - deploy_prerelease:
           requires:
             - build_node16
-            - build_node14
+            - build_node19
             - build_node18
           filters:
             branches:
