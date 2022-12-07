@@ -30,7 +30,7 @@
     "lint": "npm-run-all lint:*",
     "lint:monorepolint": "monorepolint check --verbose",
     "lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' -l",
-    "prePublish": "turbo clean && turbo check",
+    "prePublish": "turbo clean && pnpm install && turbo check",
     "publish:release": "pnpm run prePublish && lerna publish --no-verify-access --force-publish",
     "publish:prerelease": "pnpm run prePublish && lerna publish --no-verify-access --force-publish --canary minor --yes",
     "test": "turbo test",
