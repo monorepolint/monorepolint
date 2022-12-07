@@ -60,8 +60,7 @@ describe("mustSatisfyPeerDependencies", () => {
 
   afterEach(() => {
     for (const cleanupJob of cleanupJobs) {
-      //cleanupJob();
-      console.log(cleanupJob);
+      cleanupJob();
     }
     cleanupJobs = [];
   });
