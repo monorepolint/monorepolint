@@ -118,7 +118,7 @@ export async function check(
     if (matchesAnyGlob.printStats) matchesAnyGlob.printStats();
     if (printIncludesExcludesCosts) printIncludesExcludesCosts();
 
-    if (true) {
+    if (reportStats) {
       const table = new Table<[string, string]>({
         title: "Random Stats for check()",
         showFooter: false,
@@ -186,9 +186,7 @@ async function checkPackage(
   context.finish();
 }
 
-let printIncludesExcludesCosts: undefined | (() => void);
-
-printIncludesExcludesCosts = function printIncludesExcludesCostsFunc() {
+const printIncludesExcludesCosts = function printIncludesExcludesCostsFunc() {
   const table = new Table<[string, bigint]>({
     title: "Total Includes/Excludes Glob Cost",
     showFooter: false,

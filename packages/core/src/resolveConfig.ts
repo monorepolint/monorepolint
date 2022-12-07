@@ -39,6 +39,8 @@ export function resolveConfig(
       legacyRules = config.rules ?? {};
     }
 
+    // Silly rule can't handle that one is const and the other is not
+    // eslint-disable-next-line prefer-const
     for (let [type, ruleEntries] of Object.entries(legacyRules)) {
       if (ruleEntries === false) {
         continue;
@@ -120,6 +122,7 @@ function loadRuleModule(type: string, workspaceRootDir: string) {
     const [packageName, ruleVariable] = type.split(":");
     mod = require(require.resolve(packageName, { paths: [workspaceRootDir] }))[camelCase(ruleVariable)];
   } else {
+    const require = module.createRequire(workspaceRootDir);
     // otherwise just import the default
     mod = __importDefault(require(require.resolve(type, { paths: [workspaceRootDir] }))).default;
   }

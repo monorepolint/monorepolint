@@ -116,6 +116,8 @@ export class PackageContextImpl implements PackageContext {
   }
 
   public getWorkspaceContext(): WorkspaceContext {
+    // Its not an alias, its a flattened recursion
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let context: Context = this;
     while (context.parent !== undefined) {
       context = context.parent;

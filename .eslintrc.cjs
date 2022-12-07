@@ -5,6 +5,7 @@ module.exports = {
   root: true,
   rules: {
     "@typescript-eslint/no-empty-interface": "warn", // this rule could make perf worse!
+    "@typescript-eslint/no-inferrable-types": "warn", // same.
   },
   ignorePatterns: ["build/"],
 };

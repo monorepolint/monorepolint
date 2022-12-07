@@ -5,7 +5,7 @@
  *
  */
 
-import minimatch from "minimatch";
+import micromatch from "micromatch";
 import { nanosecondsToSanity } from "./nanosecondsToSanity.js";
 import { Table } from "./Table.js";
 // This file requires a LOT of caching to be performant. We have three layers to avoid work.
@@ -66,8 +66,8 @@ export const matchesAnyGlob: MatchesAnyGlob = function matchesAnyGlobFunc(needle
       if (result === undefined) {
         let regexp: RegExp | undefined | false = compiledGlobCache.get(pattern);
         if (regexp === undefined) {
-          regexp = minimatch.makeRe(pattern);
-          if (regexp === false) throw new Error("bad glob");
+          regexp = micromatch.makeRe(pattern);
+          // if (regexp === false) throw new Error("bad glob");
           compiledGlobCache.set(pattern, regexp);
         }
 
@@ -129,8 +129,8 @@ export function needleInPattern(needle: string, pattern: string) {
   if (result === undefined) {
     let regexp: RegExp | undefined | false = compiledGlobCache.get(pattern);
     if (regexp === undefined) {
-      regexp = minimatch.makeRe(pattern);
-      if (regexp === false) throw new Error("bad glob");
+      regexp = micromatch.makeRe(pattern);
+      // if (regexp === false) throw new Error("bad glob");
       compiledGlobCache.set(pattern, regexp);
     }
 
