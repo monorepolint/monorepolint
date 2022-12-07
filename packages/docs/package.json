@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "buildold": "docusaurus build",
+    "build-docs": "docusaurus build",
     "clear": "docusaurus clear",
     "deploy": "docusaurus deploy",
     "docusaurus": "docusaurus",
@@ -12,11 +12,12 @@
     "swizzle": "docusaurus swizzle"
   },
   "dependencies": {
-    "@docusaurus/core": "^2.0.0-beta.0",
-    "@docusaurus/preset-classic": "^2.0.0-beta.0",
-    "classnames": "^2.2.6",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4"
+    "@docusaurus/core": "^2.2.0",
+    "@docusaurus/preset-classic": "^2.2.0",
+    "@mdx-js/react": "^1.6.22",
+    "classnames": "^2.3.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/jest": "^29.2.4",
