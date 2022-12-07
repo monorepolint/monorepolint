@@ -8,11 +8,10 @@
 import { Context, RuleModule } from "@monorepolint/config";
 import { matchesAnyGlob } from "@monorepolint/utils";
 import { AggregateTiming } from "@monorepolint/utils";
-import path from "path";
+import * as path from "node:path";
 import * as r from "runtypes";
-import { createNewRuleConversion } from "./util/createNewRuleConversion";
-import { IPackageDependencyGraphNode, PackageDependencyGraphService } from "./util/packageDependencyGraphService";
-
+import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
+import { IPackageDependencyGraphNode, PackageDependencyGraphService } from "./util/packageDependencyGraphService.js";
 // FIXME: This rule is messed. bannedTransitiveDependencies doesnt glob
 
 const bannedDepGlobsField = r.Union(

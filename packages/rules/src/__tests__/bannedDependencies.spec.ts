@@ -4,15 +4,15 @@
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
+import { describe, expect, it, beforeEach, jest, afterEach } from "@jest/globals";
 import { WorkspaceContextImpl } from "@monorepolint/core";
 import { SimpleHost } from "@monorepolint/utils";
 import { writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
-import { bannedDependencies, Options } from "../bannedDependencies";
-import { makeDirectoryRecursively } from "../util/makeDirectory";
-import { jsonToString } from "./utils";
-
+import { bannedDependencies, Options } from "../bannedDependencies.js";
+import { makeDirectoryRecursively } from "../util/makeDirectory.js";
+import { jsonToString } from "./utils.js";
 const EMPTY_PACKAGE = jsonToString({});
 
 describe("bannedDependencies", () => {

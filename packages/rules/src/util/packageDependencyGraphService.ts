@@ -3,7 +3,7 @@
  */
 
 import { Host, PackageJson } from "@monorepolint/utils";
-import path from "path";
+import * as path from "node:path";
 import resolvePackagePath from "resolve-package-path";
 
 /** Interface for a node in a package dependency graph. */

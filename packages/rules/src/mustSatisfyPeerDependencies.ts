@@ -7,11 +7,11 @@
 
 import { Context, RuleModule } from "@monorepolint/config";
 import { Host, mutateJson, PackageJson } from "@monorepolint/utils";
-import path from "path";
-import resolvePackagePath from "resolve-package-path";
+import * as path from "node:path";
 import * as r from "runtypes";
 import { coerce } from "semver";
-import { createNewRuleConversion } from "./util/createNewRuleConversion";
+import resolvePackagePath from "resolve-package-path";
+import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
 
 const Options = r.Union(
   r.Partial({
@@ -219,7 +219,8 @@ export const MATCH_ANY_VERSION_RANGE = /^(\*|x)$/;
  *
  * More info: https://docs.npmjs.com/about-semantic-versioning
  */
-export const MATCH_GREATER_OR_EQUAL_VERSION_RANGE = /^>= ?\d+(?:\.\d+|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?$/;
+export const MATCH_GREATER_OR_EQUAL_VERSION_RANGE =
+  /^>= ?\d+(?:\.\d+|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?$/;
 
 /**
  * This regex allows any of the following formats:
@@ -243,7 +244,8 @@ export const MATCH_GREATER_OR_EQUAL_VERSION_RANGE = /^>= ?\d+(?:\.\d+|\.\d+\.\d+
  *
  * More info: https://docs.npmjs.com/about-semantic-versioning
  */
-export const MATCH_MAJOR_VERSION_RANGE = /^(?:\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d+\.\d+|\^\d+\.\d+\.x|\^\d+\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$/;
+export const MATCH_MAJOR_VERSION_RANGE =
+  /^(?:\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d+\.\d+|\^\d+\.\d+\.x|\^\d+\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$/;
 
 /**
  * Does not currently accept `<`, `<=`, `>`, `=` or `-` for ranges (e.g. `> 2.5.1 < 3` or `1.0.0 - 1.2.0`),
@@ -258,7 +260,8 @@ export const MATCH_MAJOR_VERSION_RANGE = /^(?:\^?\d+|\^?\d+\.x|\^?\d+\.x\.x|\^\d
  *
  * TODO: accept minor pins `~4.2.1`
  */
-export const RANGE_REGEX = /^(\*|x|>= ?\d+(?:\.\d+|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?|\^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?( \|\| \^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?)*)$/;
+export const RANGE_REGEX =
+  /^(\*|x|>= ?\d+(?:\.\d+|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?|\^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?( \|\| \^?\d+(\.x|\.x\.x|\.\d+|\.\d+\.x|\.\d+\.\d+(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)?)*)$/;
 
 interface IPeerDependencyRequirement {
   fromPackageName: string;
@@ -273,7 +276,7 @@ interface IResolvedPeerDependencyRequirement {
 function checkSatisfyPeerDependencies(context: Context, opts: Options) {
   const { dependencyBlacklist, dependencyWhitelist, enforceForDevDependencies, skipUnparseableRanges } = opts;
   const packageJsonPath = path.resolve(context.getPackageJsonPath());
-  const packageJson: PackageJson = require(packageJsonPath);
+  const packageJson: PackageJson = context.host.readJson(packageJsonPath);
   const packageDependencies = packageJson.dependencies || {};
   const packageDevDependencies = packageJson.devDependencies || {};
   const packagePeerDependencies = packageJson.peerDependencies || {};
@@ -308,7 +311,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
     if (dependencyPackageJsonPath == null) {
       throw new Error(`Could not resolve ${dependency} from ${path.dirname(packageJsonPath)}`);
     }
-    const dependencyPackageJson: PackageJson = require(dependencyPackageJsonPath);
+    const dependencyPackageJson: PackageJson = context.host.readJson(dependencyPackageJsonPath);
     const requiredPeerDependencies = dependencyPackageJson.peerDependencies;
     if (requiredPeerDependencies == null) {
       continue;

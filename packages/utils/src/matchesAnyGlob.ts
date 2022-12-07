@@ -5,10 +5,9 @@
  *
  */
 
-import { makeRe } from "micromatch";
-import { nanosecondsToSanity } from "./nanosecondsToSanity";
-import { Table } from "./Table";
-
+import micromatch from "micromatch";
+import { nanosecondsToSanity } from "./nanosecondsToSanity.js";
+import { Table } from "./Table.js";
 // This file requires a LOT of caching to be performant. We have three layers to avoid work.
 
 /**
@@ -65,9 +64,10 @@ export const matchesAnyGlob: MatchesAnyGlob = function matchesAnyGlobFunc(needle
       // N.B. true/false/undefined
       result = patternCache.get(needle); // only thing different from the inline is we need to reuse `result`
       if (result === undefined) {
-        let regexp = compiledGlobCache.get(pattern);
+        let regexp: RegExp | undefined | false = compiledGlobCache.get(pattern);
         if (regexp === undefined) {
-          regexp = makeRe(pattern);
+          regexp = micromatch.makeRe(pattern);
+          // if (regexp === false) throw new Error("bad glob");
           compiledGlobCache.set(pattern, regexp);
         }
 
@@ -127,9 +127,10 @@ export function needleInPattern(needle: string, pattern: string) {
   // N.B. true/false/undefined
   let result = patternCache.get(needle);
   if (result === undefined) {
-    let regexp = compiledGlobCache.get(pattern);
+    let regexp: RegExp | undefined | false = compiledGlobCache.get(pattern);
     if (regexp === undefined) {
-      regexp = makeRe(pattern);
+      regexp = micromatch.makeRe(pattern);
+      // if (regexp === false) throw new Error("bad glob");
       compiledGlobCache.set(pattern, regexp);
     }
 

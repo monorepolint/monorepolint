@@ -14,50 +14,46 @@
   },
   "lint-staged": {
     "packages/*/src/**/*.{ts,tsx}": [
-      "prettier --write",
-      "tslint -c tslint.json --fix"
+      "prettier --write"
     ]
   },
   "scripts": {
+    "check-mrl": "mrl check --verbose",
     "changelog": "rm -rf '/tmp/github-changelog-http-cache' && github_changelog_generator",
-    "ci": "npm-run-all clean compile lint test",
-    "clean": "pnpm run -r clean && rm -rf node_modules && pnpm install",
-    "compile": "pnpm run -r compile:typescript",
+    "ci": "pnpm clean && turbo check",
+    "clean": "turbo clean && rm -rf node_modules && pnpm install",
+    "build": "turbo build",
     "compile:fast": "cd packages/all; tsc --build",
     "compile:watch": "cd packages/all; tsc --build --watch",
     "fix:lint:monorepolint": "pnpm exec monorepolint fix",
     "fix:lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' --write",
-    "fix:lint:typescript": "pnpm run -r --no-bail lint:typescript -- --fix",
     "lint": "npm-run-all lint:*",
     "lint:monorepolint": "monorepolint check --verbose",
     "lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' -l",
-    "lint:typescript": "pnpm run -r --no-bail lint:typescript",
-    "prePublish": "npm-run-all clean compile lint test",
+    "prePublish": "turbo clean && turbo check",
     "publish:release": "pnpm run prePublish && lerna publish --no-verify-access --force-publish",
     "publish:prerelease": "pnpm run prePublish && lerna publish --no-verify-access --force-publish --canary minor --yes",
-    "test": "pnpm run -r test",
+    "test": "turbo test",
     "prepare": "husky install"
   },
   "devDependencies": {
     "@monorepolint/cli": "workspace:*",
-    "@monorepolint/rules": "workspace:*",
-    "@types/jest": "^27.4.1",
+    "@monorepolint/internal-mrl-config": "workspace:*",
     "@types/mock-fs": "^4.10.0",
-    "@types/node": "^14.0.12",
+    "@types/node": "^18.11.11",
     "gh-pages": "^3.0.0",
-    "husky": "^8.0.1",
-    "jest": "^27.5.1",
+    "husky": "^8.0.2",
+    "jest": "^29.3.1",
     "lerna": "^4.0.0",
-    "lint-staged": "^13.0.3",
+    "lint-staged": "^13.1.0",
     "mock-fs": "^4.7.0",
     "node-notifier": "^10.0.1",
     "npm-run-all": "^4.1.5",
-    "prettier": "~2.0.5",
+    "prettier": "^2.8.0",
     "semver": "^7.3.2",
-    "ts-jest": "^27.1.4",
-    "ts-node": "^10.7.0",
-    "tslint": "^6.1.2",
-    "typescript": "^4.6.3"
+    "ts-jest": "^29.0.3",
+    "turbo": "^1.6.3",
+    "typescript": "^4.9.3"
   },
   "optionalDependencies": {
     "fsevents": "^2.1.3"

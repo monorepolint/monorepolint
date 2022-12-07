@@ -6,11 +6,10 @@
  */
 
 import { Context, RuleModule } from "@monorepolint/config";
-import globby from "globby";
-import path from "path";
+import * as globby from "globby";
+import * as path from "node:path";
 import * as r from "runtypes";
-import { createNewRuleConversion } from "./util/createNewRuleConversion";
-
+import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
 export const Options = r.Undefined;
 
 type Options = r.Static<typeof Options>;
@@ -21,7 +20,7 @@ export const nestedWorkspaces: RuleModule<typeof Options> = {
     const rootPackageJson = context.getWorkspaceContext().getPackageJson();
 
     // Expand a set of globs covering all package.json files in the entire repo (except the root)
-    const packageJsonPaths = globby.sync(["*/**/package.json", "!**/node_modules/**"]);
+    const packageJsonPaths = globby.globbySync(["*/**/package.json", "!**/node_modules/**"]);
 
     const workspaces = Array.isArray(rootPackageJson.workspaces)
       ? rootPackageJson.workspaces
@@ -41,7 +40,7 @@ export const nestedWorkspaces: RuleModule<typeof Options> = {
     const workspacePackageJsons = (workspaces || []).map((item) => `${item}/package.json`);
 
     // Expand the globs to get an array of all package.json files that are in packages specified by a workspace.
-    const expandedWorkspacesGlobs = globby.sync([...workspacePackageJsons, "!**/node_modules/**"]);
+    const expandedWorkspacesGlobs = globby.globbySync([...workspacePackageJsons, "!**/node_modules/**"]);
 
     // Ensure there are no package.jsons which are not included in the globbed workspaces set
     const difference = packageJsonPaths.filter((packageJsonPath) => !expandedWorkspacesGlobs.includes(packageJsonPath));

@@ -4,11 +4,11 @@
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
-
+import { jest, describe, expect, it } from "@jest/globals";
 import { SimpleHost } from "@monorepolint/utils";
-import { shouldSkipPackage } from "../check";
+import { shouldSkipPackage } from "../check.js";
 import { ResolvedConfig } from "@monorepolint/config";
-import { WorkspaceContextImpl } from "../WorkspaceContext";
+import { WorkspaceContextImpl } from "../WorkspaceContext.js";
 
 describe("shouldSkipPackage", () => {
   const resolvedConfig: ResolvedConfig = {

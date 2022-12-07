@@ -7,9 +7,8 @@
 
 import { Context, RuleModule } from "@monorepolint/config";
 import * as r from "runtypes";
-import { checkAlpha } from "./util/checkAlpha";
-import { createNewRuleConversion } from "./util/createNewRuleConversion";
-
+import { checkAlpha } from "./util/checkAlpha.js";
+import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
 const Options = r.Undefined;
 
 export const alphabeticalDependencies: RuleModule<typeof Options> = {

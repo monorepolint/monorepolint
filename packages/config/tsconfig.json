@@ -1,9 +1,14 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./lib",
-    "rootDir": "./src"
+    "outDir": "./build/js",
+    "rootDir": "./src",
+    "declarationDir": "./build/types",
+    "tsBuildInfoFile": "./build/tsconfig.tsbuildinfo"
   },
+  "include": [
+    "src"
+  ],
   "references": [
     {
       "path": "../utils"

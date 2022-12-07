@@ -5,8 +5,7 @@
  *
  */
 // tslint:disable:no-console
-import { nanosecondsToSanity } from "./nanosecondsToSanity";
-
+import { nanosecondsToSanity } from "./nanosecondsToSanity.js";
 type HeaderFooterHelper<HB, FB, H, F> = (HB extends true ? { header: H } : { header?: H }) &
   (FB extends true ? { footer: F } : { footer?: F });
 

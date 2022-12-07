@@ -7,23 +7,18 @@
 
 import { Context, RuleModule } from "@monorepolint/config";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
-import { createNewRuleConversion } from "./util/createNewRuleConversion";
-import diff from "jest-diff";
+import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
+import { diff } from "jest-diff";
 import * as r from "runtypes";
 
 export const Options = r.Record({
   scripts: r.Dictionary(
     r.Union(
       r.String,
-      r
-        .Record({
-          options: r.Array(r.String.Or(r.Undefined)),
-        })
-        .And(
-          r.Partial({
-            fixValue: r.Union(r.String, r.Undefined, r.Literal(false)),
-          })
-        )
+      r.Record({
+        options: r.Array(r.String.Or(r.Undefined)),
+        fixValue: r.Union(r.String, r.Undefined, r.Literal(false)).optional(),
+      })
     )
   ), // string => string
 });
@@ -64,7 +59,7 @@ export const packageScript = {
           }
           allowedValues.add(q);
         }
-        fixToEmpty = value.hasOwnProperty("fixValue") && value.fixValue === undefined;
+        fixToEmpty = Object.prototype.hasOwnProperty.call(value, "fixValue") && value.fixValue === undefined;
         fixValue = value.fixValue;
       }
 

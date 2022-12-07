@@ -5,9 +5,9 @@
  *
  */
 
-import * as realFs from "fs";
-import { Host } from "./Host";
-import * as path from "path";
+import * as realFs from "node:fs";
+import { Host } from "./Host.js";
+import * as path from "node:path";
 
 function assertNoTombstone(node: Node): asserts node is Node & { tombstone?: false } {
   if (node.tombstone) {
@@ -238,6 +238,7 @@ export class CachingHost implements Host {
           assertType(linkedNode, "dir");
           curNode = linkedNode;
         }
+        assertType(curNode, "dir");
         curNode = curNode.dir.get(part) ?? this.#stubify(path.join(curNode.fullPath, part), curNode as any);
         curPath = path.join(curPath, part);
       }

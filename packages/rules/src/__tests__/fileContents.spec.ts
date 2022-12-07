@@ -6,16 +6,17 @@
  */
 
 // tslint:disable:no-console
-import { createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils";
+import { createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
 import { AddErrorOptions, Failure } from "@monorepolint/config";
-import { fileContents } from "../fileContents";
+import { fileContents } from "../fileContents.js";
+import { describe, expect, it, beforeEach, jest } from "@jest/globals";
 
 const EXPECTED_FOO_FILE = "hello world";
 
 describe.each(HOST_FACTORIES)("fileContents ($name)", (hostFactory) => {
   describe("fix: true", () => {
     let workspace: TestingWorkspace;
-    let spy: jest.SpyInstance<void, [AddErrorOptions]>;
+    let spy: jest.SpiedFunction<(opts: AddErrorOptions) => void>;
 
     beforeEach(async () => {
       workspace = await createTestingWorkspace({

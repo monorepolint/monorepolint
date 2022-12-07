@@ -9,9 +9,10 @@ import { SimpleHost } from "@monorepolint/utils";
 import { readFileSync, writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
-import { consistentDependencies, Options } from "../consistentDependencies";
-import { makeDirectoryRecursively } from "../util/makeDirectory";
-import { jsonToString } from "./utils";
+import { consistentDependencies, Options } from "../consistentDependencies.js";
+import { makeDirectoryRecursively } from "../util/makeDirectory.js";
+import { jsonToString } from "./utils.js";
+import { describe, expect, it, afterEach, jest } from "@jest/globals";
 
 const PACKAGE_ROOT = jsonToString({
   workspaces: {

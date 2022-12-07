@@ -4,11 +4,11 @@
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
-
-import { CachingHost } from "../CachingHost";
-import * as realfs from "fs";
-import * as path from "path";
-import * as os from "os";
+import { describe, expect, it, beforeEach } from "@jest/globals";
+import { CachingHost } from "../CachingHost.js";
+import * as realfs from "node:fs";
+import * as path from "node:path";
+import * as os from "node:os";
 
 interface TestCase<T> {
   getFs: () => T;

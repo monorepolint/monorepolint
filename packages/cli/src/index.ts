@@ -12,19 +12,12 @@ import chalk from "chalk";
 import * as fs from "fs";
 import * as path from "path";
 import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 
 const timing = new Timing("CLI Timing Data");
 
 export default function run() {
-  timing.start("Register ts-node");
-  try {
-    // tslint:disable-next-line:no-implicit-dependencies
-    require("ts-node").register();
-  } catch (err) {
-    // no ts-node, no problem
-  }
-  timing.stop();
-  yargs
+  yargs(hideBin(process.argv))
     .command(
       "check [--verbose] [--fix] [--paths <paths>...]",
       "Checks the mono repo for lint violations",
@@ -53,7 +46,13 @@ export default function run() {
 }
 
 function getVersion(): string {
-  return JSON.parse(fs.readFileSync(path.join(__dirname, "../package.json"), "utf-8")).version;
+  return JSON.parse(
+    fs.readFileSync(
+      new URL("../../package.json", import.meta.url),
+      // path.join(__dirname, "../package.json"),
+      "utf-8"
+    )
+  ).version;
 }
 
 async function handleCheck(args: Options) {
@@ -67,26 +66,46 @@ async function handleCheck(args: Options) {
   const host = process.env.MRL_CACHING_HOST === "true" ? new CachingHost() : new SimpleHost();
 
   const configFilesToTry = [
-    path.resolve(process.cwd(), ".monorepolint.config.ts"),
     path.resolve(process.cwd(), ".monorepolint.config.js"),
+    path.resolve(process.cwd(), ".monorepolint.config.cjs"),
+    path.resolve(process.cwd(), ".monorepolint.config.mjs"),
   ];
 
   timing.start("Read/compile config");
   let unverifiedConfig;
+  let foundConfig = undefined;
+  let importError: unknown = undefined;
   for (const configPath of configFilesToTry) {
+    if (!fs.existsSync(configPath)) {
+      continue;
+    }
+    foundConfig = configPath;
     try {
-      unverifiedConfig = require(configPath);
+      unverifiedConfig = (await import(configPath)).default;
       break;
     } catch (e) {
+      importError = e;
       if (!(e instanceof Error && e.message.startsWith("Cannot find module"))) {
         console.log(e);
       }
-      continue;
+      break;
     }
   }
   if (unverifiedConfig === undefined) {
-    throw new Error("Unable to find a usable config file");
+    if (importError) {
+      throw new AggregateError(
+        [importError],
+        `File exists ('${foundConfig}') but could not be imported due to error: ${(importError as any)?.message}`
+      );
+    } else if (foundConfig) {
+      throw new Error(`File exists ('${foundConfig}') and was imported but the default export was undefined`);
+    } else {
+      throw new Error(
+        `Unable to find a usable config file. Tried: \n${configFilesToTry.map((a) => `  - ${a}`).join("\n")}`
+      );
+    }
   }
+
   timing.start("Verify config");
   const config: Config | LegacyConfig = Config.Or(LegacyConfig).check(unverifiedConfig) as any;
   timing.start("Resolve config");

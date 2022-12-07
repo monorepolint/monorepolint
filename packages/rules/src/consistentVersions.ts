@@ -9,8 +9,7 @@ import { Context, RuleModule } from "@monorepolint/config";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
 import * as r from "runtypes";
 import { coerce, SemVer } from "semver";
-import { createNewRuleConversion } from "./util/createNewRuleConversion";
-
+import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
 export const Options = r.Record({
   matchDependencyVersions: r.Dictionary(r.Union(r.String, r.Array(r.String))),
 });

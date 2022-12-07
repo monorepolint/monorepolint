@@ -6,8 +6,7 @@
  */
 // tslint:disable:no-console
 
-import { Table } from "./Table";
-
+import { Table } from "./Table.js";
 export class AggregateTiming {
   #data = new Map<string, { count: number; total: bigint }>();
   #last: { count: number; total: bigint } | undefined;

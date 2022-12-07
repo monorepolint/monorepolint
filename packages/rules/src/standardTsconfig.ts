@@ -7,8 +7,8 @@
 
 import { Context, RuleModule } from "@monorepolint/config";
 import { matchesAnyGlob } from "@monorepolint/utils";
-import diff from "jest-diff";
-import { createNewRuleConversion } from "./util/createNewRuleConversion";
+import { diff } from "jest-diff";
+import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
 import * as path from "path";
 import * as r from "runtypes";
 

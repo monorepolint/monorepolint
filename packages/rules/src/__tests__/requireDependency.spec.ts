@@ -6,12 +6,13 @@
  */
 import { WorkspaceContextImpl } from "@monorepolint/core";
 import { SimpleHost } from "@monorepolint/utils";
-import { readFileSync, writeFileSync } from "fs";
-import * as path from "path";
+import { readFileSync, writeFileSync } from "node:fs";
+import * as path from "node:path";
 import * as tmp from "tmp";
-import { requireDependency } from "../requireDependency";
-import { makeDirectoryRecursively } from "../util/makeDirectory";
-import { jsonToString } from "./utils";
+import { requireDependency } from "../requireDependency.js";
+import { makeDirectoryRecursively } from "../util/makeDirectory.js";
+import { jsonToString } from "./utils.js";
+import { describe, expect, it, afterEach, jest } from "@jest/globals";
 
 const PACKAGE_ROOT = jsonToString({
   workspaces: {

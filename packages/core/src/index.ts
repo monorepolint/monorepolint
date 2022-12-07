@@ -5,7 +5,7 @@
  *
  */
 
-export { check } from "./check";
-export { PackageContextImpl } from "./PackageContext"; // exposed for rule tests
-export { WorkspaceContextImpl } from "./WorkspaceContext"; // exposed for rule tests
-export { resolveConfig } from "./resolveConfig";
+export { check } from "./check.js";
+export { PackageContextImpl } from "./PackageContext.js";
+export { WorkspaceContextImpl } from "./WorkspaceContext.js";
+export { resolveConfig } from "./resolveConfig.js";

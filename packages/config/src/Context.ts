@@ -6,9 +6,8 @@
  */
 
 import { Host, PackageJson } from "@monorepolint/utils";
-import { ResolvedConfig } from "./Config";
-import { WorkspaceContext } from "./WorkspaceContext";
-
+import { ResolvedConfig } from "./Config.js";
+import { WorkspaceContext } from "./WorkspaceContext.js";
 export interface Failure {
   message: string;
   file?: string;

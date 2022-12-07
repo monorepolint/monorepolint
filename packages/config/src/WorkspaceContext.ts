@@ -5,8 +5,7 @@
  *
  */
 
-import { PackageContext } from "./PackageContext";
-
+import { PackageContext } from "./PackageContext.js";
 // Right now, this stuff is done serially so we are writing less code to support that. Later we may want to redo this.
 export interface WorkspaceContext extends PackageContext {
   getWorkspacePackageDirs(): Promise<string[]>;

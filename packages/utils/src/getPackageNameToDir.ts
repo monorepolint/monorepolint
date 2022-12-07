@@ -6,10 +6,9 @@
  */
 
 import { join as pathJoin } from "path";
-import { getWorkspacePackageDirs } from "./getWorkspacePackageDirs";
-import { Host } from "./Host";
-import { PackageJson } from "./PackageJson";
-
+import { getWorkspacePackageDirs } from "./getWorkspacePackageDirs.js";
+import { Host } from "./Host.js";
+import { PackageJson } from "./PackageJson.js";
 /**
  * returns a map of package names to their directories in the workspace.
  * if `resolvePaths` is true, the returned directory names are absolute paths

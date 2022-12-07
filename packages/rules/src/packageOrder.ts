@@ -6,10 +6,9 @@
  */
 
 import { Context, RuleModule } from "@monorepolint/config";
-import diff from "jest-diff";
+import { diff } from "jest-diff";
 import * as r from "runtypes";
-import { createNewRuleConversion } from "./util/createNewRuleConversion";
-
+import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
 type OrderFunction = (context: Context) => (a: string, b: string) => number;
 
 const Options = r
@@ -28,9 +27,12 @@ const defaultKeyOrder = [
   "contributors",
   "url",
   "license",
+  "type",
+  "exports",
   "private",
   "engines",
   "bin",
+  "types",
   "main",
   "module",
   "typings",

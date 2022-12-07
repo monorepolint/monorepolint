@@ -7,8 +7,7 @@
 
 import * as realFs from "fs";
 
-import { Host } from "./Host";
-
+import { Host } from "./Host.js";
 export class SimpleHost implements Host {
   constructor(private fs: typeof realFs = realFs) {}
   mkdir(directoryPath: string, opts?: { recursive: boolean }): void {

@@ -5,16 +5,16 @@
  *
  */
 
-export { getWorkspacePackageDirs } from "./getWorkspacePackageDirs";
-export { mutateJson } from "./mutateJson";
-export { PackageJson } from "./PackageJson";
-export { findWorkspaceDir } from "./findWorkspaceDir";
-export { getPackageNameToDir } from "./getPackageNameToDir";
-export { Host } from "./Host";
-export { SimpleHost } from "./SimpleHost";
-export { CachingHost } from "./CachingHost";
-export { matchesAnyGlob } from "./matchesAnyGlob";
-export { nanosecondsToSanity } from "./nanosecondsToSanity";
-export { AggregateTiming } from "./AggregateTiming";
-export { Timing } from "./Timing";
-export { Table } from "./Table";
+export { getWorkspacePackageDirs } from "./getWorkspacePackageDirs.js";
+export { mutateJson } from "./mutateJson.js";
+export { PackageJson } from "./PackageJson.js";
+export { findWorkspaceDir } from "./findWorkspaceDir.js";
+export { getPackageNameToDir } from "./getPackageNameToDir.js";
+export { Host } from "./Host.js";
+export { SimpleHost } from "./SimpleHost.js";
+export { CachingHost } from "./CachingHost.js";
+export { matchesAnyGlob } from "./matchesAnyGlob.js";
+export { nanosecondsToSanity } from "./nanosecondsToSanity.js";
+export { AggregateTiming } from "./AggregateTiming.js";
+export { Timing } from "./Timing.js";
+export { Table } from "./Table.js";

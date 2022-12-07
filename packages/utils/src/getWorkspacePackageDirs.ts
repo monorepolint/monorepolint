@@ -6,20 +6,35 @@
  */
 
 import { existsSync } from "fs";
-import glob from "glob";
-import { join as pathJoin, resolve as pathResolve } from "path";
-import { Host } from "./Host";
-import { PackageJson } from "./PackageJson";
-import findPNPMWorkspacePackages from "@pnpm/find-workspace-packages";
+import * as glob from "glob";
+import * as path from "node:path";
+import * as fs from "node:fs";
+import { Host } from "./Host.js";
+import { PackageJson } from "./PackageJson.js";
+import * as readYamlFile from "read-yaml-file";
+import { findPackages } from "find-packages";
+
+async function findPNPMWorkspacePackages(workspaceRoot: string) {
+  workspaceRoot = fs.realpathSync(workspaceRoot);
+  const workspaceManifest = await readYamlFile.default<{ packages?: string[] }>(
+    path.join(workspaceRoot, "pnpm-workspace.yaml")
+  );
+
+  return findPackages(workspaceRoot, {
+    ignore: ["**/node_modules/**", "**/bower_components/**"],
+    includeRoot: true,
+    patterns: workspaceManifest.packages,
+  });
+}
 
 export async function getWorkspacePackageDirs(
   host: Pick<Host, "readJson" | "exists">,
   workspaceDir: string,
   resolvePaths: boolean = false
 ) {
-  const packageJson: PackageJson = host.readJson(pathJoin(workspaceDir, "package.json"));
+  const packageJson: PackageJson = host.readJson(path.join(workspaceDir, "package.json"));
 
-  const isPnpmWorkspace = host.exists(pathJoin(workspaceDir, "pnpm-workspace.yaml"));
+  const isPnpmWorkspace = host.exists(path.join(workspaceDir, "pnpm-workspace.yaml"));
   if (isPnpmWorkspace) {
     const workspacePackages = await findPNPMWorkspacePackages(workspaceDir);
     if (workspacePackages.length === 0) {
@@ -39,11 +54,11 @@ export async function getWorkspacePackageDirs(
 
   for (const pattern of packageGlobs) {
     for (const packagePath of glob.sync(pattern, { cwd: workspaceDir })) {
-      const packageJsonPath = pathJoin(workspaceDir, packagePath, "package.json");
+      const packageJsonPath = path.join(workspaceDir, packagePath, "package.json");
 
       if (existsSync(packageJsonPath)) {
         if (resolvePaths === true) {
-          ret.push(pathResolve(pathJoin(workspaceDir, packagePath)));
+          ret.push(path.resolve(path.join(workspaceDir, packagePath)));
         } else {
           ret.push(packagePath);
         }
