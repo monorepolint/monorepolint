@@ -12,7 +12,7 @@ import { expect, jest } from "@jest/globals";
 import * as path from "node:path";
 import * as tmp from "tmp";
 
-export function jsonToString(obj: {}) {
+export function jsonToString(obj: unknown) {
   return JSON.stringify(obj, undefined, 2) + "\n";
 }
 

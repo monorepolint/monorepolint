@@ -12,7 +12,6 @@ import * as r from "runtypes";
 import { coerce } from "semver";
 import resolvePackagePath from "resolve-package-path";
 import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
-import * as module from "node:module";
 
 const Options = r.Union(
   r.Partial({
@@ -307,7 +306,6 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
   const allDependencies = enforceForDevDependencies
     ? [...Object.keys(packageDependencies), ...Object.keys(packageDevDependencies)]
     : Object.keys(packageDependencies);
-  console.log(packageJsonPath);
   for (const dependency of allDependencies) {
     const dependencyPackageJsonPath = resolvePackagePath(dependency, path.dirname(packageJsonPath));
     if (dependencyPackageJsonPath == null) {

@@ -16,6 +16,5 @@ export default defineConfig({
       "../../../node_modules/*",
       "../../../../node_modules/*",
     ];
-    options.logLevel = "debug";
   },
 });

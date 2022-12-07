@@ -22,16 +22,17 @@
       "outputs": [],
       "inputs": ["src/**/*.tsx", "src/**/*.ts", "tsconfig.json", "../../jest.config.base.js"]
     },
-    "//#check-mrl": {
-      "dependsOn": ["@monorepolint/internal-mrl-config#transpile-typescript"],
-      "inputs": ["package.json", "packages/*/package.json"]
-    },
     "lint": {
-      "outputs": []
+      "outputs": [],
+      "inputs": ["package.json", "src/**/*", "../../.eslintrc.cjs"]
     },
     "check": {
-      "dependsOn": ["build", "test", "lint"],
+      "dependsOn": ["build", "test", "lint", "//#check-mrl"],
       "outputs": []
+    },
+    "//#check-mrl": {
+      "dependsOn": ["@monorepolint/internal-mrl-config#transpile-typescript"],
+      "inputs": ["package.json", "packages/*/package.json", "packages/*/tsconfig.json", "templates/*"]
     },
     "//#compile:watch": {
       "cache": false

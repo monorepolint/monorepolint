@@ -986,7 +986,7 @@ describe("mustSatisfyPeerDependencies", () => {
       devDependencies: {
         ccc: "0.0.1",
       },
-    };
+    } as const;
     const readTestPackageJson = addPackageJson(host, "./package.json", testPackageJson);
 
     const aaaPackageJson = {
@@ -994,21 +994,21 @@ describe("mustSatisfyPeerDependencies", () => {
       peerDependencies: {
         greatLib: "15 || ^16.2",
       },
-    };
+    } as const;
     addPackageJson(host, "./node_modules/aaa/package.json", aaaPackageJson);
     const bbbPackageJson = {
       name: "bbbb",
       peerDependencies: {
         greatLib: "^16",
       },
-    };
+    } as const;
     addPackageJson(host, "./node_modules/bbb/package.json", bbbPackageJson);
     const cccPackageJson = {
       name: "ccc",
       peerDependencies: {
         greatestLib: "100",
       },
-    };
+    } as const;
     addPackageJson(host, "./node_modules/ccc/package.json", cccPackageJson);
 
     await check({});
@@ -1023,8 +1023,8 @@ describe("mustSatisfyPeerDependencies", () => {
     addErrorSpy.mockReset();
 
     await check({ enforceForDevDependencies: true });
-    expect(addErrorSpy).toHaveBeenCalledTimes(2);
-    expect(addErrorSpy.mock.calls[1][0].message).toEqual(
+    expect(addErrorSpy).toHaveBeenCalledTimes(1);
+    expect(addErrorSpy.mock.calls[0][0].message).toEqual(
       `[3] Package ${testPackageJson.name} is missing required greatestLib dependency.\n\t` +
         `Dependency ${cccPackageJson.name} requires '${cccPackageJson.peerDependencies.greatestLib}'.`
     );
@@ -1041,34 +1041,34 @@ describe("mustSatisfyPeerDependencies", () => {
         bbb: "0.0.1",
       },
       peerDependencies: {
-        greatLib: "^16",
+        greatLib: "^15 || ^16",
       },
       devDependencies: {
         ccc: "0.0.1",
       },
-    };
+    } as const;
     const readTestPackageJson = addPackageJson(host, "./package.json", testPackageJson);
 
     const aaaPackageJson = {
-      name: "a",
+      name: "aaa",
       peerDependencies: {
         greatLib: "15 || ^16",
       },
-    };
+    } as const;
     addPackageJson(host, "./node_modules/aaa/package.json", aaaPackageJson);
     const bbbPackageJson = {
-      name: "b",
+      name: "bbb",
       peerDependencies: {
         greatLib: "^16",
       },
-    };
+    } as const;
     addPackageJson(host, "./node_modules/bbb/package.json", bbbPackageJson);
     const cccPackageJson = {
-      name: "c",
+      name: "ccc",
       peerDependencies: {
         greatLib: "^16.2",
       },
-    };
+    } as const;
     addPackageJson(host, "./node_modules/ccc/package.json", cccPackageJson);
 
     await check({});
@@ -1083,7 +1083,7 @@ describe("mustSatisfyPeerDependencies", () => {
     await check({ enforceForDevDependencies: true });
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[4] Package ${testPackageJson.name} peer dependency on greatLib '${testPackageJson.peerDependencies.greatLib}' is not strict enough.\n\t` +
+      `[4] Package ${testPackageJson.name} peer dependency on greatLib '${bbbPackageJson.peerDependencies.greatLib}' is not strict enough.\n\t` +
         `Dependency ${cccPackageJson.name} requires '${cccPackageJson.peerDependencies.greatLib}'.`
     );
     addErrorSpy.mockReset();

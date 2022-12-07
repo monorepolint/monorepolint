@@ -59,7 +59,7 @@ export const packageScript = {
           }
           allowedValues.add(q);
         }
-        fixToEmpty = value.hasOwnProperty("fixValue") && value.fixValue === undefined;
+        fixToEmpty = Object.prototype.hasOwnProperty.call(value, "fixValue") && value.fixValue === undefined;
         fixValue = value.fixValue;
       }
 
