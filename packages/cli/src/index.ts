@@ -17,14 +17,6 @@ import { hideBin } from "yargs/helpers";
 const timing = new Timing("CLI Timing Data");
 
 export default function run() {
-  timing.start("Register ts-node");
-  try {
-    // tslint:disable-next-line:no-implicit-dependencies
-    require("ts-node").register();
-  } catch (err) {
-    // no ts-node, no problem
-  }
-  timing.stop();
   yargs(hideBin(process.argv))
     .command(
       "check [--verbose] [--fix] [--paths <paths>...]",
@@ -74,7 +66,6 @@ async function handleCheck(args: Options) {
   const host = process.env.MRL_CACHING_HOST === "true" ? new CachingHost() : new SimpleHost();
 
   const configFilesToTry = [
-    path.resolve(process.cwd(), ".monorepolint.config.ts"),
     path.resolve(process.cwd(), ".monorepolint.config.js"),
     path.resolve(process.cwd(), ".monorepolint.config.cjs"),
     path.resolve(process.cwd(), ".monorepolint.config.mjs"),
