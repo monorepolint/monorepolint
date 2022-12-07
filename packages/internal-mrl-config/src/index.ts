@@ -56,10 +56,11 @@ const config: Config = {
       options: {
         devDependencies: {
           typescript: "^4.9.3",
-          "@types/jest": "^27.4.1",
+          "@types/jest": "^29.2.4",
           prettier: "^2.8.0",
           "ts-jest": "^29.0.3",
           jest: "^29.3.1",
+          tslib: "^2.4.1",
         },
       },
     }),

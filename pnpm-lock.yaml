@@ -12,10 +12,10 @@ importers:
       '@types/node': ^18.11.11
       fsevents: ^2.1.3
       gh-pages: ^3.0.0
-      husky: ^8.0.1
+      husky: ^8.0.2
       jest: ^29.3.1
       lerna: ^4.0.0
-      lint-staged: ^13.0.3
+      lint-staged: ^13.1.0
       mock-fs: ^4.7.0
       node-notifier: ^10.0.1
       npm-run-all: ^4.1.5
@@ -35,10 +35,10 @@ importers:
       '@types/mock-fs': 4.10.0
       '@types/node': 18.11.11
       gh-pages: 3.0.0
-      husky: 8.0.1
+      husky: 8.0.2
       jest: 29.3.1_veyjhmizagmbhaq4p2zx2bxume
       lerna: 4.0.0
-      lint-staged: 13.0.3
+      lint-staged: 13.1.0
       mock-fs: 4.12.0
       node-notifier: 10.0.1
       npm-run-all: 4.1.5
@@ -219,8 +219,8 @@ importers:
       '@monorepolint/core': ^0.4.0
       '@monorepolint/utils': ^0.4.0
       '@types/jest': ^27.4.1
-      '@types/semver': ^7.2.0
-      '@types/tmp': ^0.2.0
+      '@types/semver': ^7.3.13
+      '@types/tmp': ^0.2.3
       globby: ^13.1.2
       jest: ^29.3.1
       jest-diff: ^29.3.1
@@ -245,8 +245,8 @@ importers:
       tslib: 2.4.0
     devDependencies:
       '@types/jest': 27.4.1
-      '@types/semver': 7.2.0
-      '@types/tmp': 0.2.0
+      '@types/semver': 7.3.13
+      '@types/tmp': 0.2.3
       jest: 29.3.1
       prettier: 2.8.0
       tmp: 0.2.1
@@ -256,14 +256,13 @@ importers:
 
   packages/utils:
     specifiers:
-      '@types/find-up': ^4.0.0
-      '@types/glob': ^7.1.1
+      '@types/glob': ^8.0.0
       '@types/jest': ^27.4.1
       '@types/minimatch': ^5.1.2
       '@types/node': ^18.11.11
       find-packages: ^10.0.4
       find-up: ^6.3.0
-      glob: ^7.1.3
+      glob: ^8.0.3
       jest: ^29.3.1
       minimatch: ^5.1.1
       prettier: ^2.8.0
@@ -275,13 +274,12 @@ importers:
     dependencies:
       find-packages: 10.0.4
       find-up: 6.3.0
-      glob: 7.2.0
+      glob: 8.0.3
       minimatch: 5.1.1
       read-yaml-file: 2.1.0
       tslib: 2.4.0
     devDependencies:
-      '@types/find-up': 4.0.0
-      '@types/glob': 7.1.2
+      '@types/glob': 8.0.0
       '@types/jest': 27.4.1
       '@types/minimatch': 5.1.2
       '@types/node': 18.11.11
@@ -4160,15 +4158,8 @@ packages:
       '@types/serve-static': 1.13.10
     dev: false
 
-  /@types/find-up/4.0.0:
-    resolution: {integrity: sha512-QlRNKeOPFWKisbNtKVOOGXw3AeLbkw8UmT/EyEGM6brfqpYffKBcch7f1y40NYN9O90aK2+K0xBMDJfOAsg2qg==}
-    deprecated: This is a stub types definition. find-up provides its own type definitions, so you do not need this installed.
-    dependencies:
-      find-up: 6.3.0
-    dev: true
-
-  /@types/glob/7.1.2:
-    resolution: {integrity: sha512-VgNIkxK+j7Nz5P7jvUZlRvhuPSmsEfS03b0alKcq5V/STUKAa3Plemsn5mrQUO7am6OErJ4rhGEGJbACclrtRA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/@types/glob/-/glob-7.1.2.tgz}
+  /@types/glob/8.0.0:
+    resolution: {integrity: sha512-l6NQsDDyQUVeoTynNpC9uRvCUint/gSUXQA2euwmTuWGvPY5LSDUu6tkCtJB2SvGQlJQzLaKqcGZP4//7EDveA==}
     dependencies:
       '@types/minimatch': 5.1.2
       '@types/node': 18.11.11
@@ -4346,10 +4337,8 @@ packages:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
     dev: false
 
-  /@types/semver/7.2.0:
-    resolution: {integrity: sha512-TbB0A8ACUWZt3Y6bQPstW9QNbhNeebdgLX4T/ZfkrswAfUzRiXrgd9seol+X379Wa589Pu4UEx9Uok0D4RjRCQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/@types/semver/-/semver-7.2.0.tgz}
-    dependencies:
-      '@types/node': 18.11.11
+  /@types/semver/7.3.13:
+    resolution: {integrity: sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==}
     dev: true
 
   /@types/serve-index/1.9.1:
@@ -4375,8 +4364,8 @@ packages:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
     dev: true
 
-  /@types/tmp/0.2.0:
-    resolution: {integrity: sha512-flgpHJjntpBAdJD43ShRosQvNC0ME97DCfGvZEDlAThQmnerRXrLbX6YgzRBQCZTthET9eAWFAMaYP0m0Y4HzQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/@types/tmp/-/tmp-0.2.0.tgz}
+  /@types/tmp/0.2.3:
+    resolution: {integrity: sha512-dDZH/tXzwjutnuk4UacGgFRwV+JSLaXL1ikvidfJprkb7L9Nx1njcRHHmi3Dsvt7pgqqTEeucQuOrWHPFgzVHA==}
     dev: true
 
   /@types/unist/2.0.3:
@@ -4586,7 +4575,7 @@ packages:
     dev: true
 
   /aggregate-error/3.0.1:
-    resolution: {integrity: sha512-quoaXsZ9/BLNae5yiNoUz+Nhkwz83GhWwtYFglcjEQB2NDHCIpApbqXxIFnm4Pq/Nvhrsq5sYJFyohrrxnTGAA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/aggregate-error/-/aggregate-error-3.0.1.tgz}
+    resolution: {integrity: sha512-quoaXsZ9/BLNae5yiNoUz+Nhkwz83GhWwtYFglcjEQB2NDHCIpApbqXxIFnm4Pq/Nvhrsq5sYJFyohrrxnTGAA==}
     engines: {node: '>=8'}
     dependencies:
       clean-stack: 2.2.0
@@ -4688,7 +4677,7 @@ packages:
     dev: true
 
   /ansi-regex/5.0.1:
-    resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-5.0.1.tgz}
+    resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
     engines: {node: '>=8'}
 
   /ansi-regex/6.0.1:
@@ -5447,7 +5436,7 @@ packages:
     dev: false
 
   /clean-stack/2.2.0:
-    resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/clean-stack/-/clean-stack-2.2.0.tgz}
+    resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
     engines: {node: '>=6'}
 
   /cli-boxes/2.2.1:
@@ -6099,7 +6088,7 @@ packages:
       postcss: ^8.2.15
     dependencies:
       cssnano-preset-default: 5.2.7_postcss@8.4.12
-      lilconfig: 2.0.5
+      lilconfig: 2.0.6
       postcss: 8.4.12
       yaml: 1.10.2
     dev: false
@@ -7204,6 +7193,7 @@ packages:
     dependencies:
       locate-path: 7.1.1
       path-exists: 5.0.0
+    dev: false
 
   /flux/4.0.3_react@16.13.1:
     resolution: {integrity: sha512-yKAbrp7JhZhj6uiT1FTuVMlIAT1J4jqEyBpFApi1kxpGZCvacMVc/t1pMQyotqHhAgvoE3bNvAykhCo2CLjnYw==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/flux/-/flux-4.0.3.tgz}
@@ -7521,7 +7511,7 @@ packages:
     dev: true
 
   /glob/7.2.0:
-    resolution: {integrity: sha512-lmLf6gtyrPq8tTjSmrO94wBeQbFR3HbLHbuyD69wuyQkImp2hWqMGB47OX65FBkPffO641IP9jWa1z4ivqG26Q==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/glob/-/glob-7.2.0.tgz}
+    resolution: {integrity: sha512-lmLf6gtyrPq8tTjSmrO94wBeQbFR3HbLHbuyD69wuyQkImp2hWqMGB47OX65FBkPffO641IP9jWa1z4ivqG26Q==}
     dependencies:
       fs.realpath: 1.0.0
       inflight: 1.0.6
@@ -7529,6 +7519,17 @@ packages:
       minimatch: 3.0.5
       once: 1.4.0
       path-is-absolute: 1.0.1
+
+  /glob/8.0.3:
+    resolution: {integrity: sha512-ull455NHSHI/Y1FqGaaYFaLGkNMMJbavMrEGFXG/PGrg6y7sutWHUHrz6gy6WEBH6akM1M414dWKCNs+IhKdiQ==}
+    engines: {node: '>=12'}
+    dependencies:
+      fs.realpath: 1.0.0
+      inflight: 1.0.6
+      inherits: 2.0.4
+      minimatch: 5.1.1
+      once: 1.4.0
+    dev: false
 
   /global-dirs/3.0.0:
     resolution: {integrity: sha512-v8ho2DS5RiCjftj1nD9NmnfaOzTdud7RRnVd9kFNOjqZbISlx5DQ+OrTkywgd0dIt7oFCvKetZSHoHcP3sDdiA==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/global-dirs/-/global-dirs-3.0.0.tgz}
@@ -8022,8 +8023,8 @@ packages:
       strip-url-auth: 1.0.1
     dev: true
 
-  /husky/8.0.1:
-    resolution: {integrity: sha512-xs7/chUH/CKdOCs7Zy0Aev9e/dKOMZf3K1Az1nar3tzlv0jfqnYtu235bstsWTmXOR0EfINrPa97yy4Lz6RiKw==}
+  /husky/8.0.2:
+    resolution: {integrity: sha512-Tkv80jtvbnkK3mYWxPZePGFpQ/tT3HNSs/sasF9P2YfkMezDl3ON37YN6jUUI4eTg5LcyVynlb6r4eyvOmspvg==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
@@ -8099,7 +8100,7 @@ packages:
     engines: {node: '>=0.8.19'}
 
   /indent-string/4.0.0:
-    resolution: {integrity: sha512-EdDDZu4A2OyIK7Lr/2zG+w5jmbuk1DVBnEwREQvBzspBJkCEbRa8GxU1lghYcaGJCnRWibjDXlq779X1/y5xwg==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/indent-string/-/indent-string-4.0.0.tgz}
+    resolution: {integrity: sha512-EdDDZu4A2OyIK7Lr/2zG+w5jmbuk1DVBnEwREQvBzspBJkCEbRa8GxU1lghYcaGJCnRWibjDXlq779X1/y5xwg==}
     engines: {node: '>=8'}
 
   /infer-owner/1.0.4:
@@ -9351,15 +9352,15 @@ packages:
       - supports-color
     dev: true
 
-  /lilconfig/2.0.5:
-    resolution: {integrity: sha512-xaYmXZtTHPAw5m+xLN8ab9C+3a8YmV3asNSPOATITbtwrfbwaLJj8h66H1WMIpALCkqsIzK3h7oQ+PdX+LQ9Eg==}
+  /lilconfig/2.0.6:
+    resolution: {integrity: sha512-9JROoBW7pobfsx+Sq2JsASvCo6Pfo6WWoUW79HuB1BCoBXD4PLWJPqDF6fNj67pqBYTbAHkE57M1kS/+L1neOg==}
     engines: {node: '>=10'}
 
   /lines-and-columns/1.1.6:
     resolution: {integrity: sha512-8ZmlJFVK9iCmtLz19HpSsR8HaAMWBT284VMNednLwlIMDP2hJDCIhUp0IZ2xUcZ+Ob6BM0VvCSJwzASDM45NLQ==}
 
-  /lint-staged/13.0.3:
-    resolution: {integrity: sha512-9hmrwSCFroTSYLjflGI8Uk+GWAwMB4OlpU4bMJEAT5d/llQwtYKoim4bLOyLCuWFAhWEupE0vkIFqtw/WIsPug==}
+  /lint-staged/13.1.0:
+    resolution: {integrity: sha512-pn/sR8IrcF/T0vpWLilih8jmVouMlxqXxKuAojmbiGX5n/gDnz+abdPptlj0vYnbfE0SQNl3CY/HwtM0+yfOVQ==}
     engines: {node: ^14.13.1 || >=16.0.0}
     hasBin: true
     dependencies:
@@ -9368,8 +9369,8 @@ packages:
       commander: 9.4.1
       debug: 4.3.4
       execa: 6.1.0
-      lilconfig: 2.0.5
-      listr2: 4.0.5
+      lilconfig: 2.0.6
+      listr2: 5.0.6
       micromatch: 4.0.5
       normalize-path: 3.0.0
       object-inspect: 1.12.2
@@ -9381,9 +9382,9 @@ packages:
       - supports-color
     dev: true
 
-  /listr2/4.0.5:
-    resolution: {integrity: sha512-juGHV1doQdpNT3GSTs9IUN43QJb7KHdF9uqg7Vufs/tG9VTzpFphqF4pm/ICdAABGQxsyNn9CiYA3StkI6jpwA==}
-    engines: {node: '>=12'}
+  /listr2/5.0.6:
+    resolution: {integrity: sha512-u60KxKBy1BR2uLJNTWNptzWQ1ob/gjMzIJPZffAENzpZqbMZ/5PrXXOomDcevIS/+IB7s1mmCEtSlT2qHWMqag==}
+    engines: {node: ^14.13.1 || >=16.0.0}
     peerDependencies:
       enquirer: '>= 2.3.0 < 3'
     peerDependenciesMeta:
@@ -9395,7 +9396,7 @@ packages:
       log-update: 4.0.0
       p-map: 4.0.0
       rfdc: 1.3.0
-      rxjs: 7.5.5
+      rxjs: 7.6.0
       through: 2.3.8
       wrap-ansi: 7.0.0
     dev: true
@@ -9478,6 +9479,7 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       p-locate: 6.0.0
+    dev: false
 
   /lodash._reinterpolate/3.0.0:
     resolution: {integrity: sha1-DM8tiRZq8Ds2Y8eWU4t1rG4RTZ0=, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz}
@@ -10505,6 +10507,7 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       yocto-queue: 1.0.0
+    dev: false
 
   /p-locate/2.0.0:
     resolution: {integrity: sha512-nQja7m7gSKuewoVRen45CtVfODR3crN3goVQ0DDZ9N3yHxgpkuBhZqsaiotSQRrADUrne346peY7kT3TSACykg==}
@@ -10538,6 +10541,7 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       p-limit: 4.0.0
+    dev: false
 
   /p-map-series/2.1.0:
     resolution: {integrity: sha512-RpYIIK1zXSNEOdwxcfe7FdvGcs7+y5n8rifMhMNWvaxRNMPINJHF5GDeuVxWqnfrcHPSCnp7Oo5yNXHId9Av2Q==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/p-map-series/-/p-map-series-2.1.0.tgz}
@@ -10743,6 +10747,7 @@ packages:
   /path-exists/5.0.0:
     resolution: {integrity: sha512-RjhtfwJOxzcFmNOi6ltcbcu4Iu+FL3zEj83dk4kAS+fVpTxXLO1b38RvJgT/0QwvV/L3aY9TAnyv0EOqW4GoMQ==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dev: false
 
   /path-is-absolute/1.0.1:
     resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}
@@ -10753,7 +10758,7 @@ packages:
     dev: false
 
   /path-key/2.0.1:
-    resolution: {integrity: sha1-QRyttXTFoUDTpLGRDUDYDMn0C0A=, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/path-key/-/path-key-2.0.1.tgz}
+    resolution: {integrity: sha512-fEHGKCSmUSDPv4uoj8AlD+joPlq3peND+HRYyxFz4KPw4z926S/b8rIuFs2FYJg3BwsxJf6A9/3eIdLaYC+9Dw==}
     engines: {node: '>=4'}
     dev: true
 
@@ -10981,7 +10986,7 @@ packages:
       ts-node:
         optional: true
     dependencies:
-      lilconfig: 2.0.5
+      lilconfig: 2.0.6
       yaml: 1.10.2
     dev: true
 
@@ -12232,8 +12237,8 @@ packages:
       tslib: 1.13.0
     dev: true
 
-  /rxjs/7.5.5:
-    resolution: {integrity: sha512-sy+H0pQofO95VDmFLzyaw9xNJU4KTRSwQIGM6+iG3SypAtCiLDzpeG8sJrNCWn2Up9km+KhkvTdbkrdy+yzZdw==}
+  /rxjs/7.6.0:
+    resolution: {integrity: sha512-DDa7d8TFNUalGC9VqXvQ1euWNN7sc63TrUCuM9J998+ViviahMIjKSOU7rfcgFOF+FCD71BhDRv4hrFz+ImDLQ==}
     dependencies:
       tslib: 2.4.0
 
@@ -12425,7 +12430,7 @@ packages:
     dev: false
 
   /shebang-command/1.2.0:
-    resolution: {integrity: sha1-RKrGW2lbAzmJaMOfNj/uXer98eo=, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/shebang-command/-/shebang-command-1.2.0.tgz}
+    resolution: {integrity: sha512-EV3L1+UQWGor21OmnvojK36mhg+TyIKDh3iFBKBohr5xeXIhNBcx8oWdgkTEEQ+BEFFYdLRuqMfd5L84N1V5Vg==}
     engines: {node: '>=0.10.0'}
     dependencies:
       shebang-regex: 1.0.0
@@ -13318,7 +13323,7 @@ packages:
     dev: true
 
   /tslib/1.13.0:
-    resolution: {integrity: sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/tslib/-/tslib-1.13.0.tgz}
+    resolution: {integrity: sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==}
 
   /tslib/2.3.1:
     resolution: {integrity: sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==}
@@ -13470,7 +13475,7 @@ packages:
     dev: true
 
   /type-fest/2.12.2:
-    resolution: {integrity: sha512-qt6ylCGpLjZ7AaODxbpyBZSs9fCI9SkL3Z9q2oxMBQhs/uyY+VD8jHA8ULCGmWQJlBgqvO3EJeAngOHD8zQCrQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/type-fest/-/type-fest-2.12.2.tgz}
+    resolution: {integrity: sha512-qt6ylCGpLjZ7AaODxbpyBZSs9fCI9SkL3Z9q2oxMBQhs/uyY+VD8jHA8ULCGmWQJlBgqvO3EJeAngOHD8zQCrQ==}
     engines: {node: '>=12.20'}
     dev: false
 
@@ -13858,7 +13863,7 @@ packages:
       joi: 17.6.0
       lodash: 4.17.21
       minimist: 1.2.6
-      rxjs: 7.5.5
+      rxjs: 7.6.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -14163,7 +14168,7 @@ packages:
       strip-ansi: 6.0.1
 
   /wrap-ansi/8.0.1:
-    resolution: {integrity: sha512-QFF+ufAqhoYHvoHdajT/Po7KoXVBPXS2bgjIam5isfWJPfIOnQZ50JtUiVvCv/sjgacf3yRrt2ZKUZ/V4itN4g==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-8.0.1.tgz}
+    resolution: {integrity: sha512-QFF+ufAqhoYHvoHdajT/Po7KoXVBPXS2bgjIam5isfWJPfIOnQZ50JtUiVvCv/sjgacf3yRrt2ZKUZ/V4itN4g==}
     engines: {node: '>=12'}
     dependencies:
       ansi-styles: 6.1.0
@@ -14360,6 +14365,7 @@ packages:
   /yocto-queue/1.0.0:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
+    dev: false
 
   /zwitch/1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/zwitch/-/zwitch-1.0.5.tgz}

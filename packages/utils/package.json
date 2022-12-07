@@ -26,14 +26,13 @@
   "dependencies": {
     "find-packages": "^10.0.4",
     "find-up": "^6.3.0",
-    "glob": "^7.1.3",
+    "glob": "^8.0.3",
     "minimatch": "^5.1.1",
     "read-yaml-file": "^2.1.0",
     "tslib": "^2.3.1"
   },
   "devDependencies": {
-    "@types/find-up": "^4.0.0",
-    "@types/glob": "^7.1.1",
+    "@types/glob": "^8.0.0",
     "@types/minimatch": "^5.1.2",
     "@types/node": "^18.11.11",
     "tsup": "^6.5.0",
