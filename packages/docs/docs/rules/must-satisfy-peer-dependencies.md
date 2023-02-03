@@ -1,5 +1,5 @@
 ---
-title: :must-satisfy-peer-dependencies
+title: MustSatisfyPeerDependencies
 ---
 
 Ensures that packages satisfy peer dependency requirements declared by their dependencies.
@@ -14,15 +14,19 @@ Ensures that packages satisfy peer dependency requirements declared by their dep
 ### Example
 
 ```javascript
-module.exports = {
-  rules: {
-    ":must-satisfy-peer-dependencies": {
+import { MustSatisfyPeerDependencies } from "monorepolint/rules";
+export default {
+  rules: [
+    new MustSatisfyPeerDependencies({
       options: {
         skipUnparseableRanges: false,
-        dependencyWhitelist: ["react", "react-dom"],
+        dependencyWhitelist: [
+          "react",
+          "react-dom",
+        ],
       },
-    },
-  },
+    }),
+  ],
 };
 ```
 

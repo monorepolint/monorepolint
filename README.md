@@ -53,80 +53,85 @@ For now, look at [.monorepolint.config.ts](./.monorepolint.config.ts) in this re
 Sample:
 
 ```js
-module.exports = {
-  checks: {
-    ":standard-tsconfig": [
-      {
-        template: {
-          compilerOptions: {
-            target: "es5",
-            module: "commonjs",
-            lib: ["es2015"],
-            declaration: true,
-            declarationMap: true,
-            sourceMap: true,
-            outDir: "./build",
-            rootDir: "./src",
-            composite: true,
-            importHelpers: true,
-            strict: true,
-            noUnusedLocals: true,
-            noUnusedParameters: true,
-            noImplicitReturns: true,
-            noFallthroughCasesInSwitch: true,
-            allowSyntheticDefaultImports: true,
-            esModuleInterop: true
-          }
-        }
-      }
-    ],
-    ":file-contents": [
-      {
-        options: "jest.config.js",
-        templateFile: "./templates/jest.config.js"
-      }
-    ],
-    ":package-script": [
-      {
-        options: {
-          clean: "rm -rf build",
-          "compile-typescript": "../../node_modules/.bin/tsc",
-          "lint:typescript":
-            "../../node_modules/.bin/tslint --config ../../tslint.json --project .",
-          "test:watch":
-            "../../node_modules/.bin/jest --colors --passWithNoTests --watch",
-          test: "../../node_modules/.bin/jest --colors --passWithNoTests"
-        }
-      }
-    ],
-    ":package-order": [
-      {
-        options: [
-          "name",
-          "version",
-          "author",
-          "url",
-          "license",
-          "private",
-          "main",
-          "typings",
-          "style",
-          "sideEffects",
-          "workspaces",
-          "husky",
-          "lint-staged",
-          "scripts",
-          "dependencies",
-          "peerDependencies",
-          "devDependencies",
-          "publishConfig",
-          "gitHead"
-        ],
-        includeWorkspaceRoot: true
-      }
-    ],
-    ":alphabetical-dependencies": {}
-  }
+import * as Rules from "monorepolint/rules";
+
+const META_PACKAGES = ["monorepolint"];
+const DOCS = "@monorepolint/docs";
+
+// FIXME: This is still suboptimal
+const DELETE_SCRIPT_ENTRTY = { options: [undefined], fixValue: undefined };
+
+export default {
+  rules: [
+    new Rules.StandardTsConfig({
+      options: {
+        templateFile: "./templates/tsconfig.json",
+      },
+      excludePackages: [DOCS],
+    }),
+    new Rules.FileContents({
+      options: {
+        file: "jest.config.cjs",
+        templateFile: "./templates/jest.config.cjs",
+      },
+      excludePackages: [DOCS],
+    }),
+    new Rules.PackageScript({
+      options: {
+        scripts: {
+          clean: "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
+          "compile-typescript": "tsc --build",
+          "lint:typescript": DELETE_SCRIPT_ENTRTY,
+          jest: DELETE_SCRIPT_ENTRTY, // this syntax needs work :(
+          "jest:watch": DELETE_SCRIPT_ENTRTY,
+          lint: "eslint .",
+          "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --colors --passWithNoTests --watch",
+          test: "NODE_OPTIONS=--experimental-vm-modules jest --colors --passWithNoTests",
+        },
+      },
+      excludePackages: [DOCS, ...META_PACKAGES],
+    }),
+    new Rules.PackageScript({
+      options: {
+        scripts: {
+          clean: DELETE_SCRIPT_ENTRTY,
+          "compile-typescript": DELETE_SCRIPT_ENTRTY,
+          "lint:typescript": DELETE_SCRIPT_ENTRTY,
+          jest: DELETE_SCRIPT_ENTRTY, // this syntax needs work :(
+          "jest:watch": DELETE_SCRIPT_ENTRTY,
+          lint: DELETE_SCRIPT_ENTRTY,
+          "test:watch": DELETE_SCRIPT_ENTRTY,
+          test: DELETE_SCRIPT_ENTRTY,
+        },
+      },
+      includePackages: [...META_PACKAGES],
+    }),
+    new Rules.PackageOrder({}),
+    new Rules.AlphabeticalDependencies({}),
+    new Rules.AlphabeticalScripts({}),
+    new Rules.ConsistentDependencies({}),
+    new Rules.BannedDependencies({
+      options: {
+        bannedDependencies: ["lodash"],
+      },
+    }),
+    new Rules.RequireDependency({
+      options: {
+        devDependencies: {
+          typescript: "^4.9.5",
+          "@types/jest": "^29.2.4",
+          prettier: "^2.8.3",
+          "ts-jest": "^29.0.5",
+          jest: "^29.3.1",
+          "@jest/globals": "^29.3.1",
+          tslib: "^2.5.0",
+          "@typescript-eslint/parser": "^5.45.1",
+          "@typescript-eslint/eslint-plugin": "^5.45.1",
+          eslint: "^8.29.0",
+        },
+      },
+    }),
+  ],
 };
 ```
 

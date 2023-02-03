@@ -1,5 +1,5 @@
 ---
-title: :banned-dependencies
+title: BannedDependencies
 ---
 
 Disallow problematic dependencies.
@@ -11,18 +11,23 @@ Disallow problematic dependencies.
   - Note: this used to just be an array of globs but that is now deprecated.
 - `bannedDependencyExactMatchs`
   - An array of dependencies to ban via exact match
+  - Deprecated
 
 ### Example
 
 ```javascript
-module.exports = {
-  rules: {
-    ":banned-dependencies": {
+import { BannedDependencies } from "monorepolint/rules";
+export default {
+  rules: [
+    new BannedDependencies({
       options: {
-        bannedDependencies: { exact: ["lodash"], glob: ["lodash-*"] }
+        bannedDependencies: {
+          exact: ["lodash"],
+          glob: ["lodash-*"],
+        },
       },
-    },
-  },
+    }),
+  ],
 };
 ```
 

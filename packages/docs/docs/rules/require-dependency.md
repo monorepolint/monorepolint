@@ -1,5 +1,5 @@
 ---
-title: :require-dependency
+title: RequireDependency
 ---
 
 Require all packages to declare dependencies with specified versions.
@@ -21,16 +21,17 @@ local entry.
 ### Example
 
 ```javascript
-module.exports = {
-  rules: {
-    ":require-dependency": {
+import { RequireDependency } from "monorepolint/rules";
+export default {
+  rules: [
+    new RequireDependency({
       options: {
         devDependencies: {
           typescript: "^3.8.3",
         },
       },
-    },
-  },
+    }),
+  ],
 };
 ```
 

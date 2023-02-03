@@ -72,13 +72,13 @@ export const config: Config = {
     new Rules.RequireDependency({
       options: {
         devDependencies: {
-          typescript: "^4.9.3",
+          typescript: "^4.9.5",
           "@types/jest": "^29.2.4",
-          prettier: "^2.8.0",
-          "ts-jest": "^29.0.3",
+          prettier: "^2.8.3",
+          "ts-jest": "^29.0.5",
           jest: "^29.3.1",
           "@jest/globals": "^29.3.1",
-          tslib: "^2.4.1",
+          tslib: "^2.5.0",
           "@typescript-eslint/parser": "^5.45.1",
           "@typescript-eslint/eslint-plugin": "^5.45.1",
           eslint: "^8.29.0",
