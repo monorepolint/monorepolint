@@ -1,5 +1,5 @@
 ---
-title: :standard-tsconfig
+title: StandardTsConfig
 ---
 
 Special case of the File Contents rule for typescript configs. Using a template file for the typescript config, auto discover ands adds project references to the config
@@ -26,14 +26,16 @@ Exactly one of `generator`, `template`, or `templateFile` needs to be specified.
 ### Example
 
 ```javascript
-module.exports = {
-  rules: {
-    ":standard-tsconfig": {
+import { StandardTsConfig } from "monorepolint/rules";
+export default {
+  rules: [
+    new StandardTsConfig({
       options: {
-        templateFile: "./templates/tsconfig.json",
+        templateFile:
+          "./templates/tsconfig.json",
       },
-    },
-  },
+    }),
+  ],
 };
 ```
 

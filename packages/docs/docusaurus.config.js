@@ -1,75 +1,89 @@
 module.exports = {
-  title: 'monorepolint',
-  tagline: 'monorepo consistency made easy',
-  url: 'https://monorepolint.com',
-  baseUrl: '/',
-  favicon: 'img/favicon.ico',
-  organizationName: 'monorepolint', // Usually your GitHub org/user name.
-  projectName: 'monorepolint', // Usually your repo name.
+  title: "monorepolint",
+  tagline: "monorepo consistency made easy",
+  url: "https://monorepolint.com",
+  baseUrl: "/",
+  favicon: "img/favicon.ico",
+  organizationName: "monorepolint", // Usually your GitHub org/user name.
+  projectName: "monorepolint", // Usually your repo name.
   themeConfig: {
+    prism: {
+      theme: require("prism-react-renderer/themes/github"),
+    },
     colorMode: {
-      defaultMode: 'dark'
+      defaultMode: "light",
     },
     navbar: {
-      title: 'monorepolint',
+      title: "monorepolint",
       items: [
         {
-          to: 'docs/',
-          activeBasePath: 'docs',
-          label: 'Docs',
-          position: 'left',
+          to: "docs/",
+          activeBasePath: "docs",
+          label: "Getting Started",
+          position: "right",
         },
         {
-          to: 'blog/',
-          label: 'Blog',
-          position: 'left',
+          to: "docs/",
+          activeBasePath: "docs",
+          label: "Docs",
+          position: "right",
         },
         {
-          href: 'https://github.com/monorepolint/monorepolint',
-          label: 'GitHub',
-          position: 'right',
+          to: "docs/rules/alphabetical-dependencies",
+          label: "Rules",
+          position: "right",
+        },
+        {
+          to: "blog/",
+          label: "News",
+          position: "right",
+        },
+        {
+          href: "https://github.com/monorepolint/monorepolint",
+          label: "GitHub",
+          position: "right",
         },
       ],
     },
     footer: {
-      style: 'dark',
+      style: "dark",
       links: [
         {
-          title: 'Docs',
+          title: "Docs",
           items: [
             {
-              label: 'CLI',
-              to: 'docs/cli',
+              label: "CLI",
+              to: "docs/cli",
             },
           ],
         },
         {
-          title: 'Community',
+          title: "Community",
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/monorepolint',
+              label: "Stack Overflow",
+              href: "https://stackoverflow.com/questions/tagged/monorepolint",
             },
             {
-              label: 'Discord',
-              href: 'https://discord.gg/s7DQmr5',
+              label: "Discord",
+              href: "https://discord.gg/s7DQmr5",
             },
             {
-              label: 'Twitter',
-              href: 'https://twitter.com/monorepolint',
+              label: "Twitter",
+              href: "https://twitter.com/monorepolint",
             },
           ],
         },
         {
-          title: 'More',
+          title: "More",
           items: [
             {
-              label: 'Blog',
-              to: 'blog',
+              label: "Blog",
+              to: "blog",
             },
             {
-              label: 'GitHub',
-              href: 'https://github.com/monorepolint/monorepolint',
+              label: "GitHub",
+              href: "https://github.com/monorepolint/monorepolint",
             },
           ],
         },
@@ -79,22 +93,20 @@ module.exports = {
   },
   presets: [
     [
-      '@docusaurus/preset-classic',
+      "@docusaurus/preset-classic",
       {
         docs: {
-          sidebarCollapsible: false,
+          sidebarCollapsible: true,
           // It is recommended to set document id as docs home page (`docs/` path).
-          sidebarPath: require.resolve('./sidebars.js'),
+          sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
-          editUrl:
-            'https://github.com/monorepolint/monorepolint/edit/master/packages/docs/',
+          editUrl: "https://github.com/monorepolint/monorepolint/edit/master/packages/docs/",
         },
         blog: {
-          editUrl:
-            'https://github.com/monorepolint/monorepolint/edit/master/packages/docs/docs/blog',
+          editUrl: "https://github.com/monorepolint/monorepolint/edit/master/packages/docs/docs/blog",
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: require.resolve("./src/css/custom.css"),
         },
       },
     ],

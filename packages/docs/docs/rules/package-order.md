@@ -1,5 +1,5 @@
 ---
-title: :package-order
+title: PackageOrder
 ---
 
 Standardize entry order in package.json.
@@ -12,9 +12,10 @@ Standardize entry order in package.json.
 ### Example
 
 ```javascript
-module.exports = {
-  rules: {
-    ":package-order": {
+import { PackageOrder } from "monorepolint/rules";
+export default {
+  rules: [
+    new PackageOrder({
       options: {
         order: [
           "name",
@@ -44,8 +45,8 @@ module.exports = {
           "publishConfig",
         ],
       },
-    },
-  },
+    }),
+  ],
 };
 ```
 

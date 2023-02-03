@@ -1,5 +1,5 @@
 ---
-title: :consistent-versions
+title: ConsistentVersions
 ---
 
 Ensure that all packages use the same version of a dependency, when present in either `dependencies` or `devDependencies`.
@@ -14,17 +14,17 @@ for all packages, not just enforce consistent versions when present.
 ### Example
 
 ```javascript
-module.exports = {
-  rules: {
-    ":consistent-versions": {
+import { ConsistentVersions } from "monorepolint/rules";
+export default {
+  rules: [
+    new ConsistentVersions({
       options: {
         matchDependencyVersions: {
-          "@types/react": "^16.9.19",
-          "@types/react-dom": "^16.9.5",
+          lodash: "1.0.0",
         },
       },
-    },
-  },
+    }),
+  ],
 };
 ```
 

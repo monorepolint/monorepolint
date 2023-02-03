@@ -1,0 +1,118 @@
+---
+title: Configuration File
+---
+
+monorepolint expects a configuration file at the root of your monorepo named
+
+- `.monorepolint.config.js`,
+- `.monorepolint.config.cjs`, or
+- `.monorepolint.config.mjs`.
+
+This file is the central brain for how your project should be configured and
+enables you to keep your sub-projects consistent through out.
+
+:::info Old Config Format
+
+Earlier versions of monorepolint expected a file called `monorepolint.config.ts` in the root of your
+project. However, we noticed a number of projects found it hard to keep tsc happy, especially
+in vscode.
+
+If you want to write your config in typescript, we recommend you create a separate project and
+reference it from your root config.
+
+:::
+
+## Config File Format
+
+A monorepolint configuration file is just a plain javascript file. Just declare the rules you want
+and go!.
+
+```ts title=".monorepolint.config.mjs"
+import { AlphabeticalDependencies } from "@monorepolint/rules";
+
+export default {
+  rules: [new AlphabeticalDependencies({})],
+};
+```
+
+## Built-in and Custom Rules
+
+All built-in rules begin with a colon. Custom rules will be the package where the rule is defined, followed by a colon and the rule name. For more information see [Writing Custom Rules](./writing-custom-rules).
+
+:::info Old Rule Declarations
+
+Earlier versions of monorepolint allowed a shorthand for declaring rules. These are still currently
+supported but are scheduled to be removed in a future version. We realized that type completion
+was far more valuale than cute shorthand.
+
+:::
+
+## Common Configuration Options
+
+Each rule configuration supports the following options:
+
+```ts
+type CommonOptions<T> {
+  /** Unique Per Rule **/
+  options?: T;
+
+  /**
+   * Package names or minimatch globs of package names
+   * allowing certain packages to be excluded from this rule.
+   * @default excluding no child packages.
+   **/
+  excludePackages?: string[] | undefined;
+
+  /**
+   * Package names or minimatch globs of package names
+   * for specifying specific packages this applies to.
+   * @default including all child packages.
+   **/
+  includePackages?: string[] | undefined;
+
+  /**
+   * Whether to include the root package for this rule
+   * @default false
+   */
+  includeWorkspaceRoot?: boolean | undefined;
+}
+```
+
+## Detailed Example
+
+If you had a legacy configuration format, it should still work
+
+```js title=".monorepolint.config.cjs"
+import {
+  PackageOrder,
+  AlphabeticalDependencies,
+  PackageScript,
+  AlphabeticalScripts,
+  BannedDependencies,
+  ConsistentDependences,
+} from "@monorepolint/rules";
+
+export default {
+  rules: [
+    new PackageScript({
+      options: {
+        scripts: {
+          clean: "rm -rf build lib node_modules *.tgz",
+          test: "../../node_modules/.bin/jest --colors --passWithNoTests",
+        },
+      },
+    }),
+    new PackageOrder({}),
+    new AlphabeticalDependencies({}),
+    new BannedDependencies({
+      options: {
+        bannedDependencies: ["lodash"],
+      },
+      includeWorkspaceRoot: true,
+    }),
+    new ConsistentDependencies({}),
+  ],
+};
+```
+
+This will ensure that all projects have a `clean` and `test` task, that the order of the entries in package.json are sane, that dependencies and scripts are kept in alphabetical order, that lodash is banned from the project, and the last one ensures that if a package is listed in the root package.json, all packages in the workspace that list that dependency must match the same version.

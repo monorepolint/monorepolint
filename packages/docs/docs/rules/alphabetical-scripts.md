@@ -1,5 +1,5 @@
 ---
-title: :alphabetical-scripts
+title: AlphabeticalScripts
 ---
 
 Makes sure that all scripts are ordered alphabetically.
@@ -7,10 +7,9 @@ Makes sure that all scripts are ordered alphabetically.
 ### Example
 
 ```javascript
-module.exports = {
-  rules: {
-    ":alphabetical-scripts": true,
-  },
+import { AlphabeticalScripts } from "monorepolint/rules";
+export default {
+  rules: [new AlphabeticalScripts({})],
 };
 ```
 

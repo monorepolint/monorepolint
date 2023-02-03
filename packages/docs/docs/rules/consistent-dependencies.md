@@ -1,5 +1,5 @@
 ---
-title: :consistent-dependencies
+title: ConsistentDependencies
 ---
 
 Enforce dependency versions are consistent with workspace root.
@@ -9,10 +9,11 @@ If your root package.json has a dependency on `"somelib": "^1.0.0"` then all chi
 ### Example
 
 ```javascript
-module.exports = {
-  rules: {
-    ":consistent-dependencies": true,
-  },
+import { ConsistentDependencies } from "monorepolint/rules";
+export default {
+  rules: [
+    new ConsistentDependencies({}),
+  ],
 };
 ```
 
