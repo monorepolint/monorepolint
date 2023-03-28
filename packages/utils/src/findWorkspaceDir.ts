@@ -5,17 +5,17 @@
  *
  */
 
-import * as path from "path";
+import { dirname, join, normalize } from "path";
 import { Host } from "./Host.js";
 import { PackageJson } from "./PackageJson.js";
-import * as fs from "fs";
 
 export async function findPnpmWorkspaceDir(cwd: string) {
   const { findUp } = await import("find-up");
+  const { promises } = await import("fs");
   const workspaceManifestLocation = await findUp("pnpm-workspace.yaml", {
-    cwd: await fs.promises.realpath(cwd),
+    cwd: await promises.realpath(cwd),
   });
-  return workspaceManifestLocation && path.dirname(workspaceManifestLocation);
+  return workspaceManifestLocation && dirname(workspaceManifestLocation);
 }
 
 export async function findWorkspaceDir(
@@ -29,7 +29,7 @@ export async function findWorkspaceDir(
   }
 
   // We may not be in a repository that uses PNPM, look for workspaces in package.json
-  const packagePath = path.join(dir, "package.json");
+  const packagePath = join(dir, "package.json");
   if (host.exists(packagePath)) {
     const packageJson = host.readJson(packagePath) as PackageJson;
     if (packageJson.workspaces !== undefined) {
@@ -37,7 +37,7 @@ export async function findWorkspaceDir(
     }
   }
 
-  const nextDir = path.normalize(path.join(dir, ".."));
+  const nextDir = normalize(join(dir, ".."));
   if (nextDir === dir) {
     return undefined;
   }
