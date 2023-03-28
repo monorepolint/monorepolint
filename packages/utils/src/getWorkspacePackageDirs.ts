@@ -5,21 +5,20 @@
  *
  */
 
-import { existsSync } from "fs";
+import * as fs from "fs";
 import * as glob from "glob";
-import * as path from "node:path";
-import * as fs from "node:fs";
+import * as path from "path";
 import { Host } from "./Host.js";
 import { PackageJson } from "./PackageJson.js";
-import * as readYamlFile from "read-yaml-file";
-import { findPackages } from "find-packages";
 
 async function findPNPMWorkspacePackages(workspaceRoot: string) {
   workspaceRoot = fs.realpathSync(workspaceRoot);
-  const workspaceManifest = await readYamlFile.default<{ packages?: string[] }>(
+  const { default: readYamlFile } = await import("read-yaml-file");
+  const workspaceManifest = await readYamlFile<{ packages?: string[] }>(
     path.join(workspaceRoot, "pnpm-workspace.yaml")
   );
 
+  const { findPackages } = await import("find-packages");
   return findPackages(workspaceRoot, {
     ignore: ["**/node_modules/**", "**/bower_components/**"],
     includeRoot: true,
@@ -56,7 +55,7 @@ export async function getWorkspacePackageDirs(
     for (const packagePath of glob.sync(pattern, { cwd: workspaceDir })) {
       const packageJsonPath = path.join(workspaceDir, packagePath, "package.json");
 
-      if (existsSync(packageJsonPath)) {
+      if (fs.existsSync(packageJsonPath)) {
         if (resolvePaths === true) {
           ret.push(path.resolve(path.join(workspaceDir, packagePath)));
         } else {

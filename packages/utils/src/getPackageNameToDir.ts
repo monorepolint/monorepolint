@@ -5,7 +5,7 @@
  *
  */
 
-import { join as pathJoin } from "path";
+import * as path from "path";
 import { getWorkspacePackageDirs } from "./getWorkspacePackageDirs.js";
 import { Host } from "./Host.js";
 import { PackageJson } from "./PackageJson.js";
@@ -23,7 +23,7 @@ export async function getPackageNameToDir(
 
   const workspacePackages = await getWorkspacePackageDirs(host, workspaceDir, resolvePaths);
   for (const packageDir of workspacePackages) {
-    const packagePath = pathJoin(packageDir, "package.json");
+    const packagePath = path.join(packageDir, "package.json");
     const { name } = host.readJson(packagePath) as PackageJson;
     if (name === undefined) {
       throw new Error(`Package needs a name: ${packagePath}`);
