@@ -60,6 +60,21 @@ export const config: Config = {
       },
       includePackages: [...META_PACKAGES],
     }),
+    new Rules.PackageEntry({
+      options: {
+        entries: {
+          exports: {
+            ".": {
+              types: "./build/types/index.d.ts",
+              import: "./build/js/index.js",
+            },
+          },
+          engines: {
+            node: ">=16",
+          },
+        },
+      },
+    }),
     new Rules.PackageOrder({}),
     new Rules.AlphabeticalDependencies({}),
     new Rules.AlphabeticalScripts({}),

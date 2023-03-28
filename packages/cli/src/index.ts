@@ -67,7 +67,6 @@ async function handleCheck(args: Options) {
 
   const configFilesToTry = [
     path.resolve(process.cwd(), ".monorepolint.config.js"),
-    path.resolve(process.cwd(), ".monorepolint.config.cjs"),
     path.resolve(process.cwd(), ".monorepolint.config.mjs"),
   ];
 

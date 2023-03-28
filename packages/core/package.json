@@ -11,9 +11,11 @@
   "exports": {
     ".": {
       "types": "./build/types/index.d.ts",
-      "import": "./build/js/index.js",
-      "require": "./build/js/index.cjs"
+      "import": "./build/js/index.js"
     }
+  },
+  "engines": {
+    "node": ">=16"
   },
   "scripts": {
     "clean": "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
