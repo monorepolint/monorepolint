@@ -68,6 +68,10 @@ export const config: Config = {
               types: "./build/types/index.d.ts",
               import: "./build/js/index.js",
             },
+            "./*": {
+              types: "./build/types/public/*.d.ts",
+              import: "./build/js/public/*.js",
+            },
           },
           engines: {
             node: ">=16",
