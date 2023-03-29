@@ -101,9 +101,11 @@ describe.each(HOST_FACTORIES)("expectPackageOrder ($name)", (hostFactory) => {
     it("fixes order for expected keys", () => {
       workspace.writeFile("package.json", PACKAGE_UNORDERED);
 
-      packageOrder.check(context, {
-        order: orderArray,
-      });
+      packageOrder({
+        options: {
+          order: orderArray,
+        },
+      }).check(context);
 
       expect(spy).toHaveBeenCalledTimes(1);
 
@@ -122,9 +124,11 @@ describe.each(HOST_FACTORIES)("expectPackageOrder ($name)", (hostFactory) => {
     it("fixes order for unexpected keys", () => {
       workspace.writeFile("package.json", PACKAGE_UNORDERED_UNKOWN_KEYS);
 
-      packageOrder.check(context, {
-        order: orderArray,
-      });
+      packageOrder({
+        options: {
+          order: orderArray,
+        },
+      }).check(context);
 
       expect(spy).toHaveBeenCalledTimes(1);
 
@@ -143,9 +147,11 @@ describe.each(HOST_FACTORIES)("expectPackageOrder ($name)", (hostFactory) => {
     it("fixes order using function", () => {
       workspace.writeFile("package.json", PACKAGE_UNORDERED);
 
-      packageOrder.check(context, {
-        order: orderFunction,
-      });
+      packageOrder({
+        options: {
+          order: orderFunction,
+        },
+      }).check(context);
 
       expect(spy).toHaveBeenCalledTimes(1);
 
@@ -164,9 +170,11 @@ describe.each(HOST_FACTORIES)("expectPackageOrder ($name)", (hostFactory) => {
     it("does nothing if already order", () => {
       workspace.writeFile("package.json", PACKAGE_ORDERED_UNKOWN_KEYS);
 
-      packageOrder.check(context, {
-        order: orderArray,
-      });
+      packageOrder({
+        options: {
+          order: orderArray,
+        },
+      }).check(context);
 
       expect(spy).not.toHaveBeenCalled();
 

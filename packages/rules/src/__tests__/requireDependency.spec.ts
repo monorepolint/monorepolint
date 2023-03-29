@@ -89,7 +89,7 @@ describe("requireDependency", () => {
     function checkAndSpy(q: string) {
       const context = workspaceContext.createChildContext(path.resolve(dir.name, q));
       const addErrorSpy = jest.spyOn(context, "addError");
-      requireDependency.check(context, OPTIONS);
+      requireDependency({ options: OPTIONS }).check(context);
       return { context, addErrorSpy };
     }
 
@@ -116,7 +116,7 @@ describe("requireDependency", () => {
     addFile("./packages/wrong/package.json", PACKAGE_WITH_WRONG_ENTRIES);
     addFile("./packages/right/package.json", PACKAGE_WITH_RIGHT_ENTRIES);
 
-    requireDependency.check(workspaceContext, OPTIONS);
+    requireDependency({ options: OPTIONS }).check(workspaceContext);
 
     const none = checkAndSpy("./packages/none");
     expect(none.addErrorSpy).toHaveBeenCalledTimes(2);

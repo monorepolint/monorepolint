@@ -50,7 +50,7 @@ describe("consistentVersions", () => {
     const addErrorSpy = jest.spyOn(workspaceContext, "addError");
 
     function check(options: Options = { matchDependencyVersions: {} }) {
-      consistentVersions.check(workspaceContext, options);
+      consistentVersions({ options }).check(workspaceContext);
     }
 
     return { addErrorSpy, check, host };

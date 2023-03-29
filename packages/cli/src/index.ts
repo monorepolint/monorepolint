@@ -6,8 +6,8 @@
  */
 
 import { check, resolveConfig } from "@monorepolint/core";
-import { Config, LegacyConfig, Options } from "@monorepolint/config";
-import { CachingHost, SimpleHost, findWorkspaceDir, Timing } from "@monorepolint/utils";
+import { Config, Options } from "@monorepolint/config";
+import { CachingHost, SimpleHost, Timing } from "@monorepolint/utils";
 import chalk from "chalk";
 import * as fs from "fs";
 import * as path from "path";
@@ -46,13 +46,7 @@ export default function run() {
 }
 
 function getVersion(): string {
-  return JSON.parse(
-    fs.readFileSync(
-      new URL("../../package.json", import.meta.url),
-      // path.join(__dirname, "../package.json"),
-      "utf-8"
-    )
-  ).version;
+  return JSON.parse(fs.readFileSync(new URL("../../package.json", import.meta.url), "utf-8")).version;
 }
 
 async function handleCheck(args: Options) {
@@ -65,10 +59,7 @@ async function handleCheck(args: Options) {
   }
   const host = process.env.MRL_CACHING_HOST === "true" ? new CachingHost() : new SimpleHost();
 
-  const configFilesToTry = [
-    path.resolve(process.cwd(), ".monorepolint.config.js"),
-    path.resolve(process.cwd(), ".monorepolint.config.mjs"),
-  ];
+  const configFilesToTry = [path.resolve(process.cwd(), ".monorepolint.config.mjs")];
 
   timing.start("Read/compile config");
   let unverifiedConfig;
@@ -106,10 +97,9 @@ async function handleCheck(args: Options) {
   }
 
   timing.start("Verify config");
-  const config: Config | LegacyConfig = Config.Or(LegacyConfig).check(unverifiedConfig) as any;
+  const config: Config = Config.check(unverifiedConfig) as Config;
   timing.start("Resolve config");
-  const workspaceDir = await findWorkspaceDir(host, process.cwd());
-  const resolvedConfig = resolveConfig(config, args, workspaceDir!);
+  const resolvedConfig = resolveConfig(config, args);
   timing.start("Run Checks");
   const checkResult = await check(resolvedConfig, host, process.cwd(), args.paths, args.stats);
   timing.start("Flush host");

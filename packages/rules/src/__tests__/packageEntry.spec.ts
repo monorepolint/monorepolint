@@ -76,12 +76,14 @@ describe.each(HOST_FACTORIES)("expectPackageEntries ($name)", (hostFactory) => {
     it("fixes missing entries", () => {
       workspace.writeFile("package.json", PACKAGE_MISSING_ENTRY);
 
-      packageEntry.check(context, {
-        entries: {
-          license: "UNLICENSED",
+      packageEntry({
+        options: {
+          entries: {
+            license: "UNLICENSED",
+          },
+          entriesExist: undefined,
         },
-        entriesExist: undefined,
-      });
+      }).check(context);
 
       expect(spy).toHaveBeenCalledTimes(1);
 
@@ -100,15 +102,17 @@ describe.each(HOST_FACTORIES)("expectPackageEntries ($name)", (hostFactory) => {
     it("fixes missing nested entries", () => {
       workspace.writeFile("package.json", PACKAGE_MISSING_ENTRY);
 
-      packageEntry.check(context, {
-        entries: {
-          repository: {
-            type: "git",
-            url: "https://github.com:foo/foo",
+      packageEntry({
+        options: {
+          entries: {
+            repository: {
+              type: "git",
+              url: "https://github.com:foo/foo",
+            },
           },
+          entriesExist: undefined,
         },
-        entriesExist: undefined,
-      });
+      }).check(context);
 
       expect(spy).toHaveBeenCalledTimes(1);
 
@@ -127,15 +131,17 @@ describe.each(HOST_FACTORIES)("expectPackageEntries ($name)", (hostFactory) => {
     it("doesn't error for nested entries that are defined", () => {
       workspace.writeFile("package.json", PACKAGE_REPOSITORY);
 
-      packageEntry.check(context, {
-        entries: {
-          repository: {
-            type: "git",
-            url: "https://github.com:foo/foo",
+      packageEntry({
+        options: {
+          entries: {
+            repository: {
+              type: "git",
+              url: "https://github.com:foo/foo",
+            },
           },
+          entriesExist: undefined,
         },
-        entriesExist: undefined,
-      });
+      }).check(context);
 
       expect(spy).toHaveBeenCalledTimes(0);
       expect(workspace.readFile("package.json")).toEqual(PACKAGE_REPOSITORY);
@@ -144,10 +150,12 @@ describe.each(HOST_FACTORIES)("expectPackageEntries ($name)", (hostFactory) => {
     it("errors for keys that are missing", () => {
       workspace.writeFile("package.json", PACKAGE_REPOSITORY);
 
-      packageEntry.check(context, {
-        entries: undefined,
-        entriesExist: ["bugs"],
-      });
+      packageEntry({
+        options: {
+          entries: undefined,
+          entriesExist: ["bugs"],
+        },
+      }).check(context);
 
       expect(spy).toHaveBeenCalledTimes(1);
 
@@ -165,15 +173,17 @@ describe.each(HOST_FACTORIES)("expectPackageEntries ($name)", (hostFactory) => {
     it("handles both entries and entriesExist", () => {
       workspace.writeFile("package.json", PACKAGE_MISSING_ENTRY);
 
-      packageEntry.check(context, {
-        entries: {
-          repository: {
-            type: "git",
-            url: "https://github.com:foo/foo",
+      packageEntry({
+        options: {
+          entries: {
+            repository: {
+              type: "git",
+              url: "https://github.com:foo/foo",
+            },
           },
+          entriesExist: ["bugs"],
         },
-        entriesExist: ["bugs"],
-      });
+      }).check(context);
 
       expect(spy).toHaveBeenCalledTimes(2);
 

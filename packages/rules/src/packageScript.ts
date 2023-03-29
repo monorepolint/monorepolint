@@ -5,11 +5,10 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/config";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
-import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
 import { diff } from "jest-diff";
 import * as r from "runtypes";
+import { makeRule } from "./util/makeRule.js";
 
 export const Options = r.Record({
   scripts: r.Dictionary(
@@ -27,8 +26,9 @@ export type Options = r.Static<typeof Options>;
 
 export const MSG_NO_SCRIPTS_BLOCK = "No scripts block in package.json";
 
-export const packageScript = {
-  check: function expectPackageScript(context: Context, options: Options) {
+export const packageScript = makeRule({
+  name: "packageScript",
+  check: (context, options) => {
     const packageJson = context.getPackageJson();
     if (packageJson.scripts === undefined) {
       context.addError({
@@ -96,6 +96,4 @@ export const packageScript = {
     }
   },
   optionsRuntype: Options,
-} as RuleModule<typeof Options>;
-
-export const PackageScript = createNewRuleConversion("PackageScript", packageScript);
+});

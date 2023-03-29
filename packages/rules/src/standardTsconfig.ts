@@ -5,12 +5,12 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/config";
+import { Context } from "@monorepolint/config";
 import { matchesAnyGlob } from "@monorepolint/utils";
 import { diff } from "jest-diff";
-import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
 import * as path from "path";
 import * as r from "runtypes";
+import { makeRule } from "./util/makeRule.js";
 
 const DEFAULT_TSCONFIG_FILENAME = "tsconfig.json";
 
@@ -41,8 +41,9 @@ const Options = r
 
 export interface Options extends r.Static<typeof Options> {}
 
-export const standardTsconfig = {
-  check: async function expectStandardTsconfig(context: Context, opts: Options) {
+export const standardTsconfig = makeRule({
+  name: "standardTsconfig",
+  check: async (context, opts) => {
     const tsconfigFileName = opts.file ?? DEFAULT_TSCONFIG_FILENAME;
     const fullPath = path.resolve(context.packageDir, tsconfigFileName);
     const generator = getGenerator(context, opts);
@@ -74,9 +75,7 @@ export const standardTsconfig = {
     }
   },
   optionsRuntype: Options,
-} as RuleModule<typeof Options>;
-
-export const StandardTsConfig = createNewRuleConversion("StandardTsconfig", standardTsconfig);
+});
 
 function getGenerator(context: Context, opts: Options) {
   if (opts.generator) {
@@ -110,10 +109,9 @@ function makeGenerator(
 
     const packageJson = context.getPackageJson();
     const deps = [...Object.keys(packageJson.dependencies || {}), ...Object.keys(packageJson.devDependencies || {})];
-
     for (const dep of deps) {
       const packageDir = nameToDirectory.get(dep);
-      if (packageDir !== undefined && (excludedReferences === undefined || matchesAnyGlob(dep, excludedReferences))) {
+      if (packageDir !== undefined && (excludedReferences === undefined || !matchesAnyGlob(dep, excludedReferences))) {
         const absoluteReferencePath =
           tsconfigReferenceFile !== undefined ? path.join(packageDir, tsconfigReferenceFile) : packageDir;
         template.references.push({

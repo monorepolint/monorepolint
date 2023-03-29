@@ -29,12 +29,14 @@ describe.each(HOST_FACTORIES)("fileContents ($name)", (hostFactory) => {
     });
 
     it("fixes missing file", () => {
-      fileContents.check(workspace.context, {
-        file: "foo.txt",
-        templateFile: "shared/foo-template.txt",
-        generator: undefined,
-        template: undefined,
-      });
+      fileContents({
+        options: {
+          file: "foo.txt",
+          templateFile: "shared/foo-template.txt",
+          generator: undefined,
+          template: undefined,
+        },
+      }).check(workspace.context);
 
       expect(spy).toHaveBeenCalledTimes(1);
 
@@ -51,12 +53,14 @@ describe.each(HOST_FACTORIES)("fileContents ($name)", (hostFactory) => {
     });
 
     it("fixes missing nested file", () => {
-      fileContents.check(workspace.context, {
-        file: "nested/foo.txt",
-        templateFile: "shared/foo-template.txt",
-        generator: undefined,
-        template: undefined,
-      });
+      fileContents({
+        options: {
+          file: "nested/foo.txt",
+          templateFile: "shared/foo-template.txt",
+          generator: undefined,
+          template: undefined,
+        },
+      }).check(workspace.context);
 
       expect(spy).toHaveBeenCalledTimes(1);
 
