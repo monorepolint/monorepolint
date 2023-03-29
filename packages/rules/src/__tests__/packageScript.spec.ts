@@ -47,11 +47,13 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
     it("handles an empty script section", () => {
       workspace.writeFile("package.json", PACKAGE_WITHOUT_SCRIPTS);
 
-      packageScript.check(workspace.context, {
-        scripts: {
-          foo: "bar",
+      packageScript({
+        options: {
+          scripts: {
+            foo: "bar",
+          },
         },
-      });
+      }).check(workspace.context);
 
       expect(spy).toHaveBeenCalledTimes(1);
 
@@ -84,11 +86,13 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
     it("fixes an empty script section", () => {
       workspace.writeFile("package.json", PACKAGE_WITHOUT_SCRIPTS);
 
-      packageScript.check(context, {
-        scripts: {
-          foo: "bar",
+      packageScript({
+        options: {
+          scripts: {
+            foo: "bar",
+          },
         },
-      });
+      }).check(context);
 
       expect(spy).toHaveBeenCalledTimes(1);
 
@@ -107,11 +111,13 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
     it("adds a script", () => {
       workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
 
-      packageScript.check(context, {
-        scripts: {
-          [MISSING_SCRIPT_NAME]: MISSING_SCRIPT_VALUE,
+      packageScript({
+        options: {
+          scripts: {
+            [MISSING_SCRIPT_NAME]: MISSING_SCRIPT_VALUE,
+          },
         },
-      });
+      }).check(context);
 
       expect(spy).toHaveBeenCalledTimes(1);
 
@@ -134,11 +140,13 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
     it("does nothing if the value exists", () => {
       workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
 
-      packageScript.check(context, {
-        scripts: {
-          [SCRIPT_NAME]: SCRIPT_VALUE,
+      packageScript({
+        options: {
+          scripts: {
+            [SCRIPT_NAME]: SCRIPT_VALUE,
+          },
         },
-      });
+      }).check(context);
 
       expect(spy).not.toHaveBeenCalled();
 
@@ -150,13 +158,15 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
     it("errors if long form is used and no value matches and there is no fixValue", () => {
       workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
 
-      packageScript.check(context, {
-        scripts: {
-          foo: {
-            options: ["a", "b"],
+      packageScript({
+        options: {
+          scripts: {
+            foo: {
+              options: ["a", "b"],
+            },
           },
         },
-      });
+      }).check(context);
 
       const errors = spy.mock.calls;
 
@@ -167,14 +177,16 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
     it("uses the fixValue for fixing if provided", () => {
       workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
 
-      packageScript.check(context, {
-        scripts: {
-          foo: {
-            options: ["a", "b"],
-            fixValue: "a",
+      packageScript({
+        options: {
+          scripts: {
+            foo: {
+              options: ["a", "b"],
+              fixValue: "a",
+            },
           },
         },
-      });
+      }).check(context);
 
       const errors = spy.mock.calls;
 
@@ -190,14 +202,16 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
     it("can fix to empty", () => {
       workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
 
-      packageScript.check(context, {
-        scripts: {
-          [SCRIPT_NAME]: {
-            options: ["a", undefined],
-            fixValue: undefined,
+      packageScript({
+        options: {
+          scripts: {
+            [SCRIPT_NAME]: {
+              options: ["a", undefined],
+              fixValue: undefined,
+            },
           },
         },
-      });
+      }).check(context);
 
       const errors = spy.mock.calls;
 
@@ -210,14 +224,16 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
     it("can allow only empty", () => {
       workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
 
-      packageScript.check(context, {
-        scripts: {
-          [SCRIPT_NAME]: {
-            options: [undefined],
-            fixValue: undefined,
+      packageScript({
+        options: {
+          scripts: {
+            [SCRIPT_NAME]: {
+              options: [undefined],
+              fixValue: undefined,
+            },
           },
         },
-      });
+      }).check(context);
 
       const errors = spy.mock.calls;
 

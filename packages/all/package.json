@@ -2,6 +2,19 @@
   "name": "monorepolint",
   "version": "0.4.0",
   "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./build/types/index.d.ts",
+      "import": "./build/js/index.js"
+    },
+    "./*": {
+      "types": "./build/types/public/*.d.ts",
+      "import": "./build/js/public/*.js"
+    }
+  },
+  "engines": {
+    "node": ">=16"
+  },
   "scripts": {},
   "dependencies": {
     "@monorepolint/cli": "^0.4.0",

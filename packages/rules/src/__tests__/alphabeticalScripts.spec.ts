@@ -49,7 +49,7 @@ describe.each(HOST_FACTORIES)("alphabeticalScripts ($name)", (hostFactory) => {
     it("fixes unsorted scripts", () => {
       workspace.writeFile("package.json", PACKAGE_SCRIPTS_UNSORTED);
 
-      alphabeticalScripts.check(context, undefined);
+      alphabeticalScripts({}).check(context);
 
       expect(spy).toHaveBeenCalledTimes(1);
 
@@ -68,7 +68,7 @@ describe.each(HOST_FACTORIES)("alphabeticalScripts ($name)", (hostFactory) => {
     it("does nothing if already sorted", () => {
       workspace.writeFile("package.json", PACKAGE_SCRIPTS_SORTED);
 
-      alphabeticalScripts.check(context, undefined);
+      alphabeticalScripts({}).check(context);
 
       expect(spy).toHaveBeenCalledTimes(0);
     });

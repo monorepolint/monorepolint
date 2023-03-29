@@ -72,7 +72,7 @@ describe("nestedWorkspaces", () => {
     async function checkAndSpy() {
       const addErrorSpy = jest.spyOn(workspaceContext, "addError");
 
-      await nestedWorkspaces.check(workspaceContext, undefined);
+      await nestedWorkspaces({}).check(workspaceContext);
       return { addErrorSpy };
     }
 

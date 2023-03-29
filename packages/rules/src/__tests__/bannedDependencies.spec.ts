@@ -51,9 +51,7 @@ describe("bannedDependencies", () => {
 
     function checkAndSpy(options: Options) {
       const addErrorSpy = jest.spyOn(workspaceContext, "addError");
-      bannedDependencies.check(workspaceContext, {
-        ...options,
-      });
+      bannedDependencies({ options }).check(workspaceContext);
       return { addErrorSpy };
     }
 

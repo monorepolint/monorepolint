@@ -20,17 +20,7 @@ export interface RuleEntry<T = unknown> extends r.Static<typeof RuleEntry> {
   options?: T;
 }
 
-export const RuleModule = r.Record({
-  check: r.Function,
-  optionsRuntype: r.Unknown,
-  printStats: r.Function.optional(),
-});
-export interface RuleModule<T extends r.Runtype = r.Runtype> extends r.Static<typeof RuleModule> {
-  check: Checker<T>;
-  optionsRuntype: T;
-}
-
-export interface NewRuleModule<T extends r.Runtype = r.Runtype> {
+export interface RuleModule<T extends r.Runtype<any> = r.Runtype> {
   check: (context: Context) => Promise<unknown> | unknown;
   name: string;
   id: string;
@@ -39,22 +29,12 @@ export interface NewRuleModule<T extends r.Runtype = r.Runtype> {
   ruleEntry: RuleEntry<r.Static<T>>;
 }
 
-export const LegacyRules = r.Dictionary(RuleEntry.Or(r.Array(RuleEntry)).Or(r.Boolean));
-export type LegacyRules = r.Static<typeof LegacyRules>;
-
 export const Config = r.Record({
   rules: r.Array(r.Unknown),
-  legacyRules: LegacyRules.optional(),
 });
 export interface Config extends r.Static<typeof Config> {
-  rules: NewRuleModule[];
+  rules: RuleModule[];
 }
-
-export const LegacyConfig = r.Record({
-  rules: LegacyRules.optional(),
-});
-
-export interface LegacyConfig extends r.Static<typeof LegacyConfig> {}
 
 export interface Options {
   readonly verbose?: boolean;
@@ -69,7 +49,7 @@ export type Checker<T extends r.Runtype> =
   | ((context: Context, args: r.Static<T>, extra?: { id: string }) => void)
   | ((context: Context, args: r.Static<T>, extra?: { id: string }) => Promise<void>);
 
-export interface ResolvedRule<T extends r.Runtype = r.Runtype> extends NewRuleModule<T> {}
+export interface ResolvedRule<T extends r.Runtype = r.Runtype> extends RuleModule<T> {}
 
 export interface ResolvedConfig extends Options {
   readonly rules: ReadonlyArray<ResolvedRule>;

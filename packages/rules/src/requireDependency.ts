@@ -5,11 +5,12 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/config";
+import { Context } from "@monorepolint/config";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
 import { diff } from "jest-diff";
 import * as r from "runtypes";
-import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
+import { makeRule } from "./util/makeRule.js";
+
 const Options = r.Partial({
   dependencies: r.Dictionary(r.String),
   devDependencies: r.Dictionary(r.String),
@@ -19,7 +20,8 @@ const Options = r.Partial({
 
 type Options = r.Static<typeof Options>;
 
-export const requireDependency = {
+export const requireDependency = makeRule({
+  name: "requireDependency",
   check: function expectPackageEntry(context: Context, options: Options) {
     const packageJson = context.getPackageJson();
     const packageJsonPath = context.getPackageJsonPath();
@@ -66,6 +68,4 @@ export const requireDependency = {
     });
   },
   optionsRuntype: Options,
-} as RuleModule<typeof Options>;
-
-export const RequireDependency = createNewRuleConversion("RequireDependency", requireDependency);
+});

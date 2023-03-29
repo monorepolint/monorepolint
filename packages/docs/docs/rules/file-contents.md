@@ -1,5 +1,5 @@
 ---
-title: FileContents
+title: fileContents
 ---
 
 Enforce that each package has a file with certain contents enforced by either a template or generator.
@@ -20,17 +20,17 @@ Exactly one of `generator`, `template`, or `templateFile` needs to be specified.
 ### Example
 
 ```js
-import { FileContents } from "monorepolint/rules";
+import { fileContents } from "monorepolint/rules";
 export default {
   rules: [
-    new FileContents({
+    fileContents({
       options: {
         file: "jest.config.js",
         templateFile:
           "./templates/jest.config.js",
       },
     }),
-    new FileContents({
+    fileContents({
       options: {
         file: "foo.txt",
         template: "Hi mom",

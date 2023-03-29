@@ -5,18 +5,19 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/config";
 import * as globby from "globby";
 import * as path from "node:path";
 import * as r from "runtypes";
-import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
+import { makeRule } from "./util/makeRule.js";
+
 export const Options = r.Undefined;
 
 type Options = r.Static<typeof Options>;
 
 // Enforce that the root package.json contains all of the workspaces in the repo (including nested packages)
-export const nestedWorkspaces: RuleModule<typeof Options> = {
-  check: (context: Context) => {
+export const nestedWorkspaces = makeRule({
+  name: "nestedWorkspaces",
+  check: (context) => {
     const rootPackageJson = context.getWorkspaceContext().getPackageJson();
 
     // Expand a set of globs covering all package.json files in the entire repo (except the root)
@@ -56,6 +57,4 @@ export const nestedWorkspaces: RuleModule<typeof Options> = {
     }
   },
   optionsRuntype: Options,
-};
-
-export const NestedWorkspaces = createNewRuleConversion("NestedWorkspaces", nestedWorkspaces);
+});

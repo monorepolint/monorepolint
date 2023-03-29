@@ -1,15 +1,15 @@
 /*!
- * Copyright 2019 Palantir Technologies, Inc.
+ * Copyright 2023 Palantir Technologies, Inc.
  *
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/config";
+import { Context } from "@monorepolint/config";
 import { diff } from "jest-diff";
 import * as path from "path";
 import * as r from "runtypes";
-import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
+import { makeRule } from "./util/makeRule.js";
 const Options = r.Union(
   r.Record({
     file: r.String,
@@ -35,8 +35,9 @@ const Options = r.Union(
 
 type Options = r.Static<typeof Options>;
 
-export const fileContents = {
-  check: function expectFileContents(context: Context, opts: Options) {
+export const fileContents = makeRule({
+  name: "fileContents",
+  check: (context, opts) => {
     const fullPath = path.join(context.packageDir, opts.file);
     const expectedContent = getExpectedContents(context, opts);
 
@@ -59,7 +60,7 @@ export const fileContents = {
     }
   },
   optionsRuntype: Options,
-} as RuleModule<typeof Options>;
+});
 
 const optionsCache = new Map<Options, ((context: Context) => string | undefined) | string | undefined>();
 
@@ -88,5 +89,3 @@ function getExpectedContents(context: Context, opts: Options) {
     return opts.template;
   }
 }
-
-export const FileContents = createNewRuleConversion("FileContents", fileContents);

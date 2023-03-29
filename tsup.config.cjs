@@ -5,9 +5,10 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   outDir: "build/js",
+  target: "node16",
   clean: true,
 
-  format: ["cjs", "esm"],
+  format: ["esm"],
   esbuildOptions: (options) => {
     options.external = [
       "./node_modules/*",

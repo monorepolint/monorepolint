@@ -77,7 +77,7 @@ describe("consistentDependencies", () => {
     function checkAndSpy(q: string, opts?: Options) {
       const context = workspaceContext.createChildContext(path.resolve(dir.name, q));
       const addErrorSpy = jest.spyOn(context, "addError");
-      consistentDependencies.check(context, opts);
+      consistentDependencies({ options: opts }).check(context);
       return { context, addErrorSpy };
     }
 
@@ -104,7 +104,7 @@ describe("consistentDependencies", () => {
     addFile("./packages/right/package.json", PACKAGE_CHILD_WITH_RIGHT_VERSION);
     addFile("./packages/wrong/package.json", PACKAGE_CHILD_WITH_WRONG_VERSION);
 
-    consistentDependencies.check(workspaceContext, undefined);
+    consistentDependencies({}).check(workspaceContext);
 
     const star = checkAndSpy("./packages/star");
     expect(star.addErrorSpy).toHaveBeenCalledTimes(0);

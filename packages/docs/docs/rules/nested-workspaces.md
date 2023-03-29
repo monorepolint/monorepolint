@@ -1,5 +1,5 @@
 ---
-title: NestedWorkspaces
+title: nestedWorkspaces
 ---
 
 Enforce that all workspaces in the repo are represented by the `workspaces` field in `package.json`.
@@ -8,9 +8,9 @@ In particular, this ensures that nested workspaces (e.g. `packages/group/*`) are
 ### Example
 
 ```javascript
-import { NestedWorkspaces } from "monorepolint/rules";
+import { nestedWorkspaces } from "monorepolint/rules";
 export default {
-  rules: [new NestedWorkspaces({})],
+  rules: [nestedWorkspaces({})],
 };
 ```
 

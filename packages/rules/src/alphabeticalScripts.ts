@@ -5,17 +5,15 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/config";
 import * as r from "runtypes";
 import { checkAlpha } from "./util/checkAlpha.js";
-import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
+import { makeRule } from "./util/makeRule.js";
 const Options = r.Undefined;
 
-export const alphabeticalScripts: RuleModule<typeof Options> = {
-  check: function expectAlphabeticalScripts(context: Context) {
+export const alphabeticalScripts = makeRule({
+  name: "alphabeticalScripts",
+  check: (context) => {
     checkAlpha(context, "scripts");
   },
   optionsRuntype: Options,
-};
-
-export const AlphabeticalScripts = createNewRuleConversion("AlphabeticalScripts", alphabeticalScripts);
+});

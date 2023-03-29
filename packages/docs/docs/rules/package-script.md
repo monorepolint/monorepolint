@@ -1,5 +1,5 @@
 ---
-title: PackageScript
+title: packageScript
 ---
 
 Standardize package scripts. This is a separate rule from Package Entries to make it easy to have multiple package script rules apply to one package.
@@ -16,10 +16,10 @@ Standardize package scripts. This is a separate rule from Package Entries to mak
 ### Example
 
 ```javascript
-import { PackageScript } from "monorepolint/rules";
+import { packageScript } from "monorepolint/rules";
 export default {
   rules: [
-    new PackageScript({
+    packageScript({
       options: {
         scripts: {
           clean:

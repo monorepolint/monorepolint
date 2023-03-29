@@ -63,20 +63,20 @@ const DELETE_SCRIPT_ENTRTY = { options: [undefined], fixValue: undefined };
 
 export default {
   rules: [
-    new Rules.StandardTsConfig({
+    Rules.standardTsConfig({
       options: {
         templateFile: "./templates/tsconfig.json",
       },
       excludePackages: [DOCS],
     }),
-    new Rules.FileContents({
+    Rules.fileContents({
       options: {
         file: "jest.config.cjs",
         templateFile: "./templates/jest.config.cjs",
       },
       excludePackages: [DOCS],
     }),
-    new Rules.PackageScript({
+    Rules.packageScript({
       options: {
         scripts: {
           clean: "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
@@ -91,7 +91,7 @@ export default {
       },
       excludePackages: [DOCS, ...META_PACKAGES],
     }),
-    new Rules.PackageScript({
+    Rules.packageScript({
       options: {
         scripts: {
           clean: DELETE_SCRIPT_ENTRTY,
@@ -106,16 +106,16 @@ export default {
       },
       includePackages: [...META_PACKAGES],
     }),
-    new Rules.PackageOrder({}),
-    new Rules.AlphabeticalDependencies({}),
-    new Rules.AlphabeticalScripts({}),
-    new Rules.ConsistentDependencies({}),
-    new Rules.BannedDependencies({
+    Rules.packageOrder({}),
+    Rules.alphabeticalDependencies({}),
+    Rules.alphabeticalScripts({}),
+    Rules.consistentDependencies({}),
+    Rules.bannedDependencies({
       options: {
         bannedDependencies: ["lodash"],
       },
     }),
-    new Rules.RequireDependency({
+    Rules.requireDependency({
       options: {
         devDependencies: {
           typescript: "^4.9.5",

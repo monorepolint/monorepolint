@@ -5,11 +5,11 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/config";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
 import { diff } from "jest-diff";
 import * as r from "runtypes";
-import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
+import { makeRule } from "./util/makeRule.js";
+
 export const Options = r.Union(
   r
     .Record({
@@ -37,8 +37,9 @@ export const Options = r.Union(
 
 export type Options = r.Static<typeof Options>;
 
-export const packageEntry: RuleModule<typeof Options> = {
-  check: function expectPackageEntry(context: Context, options: Options) {
+export const packageEntry = makeRule({
+  name: "packageEntry",
+  check: (context, options) => {
     const packageJson = context.getPackageJson();
 
     if (options.entries) {
@@ -78,9 +79,7 @@ export const packageEntry: RuleModule<typeof Options> = {
     }
   },
   optionsRuntype: Options,
-};
-
-export const PackageEntry = createNewRuleConversion("PackageEntry", packageEntry);
+});
 
 export function createStandardizedEntryErrorMessage(key: string) {
   return `Expected standardized entry for '${key}'`;

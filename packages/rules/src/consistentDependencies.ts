@@ -5,10 +5,10 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/config";
+import { Context } from "@monorepolint/config";
 import { diff } from "jest-diff";
 import * as r from "runtypes";
-import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
+import { makeRule } from "./util/makeRule.js";
 const Options = r
   .Record({
     ignoredDependencies: r.Array(r.String).Or(r.Undefined),
@@ -18,16 +18,15 @@ export type Options = r.Static<typeof Options>;
 
 const skippedVersions = ["*", "latest"];
 
-export const consistentDependencies = {
-  check: function expectConsistentDependencies(context: Context, args: Options) {
+export const consistentDependencies = makeRule({
+  name: "consistentDependencies",
+  check: (context, args) => {
     checkDeps(context, args, "dependencies");
     checkDeps(context, args, "devDependencies");
     // we don't check peer deps since they can be more lenient
   },
   optionsRuntype: Options,
-} as RuleModule<typeof Options>;
-
-export const ConsistentDependencies = createNewRuleConversion("ConsistentDependencies", consistentDependencies);
+});
 
 function checkDeps(context: Context, args: Options, block: "dependencies" | "devDependencies" | "peerDependencies") {
   const packageJson = context.getPackageJson();

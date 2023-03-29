@@ -5,21 +5,22 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/config";
+import { Context } from "@monorepolint/config";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
 import * as r from "runtypes";
 import { coerce, SemVer } from "semver";
-import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
+import { makeRule } from "./util/makeRule.js";
 export const Options = r.Record({
   matchDependencyVersions: r.Dictionary(r.Union(r.String, r.Array(r.String))),
 });
 
 export type Options = r.Static<typeof Options>;
 
-export const consistentVersions: RuleModule<typeof Options> = {
+export const consistentVersions = makeRule({
+  name: "consistentVersions",
   check: checkConsistentVersions,
   optionsRuntype: Options,
-};
+});
 
 function checkConsistentVersions(context: Context, options: Options) {
   for (const [dependencyPackageName, expectedPackageDependencyValue] of Object.entries(
@@ -138,5 +139,3 @@ const ensurePackageMatchesSomeVersion = (
     });
   }
 };
-
-export const ConsistentVersions = createNewRuleConversion("ConsistentVersions", consistentVersions);

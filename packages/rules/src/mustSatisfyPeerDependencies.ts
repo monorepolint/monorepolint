@@ -5,13 +5,13 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/config";
+import { Context } from "@monorepolint/config";
 import { Host, mutateJson, PackageJson } from "@monorepolint/utils";
 import * as path from "node:path";
 import * as r from "runtypes";
 import { coerce } from "semver";
 import resolvePackagePath from "resolve-package-path";
-import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
+import { makeRule } from "./util/makeRule.js";
 
 const Options = r.Union(
   r.Partial({
@@ -184,15 +184,11 @@ const Options = r.Union(
 
 export type Options = r.Static<typeof Options>;
 
-export const mustSatisfyPeerDependencies: RuleModule<typeof Options> = {
+export const mustSatisfyPeerDependencies = makeRule({
+  name: "mustSatisfyPeerDependencies",
   check: checkSatisfyPeerDependencies,
   optionsRuntype: Options,
-};
-
-export const MustSatisfyPeerDependencies = createNewRuleConversion(
-  "MustSatisfyPeerDependencies",
-  mustSatisfyPeerDependencies
-);
+});
 
 /**
  * separating on `|`, this regex allows any of the following formats:

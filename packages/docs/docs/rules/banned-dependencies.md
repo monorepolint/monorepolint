@@ -1,5 +1,5 @@
 ---
-title: BannedDependencies
+title: bannedDependencies
 ---
 
 Disallow problematic dependencies.
@@ -16,10 +16,10 @@ Disallow problematic dependencies.
 ### Example
 
 ```javascript
-import { BannedDependencies } from "monorepolint/rules";
+import { bannedDependencies } from "monorepolint/rules";
 export default {
   rules: [
-    new BannedDependencies({
+    bannedDependencies({
       options: {
         bannedDependencies: {
           exact: ["lodash"],

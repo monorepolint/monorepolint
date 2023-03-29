@@ -5,12 +5,12 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/config";
+import { Context } from "@monorepolint/config";
 import { matchesAnyGlob } from "@monorepolint/utils";
 import { AggregateTiming } from "@monorepolint/utils";
 import * as path from "node:path";
 import * as r from "runtypes";
-import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
+import { makeRule } from "./util/makeRule.js";
 import { IPackageDependencyGraphNode, PackageDependencyGraphService } from "./util/packageDependencyGraphService.js";
 // FIXME: This rule is messed. bannedTransitiveDependencies doesnt glob
 
@@ -49,10 +49,9 @@ const setCache = new Map<ReadonlyArray<string>, Set<string>>();
 
 const aggregateTiming = new AggregateTiming(":bannedDependencies stats");
 
-export const bannedDependencies: RuleModule<typeof Options> & {
-  printStats: () => void;
-} = {
-  check: function expectAllowedDependencies(context, opts, extra) {
+export const bannedDependencies = makeRule({
+  name: "bannedDependencies",
+  check: (context, opts, extra) => {
     aggregateTiming.start(extra?.id ?? "unknown id");
 
     const packageJson = context.getPackageJson();
@@ -112,8 +111,7 @@ export const bannedDependencies: RuleModule<typeof Options> & {
   printStats: () => {
     aggregateTiming.printResults();
   },
-};
-export const BannedDependencies = createNewRuleConversion("BannedDependencies", bannedDependencies);
+});
 
 function populateProblemsExact(banned: Set<string>, dependencies: ReadonlyArray<string>, violations: Set<string>) {
   for (const dependency of dependencies) {

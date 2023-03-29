@@ -5,10 +5,10 @@
  *
  */
 
-import { Context, RuleModule } from "@monorepolint/config";
+import { Context } from "@monorepolint/config";
 import { diff } from "jest-diff";
 import * as r from "runtypes";
-import { createNewRuleConversion } from "./util/createNewRuleConversion.js";
+import { makeRule } from "./util/makeRule.js";
 type OrderFunction = (context: Context) => (a: string, b: string) => number;
 
 const Options = r
@@ -51,8 +51,9 @@ const defaultKeyOrder = [
   "publishConfig",
 ];
 
-export const packageOrder = {
-  check: function expectPackageOrder(context: Context, opts: Options) {
+export const packageOrder = makeRule({
+  name: "packageOrder",
+  check: (context, opts) => {
     const packageJson = context.getPackageJson();
     const packagePath = context.getPackageJsonPath();
 
@@ -81,9 +82,7 @@ export const packageOrder = {
     }
   },
   optionsRuntype: Options,
-} as RuleModule<typeof Options>;
-
-export const PackageOrder = createNewRuleConversion("PackageOrder", packageOrder);
+});
 
 function arrayOrderCompare(a: ReadonlyArray<string>, b: ReadonlyArray<string>) {
   for (let index = 0; index < a.length; index++) {

@@ -80,7 +80,7 @@ describe("mustSatisfyPeerDependencies", () => {
     const addErrorSpy = jest.spyOn(workspaceContext, "addError");
 
     async function check(options: Options) {
-      await mustSatisfyPeerDependencies.check(workspaceContext, options);
+      await mustSatisfyPeerDependencies({ options }).check(workspaceContext);
     }
 
     return { addErrorSpy, check, host };

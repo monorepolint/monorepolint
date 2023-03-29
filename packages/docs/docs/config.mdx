@@ -2,11 +2,7 @@
 title: Configuration File
 ---
 
-monorepolint expects a configuration file at the root of your monorepo named
-
-- `.monorepolint.config.js`,
-- `.monorepolint.config.cjs`, or
-- `.monorepolint.config.mjs`.
+monorepolint expects a configuration file at the root of your monorepo named `.monorepolint.config.mjs`.
 
 This file is the central brain for how your project should be configured and
 enables you to keep your sub-projects consistent through out.
@@ -80,21 +76,19 @@ type CommonOptions<T> {
 
 ## Detailed Example
 
-If you had a legacy configuration format, it should still work
-
-```js title=".monorepolint.config.cjs"
+```js title=".monorepolint.config.mjs"
 import {
-  PackageOrder,
-  AlphabeticalDependencies,
-  PackageScript,
-  AlphabeticalScripts,
-  BannedDependencies,
-  ConsistentDependences,
+  alphabeticalDependencies,
+  alphabeticalScripts,
+  bannedDependencies,
+  consistentDependences,
+  packageOrder,
+  packageScript,
 } from "@monorepolint/rules";
 
 export default {
   rules: [
-    new PackageScript({
+    packageScript({
       options: {
         scripts: {
           clean: "rm -rf build lib node_modules *.tgz",
@@ -102,15 +96,15 @@ export default {
         },
       },
     }),
-    new PackageOrder({}),
-    new AlphabeticalDependencies({}),
-    new BannedDependencies({
+    packageOrder({}),
+    alphabeticalDependencies({}),
+    bannedDependencies({
       options: {
         bannedDependencies: ["lodash"],
       },
       includeWorkspaceRoot: true,
     }),
-    new ConsistentDependencies({}),
+    consistentDependencies({}),
   ],
 };
 ```

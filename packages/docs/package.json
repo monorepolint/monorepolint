@@ -1,7 +1,20 @@
 {
   "name": "@monorepolint/docs",
   "version": "0.0.0",
+  "exports": {
+    ".": {
+      "types": "./build/types/index.d.ts",
+      "import": "./build/js/index.js"
+    },
+    "./*": {
+      "types": "./build/types/public/*.d.ts",
+      "import": "./build/js/public/*.js"
+    }
+  },
   "private": true,
+  "engines": {
+    "node": ">=16"
+  },
   "scripts": {
     "build-docs": "docusaurus build",
     "clear": "docusaurus clear",
