@@ -1,5 +1,5 @@
 ---
-title: PackageEntry
+title: packageEntry
 ---
 
 [source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/packageEntry.ts)
@@ -16,10 +16,10 @@ Standardize arbitrary entries in package.json.
 ### Example
 
 ```javascript
-import { PackageEntry } from "monorepolint/rules";
+import { packageEntry } from "monorepolint/rules";
 export default {
   rules: [
-    new PackageEntry({
+    packageEntry({
       options: {
         entries: {
           author:

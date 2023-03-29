@@ -1,5 +1,5 @@
 ---
-title: AlphabeticalScripts
+title: alphabeticalScripts
 ---
 
 Makes sure that all scripts are ordered alphabetically.
@@ -7,9 +7,9 @@ Makes sure that all scripts are ordered alphabetically.
 ### Example
 
 ```javascript
-import { AlphabeticalScripts } from "monorepolint/rules";
+import { alphabeticalScripts } from "monorepolint/rules";
 export default {
-  rules: [new AlphabeticalScripts({})],
+  rules: [alphabeticalScripts({})],
 };
 ```
 

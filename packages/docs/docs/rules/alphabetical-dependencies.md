@@ -1,5 +1,5 @@
 ---
-title: AlphabeticalDependencies
+title: alphabeticalDependencies
 ---
 
 Makes sure that all dependency blocks are ordered alphabetically.
@@ -7,10 +7,10 @@ Makes sure that all dependency blocks are ordered alphabetically.
 ### Example
 
 ```javascript
-import { AlphabeticalDependencies } from "@monorepolint/rules";
+import { lphabeticalDependencies } from "@monorepolint/rules";
 export default {
   rules: [
-    new AlphabeticalDependencies({}),
+    alphabeticalDependencies({}),
   ],
 };
 ```

@@ -1,5 +1,5 @@
 ---
-title: ConsistentVersions
+title: consistentVersions
 ---
 
 Ensure that all packages use the same version of a dependency, when present in either `dependencies` or `devDependencies`.
@@ -14,10 +14,10 @@ for all packages, not just enforce consistent versions when present.
 ### Example
 
 ```javascript
-import { ConsistentVersions } from "monorepolint/rules";
+import { consistentVersions } from "monorepolint/rules";
 export default {
   rules: [
-    new ConsistentVersions({
+    consistentVersions({
       options: {
         matchDependencyVersions: {
           lodash: "1.0.0",
