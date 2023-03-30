@@ -1,8 +1,8 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ["src/index.ts"],
-  splitting: false,
+  entry: ["src/index.ts", "src/public/*.ts"],
+  splitting: true,
   sourcemap: true,
   outDir: "build/js",
   target: "node16",
