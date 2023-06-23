@@ -13,7 +13,7 @@ import { makeRule } from "./util/makeRule.js";
 const Options = r.Union(
   r.Record({
     file: r.String,
-    generator: r.Function,
+    generator: r.Function.withGuard((x): x is (context: Context) => string | Promise<string> => x != undefined),
     template: r.Undefined.optional(),
     templateFile: r.Undefined.optional(),
   }),
@@ -37,9 +37,9 @@ type Options = r.Static<typeof Options>;
 
 export const fileContents = makeRule({
   name: "fileContents",
-  check: (context, opts) => {
+  check: async (context, opts) => {
     const fullPath = path.join(context.packageDir, opts.file);
-    const expectedContent = getExpectedContents(context, opts);
+    const expectedContent = await getExpectedContents(context, opts);
 
     const pathExists = context.host.exists(fullPath);
     const actualContent = pathExists ? context.host.readFile(fullPath, { encoding: "utf-8" }) : undefined;
@@ -62,9 +62,12 @@ export const fileContents = makeRule({
   optionsRuntype: Options,
 });
 
-const optionsCache = new Map<Options, ((context: Context) => string | undefined) | string | undefined>();
+const optionsCache = new Map<
+  Options,
+  ((context: Context) => Promise<string> | string | undefined) | string | undefined
+>();
 
-function getExpectedContents(context: Context, opts: Options) {
+async function getExpectedContents(context: Context, opts: Options) {
   // we need to use has because undefined is a valid value in the cache
   if (optionsCache.has(opts)) {
     const cachedEntry = optionsCache.get(opts);
@@ -76,7 +79,7 @@ function getExpectedContents(context: Context, opts: Options) {
 
   if (opts.generator) {
     optionsCache.set(opts, opts.generator);
-    return opts.generator(context) as string | undefined; // we have no guarentee its the right kind of function
+    return opts.generator(context);
   } else if (opts.templateFile) {
     const { packageDir: workspacePackageDir } = context.getWorkspaceContext();
     const fullPath = path.resolve(workspacePackageDir, opts.templateFile);

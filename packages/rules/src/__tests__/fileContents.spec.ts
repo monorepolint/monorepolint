@@ -28,8 +28,30 @@ describe.each(HOST_FACTORIES)("fileContents ($name)", (hostFactory) => {
       spy = jest.spyOn(workspace.context, "addError");
     });
 
-    it("fixes missing file", () => {
-      fileContents({
+    it("works with async generator", async () => {
+      await fileContents({
+        options: {
+          file: "foo.txt",
+          generator: () => Promise.resolve(EXPECTED_FOO_FILE),
+        },
+      }).check(workspace.context);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+
+      const failure: Failure = spy.mock.calls[0][0];
+      expect(failure).toMatchObject(
+        workspace.failureMatcher({
+          file: "foo.txt",
+          hasFixer: true,
+          message: "Expect file contents to match",
+        })
+      );
+
+      expect(workspace.readFile("foo.txt")).toEqual(EXPECTED_FOO_FILE);
+    });
+
+    it("fixes missing file", async () => {
+      await fileContents({
         options: {
           file: "foo.txt",
           templateFile: "shared/foo-template.txt",
@@ -52,8 +74,8 @@ describe.each(HOST_FACTORIES)("fileContents ($name)", (hostFactory) => {
       expect(workspace.readFile("foo.txt")).toEqual(EXPECTED_FOO_FILE);
     });
 
-    it("fixes missing nested file", () => {
-      fileContents({
+    it("fixes missing nested file", async () => {
+      await fileContents({
         options: {
           file: "nested/foo.txt",
           templateFile: "shared/foo-template.txt",
