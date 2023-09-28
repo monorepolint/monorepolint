@@ -56,5 +56,5 @@ export const nestedWorkspaces = makeRule({
       });
     }
   },
-  optionsRuntype: Options,
+  validateOptions: Options.check,
 });

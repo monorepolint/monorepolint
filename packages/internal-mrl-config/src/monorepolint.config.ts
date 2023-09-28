@@ -91,16 +91,16 @@ export const config: Config = {
     Rules.requireDependency({
       options: {
         devDependencies: {
-          typescript: "^4.9.5",
+          typescript: "^5.2.2",
           "@types/jest": "^29.2.4",
           prettier: "^2.8.3",
-          "ts-jest": "^29.0.5",
+          "ts-jest": "^29.1.1",
           jest: "^29.3.1",
           "@jest/globals": "^29.3.1",
-          tslib: "^2.5.0",
-          "@typescript-eslint/parser": "^5.45.1",
-          "@typescript-eslint/eslint-plugin": "^5.45.1",
-          eslint: "^8.29.0",
+          tslib: "^2.6.2",
+          "@typescript-eslint/eslint-plugin": "^6.7.3",
+          "@typescript-eslint/parser": "^6.7.3",
+          eslint: "^8.49.0",
         },
       },
     }),

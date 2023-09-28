@@ -51,7 +51,7 @@ const defaultKeyOrder = [
   "publishConfig",
 ];
 
-export const packageOrder = makeRule({
+export const packageOrder = makeRule<Options>({
   name: "packageOrder",
   check: (context, opts) => {
     const packageJson = context.getPackageJson();
@@ -70,6 +70,7 @@ export const packageOrder = makeRule({
         message: "Incorrect order of fields in package.json",
         longMessage: diff(expectedOrder, actualOrder, { expand: true }),
         fixer: () => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const expectedPackageJson: Record<string, any> = {};
 
           expectedOrder.forEach((key) => {
@@ -81,7 +82,7 @@ export const packageOrder = makeRule({
       });
     }
   },
-  optionsRuntype: Options,
+  validateOptions: Options.check,
 });
 
 function arrayOrderCompare(a: ReadonlyArray<string>, b: ReadonlyArray<string>) {

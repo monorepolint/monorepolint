@@ -19,7 +19,7 @@ export type Options = r.Static<typeof Options>;
 export const consistentVersions = makeRule({
   name: "consistentVersions",
   check: checkConsistentVersions,
-  optionsRuntype: Options,
+  validateOptions: Options.check,
 });
 
 function checkConsistentVersions(context: Context, options: Options) {

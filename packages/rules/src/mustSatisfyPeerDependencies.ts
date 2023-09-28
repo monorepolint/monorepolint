@@ -187,7 +187,7 @@ export type Options = r.Static<typeof Options>;
 export const mustSatisfyPeerDependencies = makeRule({
   name: "mustSatisfyPeerDependencies",
   check: checkSatisfyPeerDependencies,
-  optionsRuntype: Options,
+  validateOptions: Options.check,
 });
 
 /**

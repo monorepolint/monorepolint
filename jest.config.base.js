@@ -27,8 +27,6 @@ module.exports = {
   coveragePathIgnorePatterns: ["/node_modules/"],
   coverageReporters: ["json", "text", "lcov", "clover"],
 
-  notify: true,
-
   testEnvironment: "node",
   testMatch: ["<rootDir>/src/**/__tests__/*.spec.+(ts|tsx|js|cts|cjs)"],
   testPathIgnorePatterns: ["/node_modules/", "/build", "/lib"],

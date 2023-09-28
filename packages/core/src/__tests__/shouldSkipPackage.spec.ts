@@ -28,7 +28,7 @@ describe("shouldSkipPackage", () => {
         excludePackages: [fooContext.getName(), "other"],
         includePackages: [fooContext.getName()],
       },
-      optionsRuntype: {} as any,
+      validateOptions: () => {},
       name: "idk",
       id: "idc",
     });
@@ -42,7 +42,7 @@ describe("shouldSkipPackage", () => {
       ruleEntry: {
         includePackages: [],
       },
-      optionsRuntype: {} as any,
+      validateOptions: () => {},
       name: "idk",
       id: "idc",
     });
@@ -54,7 +54,7 @@ describe("shouldSkipPackage", () => {
     const actual = shouldSkipPackage(fooContext, {
       check: () => true,
       ruleEntry: {},
-      optionsRuntype: {} as any,
+      validateOptions: () => {},
       name: "idk",
       id: "idc",
     });
@@ -66,7 +66,7 @@ describe("shouldSkipPackage", () => {
     const actual = shouldSkipPackage(workspaceContext, {
       check: () => true,
       ruleEntry: {},
-      optionsRuntype: {} as any,
+      validateOptions: () => {},
       name: "idk",
       id: "idc",
     });
@@ -80,7 +80,7 @@ describe("shouldSkipPackage", () => {
       ruleEntry: {
         excludePackages: ["@foo/*", "other"],
       },
-      optionsRuntype: {} as any,
+      validateOptions: () => {},
       name: "idk",
       id: "idc",
     });
@@ -94,7 +94,7 @@ describe("shouldSkipPackage", () => {
       ruleEntry: {
         excludePackages: ["@foo/*", "other"],
       },
-      optionsRuntype: {} as any,
+      validateOptions: () => {},
       name: "idk",
       id: "idc",
     });

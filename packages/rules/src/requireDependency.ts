@@ -67,5 +67,5 @@ export const requireDependency = makeRule({
       }
     });
   },
-  optionsRuntype: Options,
+  validateOptions: Options.check,
 });

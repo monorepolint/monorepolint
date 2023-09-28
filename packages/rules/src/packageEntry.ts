@@ -37,7 +37,7 @@ export const Options = r.Union(
 
 export type Options = r.Static<typeof Options>;
 
-export const packageEntry = makeRule({
+export const packageEntry = makeRule<Options>({
   name: "packageEntry",
   check: (context, options) => {
     const packageJson = context.getPackageJson();
@@ -78,7 +78,7 @@ export const packageEntry = makeRule({
       }
     }
   },
-  optionsRuntype: Options,
+  validateOptions: Options.check,
 });
 
 export function createStandardizedEntryErrorMessage(key: string) {

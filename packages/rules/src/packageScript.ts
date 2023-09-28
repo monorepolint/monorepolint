@@ -26,7 +26,7 @@ export type Options = r.Static<typeof Options>;
 
 export const MSG_NO_SCRIPTS_BLOCK = "No scripts block in package.json";
 
-export const packageScript = makeRule({
+export const packageScript = makeRule<Options>({
   name: "packageScript",
   check: (context, options) => {
     const packageJson = context.getPackageJson();
@@ -95,5 +95,5 @@ export const packageScript = makeRule({
       }
     }
   },
-  optionsRuntype: Options,
+  validateOptions: Options.check,
 });

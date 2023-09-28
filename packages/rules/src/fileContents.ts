@@ -35,7 +35,7 @@ const Options = r.Union(
 
 type Options = r.Static<typeof Options>;
 
-export const fileContents = makeRule({
+export const fileContents = makeRule<Options>({
   name: "fileContents",
   check: async (context, opts) => {
     const fullPath = path.join(context.packageDir, opts.file);
@@ -59,7 +59,7 @@ export const fileContents = makeRule({
       });
     }
   },
-  optionsRuntype: Options,
+  validateOptions: Options.check,
 });
 
 const optionsCache = new Map<
