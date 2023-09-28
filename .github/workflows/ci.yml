@@ -8,8 +8,8 @@ jobs:
       fail-fast: false
       matrix: 
         node:
-          - 16
           - 18
+          - 20
         platform:
           - ubuntu-latest
     name: '${{matrix.platform}} / Node.js ${{ matrix.node }}'
