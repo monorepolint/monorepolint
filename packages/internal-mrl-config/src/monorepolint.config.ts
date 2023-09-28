@@ -74,7 +74,7 @@ export const config: Config = {
             },
           },
           engines: {
-            node: ">=16",
+            node: ">=18",
           },
         },
       },
