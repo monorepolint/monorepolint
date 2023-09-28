@@ -41,7 +41,7 @@ const Options = r
 
 export interface Options extends r.Static<typeof Options> {}
 
-export const standardTsconfig = makeRule({
+export const standardTsconfig = makeRule<Options>({
   name: "standardTsconfig",
   check: async (context, opts) => {
     const tsconfigFileName = opts.file ?? DEFAULT_TSCONFIG_FILENAME;
@@ -74,7 +74,7 @@ export const standardTsconfig = makeRule({
       });
     }
   },
-  optionsRuntype: Options,
+  validateOptions: Options.check,
 });
 
 function getGenerator(context: Context, opts: Options) {
@@ -94,6 +94,7 @@ function getGenerator(context: Context, opts: Options) {
 }
 
 function makeGenerator(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   template: any,
   excludedReferences: ReadonlyArray<string> | undefined,
   additionalReferences: ReadonlyArray<string> | undefined,

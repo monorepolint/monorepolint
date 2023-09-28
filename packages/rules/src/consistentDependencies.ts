@@ -18,14 +18,14 @@ export type Options = r.Static<typeof Options>;
 
 const skippedVersions = ["*", "latest"];
 
-export const consistentDependencies = makeRule({
+export const consistentDependencies = makeRule<Options>({
   name: "consistentDependencies",
   check: (context, args) => {
     checkDeps(context, args, "dependencies");
     checkDeps(context, args, "devDependencies");
     // we don't check peer deps since they can be more lenient
   },
-  optionsRuntype: Options,
+  validateOptions: Options.check,
 });
 
 function checkDeps(context: Context, args: Options, block: "dependencies" | "devDependencies" | "peerDependencies") {
@@ -66,6 +66,7 @@ function checkDeps(context: Context, args: Options, block: "dependencies" | "dev
 }
 
 function filterKeys(ob: Record<string, string>, filterOb: Record<string, string>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const newOb: Record<string, any> = {};
 
   for (const key of Object.keys(filterOb)) {

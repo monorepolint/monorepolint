@@ -5,15 +5,13 @@
  *
  */
 
-import * as r from "runtypes";
 import { checkAlpha } from "./util/checkAlpha.js";
 import { makeRule } from "./util/makeRule.js";
-const Options = r.Undefined;
 
-export const alphabeticalScripts = makeRule({
+export const alphabeticalScripts = makeRule<undefined>({
   name: "alphabeticalScripts",
   check: (context) => {
     checkAlpha(context, "scripts");
   },
-  optionsRuntype: Options,
+  validateOptions: () => {},
 });

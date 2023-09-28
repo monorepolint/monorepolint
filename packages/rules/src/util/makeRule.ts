@@ -1,29 +1,29 @@
 import { Context, RuleEntry, RuleModule } from "@monorepolint/config";
-import * as r from "runtypes";
 
 let globalId = 0;
-export function makeRule<T extends r.Runtype<unknown>>({
+export function makeRule<X>({
   name,
   check,
-  optionsRuntype,
+  validateOptions,
   printStats,
 }: {
   name: string;
-  check: (context: Context, options: r.Static<T>, extra: { id: string }) => Promise<unknown> | unknown;
-  optionsRuntype: T;
+  check: (context: Context, options: X, extra: { id: string }) => Promise<unknown> | unknown;
   printStats?: () => void;
-}): RuleFunction<T> {
+  validateOptions: (options: unknown) => asserts options is X;
+}): RuleFunction<X> {
   return function (ruleEntry) {
     const id = `${name} :: ${globalId++}`;
     return {
       id,
-      check: (context) => check(context, ruleEntry.options, { id }),
+      // eslint-disable-next-line @typescript-eslint/no-extra-non-null-assertion
+      check: (context) => check(context, ruleEntry.options!!, { id }),
       name,
-      optionsRuntype,
+      validateOptions,
       ruleEntry,
       printStats,
     };
   };
 }
 
-type RuleFunction<T extends r.Runtype<any>> = (ruleEntry: RuleEntry<r.Static<T>>) => RuleModule<T>;
+type RuleFunction<T> = (ruleEntry: RuleEntry<T>) => RuleModule<T>;

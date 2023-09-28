@@ -29,7 +29,7 @@ export async function check(
   const checkConfigStart = process.hrtime.bigint();
   for (const ruleConfig of resolvedConfig.rules) {
     try {
-      ruleConfig.optionsRuntype.check(ruleConfig.ruleEntry.options);
+      ruleConfig.validateOptions(ruleConfig.ruleEntry.options);
     } catch (e) {
       // tslint:disable-next-line:no-console
       console.log(`Error when validating config for ${ruleConfig.id}.`, e);
@@ -140,6 +140,7 @@ export async function check(
 
     // This is kinda lame but because we copy the contents of the rule to the resolved rule, all of the same type share the same `printStats`
     // function. So we just have to find one of them.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const executed = new Set<(...args: any[]) => any>();
     for (const resolvedRule of workspaceContext.resolvedConfig.rules) {
       if (resolvedRule && resolvedRule.printStats && !executed.has(resolvedRule.printStats)) {

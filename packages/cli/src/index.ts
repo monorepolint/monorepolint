@@ -6,7 +6,7 @@
  */
 
 import { check, resolveConfig } from "@monorepolint/core";
-import { Config, Options } from "@monorepolint/config";
+import { Options } from "@monorepolint/config";
 import { CachingHost, SimpleHost, Timing } from "@monorepolint/utils";
 import chalk from "chalk";
 import * as fs from "fs";
@@ -85,6 +85,7 @@ async function handleCheck(args: Options) {
     if (importError) {
       throw new AggregateError(
         [importError],
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         `File exists ('${foundConfig}') but could not be imported due to error: ${(importError as any)?.message}`
       );
     } else if (foundConfig) {
@@ -96,10 +97,8 @@ async function handleCheck(args: Options) {
     }
   }
 
-  timing.start("Verify config");
-  const config: Config = Config.check(unverifiedConfig) as Config;
   timing.start("Resolve config");
-  const resolvedConfig = resolveConfig(config, args);
+  const resolvedConfig = resolveConfig(unverifiedConfig, args);
   timing.start("Run Checks");
   const checkResult = await check(resolvedConfig, host, process.cwd(), args.paths, args.stats);
   timing.start("Flush host");

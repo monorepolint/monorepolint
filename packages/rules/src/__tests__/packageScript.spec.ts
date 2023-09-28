@@ -128,7 +128,7 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
           hasFixer: true,
           message: expect.stringContaining(
             `Expected standardized script entry for '${MISSING_SCRIPT_NAME}'`
-          ) as any as string,
+          ) as unknown as string,
         })
       );
 

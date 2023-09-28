@@ -49,7 +49,7 @@ const setCache = new Map<ReadonlyArray<string>, Set<string>>();
 
 const aggregateTiming = new AggregateTiming(":bannedDependencies stats");
 
-export const bannedDependencies = makeRule({
+export const bannedDependencies = makeRule<Options>({
   name: "bannedDependencies",
   check: (context, opts, extra) => {
     aggregateTiming.start(extra?.id ?? "unknown id");
@@ -107,7 +107,7 @@ export const bannedDependencies = makeRule({
 
     aggregateTiming.stop();
   },
-  optionsRuntype: Options,
+  validateOptions: Options.check,
   printStats: () => {
     aggregateTiming.printResults();
   },
