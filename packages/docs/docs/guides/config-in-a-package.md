@@ -43,8 +43,8 @@ Whatever your reason,
    {
        ...
        "devDependencies": {
-           "@monorepolint/cli": "^0.4.0",
-           "@monorepolint/internal-mrl-config": "^0.4.0",
+           "@monorepolint/cli": "^0.5.0",
+           "@monorepolint/internal-mrl-config": "^0.5.0",
        }
    }
    ```
