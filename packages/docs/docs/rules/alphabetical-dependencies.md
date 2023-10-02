@@ -22,4 +22,4 @@ export default {
 
 ## Reference
 
-For more information and to view the source code of this rule, please visit the [rule source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/alphabeticalDependencies.ts) in the monorepolint repository.
+For more information and to view the source code of this rule, please visit the [rule source](https://github.com/monorepolint/monorepolint/blob/main/packages/rules/src/alphabeticalDependencies.ts) in the monorepolint repository.

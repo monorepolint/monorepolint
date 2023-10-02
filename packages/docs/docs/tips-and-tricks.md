@@ -42,33 +42,39 @@ This configuration can be combined with tools like `tsup` to automatically bundl
 Pre-formatting generated content using [dprint](https://dprint.dev/) can be challenging since it cannot be used directly from node. However, it is possible to create wrappers by executing it in a shell:
 
 ```js
-const formatWithDprint = (contents, ext) => async (context) => {
-  const result = child_process.spawnSync(
-    `pnpm exec dprint fmt --stdin foo.${ext}`,
-    {
-      input: contents,
-      encoding: "utf8",
-      shell: true,
-    },
-  );
+const formatWithDprint =
+  (contents, ext) =>
+  async (context) => {
+    const result =
+      child_process.spawnSync(
+        `pnpm exec dprint fmt --stdin foo.${ext}`,
+        {
+          input: contents,
+          encoding: "utf8",
+          shell: true,
+        }
+      );
 
-  if (result.error) {
-    throw result.error;
-  }
-  return result.stdout;
-};
+    if (result.error) {
+      throw result.error;
+    }
+    return result.stdout;
+  };
 ```
 
 By utilizing this wrapper, you can ensure that your files are properly formatted:
 
 ```ts
-const tsupContents = formatWithDprint(`
+const tsupContents = formatWithDprint(
+  `
   import { defineConfig } from "tsup";
 
   export default defineConfig(async (options) =>
   (await import("mytsup")).default(options)
   );     
-`, "js);
+`,
+  "js"
+);
 
 // ...
 
@@ -76,8 +82,9 @@ return [
   fileContents({
     ...shared,
     options: {
-    file: "tsup.config.js",
-    template: tsupContents
-  })
+      file: "tsup.config.js",
+      template: tsupContents,
+    },
+  }),
 ];
 ```

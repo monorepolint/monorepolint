@@ -4,7 +4,7 @@ title: Writing Custom Rules
 
 Custom rules are simply functions that return the correct shape (`RuleModule` from `@monorepolint/config`).
 
-Lets ban lodash with a rule using the `makeRule` helper:
+For example, let's ban lodash with a rule using the `makeRule` helper:
 
 ```ts
 

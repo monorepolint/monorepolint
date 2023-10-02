@@ -35,4 +35,4 @@ export default {
 };
 ```
 
-[rule source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/requireDependency.ts)
+[rule source](https://github.com/monorepolint/monorepolint/blob/main/packages/rules/src/requireDependency.ts)

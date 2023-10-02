@@ -39,4 +39,4 @@ export default {
 };
 ```
 
-[rule source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/standardTsconfig.ts)
+[rule source](https://github.com/monorepolint/monorepolint/blob/main/packages/rules/src/standardTsconfig.ts)
