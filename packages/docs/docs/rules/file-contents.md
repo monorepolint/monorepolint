@@ -41,4 +41,4 @@ export default {
 };
 ```
 
-[rule source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/fileContents.ts)
+[rule source](https://github.com/monorepolint/monorepolint/blob/main/packages/rules/src/fileContents.ts)

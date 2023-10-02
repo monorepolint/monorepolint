@@ -2,15 +2,20 @@
 title: alphabeticalScripts
 ---
 
-Makes sure that all scripts are ordered alphabetically.
+Ensures that all scripts within a project are ordered alphabetically.
 
-### Example
+### Usage
 
 ```javascript
 import { alphabeticalScripts } from "monorepolint/rules";
+
 export default {
-  rules: [alphabeticalScripts({})],
+  rules: [
+    alphabeticalScripts({}),
+  ],
 };
 ```
 
-[rule source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/alphabeticalScripts.ts)
+## Reference
+
+For more information and to view the source code of this rule, please visit the [rule source](https://github.com/monorepolint/monorepolint/blob/main/packages/rules/src/alphabeticalScripts.ts) on the Monorepo Lint repository.

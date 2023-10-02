@@ -2,12 +2,17 @@
 title: alphabeticalDependencies
 ---
 
-Makes sure that all dependency blocks are ordered alphabetically.
+Ensures that all dependency blocks within a project are ordered alphabetically.
 
-### Example
+## Overview
+
+The `alphabeticalDependencies` rule verifies that the dependency blocks in your project are in alphabetical order. Maintaining an organized structure within your dependency blocks can improve readability and make it easier for developers to locate specific dependencies.
+
+### Usage
 
 ```javascript
-import { lphabeticalDependencies } from "@monorepolint/rules";
+import { alphabeticalDependencies } from "@monorepolint/rules";
+
 export default {
   rules: [
     alphabeticalDependencies({}),
@@ -15,4 +20,6 @@ export default {
 };
 ```
 
-[rule source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/alphabeticalDependencies.ts)
+## Reference
+
+For more information and to view the source code of this rule, please visit the [rule source](https://github.com/monorepolint/monorepolint/blob/main/packages/rules/src/alphabeticalDependencies.ts) in the monorepolint repository.

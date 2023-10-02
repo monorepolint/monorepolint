@@ -2,44 +2,31 @@
 title: Configuration File
 ---
 
-monorepolint expects a configuration file at the root of your monorepo named `.monorepolint.config.mjs`.
+Monorepolint (mrl) requires a configuration file located at the root of your monorepo, named `.monorepolint.config.mjs`. This file serves as the central configuration for your project, allowing you to maintain consistency across your sub-projects.
 
-This file is the central brain for how your project should be configured and
-enables you to keep your sub-projects consistent through out.
+:::info Previous Configuration Format
 
-:::info Old Config Format
+In earlier versions of monorepolint, the configuration file was named `monorepolint.config.ts`. Due to difficulties in maintaining TypeScript configurations that type-checked properly, particularly in Visual Studio Code, this format has been removed.
 
-Earlier versions of monorepolint expected a file called `monorepolint.config.ts` in the root of your
-project. However, we noticed a number of projects found it hard to keep tsc happy, especially
-in vscode.
-
-If you want to write your config in typescript, we recommend you create a separate project and
-reference it from your root config.
+If you prefer to use TypeScript for your configuration, consider creating a separate project and referencing it from your root configuration file.
 
 :::
 
-## Config File Format
+## Configuration File Format
 
-A monorepolint configuration file is just a plain javascript file. Just declare the rules you want
-and go!.
+A monorepolint configuration file is a simple JavaScript file. To apply specific rules, simply import and invoke the corresponding functions:
 
 ```ts title=".monorepolint.config.mjs"
-import { AlphabeticalDependencies } from "@monorepolint/rules";
+import { alphabeticalDependencies } from "@monorepolint/rules";
 
 export default {
-  rules: [new AlphabeticalDependencies({})],
+  rules: [alphabeticalDependencies({})],
 };
 ```
 
 ## Built-in and Custom Rules
 
-All built-in rules begin with a colon. Custom rules will be the package where the rule is defined, followed by a colon and the rule name. For more information see [Writing Custom Rules](./writing-custom-rules).
-
-:::info Old Rule Declarations
-
-Earlier versions of monorepolint allowed a shorthand for declaring rules. These are still currently
-supported but are scheduled to be removed in a future version. We realized that type completion
-was far more valuale than cute shorthand.
+Built-in rules are just functions exported from `@monorepolint/rules`. For information on creating custom rules, refer to the [Writing Custom Rules](./writing-custom-rules) documentation.
 
 :::
 

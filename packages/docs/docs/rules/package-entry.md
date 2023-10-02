@@ -2,7 +2,7 @@
 title: packageEntry
 ---
 
-[source](https://github.com/monorepolint/monorepolint/blob/master/packages/rules/src/packageEntry.ts)
+[source](https://github.com/monorepolint/monorepolint/blob/main/packages/rules/src/packageEntry.ts)
 
 Standardize arbitrary entries in package.json.
 
