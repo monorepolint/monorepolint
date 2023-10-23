@@ -275,8 +275,8 @@ importers:
         specifier: 3.0.0-beta.0
         version: 3.0.0-beta.0(@docusaurus/types@3.0.0-beta.0)
       '@docusaurus/utils-common':
-        specifier: 3.0.0-beta.0
-        version: 3.0.0-beta.0(@docusaurus/types@3.0.0-beta.0)
+        specifier: 3.0.0-rc.0
+        version: 3.0.0-rc.0
       '@mdx-js/react':
         specifier: ^2.0.0
         version: 2.3.0(react@18.2.0)
@@ -2699,6 +2699,18 @@ packages:
         optional: true
     dependencies:
       '@docusaurus/types': 3.0.0-beta.0(react-dom@18.2.0)(react@18.2.0)
+      tslib: 2.6.2
+    dev: false
+
+  /@docusaurus/utils-common@3.0.0-rc.0:
+    resolution: {integrity: sha512-7PpZCzXCue1kkN8nV7tX5oeKuMSYvImC3H2Mjql05ge6ILvWY/lHI8gQl9oS1Wazd4jEK0yeflAs1C/PsYUV3A==}
+    engines: {node: '>=18.0'}
+    peerDependencies:
+      '@docusaurus/types': '*'
+    peerDependenciesMeta:
+      '@docusaurus/types':
+        optional: true
+    dependencies:
       tslib: 2.6.2
     dev: false
 
