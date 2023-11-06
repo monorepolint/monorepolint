@@ -275,8 +275,8 @@ importers:
         specifier: 3.0.0-beta.0
         version: 3.0.0-beta.0(@docusaurus/types@3.0.0-beta.0)
       '@docusaurus/utils-common':
-        specifier: 3.0.0-beta.0
-        version: 3.0.0-beta.0(@docusaurus/types@3.0.0-beta.0)
+        specifier: 3.0.0
+        version: 3.0.0
       '@mdx-js/react':
         specifier: ^2.0.0
         version: 2.3.0(react@18.2.0)
@@ -2687,6 +2687,18 @@ packages:
       - esbuild
       - uglify-js
       - webpack-cli
+    dev: false
+
+  /@docusaurus/utils-common@3.0.0:
+    resolution: {integrity: sha512-7iJWAtt4AHf4PFEPlEPXko9LZD/dbYnhLe0q8e3GRK1EXZyRASah2lznpMwB3lLmVjq/FR6ZAKF+E0wlmL5j0g==}
+    engines: {node: '>=18.0'}
+    peerDependencies:
+      '@docusaurus/types': '*'
+    peerDependenciesMeta:
+      '@docusaurus/types':
+        optional: true
+    dependencies:
+      tslib: 2.6.2
     dev: false
 
   /@docusaurus/utils-common@3.0.0-beta.0(@docusaurus/types@3.0.0-beta.0):
