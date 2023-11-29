@@ -1,3 +1,4 @@
+// touch docs for publish
 module.exports = {
   title: "monorepolint",
   tagline: "monorepo consistency made easy",
