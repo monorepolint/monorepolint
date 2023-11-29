@@ -3,7 +3,7 @@ name: documentation
 on:
   push:
     branches: ['main']
-    paths: ['packages/docs/*']
+    paths: ['packages/docs/*', '.github/workflows/documentation.yml']
 
 jobs:
   gh-release:
@@ -25,17 +25,7 @@ jobs:
       - run: pnpm install
 
       - name: Build website
-        run: pnpm build-docs
-
-      - name: Release to GitHub Pages
-        env:
-          USE_SSH: true
-          GIT_USER: git
-        run: |
-          git config --global user.email "actions@gihub.com"
-          git config --global user.name "gh-actions"
-          pnpm install
-          cd packages/docs/
+        run: pnpm build-docs --filter @monorepolint/docs
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
