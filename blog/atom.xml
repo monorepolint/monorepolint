@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://monorepolint.com/blog</id>
+    <title>monorepolint Blog</title>
+    <updated>2020-06-09T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://monorepolint.com/blog"/>
+    <subtitle>monorepolint Blog</subtitle>
+    <icon>https://monorepolint.com/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[New Webpage + Docs]]></title>
+        <id>https://monorepolint.com/blog/new-webpage</id>
+        <link href="https://monorepolint.com/blog/new-webpage"/>
+        <updated>2020-06-09T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Welcome to the new homepage, documentation, and blog for monorepolint. We will]]></summary>
+        <content type="html"><![CDATA[<p>Welcome to the new homepage, documentation, and blog for monorepolint. We will
+be updating the content and docs so come back soon.</p>]]></content>
+        <author>
+            <name>Eric Anderson</name>
+            <uri>https://github.com/ericanderson</uri>
+        </author>
+    </entry>
+</feed>
