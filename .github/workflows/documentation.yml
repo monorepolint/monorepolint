@@ -3,7 +3,7 @@ name: documentation
 on:
   push:
     branches: ['main']
-    paths: ['packages/docs/*']
+    paths: ['packages/docs/*', '.github/workflows/documentation.yml']
 
 jobs:
   gh-release:
@@ -11,29 +11,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2.4.0
+        with:
+          version: 8
+      
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
-      - name: Add key to allow access to repository
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          echo "${{ secrets.GH_PAGES_DEPLOY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          cat <<EOT >> ~/.ssh/config
-          Host github.com
-          HostName github.com
-          IdentityFile ~/.ssh/id_rsa
-          EOT
-      - name: Release to GitHub Pages
-        env:
-          USE_SSH: true
-          GIT_USER: git
-        run: |
-          git config --global user.email "actions@gihub.com"
-          git config --global user.name "gh-actions"
-          yarn
-          cd packages/docs/
-          yarn deploy
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+      
+      - run: pnpm install
+
+      - name: Build website
+        run: pnpm --filter @monorepolint/docs build-docs 
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Build output to publish to the `gh-pages` branch:
+          publish_dir: ./packages/docs/build
+          
