@@ -5,7 +5,6 @@
   "contributors": [
     "Mac Lockard (https://github.com/maclockard)"
   ],
-  "url": "https://github.com/monorepolint/monorepolint",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -30,9 +29,9 @@
     "transpile-typescript": "tsup --config ../../tsup.config.cjs"
   },
   "dependencies": {
-    "@monorepolint/config": "^0.4.0",
-    "@monorepolint/core": "^0.4.0",
-    "@monorepolint/utils": "^0.4.0",
+    "@monorepolint/config": "workspace:^",
+    "@monorepolint/core": "workspace:^",
+    "@monorepolint/utils": "workspace:^",
     "globby": "^14.0.1",
     "jest-diff": "^29.7.0",
     "resolve-package-path": "^4.0.3",

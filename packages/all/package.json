@@ -17,12 +17,12 @@
   },
   "scripts": {},
   "dependencies": {
-    "@monorepolint/cli": "^0.4.0",
-    "@monorepolint/config": "^0.4.0",
-    "@monorepolint/core": "^0.4.0",
-    "@monorepolint/internal-mrl-config": "^0.4.0",
-    "@monorepolint/rules": "^0.4.0",
-    "@monorepolint/utils": "^0.4.0"
+    "@monorepolint/cli": "workspace:^",
+    "@monorepolint/config": "workspace:^",
+    "@monorepolint/core": "workspace:^",
+    "@monorepolint/internal-mrl-config": "workspace:*",
+    "@monorepolint/rules": "workspace:^",
+    "@monorepolint/utils": "workspace:^"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

@@ -33,9 +33,9 @@
     "transpile-typescript": "tsup --config ../../tsup.config.cjs"
   },
   "dependencies": {
-    "@monorepolint/config": "^0.4.0",
-    "@monorepolint/core": "^0.4.0",
-    "@monorepolint/utils": "^0.4.0",
+    "@monorepolint/config": "workspace:^",
+    "@monorepolint/core": "workspace:^",
+    "@monorepolint/utils": "workspace:^",
     "chalk": "^5.3.0",
     "tslib": "^2.6.2",
     "yargs": "^17.7.2"
