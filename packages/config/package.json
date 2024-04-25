@@ -5,6 +5,7 @@
   "contributors": [
     "Mac Lockard (https://github.com/maclockard)"
   ],
+  "url": "https://github.com/monorepolint/monorepolint",
   "license": "MIT",
   "type": "module",
   "exports": {
