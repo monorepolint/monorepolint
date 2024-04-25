@@ -24,7 +24,7 @@
     },
     "lint": {
       "outputs": [],
-      "inputs": ["package.json", "src/**/*", "../../.eslintrc.cjs"]
+      "inputs": ["package.json", "src/**/*", "../../eslint.config.mjs"]
     },
     "check": {
       "dependsOn": ["build", "test", "lint", "//#check-mrl"],

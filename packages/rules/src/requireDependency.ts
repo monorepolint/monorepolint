@@ -51,11 +51,11 @@ export const requireDependency = makeRule({
       }
 
       for (const [dep, version] of Object.entries(options[type]!)) {
-        if (packageJson[type][dep] !== version) {
+        if (packageJson[type]?.[dep] !== version) {
           context.addError({
             file: packageJsonPath,
             message: `Expected dependency ${dep}@${version}`,
-            longMessage: diff(`${dep}@${version}\n`, `${dep}@${packageJson[type][dep] || "missing"}\n`)!,
+            longMessage: diff(`${dep}@${version}\n`, `${dep}@${packageJson[type]![dep] || "missing"}\n`)!,
             fixer: () => {
               mutateJson<PackageJson>(packageJsonPath, context.host, (input) => {
                 input[type] = { ...input[type], [dep]: version };

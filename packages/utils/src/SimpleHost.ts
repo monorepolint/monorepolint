@@ -23,7 +23,7 @@ export class SimpleHost implements Host {
 
   writeFile(path: string, buffer: Buffer): void;
   writeFile(path: string, body: string, opts: { encoding: BufferEncoding }): void;
-  writeFile(path: any, body: any, opts?: { encoding: BufferEncoding }): any {
+  writeFile(path: string, body: string | Buffer, opts?: { encoding: BufferEncoding }): void {
     if (opts) {
       this.fs.writeFileSync(path, body, { encoding: opts.encoding });
     } else {
@@ -33,7 +33,7 @@ export class SimpleHost implements Host {
   readFile(path: string, opts?: undefined): Buffer;
   readFile(path: string, opts: { encoding: BufferEncoding }): string;
   readFile(path: string, opts: { asJson: true }): object;
-  readFile(path: any, opts?: { encoding?: BufferEncoding; asJson?: boolean }): string | object | Buffer {
+  readFile(path: string, opts?: { encoding?: BufferEncoding; asJson?: boolean }): string | object | Buffer {
     if (opts?.asJson) {
       return JSON.parse(this.fs.readFileSync(path, "utf-8"));
     }

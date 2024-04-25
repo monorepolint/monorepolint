@@ -129,11 +129,11 @@ export class CachingHost implements Host {
   #replaceNode(node: DirNode, newNode: Omit<DirTombstoneNode, "fullPath" | "parent" | "dir">): DirTombstoneNode;
   #replaceNode(node: Node, partialNewNode: Omit<Node, "fullPath" | "parent">): Node {
     if (!node.parent) throw new Error("Cannot replace root node");
-    const newNode = {
+    const newNode: Node = {
       ...partialNewNode,
       fullPath: node.fullPath,
       parent: node.parent,
-      dir: (node as any).dir,
+      dir: (node as DirNode).dir,
     } as Node;
     node.parent.dir.set(path.basename(node.fullPath), newNode);
     return newNode;
@@ -239,7 +239,8 @@ export class CachingHost implements Host {
           curNode = linkedNode;
         }
         assertType(curNode, "dir");
-        curNode = curNode.dir.get(part) ?? this.#stubify(path.join(curNode.fullPath, part), curNode as any);
+        assertNoTombstone(curNode);
+        curNode = curNode.dir.get(part) ?? this.#stubify(path.join(curNode.fullPath, part), curNode);
         curPath = path.join(curPath, part);
       }
     } catch (e) {
@@ -481,7 +482,7 @@ export class CachingHost implements Host {
   }
 
   flush() {
-    const promises: Promise<any>[] = [];
+    const promises: Promise<unknown>[] = [];
     for (const rootNode of this.#trees.values()) {
       promises.push(this.#flushDirNode(rootNode));
     }

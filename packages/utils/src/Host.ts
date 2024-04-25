@@ -9,7 +9,7 @@ export interface Host {
   /**
    * Reads and parses a json file.
    */
-  readJson(filename: string): any;
+  readJson(filename: string): unknown;
 
   /**
    * Writes a json file.

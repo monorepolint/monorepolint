@@ -44,7 +44,7 @@ export class PackageContextImpl implements PackageContext {
   }
 
   public getPackageJson(): PackageJson {
-    return this.host.readJson(this.getPackageJsonPath());
+    return this.host.readJson(this.getPackageJsonPath()) as PackageJson;
   }
 
   public addWarning({ message, longMessage }: Failure) {
