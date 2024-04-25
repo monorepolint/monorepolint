@@ -76,7 +76,10 @@ export interface TestingWorkspace {
 }
 
 class DefaultTestingWorkspace implements TestingWorkspace {
-  constructor(private opts: RealTestingWorkspaceOpts, public readonly context: WorkspaceContext) {}
+  constructor(
+    private opts: RealTestingWorkspaceOpts,
+    public readonly context: WorkspaceContext
+  ) {}
 
   addProject(name: string, fields: object) {
     this.writeJsonFile(path.join("packages", name, "package.json"), {

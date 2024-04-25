@@ -32,7 +32,7 @@ export async function getWorkspacePackageDirs(
   workspaceDir: string,
   resolvePaths: boolean = false
 ) {
-  const packageJson: PackageJson = host.readJson(path.join(workspaceDir, "package.json"));
+  const packageJson = host.readJson(path.join(workspaceDir, "package.json")) as PackageJson;
 
   const isPnpmWorkspace = host.exists(path.join(workspaceDir, "pnpm-workspace.yaml"));
   if (isPnpmWorkspace) {

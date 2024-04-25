@@ -93,7 +93,7 @@ describe("mustSatisfyPeerDependencies", () => {
     makeDirectoryRecursively(dirPath);
     host.writeJson(resolvedFilePath, packageJson);
     return (): PackageJson => {
-      return host.readJson(resolvedFilePath);
+      return host.readJson(resolvedFilePath) as PackageJson;
     };
   }
 

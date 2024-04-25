@@ -45,7 +45,7 @@ export class PackageDependencyGraphService implements IPackageDependencyGraphSer
         return nodes.get(packageJsonPath)!;
       }
 
-      const packageJson: PackageJson = host.readJson(packageJsonPath);
+      const packageJson = host.readJson(packageJsonPath) as PackageJson;
       const node: IPackageDependencyGraphNode = {
         packageJson,
         dependencies: new Map<string, IPackageDependencyGraphNode>(),

@@ -272,7 +272,7 @@ interface IResolvedPeerDependencyRequirement {
 function checkSatisfyPeerDependencies(context: Context, opts: Options) {
   const { dependencyBlacklist, dependencyWhitelist, enforceForDevDependencies, skipUnparseableRanges } = opts;
   const packageJsonPath = path.resolve(context.getPackageJsonPath());
-  const packageJson: PackageJson = context.host.readJson(packageJsonPath);
+  const packageJson = context.host.readJson(packageJsonPath) as PackageJson;
   const packageDependencies = packageJson.dependencies || {};
   const packageDevDependencies = packageJson.devDependencies || {};
   const packagePeerDependencies = packageJson.peerDependencies || {};
@@ -307,7 +307,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
     if (dependencyPackageJsonPath == null) {
       throw new Error(`Could not resolve ${dependency} from ${path.dirname(packageJsonPath)}`);
     }
-    const dependencyPackageJson: PackageJson = context.host.readJson(dependencyPackageJsonPath);
+    const dependencyPackageJson = context.host.readJson(dependencyPackageJsonPath) as PackageJson;
     const requiredPeerDependencies = dependencyPackageJson.peerDependencies;
     if (requiredPeerDependencies == null) {
       continue;
