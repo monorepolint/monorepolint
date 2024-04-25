@@ -91,10 +91,6 @@ export const config: Config = {
     Rules.requireDependency({
       options: {
         devDependencies: {
-          typescript: "^5.3.2",
-          "@types/jest": "^29.5.10",
-          prettier: "^3.1.0",
-          "ts-jest": "^29.1.1",
           jest: "^29.7.0",
           "@jest/globals": "^29.7.0",
           tslib: "^2.6.2",
