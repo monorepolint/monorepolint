@@ -2,8 +2,8 @@ name: documentation
 
 on:
   push:
-    branches: ['main']
-    paths: ['packages/docs/*', '.github/workflows/documentation.yml']
+    branches: ["main"]
+    paths: ["packages/docs/*", ".github/workflows/documentation.yml"]
 
 jobs:
   gh-release:
@@ -14,18 +14,18 @@ jobs:
 
       - uses: pnpm/action-setup@v3.0.0
         with:
-          version: 8
-      
+          version: 9.0.6
+
       - uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'pnpm'
-      
+          node-version: "18"
+          registry-url: "https://registry.npmjs.org"
+          cache: "pnpm"
+
       - run: pnpm install
 
       - name: Build website
-        run: pnpm --filter @monorepolint/docs build-docs 
+        run: pnpm --filter @monorepolint/docs build-docs
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
@@ -33,4 +33,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # Build output to publish to the `gh-pages` branch:
           publish_dir: ./packages/docs/build
-          
