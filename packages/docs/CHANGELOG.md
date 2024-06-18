@@ -1,5 +1,7 @@
 # @monorepolint/docs
 
+## 0.5.0-beta.2
+
 ## 0.5.0-beta.1
 
 ## 0.5.0-beta.0
