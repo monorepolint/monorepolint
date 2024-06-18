@@ -1,5 +1,17 @@
 # monorepolint
 
+## 0.5.0-beta.4
+
+### Patch Changes
+
+- e72c978: Use forked action
+  - @monorepolint/cli@0.5.0-beta.4
+  - @monorepolint/config@0.5.0-beta.4
+  - @monorepolint/core@0.5.0-beta.4
+  - @monorepolint/internal-mrl-config@0.5.0-beta.4
+  - @monorepolint/rules@0.5.0-beta.4
+  - @monorepolint/utils@0.5.0-beta.4
+
 ## 0.5.0-beta.3
 
 ### Patch Changes

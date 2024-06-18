@@ -1,5 +1,13 @@
 # @monorepolint/cli
 
+## 0.5.0-beta.4
+
+### Patch Changes
+
+- @monorepolint/config@0.5.0-beta.4
+- @monorepolint/core@0.5.0-beta.4
+- @monorepolint/utils@0.5.0-beta.4
+
 ## 0.5.0-beta.3
 
 ### Patch Changes
