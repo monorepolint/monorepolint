@@ -1,5 +1,17 @@
 # monorepolint
 
+## 0.5.0-beta.2
+
+### Patch Changes
+
+- e5d69ff: Still trying to get releases to update in github
+  - @monorepolint/cli@0.5.0-beta.2
+  - @monorepolint/config@0.5.0-beta.2
+  - @monorepolint/core@0.5.0-beta.2
+  - @monorepolint/internal-mrl-config@0.5.0-beta.2
+  - @monorepolint/rules@0.5.0-beta.2
+  - @monorepolint/utils@0.5.0-beta.2
+
 ## 0.5.0-beta.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @monorepolint/config
 
+## 0.5.0-beta.2
+
+### Patch Changes
+
+- @monorepolint/utils@0.5.0-beta.2
+
 ## 0.5.0-beta.1
 
 ### Patch Changes
