@@ -11,6 +11,9 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
 
@@ -27,9 +30,11 @@ jobs:
       - run: pnpm install
 
       - name: Create Release Pull Request
-        uses: changesets/action@v1
+        uses: monorepolint/changesets-action@v1
         with:
+          title: "🦋 Changeset release"
           publish: pnpm ci:publish
+          createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
