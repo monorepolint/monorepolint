@@ -12,6 +12,7 @@
     "@monorepolint/utils": "0.4.0"
   },
   "changesets": [
+    "fuzzy-parrots-call",
     "neat-melons-clean"
   ]
 }
