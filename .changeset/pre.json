@@ -11,5 +11,7 @@
     "@monorepolint/rules": "0.4.0",
     "@monorepolint/utils": "0.4.0"
   },
-  "changesets": []
+  "changesets": [
+    "neat-melons-clean"
+  ]
 }
