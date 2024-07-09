@@ -21,7 +21,7 @@
     "check-mrl": "mrl check --verbose",
     "changelog": "rm -rf '/tmp/github-changelog-http-cache' && github_changelog_generator",
     "ci": "pnpm clean && turbo check",
-    "ci:publish": "pnpm publish -r && changeset tag",
+    "ci:publish": "pnpm prepack && pnpm publish -r && changeset tag",
     "clean": "turbo clean && rm -rf node_modules && pnpm install",
     "build": "turbo build",
     "compile:fast": "cd packages/all; tsc --build",

@@ -1,5 +1,16 @@
 # @monorepolint/internal-mrl-config
 
+## 0.5.0-beta.9
+
+### Patch Changes
+
+- Interal changes
+- Updated dependencies
+  - @monorepolint/config@0.5.0-beta.9
+  - @monorepolint/core@0.5.0-beta.9
+  - @monorepolint/rules@0.5.0-beta.9
+  - @monorepolint/utils@0.5.0-beta.9
+
 ## 0.5.0-beta.8
 
 ### Patch Changes
