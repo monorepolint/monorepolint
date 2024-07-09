@@ -1,5 +1,11 @@
 # @monorepolint/utils
 
+## 0.5.0-beta.8
+
+### Patch Changes
+
+- b024660: Internal change to how publish happens
+
 ## 0.5.0-beta.0
 
 ### Minor Changes
