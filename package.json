@@ -31,7 +31,7 @@
     "lint": "npm-run-all lint:*",
     "lint:monorepolint": "monorepolint check --verbose",
     "lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' -l",
-    "prePublish": "turbo clean && pnpm install && turbo check",
+    "prepack": "turbo clean && pnpm install && turbo check",
     "test": "turbo test",
     "prepare": "husky install"
   },
