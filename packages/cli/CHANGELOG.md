@@ -1,5 +1,15 @@
 # @monorepolint/cli
 
+## 0.5.0-beta.8
+
+### Patch Changes
+
+- b024660: Internal change to how publish happens
+- Updated dependencies [b024660]
+  - @monorepolint/config@0.5.0-beta.8
+  - @monorepolint/core@0.5.0-beta.8
+  - @monorepolint/utils@0.5.0-beta.8
+
 ## 0.5.0-beta.0
 
 ### Minor Changes
