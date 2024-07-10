@@ -1,5 +1,15 @@
 # @monorepolint/config
 
+## 0.5.0-beta.10
+
+### Minor Changes
+
+- 3351fa9: Exported interfaces are readonly now
+
+### Patch Changes
+
+- @monorepolint/utils@0.5.0-beta.10
+
 ## 0.5.0-beta.9
 
 ### Patch Changes
