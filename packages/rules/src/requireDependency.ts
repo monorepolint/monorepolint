@@ -9,7 +9,7 @@ import { Context } from "@monorepolint/config";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
 import { diff } from "jest-diff";
 import * as r from "runtypes";
-import { makeRule } from "./util/makeRule.js";
+import { createRuleFactory } from "./util/createRuleFactory.js";
 
 const Options = r.Partial({
   dependencies: r.Dictionary(r.String),
@@ -20,7 +20,7 @@ const Options = r.Partial({
 
 type Options = r.Static<typeof Options>;
 
-export const requireDependency = makeRule({
+export const requireDependency = createRuleFactory({
   name: "requireDependency",
   check: function expectPackageEntry(context: Context, options: Options) {
     const packageJson = context.getPackageJson();

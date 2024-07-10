@@ -11,7 +11,7 @@ import * as path from "node:path";
 import * as r from "runtypes";
 import { coerce } from "semver";
 import resolvePackagePath from "resolve-package-path";
-import { makeRule } from "./util/makeRule.js";
+import { createRuleFactory } from "./util/createRuleFactory.js";
 
 const Options = r.Union(
   r.Partial({
@@ -184,7 +184,7 @@ const Options = r.Union(
 
 export type Options = r.Static<typeof Options>;
 
-export const mustSatisfyPeerDependencies = makeRule({
+export const mustSatisfyPeerDependencies = createRuleFactory({
   name: "mustSatisfyPeerDependencies",
   check: checkSatisfyPeerDependencies,
   validateOptions: Options.check,

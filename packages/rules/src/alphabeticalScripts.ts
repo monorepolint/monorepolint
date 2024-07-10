@@ -6,9 +6,9 @@
  */
 
 import { checkAlpha } from "./util/checkAlpha.js";
-import { makeRule } from "./util/makeRule.js";
+import { createRuleFactory } from "./util/createRuleFactory.js";
 
-export const alphabeticalScripts = makeRule<undefined>({
+export const alphabeticalScripts = createRuleFactory<undefined>({
   name: "alphabeticalScripts",
   check: (context) => {
     checkAlpha(context, "scripts");

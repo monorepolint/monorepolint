@@ -8,14 +8,14 @@
 import * as globby from "globby";
 import * as path from "node:path";
 import * as r from "runtypes";
-import { makeRule } from "./util/makeRule.js";
+import { createRuleFactory } from "./util/createRuleFactory.js";
 
 export const Options = r.Undefined;
 
 type Options = r.Static<typeof Options>;
 
 // Enforce that the root package.json contains all of the workspaces in the repo (including nested packages)
-export const nestedWorkspaces = makeRule({
+export const nestedWorkspaces = createRuleFactory({
   name: "nestedWorkspaces",
   check: (context) => {
     const rootPackageJson = context.getWorkspaceContext().getPackageJson();
@@ -26,8 +26,8 @@ export const nestedWorkspaces = makeRule({
     const workspaces = Array.isArray(rootPackageJson.workspaces)
       ? rootPackageJson.workspaces
       : rootPackageJson.workspaces !== undefined
-      ? rootPackageJson.workspaces.packages
-      : undefined;
+        ? rootPackageJson.workspaces.packages
+        : undefined;
 
     if (workspaces === undefined && packageJsonPaths.length > 0) {
       context.addError({

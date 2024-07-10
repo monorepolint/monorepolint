@@ -8,7 +8,7 @@
 import { Context } from "@monorepolint/config";
 import { diff } from "jest-diff";
 import * as r from "runtypes";
-import { makeRule } from "./util/makeRule.js";
+import { createRuleFactory } from "./util/createRuleFactory.js";
 const Options = r
   .Record({
     ignoredDependencies: r.Array(r.String).Or(r.Undefined),
@@ -18,7 +18,7 @@ export type Options = r.Static<typeof Options>;
 
 const skippedVersions = ["*", "latest"];
 
-export const consistentDependencies = makeRule<Options>({
+export const consistentDependencies = createRuleFactory<Options>({
   name: "consistentDependencies",
   check: (context, args) => {
     checkDeps(context, args, "dependencies");

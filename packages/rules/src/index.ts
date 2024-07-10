@@ -18,3 +18,11 @@ export { packageScript } from "./packageScript.js";
 export { standardTsconfig } from "./standardTsconfig.js";
 export { nestedWorkspaces } from "./nestedWorkspaces.js";
 export { requireDependency } from "./requireDependency.js";
+
+export {
+  createRuleFactory,
+  RuleCheckFn,
+  RuleFactoryFn,
+  RuleFactoryOptions,
+  ValidateOptionsFn,
+} from "./util/createRuleFactory.js";

@@ -6,9 +6,9 @@
  */
 
 import { checkAlpha } from "./util/checkAlpha.js";
-import { makeRule } from "./util/makeRule.js";
+import { createRuleFactory } from "./util/createRuleFactory.js";
 
-export const alphabeticalDependencies = makeRule<undefined>({
+export const alphabeticalDependencies = createRuleFactory<undefined>({
   name: "alphabeticalDependencies",
   check: (context) => {
     checkAlpha(context, "dependencies");

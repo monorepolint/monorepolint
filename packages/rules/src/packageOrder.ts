@@ -8,7 +8,7 @@
 import { Context } from "@monorepolint/config";
 import { diff } from "jest-diff";
 import * as r from "runtypes";
-import { makeRule } from "./util/makeRule.js";
+import { createRuleFactory } from "./util/createRuleFactory.js";
 type OrderFunction = (context: Context) => (a: string, b: string) => number;
 
 const Options = r
@@ -51,7 +51,7 @@ const defaultKeyOrder = [
   "publishConfig",
 ];
 
-export const packageOrder = makeRule<Options>({
+export const packageOrder = createRuleFactory<Options>({
   name: "packageOrder",
   check: (context, opts) => {
     const packageJson = context.getPackageJson();

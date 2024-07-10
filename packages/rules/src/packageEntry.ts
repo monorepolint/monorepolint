@@ -8,7 +8,7 @@
 import { mutateJson, PackageJson } from "@monorepolint/utils";
 import { diff } from "jest-diff";
 import * as r from "runtypes";
-import { makeRule } from "./util/makeRule.js";
+import { createRuleFactory } from "./util/createRuleFactory.js";
 
 export const Options = r.Union(
   r
@@ -37,7 +37,7 @@ export const Options = r.Union(
 
 export type Options = r.Static<typeof Options>;
 
-export const packageEntry = makeRule<Options>({
+export const packageEntry = createRuleFactory<Options>({
   name: "packageEntry",
   check: (context, options) => {
     const packageJson = context.getPackageJson();

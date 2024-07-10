@@ -10,7 +10,7 @@ import { matchesAnyGlob } from "@monorepolint/utils";
 import { diff } from "jest-diff";
 import * as path from "path";
 import * as r from "runtypes";
-import { makeRule } from "./util/makeRule.js";
+import { createRuleFactory } from "./util/createRuleFactory.js";
 
 const DEFAULT_TSCONFIG_FILENAME = "tsconfig.json";
 
@@ -41,7 +41,7 @@ const Options = r
 
 export interface Options extends r.Static<typeof Options> {}
 
-export const standardTsconfig = makeRule<Options>({
+export const standardTsconfig = createRuleFactory<Options>({
   name: "standardTsconfig",
   check: async (context, opts) => {
     const tsconfigFileName = opts.file ?? DEFAULT_TSCONFIG_FILENAME;

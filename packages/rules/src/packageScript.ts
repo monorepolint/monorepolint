@@ -8,7 +8,7 @@
 import { mutateJson, PackageJson } from "@monorepolint/utils";
 import { diff } from "jest-diff";
 import * as r from "runtypes";
-import { makeRule } from "./util/makeRule.js";
+import { createRuleFactory } from "./util/createRuleFactory.js";
 
 export const Options = r.Record({
   scripts: r.Dictionary(
@@ -26,7 +26,7 @@ export type Options = r.Static<typeof Options>;
 
 export const MSG_NO_SCRIPTS_BLOCK = "No scripts block in package.json";
 
-export const packageScript = makeRule<Options>({
+export const packageScript = createRuleFactory<Options>({
   name: "packageScript",
   check: (context, options) => {
     const packageJson = context.getPackageJson();

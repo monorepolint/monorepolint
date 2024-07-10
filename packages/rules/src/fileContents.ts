@@ -9,7 +9,7 @@ import { Context } from "@monorepolint/config";
 import { diff } from "jest-diff";
 import * as path from "path";
 import * as r from "runtypes";
-import { makeRule } from "./util/makeRule.js";
+import { createRuleFactory } from "./util/createRuleFactory.js";
 const Options = r.Union(
   r.Record({
     file: r.String,
@@ -35,7 +35,7 @@ const Options = r.Union(
 
 type Options = r.Static<typeof Options>;
 
-export const fileContents = makeRule<Options>({
+export const fileContents = createRuleFactory<Options>({
   name: "fileContents",
   check: async (context, opts) => {
     const fullPath = path.join(context.packageDir, opts.file);

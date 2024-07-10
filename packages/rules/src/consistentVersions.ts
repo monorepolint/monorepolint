@@ -9,14 +9,14 @@ import { Context } from "@monorepolint/config";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
 import * as r from "runtypes";
 import { coerce, SemVer } from "semver";
-import { makeRule } from "./util/makeRule.js";
+import { createRuleFactory } from "./util/createRuleFactory.js";
 export const Options = r.Record({
   matchDependencyVersions: r.Dictionary(r.Union(r.String, r.Array(r.String))),
 });
 
 export type Options = r.Static<typeof Options>;
 
-export const consistentVersions = makeRule({
+export const consistentVersions = createRuleFactory({
   name: "consistentVersions",
   check: checkConsistentVersions,
   validateOptions: Options.check,

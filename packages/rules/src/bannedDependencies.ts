@@ -10,7 +10,7 @@ import { matchesAnyGlob } from "@monorepolint/utils";
 import { AggregateTiming } from "@monorepolint/utils";
 import * as path from "node:path";
 import * as r from "runtypes";
-import { makeRule } from "./util/makeRule.js";
+import { createRuleFactory } from "./util/createRuleFactory.js";
 import { IPackageDependencyGraphNode, PackageDependencyGraphService } from "./util/packageDependencyGraphService.js";
 // FIXME: This rule is messed. bannedTransitiveDependencies doesnt glob
 
@@ -49,7 +49,7 @@ const setCache = new Map<ReadonlyArray<string>, Set<string>>();
 
 const aggregateTiming = new AggregateTiming(":bannedDependencies stats");
 
-export const bannedDependencies = makeRule<Options>({
+export const bannedDependencies = createRuleFactory<Options>({
   name: "bannedDependencies",
   check: (context, opts, extra) => {
     aggregateTiming.start(extra?.id ?? "unknown id");
