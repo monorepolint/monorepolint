@@ -2,11 +2,33 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://monorepolint.com/blog</id>
     <title>monorepolint Blog</title>
-    <updated>2020-06-09T00:00:00.000Z</updated>
+    <updated>2024-07-30T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://monorepolint.com/blog"/>
     <subtitle>monorepolint Blog</subtitle>
     <icon>https://monorepolint.com/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[v0.5.0]]></title>
+        <id>https://monorepolint.com/blog/0.5.0</id>
+        <link href="https://monorepolint.com/blog/0.5.0"/>
+        <updated>2024-07-30T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[I'm really excited to announce the release of v0.5.0.]]></summary>
+        <content type="html"><![CDATA[<p>I'm really excited to announce the release of v0.5.0.</p>
+<p>This has been nearly 4 years of using MRL directly from main and its high time we make a release so its easy for everyone to use.</p>
+<p>If you've used earlier version of MRL, you'll now see:</p>
+<ul>
+<li>Improved performance</li>
+<li>A new syntax format that gives you intellisense since its just js/ts</li>
+<li>New rules</li>
+<li>And more</li>
+</ul>
+<p>Please forgive my lack of proper release notes here. Going forward we are using changesets to manage and track changes.</p>
+<p>Please give us some feedback by <a href="https://github.com/monorepolint/monorepolint/discussions" target="_blank" rel="noopener noreferrer">Contributing to the GH Discussions</a> or <a href="https://github.com/monorepolint/monorepolint/issues/new/choose" target="_blank" rel="noopener noreferrer">Openning an issue</a></p>]]></content>
+        <author>
+            <name>Eric Anderson</name>
+            <uri>https://github.com/ericanderson</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[New Webpage + Docs]]></title>
         <id>https://monorepolint.com/blog/new-webpage</id>
