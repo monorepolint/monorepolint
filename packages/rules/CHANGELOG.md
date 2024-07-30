@@ -1,5 +1,24 @@
 # @monorepolint/rules
 
+## 0.5.0
+
+### Minor Changes
+
+- 3351fa9: @monorepolint/rules exposes createRuleFactory
+- 45fb496: I failed to take good notes over the last few years. Sorry.
+
+### Patch Changes
+
+- b024660: Internal change to how publish happens
+- b024660: Internal
+- Updated dependencies [b024660]
+- Updated dependencies [3351fa9]
+- Updated dependencies [b024660]
+- Updated dependencies [45fb496]
+  - @monorepolint/config@0.5.0
+  - @monorepolint/core@0.5.0
+  - @monorepolint/utils@0.5.0
+
 ## 0.5.0-beta.10
 
 ### Minor Changes
@@ -17,7 +36,7 @@
 
 ### Patch Changes
 
-- Interal changes
+- Internal
 - Updated dependencies
   - @monorepolint/config@0.5.0-beta.9
   - @monorepolint/core@0.5.0-beta.9
