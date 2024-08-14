@@ -12,6 +12,7 @@
     "@monorepolint/utils": "0.5.0"
   },
   "changesets": [
+    "curvy-pears-learn",
     "fluffy-elephants-march"
   ]
 }

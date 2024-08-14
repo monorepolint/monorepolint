@@ -1,5 +1,12 @@
 # @monorepolint/config
 
+## 0.6.0-alpha.1
+
+### Patch Changes
+
+- c57d210: Fix ConfigFn definition to reflect that it can be async
+  - @monorepolint/utils@0.6.0-alpha.1
+
 ## 0.6.0-alpha.0
 
 ### Minor Changes
