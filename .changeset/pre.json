@@ -1,0 +1,15 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "monorepolint": "0.5.0",
+    "@monorepolint/cli": "0.5.0",
+    "@monorepolint/config": "0.5.0",
+    "@monorepolint/core": "0.5.0",
+    "@monorepolint/docs": "0.5.0",
+    "@monorepolint/internal-mrl-config": "0.5.0",
+    "@monorepolint/rules": "0.5.0",
+    "@monorepolint/utils": "0.5.0"
+  },
+  "changesets": []
+}
