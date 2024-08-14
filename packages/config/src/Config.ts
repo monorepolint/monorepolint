@@ -31,7 +31,7 @@ export interface Config {
   readonly rules: RuleModule<any>[];
 }
 
-export type ConfigFn = (context: WorkspaceContext) => Config;
+export type ConfigFn = (context: WorkspaceContext) => Promise<Config> | Config;
 
 export interface Options {
   readonly verbose?: boolean;
