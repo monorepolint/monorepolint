@@ -1,5 +1,15 @@
 # @monorepolint/internal-mrl-config
 
+## 0.6.0-alpha.0
+
+### Patch Changes
+
+- Updated dependencies [8c4294d]
+  - @monorepolint/config@0.6.0-alpha.0
+  - @monorepolint/core@0.6.0-alpha.0
+  - @monorepolint/rules@0.6.0-alpha.0
+  - @monorepolint/utils@0.6.0-alpha.0
+
 ## 0.5.0
 
 ### Minor Changes

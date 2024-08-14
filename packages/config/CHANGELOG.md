@@ -1,5 +1,15 @@
 # @monorepolint/config
 
+## 0.6.0-alpha.0
+
+### Minor Changes
+
+- 8c4294d: config files can now be a factory function
+
+### Patch Changes
+
+- @monorepolint/utils@0.6.0-alpha.0
+
 ## 0.5.0
 
 ### Minor Changes
