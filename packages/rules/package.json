@@ -1,6 +1,6 @@
 {
   "name": "@monorepolint/rules",
-  "version": "0.5.0",
+  "version": "0.6.0-alpha.0",
   "author": "Eric L Anderson (https://github.com/ericanderson)",
   "contributors": [
     "Mac Lockard (https://github.com/maclockard)"
