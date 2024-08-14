@@ -24,6 +24,23 @@ export default {
 };
 ```
 
+### Using a factory function
+
+(Since v0.6.0)
+You may also do some preprocessing work if needed. For example, you can create a factory function that returns a rule configuration object:
+
+```ts title=".monorepolint.config.mjs"
+import { alphabeticalDependencies } from "@monorepolint/rules";
+
+function createConfig(context) {
+  return {
+    rules: [alphabeticalDependencies({})],
+  };
+}
+
+export default createConfig;
+```
+
 ## Built-in and Custom Rules
 
 Built-in rules are just functions exported from `@monorepolint/rules`. For information on creating custom rules, refer to the [Writing Custom Rules](./writing-custom-rules) documentation.

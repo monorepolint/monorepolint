@@ -5,11 +5,12 @@
  *
  */
 
-import { findWorkspaceDir, Host, matchesAnyGlob, nanosecondsToSanity, Table } from "@monorepolint/utils";
+import { Host, matchesAnyGlob, nanosecondsToSanity, Table } from "@monorepolint/utils";
 import { dirname as pathDirname, resolve as pathResolve } from "path";
 import { ResolvedConfig, ResolvedRule } from "@monorepolint/config";
 import { Context } from "@monorepolint/config";
-import { WorkspaceContextImpl } from "./WorkspaceContext.js";
+import { createWorkspaceContext } from "./createWorkspaceContext.js";
+
 export async function check(
   resolvedConfig: ResolvedConfig,
   host: Host,
@@ -18,13 +19,9 @@ export async function check(
   reportStats?: boolean
 ): Promise<boolean> {
   const checkStart = process.hrtime.bigint();
-  const workspaceDir = await findWorkspaceDir(host, cwd);
-  if (workspaceDir === undefined) {
-    throw new Error(`Unable to find a workspace from ${cwd}`);
-  }
+  const workspaceContext = await createWorkspaceContext(host, cwd, resolvedConfig);
 
-  const workspaceContext = new WorkspaceContextImpl(workspaceDir, resolvedConfig, host);
-
+  const workspaceDir = workspaceContext.packageDir;
   // Validate config once
   const checkConfigStart = process.hrtime.bigint();
   for (const ruleConfig of resolvedConfig.rules) {

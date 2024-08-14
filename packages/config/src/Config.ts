@@ -6,6 +6,7 @@
  */
 
 import { Context } from "./Context.js";
+import { WorkspaceContext } from "./WorkspaceContext.js";
 // TODO: extract all these types to their own files
 
 export interface RuleEntry<T = unknown> {
@@ -29,6 +30,8 @@ export interface Config {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly rules: RuleModule<any>[];
 }
+
+export type ConfigFn = (context: WorkspaceContext) => Config;
 
 export interface Options {
   readonly verbose?: boolean;

@@ -5,16 +5,15 @@
  *
  */
 
-import { check, resolveConfig } from "@monorepolint/core";
 import { Options } from "@monorepolint/config";
-import { CachingHost, SimpleHost, Timing } from "@monorepolint/utils";
+import { check } from "@monorepolint/core";
+import { CachingHost, SimpleHost } from "@monorepolint/utils";
 import chalk from "chalk";
 import * as fs from "fs";
-import * as path from "path";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-
-const timing = new Timing("CLI Timing Data");
+import { readResolvedConfig } from "./readResolvedConfig.js";
+import { timing } from "./timing.js";
 
 export default function run() {
   yargs(hideBin(process.argv))
@@ -58,78 +57,55 @@ async function handleCheck(args: Options) {
     console.log("++++ USING EXPERIMENTAL CACHING HOST");
   }
   const host = process.env.MRL_CACHING_HOST === "true" ? new CachingHost() : new SimpleHost();
+  try {
+    const resolvedConfig = await readResolvedConfig(host, args);
+    timing.start("Run Checks");
+    const checkResult = await check(resolvedConfig, host, process.cwd(), args.paths, args.stats);
+    timing.start("Flush host");
+    await host.flush();
+    timing.stop();
 
-  const configFilesToTry = [path.resolve(process.cwd(), ".monorepolint.config.mjs")];
-
-  timing.start("Read/compile config");
-  let unverifiedConfig;
-  let foundConfig = undefined;
-  let importError: unknown = undefined;
-  for (const configPath of configFilesToTry) {
-    if (!fs.existsSync(configPath)) {
-      continue;
+    if (args.stats) {
+      timing.printResults();
     }
-    foundConfig = configPath;
-    try {
-      unverifiedConfig = (await import(configPath)).default;
-      break;
-    } catch (e) {
-      importError = e;
-      if (!(e instanceof Error && e.message.startsWith("Cannot find module"))) {
-        console.log(e);
-      }
-      break;
+
+    if (!checkResult) {
+      console.error();
+
+      const runCommand = getRunCommand();
+
+      console.error("monorepolint (mrl) failed 1 or more checks");
+      console.error();
+      console.error(`For more information, run ${chalk.blue(`${runCommand} check --verbose`)}`);
+      console.error(`To automatically fix errors, run ${chalk.blue(`${runCommand} check --fix`)}`);
+      console.error();
+      process.exit(100);
     }
-  }
-  if (unverifiedConfig === undefined) {
-    if (importError) {
-      throw new AggregateError(
-        [importError],
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        `File exists ('${foundConfig}') but could not be imported due to error: ${(importError as any)?.message}`
-      );
-    } else if (foundConfig) {
-      throw new Error(`File exists ('${foundConfig}') and was imported but the default export was undefined`);
-    } else {
-      throw new Error(
-        `Unable to find a usable config file. Tried: \n${configFilesToTry.map((a) => `  - ${a}`).join("\n")}`
-      );
-    }
-  }
-
-  timing.start("Resolve config");
-  const resolvedConfig = resolveConfig(unverifiedConfig, args);
-  timing.start("Run Checks");
-  const checkResult = await check(resolvedConfig, host, process.cwd(), args.paths, args.stats);
-  timing.start("Flush host");
-  await host.flush();
-  timing.stop();
-
-  if (args.stats) {
-    timing.printResults();
-  }
-
-  if (!checkResult) {
+  } catch (e) {
     console.error();
 
-    const execPath = process.env.npm_execpath;
+    const runCommand = getRunCommand();
 
-    const npmAgent =
-      typeof execPath === "string"
-        ? execPath.includes("yarn")
-          ? "yarn"
-          : execPath.includes("npm")
+    console.error("monorepolint (mrl) had an unexpected error:");
+    console.error(e);
+    console.error();
+    console.error(`More information may be available; run ${chalk.blue(`${runCommand} check --verbose`)}`);
+    console.error();
+    process.exit(101);
+  }
+}
+
+function getRunCommand() {
+  const execPath = process.env.npm_execpath;
+
+  const npmAgent =
+    typeof execPath === "string"
+      ? execPath.includes("yarn")
+        ? "yarn"
+        : execPath.includes("npm")
           ? "npm"
           : undefined
-        : undefined;
+      : undefined;
 
-    const runCommand = npmAgent === "yarn" ? "yarn mrl" : npmAgent === "npm" ? "npm run mrl" : "mrl";
-
-    console.error("monorepolint (mrl) failed 1 or more checks");
-    console.error();
-    console.error(`For more information, run ${chalk.blue(`${runCommand} check --verbose`)}`);
-    console.error(`To automatically fix errors, run ${chalk.blue(`${runCommand} check --fix`)}`);
-    console.error();
-    process.exit(100);
-  }
+  return npmAgent === "yarn" ? "yarn mrl" : npmAgent === "npm" ? "npm run mrl" : "mrl";
 }
