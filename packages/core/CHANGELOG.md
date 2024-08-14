@@ -1,5 +1,13 @@
 # @monorepolint/core
 
+## 0.6.0-alpha.1
+
+### Patch Changes
+
+- Updated dependencies [c57d210]
+  - @monorepolint/config@0.6.0-alpha.1
+  - @monorepolint/utils@0.6.0-alpha.1
+
 ## 0.6.0-alpha.0
 
 ### Minor Changes
