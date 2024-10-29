@@ -157,7 +157,7 @@ export default {
 
 ### Generating changelog
 
-1. [Setup a GH Token](https://github.com/github-changelog-generator/github-changelog-generator/tree/main#github-token)
+1. [Setup a GH Token](https://github.com/github-changelog-generator/github-changelog-generator/tree/master#github-token)
 
 2. Run this command:
 
