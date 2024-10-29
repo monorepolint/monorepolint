@@ -48,7 +48,7 @@ mrl check --fix
 
 ## Configuration
 
-For now, look at [.monorepolint.config.ts](./.monorepolint.config.ts) in this repo.
+For now, look at [.monorepolint.config.ts](./packages/internal-mrl-config/src/monorepolint.config.ts) in this repo.
 
 Sample:
 
