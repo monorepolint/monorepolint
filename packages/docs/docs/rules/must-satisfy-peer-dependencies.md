@@ -14,7 +14,7 @@ Ensures that packages satisfy peer dependency requirements declared by their dep
 ### Example
 
 ```javascript
-import { mustSatisfyPeerDependencies } from "monorepolint/rules";
+import { mustSatisfyPeerDependencies } from "@monorepolint/rules";
 export default {
   rules: [
     mustSatisfyPeerDependencies({
