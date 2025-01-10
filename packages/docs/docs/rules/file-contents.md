@@ -20,7 +20,7 @@ Exactly one of `generator`, `template`, or `templateFile` needs to be specified.
 ### Example
 
 ```js
-import { fileContents } from "monorepolint/rules";
+import { fileContents } from "@monorepolint/rules";
 export default {
   rules: [
     fileContents({
