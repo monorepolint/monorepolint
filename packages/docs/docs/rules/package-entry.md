@@ -16,7 +16,7 @@ Standardize arbitrary entries in package.json.
 ### Example
 
 ```javascript
-import { packageEntry } from "monorepolint/rules";
+import { packageEntry } from "@monorepolint/rules";
 export default {
   rules: [
     packageEntry({
