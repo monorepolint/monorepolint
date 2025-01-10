@@ -9,7 +9,7 @@ If your root package.json has a dependency on `"somelib": "^1.0.0"` then all chi
 ### Example
 
 ```javascript
-import { consistentDependencies } from "monorepolint/rules";
+import { consistentDependencies } from "@monorepolint/rules";
 export default {
   rules: [
     consistentDependencies({}),
