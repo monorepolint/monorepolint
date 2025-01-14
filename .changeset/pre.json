@@ -12,7 +12,11 @@
     "@monorepolint/utils": "0.5.0"
   },
   "changesets": [
+    "big-ways-confess",
     "curvy-pears-learn",
-    "fluffy-elephants-march"
+    "fluffy-elephants-march",
+    "late-zoos-watch",
+    "little-parents-bathe",
+    "thick-pugs-pull"
   ]
 }
