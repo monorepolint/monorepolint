@@ -48,7 +48,7 @@ mrl check --fix
 
 ## Configuration
 
-For now, look at [.monorepolint.config.ts](./.monorepolint.config.ts) in this repo.
+For now, look at [.monorepolint.config.ts](./packages/internal-mrl-config/src/monorepolint.config.ts) in this repo.
 
 Sample:
 
@@ -157,7 +157,7 @@ export default {
 
 ### Generating changelog
 
-1. [Setup a GH Token](https://github.com/github-changelog-generator/github-changelog-generator/tree/main#github-token)
+1. [Setup a GH Token](https://github.com/github-changelog-generator/github-changelog-generator/tree/master#github-token)
 
 2. Run this command:
 
