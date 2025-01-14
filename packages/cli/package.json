@@ -28,8 +28,8 @@
     "clean": "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
     "compile-typescript": "tsc --build",
     "lint": "eslint .",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --colors --passWithNoTests",
-    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --colors --passWithNoTests --watch",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest --passWithNoTests",
     "transpile-typescript": "tsup --config ../../tsup.config.cjs"
   },
   "dependencies": {
@@ -41,8 +41,6 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@jest/globals": "^29.7.0",
-    "@types/jest": "^29.5.14",
     "@types/yargs": "17.0.33",
     "@typescript-eslint/eslint-plugin": "^8.20.0",
     "@typescript-eslint/parser": "^8.20.0",

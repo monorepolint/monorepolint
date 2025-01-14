@@ -27,7 +27,27 @@ export const config: ConfigFn = (_context) => {
       Rules.fileContents({
         options: {
           file: "jest.config.cjs",
-          templateFile: "./templates/jest.config.cjs",
+          template: undefined,
+        },
+        excludePackages: [DOCS],
+      }),
+      Rules.fileContents({
+        options: {
+          file: "vitest.config.mjs",
+          template: `
+import { coverageConfigDefaults, defineProject, defaultExclude } from 'vitest/config'
+
+export default defineProject({
+  test: {
+   exclude: [...defaultExclude, "**/build/**"],
+    coverage: {
+      provider: "v8",
+      enabled: true,
+      exclude: [...coverageConfigDefaults.exclude, "vitest.config.*"]
+    }
+  },
+})
+          `,
         },
         excludePackages: [DOCS],
       }),
@@ -40,8 +60,8 @@ export const config: ConfigFn = (_context) => {
             jest: DELETE_SCRIPT_ENTRTY, // this syntax needs work :(
             "jest:watch": DELETE_SCRIPT_ENTRTY,
             lint: "eslint .",
-            "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --colors --passWithNoTests --watch",
-            test: "NODE_OPTIONS=--experimental-vm-modules jest --colors --passWithNoTests",
+            "test:watch": "vitest --passWithNoTests",
+            test: "vitest run --passWithNoTests",
           },
         },
         excludePackages: [DOCS, ...META_PACKAGES],
@@ -92,8 +112,6 @@ export const config: ConfigFn = (_context) => {
       Rules.requireDependency({
         options: {
           devDependencies: {
-            jest: "^29.7.0",
-            "@jest/globals": "^29.7.0",
             tslib: "^2.8.1",
           },
         },

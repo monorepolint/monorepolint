@@ -12,7 +12,7 @@ import * as tmp from "tmp";
 import { nestedWorkspaces } from "../nestedWorkspaces.js";
 import { makeDirectoryRecursively } from "../util/makeDirectory.js";
 import { jsonToString } from "./utils.js";
-import { describe, expect, it, beforeEach, afterEach, jest } from "@jest/globals";
+import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 
 const EMPTY_PACKAGE = jsonToString({});
 
@@ -45,7 +45,7 @@ describe("nestedWorkspaces", () => {
     cleanupJobs.push(() => dir.removeCallback());
     cwd = dir.name;
 
-    const spy = jest.spyOn(process, "cwd");
+    const spy = vi.spyOn(process, "cwd");
     spy.mockReturnValue(cwd);
   });
 
@@ -70,7 +70,7 @@ describe("nestedWorkspaces", () => {
     );
 
     async function checkAndSpy() {
-      const addErrorSpy = jest.spyOn(workspaceContext, "addError");
+      const addErrorSpy = vi.spyOn(workspaceContext, "addError");
 
       await nestedWorkspaces({}).check(workspaceContext);
       return { addErrorSpy };

@@ -11,7 +11,7 @@ import * as path from "path";
 import * as tmp from "tmp";
 import { consistentVersions, Options } from "../consistentVersions.js";
 import { makeDirectoryRecursively } from "../util/makeDirectory.js";
-import { describe, expect, it, beforeEach, afterEach, jest } from "@jest/globals";
+import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 
 describe("consistentVersions", () => {
   tmp.setGracefulCleanup();
@@ -24,7 +24,7 @@ describe("consistentVersions", () => {
     cleanupJobs.push(() => dir.removeCallback());
     cwd = dir.name;
 
-    const spy = jest.spyOn(process, "cwd");
+    const spy = vi.spyOn(process, "cwd");
     spy.mockReturnValue(cwd);
   });
 
@@ -47,7 +47,7 @@ describe("consistentVersions", () => {
       },
       host
     );
-    const addErrorSpy = jest.spyOn(workspaceContext, "addError");
+    const addErrorSpy = vi.spyOn(workspaceContext, "addError");
 
     function check(options: Options = { matchDependencyVersions: {} }) {
       consistentVersions({ options }).check(workspaceContext);

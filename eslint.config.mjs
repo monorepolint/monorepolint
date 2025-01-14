@@ -27,6 +27,15 @@ export default tseslint.config(
     },
   },
   {
+    files: ["vitest.workspace.js"],
+    languageOptions: {
+      globals: globals.node,
+    },
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
+  {
     files: ["**/__tests__/*.ts"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",

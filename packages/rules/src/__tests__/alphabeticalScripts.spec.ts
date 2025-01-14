@@ -6,7 +6,7 @@
  */
 
 // tslint:disable:no-console
-import { describe, expect, it, beforeEach, jest } from "@jest/globals";
+import { describe, expect, it, beforeEach, vi } from "vitest";
 import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, jsonToString, TestingWorkspace } from "./utils.js";
 import { Context, Failure } from "@monorepolint/config";
 import { alphabeticalScripts } from "../alphabeticalScripts.js";
@@ -43,7 +43,7 @@ describe.each(HOST_FACTORIES)("alphabeticalScripts ($name)", (hostFactory) => {
       });
       context = workspace.context; // minimizing delta
 
-      spy = jest.spyOn(workspace.context, "addError");
+      spy = vi.spyOn(workspace.context, "addError");
     });
 
     it("fixes unsorted scripts", () => {

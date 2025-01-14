@@ -10,7 +10,7 @@
 import { Context, Failure } from "@monorepolint/config";
 import { createExpectedEntryErrorMessage, createStandardizedEntryErrorMessage, packageEntry } from "../packageEntry.js";
 import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
-import { describe, expect, it, beforeEach, afterEach, jest } from "@jest/globals";
+import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 
 const PACKAGE_MISSING_ENTRY =
   JSON.stringify(
@@ -66,7 +66,7 @@ describe.each(HOST_FACTORIES)("expectPackageEntries ($name)", (hostFactory) => {
       });
       context = workspace.context; // minimizing delta
 
-      spy = jest.spyOn(workspace.context, "addError");
+      spy = vi.spyOn(workspace.context, "addError");
     });
 
     afterEach(() => {

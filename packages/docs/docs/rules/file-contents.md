@@ -36,6 +36,12 @@ export default {
         template: "Hi mom",
       },
     }),
+    fileContents({
+      options: {
+        file: "badFile.txt",
+        template: undefined, // delete file
+      },
+    }),
     // TODO: Generator example
   ],
 };

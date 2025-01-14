@@ -25,8 +25,8 @@
     "clean": "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
     "compile-typescript": "tsc --build",
     "lint": "eslint .",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --colors --passWithNoTests",
-    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --colors --passWithNoTests --watch",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest --passWithNoTests",
     "transpile-typescript": "tsup --config ../../tsup.config.cjs"
   },
   "dependencies": {

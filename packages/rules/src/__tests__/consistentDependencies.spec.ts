@@ -12,7 +12,7 @@ import * as tmp from "tmp";
 import { consistentDependencies, Options } from "../consistentDependencies.js";
 import { makeDirectoryRecursively } from "../util/makeDirectory.js";
 import { jsonToString } from "./utils.js";
-import { describe, expect, it, afterEach, jest } from "@jest/globals";
+import { describe, expect, it, afterEach, vi } from "vitest";
 
 const PACKAGE_ROOT = jsonToString({
   workspaces: {
@@ -76,7 +76,7 @@ describe("consistentDependencies", () => {
 
     function checkAndSpy(q: string, opts?: Options) {
       const context = workspaceContext.createChildContext(path.resolve(dir.name, q));
-      const addErrorSpy = jest.spyOn(context, "addError");
+      const addErrorSpy = vi.spyOn(context, "addError");
       consistentDependencies({ options: opts }).check(context);
       return { context, addErrorSpy };
     }

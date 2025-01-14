@@ -21,7 +21,7 @@ const Options = r.Union(
   r.Record({
     file: r.String,
     generator: r.Undefined.optional(),
-    template: r.String,
+    template: r.String.Or(r.Undefined),
     templateFile: r.Undefined.optional(),
   }),
 
@@ -44,10 +44,16 @@ export const fileContents = createRuleFactory<Options>({
     const pathExists = context.host.exists(fullPath);
     const actualContent = pathExists ? context.host.readFile(fullPath, { encoding: "utf-8" }) : undefined;
     if (actualContent !== expectedContent) {
+      const longMessage =
+        pathExists && expectedContent == undefined ? undefined : diff(expectedContent, actualContent, { expand: true });
+
+      const message =
+        pathExists && expectedContent == undefined ? "File should not exist" : "Expect file contents to match";
+
       context.addError({
         file: fullPath,
-        message: "Expect file contents to match",
-        longMessage: diff(expectedContent, actualContent, { expand: true }),
+        message,
+        longMessage,
         fixer: () => {
           if (expectedContent === undefined) {
             if (pathExists) context.host.deleteFile(fullPath);

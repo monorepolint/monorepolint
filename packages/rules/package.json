@@ -25,8 +25,8 @@
     "clean": "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
     "compile-typescript": "tsc --build",
     "lint": "eslint .",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --colors --passWithNoTests",
-    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --colors --passWithNoTests --watch",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest --passWithNoTests",
     "transpile-typescript": "tsup --config ../../tsup.config.cjs"
   },
   "dependencies": {
@@ -41,8 +41,6 @@
     "tslib": "^2.8.1"
   },
   "devDependencies": {
-    "@jest/globals": "^29.7.0",
-    "@types/jest": "^29.5.14",
     "@types/semver": "^7.5.8",
     "@types/tmp": "^0.2.6",
     "@typescript-eslint/eslint-plugin": "^8.20.0",

@@ -8,7 +8,7 @@
 import { AddErrorOptions, WorkspaceContext } from "@monorepolint/config";
 import { WorkspaceContextImpl } from "@monorepolint/core";
 import { CachingHost, Host, SimpleHost } from "@monorepolint/utils";
-import { expect, jest } from "@jest/globals";
+import { expect, MockInstance } from "vitest";
 import * as path from "node:path";
 import * as tmp from "tmp";
 
@@ -67,7 +67,7 @@ export interface TestingWorkspace {
   readFile(filePath: string): string;
 
   /**
-   * Helper method for matching failures via jest `expect().toMatchObject
+   * Helper method for matching failures via vi `expect().toMatchObject
    *
    */
   failureMatcher(opts: { file: string; message: string; hasFixer: boolean }): any;
@@ -122,7 +122,7 @@ class DefaultTestingWorkspace implements TestingWorkspace {
   }
 }
 
-export type AddErrorSpy = jest.SpiedFunction<(options: AddErrorOptions) => void>;
+export type AddErrorSpy = MockInstance<(options: AddErrorOptions) => void>;
 
 export const HOST_FACTORIES: Array<{ name: string; make: () => Host }> = [
   { name: "SimpleHost", make: () => new SimpleHost() },

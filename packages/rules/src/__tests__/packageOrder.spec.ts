@@ -9,7 +9,7 @@
 import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
 import { Context, Failure } from "@monorepolint/config";
 import { packageOrder } from "../packageOrder.js";
-import { describe, expect, it, beforeEach, jest } from "@jest/globals";
+import { describe, expect, it, beforeEach, vi } from "vitest";
 
 const PACKAGE_UNORDERED =
   JSON.stringify(
@@ -95,7 +95,7 @@ describe.each(HOST_FACTORIES)("expectPackageOrder ($name)", (hostFactory) => {
       });
       context = workspace.context; // minimizing delta
 
-      spy = jest.spyOn(workspace.context, "addError");
+      spy = vi.spyOn(workspace.context, "addError");
     });
 
     it("fixes order for expected keys", () => {
