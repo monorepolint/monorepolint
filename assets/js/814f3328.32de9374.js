@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_monorepolint_docs=self.webpackChunk_monorepolint_docs||[]).push([[535],{5641:e=>{e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"v0.5.0","permalink":"/blog/0.5.0","unlisted":false},{"title":"New Webpage + Docs","permalink":"/blog/new-webpage","unlisted":false}]}')}}]);
