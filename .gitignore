@@ -3,6 +3,7 @@ node_modules
 /packages/*/build
 /packages/*/dist
 /packages/*/lib
+/packages/*/coverage/
 /packages/*/*.tgz
 /.npmrc
 /.yarnrc
@@ -12,3 +13,4 @@ node_modules
 yarn-error.log
 tsconfig.tsbuildinfo
 isolate-0x*-v8.log
+/coverage/

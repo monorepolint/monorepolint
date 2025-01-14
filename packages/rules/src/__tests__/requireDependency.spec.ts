@@ -12,7 +12,7 @@ import * as tmp from "tmp";
 import { requireDependency } from "../requireDependency.js";
 import { makeDirectoryRecursively } from "../util/makeDirectory.js";
 import { jsonToString } from "./utils.js";
-import { describe, expect, it, afterEach, jest } from "@jest/globals";
+import { describe, expect, it, afterEach, vi } from "vitest";
 
 const PACKAGE_ROOT = jsonToString({
   workspaces: {
@@ -88,7 +88,7 @@ describe("requireDependency", () => {
 
     function checkAndSpy(q: string) {
       const context = workspaceContext.createChildContext(path.resolve(dir.name, q));
-      const addErrorSpy = jest.spyOn(context, "addError");
+      const addErrorSpy = vi.spyOn(context, "addError");
       requireDependency({ options: OPTIONS }).check(context);
       return { context, addErrorSpy };
     }

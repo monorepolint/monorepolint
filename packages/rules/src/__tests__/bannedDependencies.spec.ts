@@ -4,7 +4,7 @@
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
-import { describe, expect, it, beforeEach, jest, afterEach } from "@jest/globals";
+import { describe, expect, it, beforeEach, vi, afterEach } from "vitest";
 import { WorkspaceContextImpl } from "@monorepolint/core";
 import { SimpleHost } from "@monorepolint/utils";
 import { writeFileSync } from "fs";
@@ -26,7 +26,7 @@ describe("bannedDependencies", () => {
     cleanupJobs.push(() => dir.removeCallback());
     cwd = dir.name;
 
-    const spy = jest.spyOn(process, "cwd");
+    const spy = vi.spyOn(process, "cwd");
     spy.mockReturnValue(cwd);
   });
 
@@ -50,7 +50,7 @@ describe("bannedDependencies", () => {
     );
 
     function checkAndSpy(options: Options) {
-      const addErrorSpy = jest.spyOn(workspaceContext, "addError");
+      const addErrorSpy = vi.spyOn(workspaceContext, "addError");
       bannedDependencies({ options }).check(workspaceContext);
       return { addErrorSpy };
     }

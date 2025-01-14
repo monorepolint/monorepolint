@@ -4,7 +4,7 @@
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
-import { describe, expect, it, beforeEach } from "@jest/globals";
+import { describe, expect, it, beforeEach } from "vitest";
 import { CachingHost } from "../CachingHost.js";
 import * as realfs from "node:fs";
 import * as path from "node:path";

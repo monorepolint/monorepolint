@@ -243,6 +243,7 @@ export class CachingHost implements Host {
         curNode = curNode.dir.get(part) ?? this.#stubify(path.join(curNode.fullPath, part), curNode);
         curPath = path.join(curPath, part);
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       // This error is expected when things done exist.
       // console.log(`Got EXPECTED error when trying to getNearestAncestorNode(${canonicalPath}): `, (e as any).message);
@@ -425,6 +426,7 @@ export class CachingHost implements Host {
       try {
         await this.fs.promises.access(node.fullPath);
         return this.fs.promises.unlink(node.fullPath);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         // should only throw if file doesnt exist which is no op
         return;
@@ -444,6 +446,7 @@ export class CachingHost implements Host {
       if (linkValue === node.symlink) {
         return;
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       // expected when the link doesnt exist
     }
@@ -454,6 +457,7 @@ export class CachingHost implements Host {
     if (!node.tombstone && node.needsFlush) {
       try {
         await this.fs.promises.access(node.fullPath); // throws if the file doesnt exist
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         await this.fs.promises.mkdir(node.fullPath); // throws if it does :(
       }

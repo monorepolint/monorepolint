@@ -53,9 +53,11 @@ async function handleCheck(args: Options) {
   console.log("monorepolint (mrl) v" + getVersion());
   console.log();
 
+  // eslint-disable-next-line turbo/no-undeclared-env-vars
   if (process.env.MRL_CACHING_HOST === "true") {
     console.log("++++ USING EXPERIMENTAL CACHING HOST");
   }
+  // eslint-disable-next-line turbo/no-undeclared-env-vars
   const host = process.env.MRL_CACHING_HOST === "true" ? new CachingHost() : new SimpleHost();
   try {
     const resolvedConfig = await readResolvedConfig(host, args);

@@ -18,53 +18,54 @@
     ]
   },
   "scripts": {
-    "check-mrl": "mrl check --verbose",
+    "build": "turbo build",
     "changelog": "rm -rf '/tmp/github-changelog-http-cache' && github_changelog_generator",
+    "check-mrl": "mrl check --verbose",
     "ci": "pnpm clean && turbo check",
     "ci:publish": "pnpm prepack && pnpm publish -r && changeset tag",
     "clean": "turbo clean && rm -rf node_modules && pnpm install",
-    "build": "turbo build",
     "compile:fast": "cd packages/all; tsc --build",
     "compile:watch": "cd packages/all; tsc --build --watch",
     "fix:lint:monorepolint": "pnpm exec monorepolint fix",
     "fix:lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' --write",
-    "lint": "npm-run-all lint:*",
+    "lint": "pnpm run --workspace-concurrency 1 '/^lint:.*/'",
     "lint:monorepolint": "monorepolint check --verbose",
     "lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' -l",
     "prepack": "turbo clean && pnpm install && turbo check",
-    "test": "turbo test",
-    "prepare": "husky install"
+    "prepare": "husky",
+    "test": "turbo test"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.11",
+    "@eslint/js": "^9.18.0",
+    "@manypkg/get-packages": "^2.2.2",
     "@monorepolint/cli": "workspace:^",
     "@monorepolint/internal-mrl-config": "workspace:*",
     "@types/mock-fs": "^4.13.4",
     "@types/node": "^18.18.14",
-    "gh-pages": "^6.1.1",
-    "husky": "^9.0.11",
-    "jest": "^29.7.0",
-    "@changesets/cli": "^2.27.5",
-    "lint-staged": "^15.2.2",
-    "mock-fs": "^5.2.0",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^3.2.5",
-    "semver": "^7.6.0",
-    "ts-jest": "^29.1.2",
-    "turbo": "^1.13.3",
-    "typescript": "^5.4.5",
-    "@eslint/js": "^9.1.1",
-    "typescript-eslint": "^7.7.1",
-    "@typescript-eslint/eslint-plugin": "^7.7.1",
-    "@typescript-eslint/parser": "^7.7.1",
-    "eslint": "^9.1.1",
-    "globals": "^15.0.0"
+    "@typescript-eslint/eslint-plugin": "^8.20.0",
+    "@typescript-eslint/parser": "^8.20.0",
+    "@vitest/coverage-v8": "^2.1.8",
+    "eslint": "^9.18.0",
+    "eslint-config-turbo": "^2.3.3",
+    "gh-pages": "^6.3.0",
+    "globals": "^15.14.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.3.0",
+    "mock-fs": "^5.4.1",
+    "prettier": "^3.4.2",
+    "semver": "^7.6.3",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0",
+    "vitest": "^2.1.8"
   },
   "optionalDependencies": {
     "fsevents": "^2.1.3"
   },
   "engines": {
     "node": ">=16",
-    "pnpm": ">=9.0.6"
+    "pnpm": ">=9.15.4"
   },
-  "packageManager": "pnpm@9.0.6"
+  "packageManager": "pnpm@9.15.4"
 }

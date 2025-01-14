@@ -6,7 +6,7 @@
  */
 
 // tslint:disable:no-console
-import { describe, expect, it, beforeEach, jest } from "@jest/globals";
+import { describe, expect, it, beforeEach, vi } from "vitest";
 import { Context, Failure } from "@monorepolint/config";
 import { packageScript } from "../packageScript.js";
 import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
@@ -41,7 +41,7 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
         host: hostFactory.make(),
       });
 
-      spy = jest.spyOn(workspace.context, "addError");
+      spy = vi.spyOn(workspace.context, "addError");
     });
 
     it("handles an empty script section", () => {
@@ -79,7 +79,7 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
         host: hostFactory.make(),
       });
 
-      spy = jest.spyOn(workspace.context, "addError");
+      spy = vi.spyOn(workspace.context, "addError");
       context = workspace.context; // minimizing delta
     });
 

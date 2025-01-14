@@ -9,14 +9,14 @@
 import { createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
 import { AddErrorOptions, Failure } from "@monorepolint/config";
 import { fileContents } from "../fileContents.js";
-import { describe, expect, it, beforeEach, jest } from "@jest/globals";
+import { describe, expect, it, beforeEach, vi, MockInstance } from "vitest";
 
 const EXPECTED_FOO_FILE = "hello world";
 
 describe.each(HOST_FACTORIES)("fileContents ($name)", (hostFactory) => {
   describe("fix: true", () => {
     let workspace: TestingWorkspace;
-    let spy: jest.SpiedFunction<(opts: AddErrorOptions) => void>;
+    let spy: MockInstance<(opts: AddErrorOptions) => void>;
 
     beforeEach(async () => {
       workspace = await createTestingWorkspace({
@@ -25,7 +25,7 @@ describe.each(HOST_FACTORIES)("fileContents ($name)", (hostFactory) => {
       });
       workspace.writeFile("shared/foo-template.txt", EXPECTED_FOO_FILE);
 
-      spy = jest.spyOn(workspace.context, "addError");
+      spy = vi.spyOn(workspace.context, "addError");
     });
 
     it("works with async generator", async () => {

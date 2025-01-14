@@ -21,7 +21,7 @@ import {
   RANGE_REGEX,
 } from "../mustSatisfyPeerDependencies.js";
 import { makeDirectoryRecursively } from "../util/makeDirectory.js";
-import { describe, expect, it, beforeEach, afterEach, jest } from "@jest/globals";
+import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 
 const doesASatisfyB = (a: string, b: string) => {
   if (!isValidRange(a)) {
@@ -54,7 +54,7 @@ describe("mustSatisfyPeerDependencies", () => {
     cleanupJobs.push(() => dir.removeCallback());
     cwd = dir.name;
 
-    const spy = jest.spyOn(process, "cwd");
+    const spy = vi.spyOn(process, "cwd");
     spy.mockReturnValue(cwd);
   });
 
@@ -77,7 +77,7 @@ describe("mustSatisfyPeerDependencies", () => {
       },
       host
     );
-    const addErrorSpy = jest.spyOn(workspaceContext, "addError");
+    const addErrorSpy = vi.spyOn(workspaceContext, "addError");
 
     async function check(options: Options) {
       await mustSatisfyPeerDependencies({ options }).check(workspaceContext);

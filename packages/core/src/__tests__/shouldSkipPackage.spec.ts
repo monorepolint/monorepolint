@@ -4,7 +4,7 @@
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
-import { jest, describe, expect, it } from "@jest/globals";
+import { vi, describe, expect, it } from "vitest";
 import { SimpleHost } from "@monorepolint/utils";
 import { shouldSkipPackage } from "../check.js";
 import { ResolvedConfig } from "@monorepolint/config";
@@ -17,7 +17,7 @@ describe("shouldSkipPackage", () => {
     fix: false,
   };
   const workspaceContext = new WorkspaceContextImpl(".", resolvedConfig, new SimpleHost());
-  jest.spyOn(workspaceContext, "getName").mockImplementation(() => "root");
+  vi.spyOn(workspaceContext, "getName").mockImplementation(() => "root");
 
   const fooContext = createChild(workspaceContext, "packages/foo", "@foo/bar");
 
@@ -105,6 +105,6 @@ describe("shouldSkipPackage", () => {
 
 function createChild(c: WorkspaceContextImpl, path: string, name: string) {
   const ret = c.createChildContext(path);
-  jest.spyOn(ret, "getName").mockImplementation(() => name);
+  vi.spyOn(ret, "getName").mockImplementation(() => name);
   return ret;
 }
