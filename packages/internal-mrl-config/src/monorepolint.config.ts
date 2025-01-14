@@ -94,7 +94,7 @@ export const config: ConfigFn = (_context) => {
           devDependencies: {
             jest: "^29.7.0",
             "@jest/globals": "^29.7.0",
-            tslib: "^2.6.2",
+            tslib: "^2.8.1",
           },
         },
       }),

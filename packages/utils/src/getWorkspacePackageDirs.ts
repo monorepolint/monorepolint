@@ -11,7 +11,7 @@ import * as path from "node:path";
 import * as fs from "node:fs";
 import { Host } from "./Host.js";
 import { PackageJson } from "./PackageJson.js";
-import * as readYamlFile from "read-yaml-file";
+import readYamlFile from "read-yaml-file";
 import { findPackages } from "find-packages";
 
 async function findPNPMWorkspacePackages(workspaceRoot: string) {
