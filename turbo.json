@@ -1,45 +1,96 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
+  "globalEnv": [
+    "npm_execpath"
+  ],
+  "tasks": {
     "build": {
-      "dependsOn": ["transpile-typescript", "compile-typescript"],
-      "inputs": ["src/**/*", "tsconfig.json"],
+      "dependsOn": [
+        "transpile-typescript",
+        "compile-typescript"
+      ],
+      "inputs": [
+        "src/**/*",
+        "tsconfig.json"
+      ],
       "outputs": []
     },
     "clean": {},
     "transpile-typescript": {
-      "dependsOn": ["^transpile-typescript"],
-      "inputs": ["src/**/*", "../../tsup.config.cjs", "tsconfig.json"],
-      "outputs": ["build/js/**"]
+      "dependsOn": [
+        "^transpile-typescript"
+      ],
+      "inputs": [
+        "src/**/*",
+        "../../tsup.config.cjs",
+        "tsconfig.json"
+      ],
+      "outputs": [
+        "build/js/**"
+      ]
     },
     "compile-typescript": {
-      "dependsOn": ["^compile-typescript"],
-      "inputs": ["src/**/*", "tsconfig.json", "../../tsconfig.base.json"],
-      "outputs": ["build/types/**"]
+      "dependsOn": [
+        "^compile-typescript"
+      ],
+      "inputs": [
+        "src/**/*",
+        "tsconfig.json",
+        "../../tsconfig.base.json"
+      ],
+      "outputs": [
+        "build/types/**"
+      ]
     },
     "test": {
-      "dependsOn": ["transpile-typescript", "compile-typescript"],
+      "dependsOn": [
+        "transpile-typescript",
+        "compile-typescript"
+      ],
       "outputs": [],
-      "inputs": ["src/**/*.tsx", "src/**/*.ts", "tsconfig.json", "../../jest.config.base.js"]
+      "inputs": [
+        "src/**/*.tsx",
+        "src/**/*.ts",
+        "tsconfig.json",
+        "../../jest.config.base.js"
+      ]
     },
     "lint": {
       "outputs": [],
-      "inputs": ["package.json", "src/**/*", "../../eslint.config.mjs"]
+      "inputs": [
+        "package.json",
+        "src/**/*",
+        "../../eslint.config.mjs"
+      ]
     },
     "check": {
-      "dependsOn": ["build", "test", "lint", "//#check-mrl"],
+      "dependsOn": [
+        "build",
+        "test",
+        "lint",
+        "//#check-mrl"
+      ],
       "outputs": []
     },
     "//#check-mrl": {
-      "dependsOn": ["@monorepolint/internal-mrl-config#transpile-typescript"],
-      "inputs": ["package.json", "packages/*/package.json", "packages/*/tsconfig.json", "templates/*"]
+      "dependsOn": [
+        "@monorepolint/internal-mrl-config#transpile-typescript"
+      ],
+      "inputs": [
+        "package.json",
+        "packages/*/package.json",
+        "packages/*/tsconfig.json",
+        "templates/*"
+      ]
     },
     "//#compile:watch": {
       "cache": false
     },
     "dev": {
       "cache": false,
-      "dependsOn": ["//#compile:watch"]
+      "dependsOn": [
+        "//#compile:watch"
+      ]
     }
   }
 }
