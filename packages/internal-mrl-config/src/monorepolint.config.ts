@@ -101,8 +101,12 @@ export default defineProject({
         },
       }),
       Rules.packageOrder({}),
-      Rules.alphabeticalDependencies({}),
-      Rules.alphabeticalScripts({}),
+      Rules.alphabeticalDependencies({
+        includeWorkspaceRoot: true,
+      }),
+      Rules.alphabeticalScripts({
+        includeWorkspaceRoot: true,
+      }),
       Rules.consistentDependencies({}),
       Rules.bannedDependencies({
         options: {
