@@ -12,7 +12,7 @@ Standardize entry order in package.json.
 ### Example
 
 ```javascript
-import { packageOrder } from "monorepolint/rules";
+import { packageOrder } from "@monorepolint/rules";
 export default {
   rules: [
     packageOrder({

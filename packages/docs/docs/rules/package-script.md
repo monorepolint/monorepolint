@@ -16,7 +16,7 @@ Standardize package scripts. This is a separate rule from Package Entries to mak
 ### Example
 
 ```javascript
-import { packageScript } from "monorepolint/rules";
+import { packageScript } from "@monorepolint/rules";
 export default {
   rules: [
     packageScript({

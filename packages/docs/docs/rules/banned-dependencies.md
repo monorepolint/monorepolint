@@ -24,7 +24,7 @@ documented.
 ### Example
 
 ```javascript
-import { bannedDependencies } from "monorepolint/rules";
+import { bannedDependencies } from "@monorepolint/rules";
 
 export default {
   rules: [

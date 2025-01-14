@@ -26,7 +26,7 @@ Exactly one of `generator`, `template`, or `templateFile` needs to be specified.
 ### Example
 
 ```javascript
-import { standardTsconfig } from "monorepolint/rules";
+import { standardTsconfig } from "@monorepolint/rules";
 export default {
   rules: [
     standardTsconfig({

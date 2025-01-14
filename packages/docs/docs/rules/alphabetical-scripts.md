@@ -7,7 +7,7 @@ Ensures that all scripts within a project are ordered alphabetically.
 ### Usage
 
 ```javascript
-import { alphabeticalScripts } from "monorepolint/rules";
+import { alphabeticalScripts } from "@monorepolint/rules";
 
 export default {
   rules: [

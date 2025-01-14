@@ -8,7 +8,7 @@ In particular, this ensures that nested workspaces (e.g. `packages/group/*`) are
 ### Example
 
 ```javascript
-import { nestedWorkspaces } from "monorepolint/rules";
+import { nestedWorkspaces } from "@monorepolint/rules";
 export default {
   rules: [nestedWorkspaces({})],
 };

@@ -21,7 +21,7 @@ local entry.
 ### Example
 
 ```javascript
-import { requireDependency } from "monorepolint/rules";
+import { requireDependency } from "@monorepolint/rules";
 export default {
   rules: [
     requireDependency({
