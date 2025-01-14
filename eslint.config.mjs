@@ -20,6 +20,9 @@ export default tseslint.config(
     languageOptions: {
       globals: globals.commonjs,
     },
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
   },
   {
     files: ["**/__tests__/*.ts"],

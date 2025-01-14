@@ -39,6 +39,7 @@ const Options = r
     return count === 1 || "Expect one of { generator, template, templateFile }";
   });
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface Options extends r.Static<typeof Options> {}
 
 export const standardTsconfig = createRuleFactory<Options>({

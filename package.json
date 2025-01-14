@@ -42,8 +42,8 @@
     "@monorepolint/internal-mrl-config": "workspace:*",
     "@types/mock-fs": "^4.13.4",
     "@types/node": "^18.18.14",
-    "@typescript-eslint/eslint-plugin": "^7.7.1",
-    "@typescript-eslint/parser": "^7.7.1",
+    "@typescript-eslint/eslint-plugin": "^8.20.0",
+    "@typescript-eslint/parser": "^8.20.0",
     "eslint": "^9.18.0",
     "gh-pages": "^6.1.1",
     "globals": "^15.14.0",
@@ -57,7 +57,7 @@
     "ts-jest": "^29.2.5",
     "turbo": "^1.13.3",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^7.7.1"
+    "typescript-eslint": "^8.20.0"
   },
   "optionalDependencies": {
     "fsevents": "^2.1.3"
