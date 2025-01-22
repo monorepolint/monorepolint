@@ -12,10 +12,10 @@ import * as r from "runtypes";
 import { createRuleFactory } from "./util/createRuleFactory.js";
 
 const Options = r.Partial({
-  dependencies: r.Dictionary(r.String),
-  devDependencies: r.Dictionary(r.String),
-  peerDependencies: r.Dictionary(r.String),
-  optionalDependencies: r.Dictionary(r.String),
+  dependencies: r.Dictionary(r.String.optional()),
+  devDependencies: r.Dictionary(r.String.optional()),
+  peerDependencies: r.Dictionary(r.String.optional()),
+  optionalDependencies: r.Dictionary(r.String.optional()),
 });
 
 type Options = r.Static<typeof Options>;
@@ -32,7 +32,8 @@ export const requireDependency = createRuleFactory({
       "peerDependencies" as const,
       "optionalDependencies" as const,
     ].forEach((type) => {
-      if (!options[type]) {
+      const expectedEntries = options[type];
+      if (!expectedEntries) {
         return;
       }
 
@@ -42,7 +43,9 @@ export const requireDependency = createRuleFactory({
           message: `No ${type} block, cannot add required ${type}.`,
           fixer: () => {
             mutateJson<PackageJson>(packageJsonPath, context.host, (input) => {
-              input[type] = options[type];
+              input[type] = Object.fromEntries(
+                Object.entries(expectedEntries).filter(([, v]) => v !== undefined)
+              ) as Record<string, string>;
               return input;
             });
           },
@@ -58,7 +61,12 @@ export const requireDependency = createRuleFactory({
             longMessage: diff(`${dep}@${version}\n`, `${dep}@${packageJson[type]![dep] || "missing"}\n`)!,
             fixer: () => {
               mutateJson<PackageJson>(packageJsonPath, context.host, (input) => {
-                input[type] = { ...input[type], [dep]: version };
+                if (version === undefined) {
+                  input[type] = { ...input[type] };
+                  delete input[type][dep];
+                } else {
+                  input[type] = { ...input[type], [dep]: version };
+                }
                 return input;
               });
             },

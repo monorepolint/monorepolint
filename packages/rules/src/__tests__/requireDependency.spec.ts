@@ -36,6 +36,7 @@ const PACKAGE_WITH_WRONG_ENTRIES = jsonToString({
   },
   devDependencies: {
     bar: "1.0.0",
+    baz: "1.0.0",
   },
 });
 
@@ -54,6 +55,7 @@ const OPTIONS = {
   },
   devDependencies: {
     bar: "^2.0.0",
+    baz: undefined,
   },
 } as const;
 
@@ -125,7 +127,7 @@ describe("requireDependency", () => {
     expect(missing.addErrorSpy).toHaveBeenCalledTimes(2);
 
     const wrong = checkAndSpy("./packages/wrong");
-    expect(wrong.addErrorSpy).toHaveBeenCalledTimes(2);
+    expect(wrong.addErrorSpy).toHaveBeenCalledTimes(3);
 
     const right = checkAndSpy("./packages/right");
     expect(right.addErrorSpy).toHaveBeenCalledTimes(0);
@@ -141,7 +143,7 @@ describe("requireDependency", () => {
     expect(missing.addErrorSpy).toHaveBeenCalledTimes(2);
 
     const wrong = checkAndSpy("./packages/wrong");
-    expect(wrong.addErrorSpy).toHaveBeenCalledTimes(2);
+    expect(wrong.addErrorSpy).toHaveBeenCalledTimes(3);
 
     const missingContents = readFile("./packages/missing/package.json");
     expect(missingContents).toEqual(CORRECT_OUTPUT);
