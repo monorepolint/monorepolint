@@ -5,11 +5,11 @@
  *
  */
 
+import { findUp } from "find-up";
+import * as fs from "fs";
 import * as path from "path";
 import { Host } from "./Host.js";
 import { PackageJson } from "./PackageJson.js";
-import * as fs from "fs";
-import { findUp } from "find-up";
 
 export async function findPnpmWorkspaceDir(cwd: string) {
   const workspaceManifestLocation = await findUp("pnpm-workspace.yaml", {
@@ -20,7 +20,7 @@ export async function findPnpmWorkspaceDir(cwd: string) {
 
 export async function findWorkspaceDir(
   host: Pick<Host, "readJson" | "exists">,
-  dir: string
+  dir: string,
 ): Promise<string | undefined> {
   // Defining workspaces in package.json is not necessary in PNPM
   const maybePnpmWorkspaceDir = await findPnpmWorkspaceDir(dir);

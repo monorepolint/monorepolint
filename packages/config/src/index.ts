@@ -5,7 +5,21 @@
  *
  */
 
-export { Config, ConfigFn, Options, ResolvedConfig, ResolvedRule, RuleEntry, RuleModule } from "./Config.js";
-export { AddErrorAsyncOptions, AddErrorOptions, AddErrorSyncOrAsyncOptions, Context, Failure } from "./Context.js";
+export {
+  Config,
+  ConfigFn,
+  Options,
+  ResolvedConfig,
+  ResolvedRule,
+  RuleEntry,
+  RuleModule,
+} from "./Config.js";
+export {
+  AddErrorAsyncOptions,
+  AddErrorOptions,
+  AddErrorSyncOrAsyncOptions,
+  Context,
+  Failure,
+} from "./Context.js";
 export { PackageContext } from "./PackageContext.js";
 export { WorkspaceContext } from "./WorkspaceContext.js";

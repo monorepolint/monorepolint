@@ -4,7 +4,7 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-pnpmfileChecksum: x6x7t5ccllvpkt3e7xbtdbb7uq
+pnpmfileChecksum: uy5lpyrhe4ujk6e2gmxeid3x7a
 
 importers:
 
@@ -44,6 +44,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^2.1.8
         version: 2.1.8(vitest@3.0.3(@types/node@18.18.14)(jiti@1.21.7)(terser@5.37.0)(yaml@2.6.1))
+      dprint:
+        specifier: ^0.48.0
+        version: 0.48.0
       eslint:
         specifier: ^9.18.0
         version: 9.18.0(jiti@1.21.7)
@@ -65,9 +68,6 @@ importers:
       mock-fs:
         specifier: ^5.4.1
         version: 5.4.1
-      prettier:
-        specifier: ^3.4.2
-        version: 3.4.2
       semver:
         specifier: ^7.6.3
         version: 7.6.3
@@ -160,9 +160,6 @@ importers:
       eslint:
         specifier: ^9.18.0
         version: 9.18.0(jiti@1.21.7)
-      prettier:
-        specifier: ^3.4.2
-        version: 3.4.2
       tsup:
         specifier: ^8.3.5
         version: 8.3.5(jiti@1.21.7)(postcss@8.5.1)(typescript@5.7.3)(yaml@2.6.1)
@@ -191,9 +188,6 @@ importers:
       eslint:
         specifier: ^9.18.0
         version: 9.18.0(jiti@1.21.7)
-      prettier:
-        specifier: ^3.4.2
-        version: 3.4.2
       tsup:
         specifier: ^8.3.5
         version: 8.3.5(jiti@1.21.7)(postcss@8.5.1)(typescript@5.7.3)(yaml@2.6.1)
@@ -225,9 +219,6 @@ importers:
       eslint:
         specifier: ^9.18.0
         version: 9.18.0(jiti@1.21.7)
-      prettier:
-        specifier: ^3.4.2
-        version: 3.4.2
       tsup:
         specifier: ^8.3.5
         version: 8.3.5(jiti@1.21.7)(postcss@8.5.1)(typescript@5.7.3)(yaml@2.6.1)
@@ -274,9 +265,6 @@ importers:
       eslint:
         specifier: ^9.18.0
         version: 9.18.0(jiti@1.21.7)
-      prettier:
-        specifier: ^3.4.2
-        version: 3.4.2
       prism-react-renderer:
         specifier: ^2.4.1
         version: 2.4.1(react@19.0.0)
@@ -314,9 +302,6 @@ importers:
       eslint:
         specifier: ^9.18.0
         version: 9.18.0(jiti@1.21.7)
-      prettier:
-        specifier: ^3.4.2
-        version: 3.4.2
       tsup:
         specifier: ^8.3.5
         version: 8.3.5(jiti@1.21.7)(postcss@8.5.1)(typescript@5.7.3)(yaml@2.6.1)
@@ -369,9 +354,6 @@ importers:
       eslint:
         specifier: ^9.18.0
         version: 9.18.0(jiti@1.21.7)
-      prettier:
-        specifier: ^3.4.2
-        version: 3.4.2
       tmp:
         specifier: ^0.2.3
         version: 0.2.3
@@ -421,9 +403,6 @@ importers:
       eslint:
         specifier: ^9.18.0
         version: 9.18.0(jiti@1.21.7)
-      prettier:
-        specifier: ^3.4.2
-        version: 3.4.2
       tsup:
         specifier: ^8.3.5
         version: 8.3.5(jiti@1.21.7)(postcss@8.5.1)(typescript@5.7.3)(yaml@2.6.1)
@@ -1596,6 +1575,51 @@ packages:
   '@docusaurus/utils@3.7.0':
     resolution: {integrity: sha512-e7zcB6TPnVzyUaHMJyLSArKa2AG3h9+4CfvKXKKWNx6hRs+p0a+u7HHTJBgo6KW2m+vqDnuIHK4X+bhmoghAFA==}
     engines: {node: '>=18.0'}
+
+  '@dprint/darwin-arm64@0.48.0':
+    resolution: {integrity: sha512-LJ+02WB1PDIUqobfwxBVMz0cUByXsZ6izFTC9tHR+BDt+qWfoZpCn5r/zpAVSkVlA5LzGHKLVNJrwKwaTnAiVA==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@dprint/darwin-x64@0.48.0':
+    resolution: {integrity: sha512-OxfLbitoNvFMVucauJ2DvEaJpnxyyhXWC2M56f2AX8lkZSsHrdMHtklqxHz3cBGVPpcCXjLPRC139ynwmqtjIA==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@dprint/linux-arm64-glibc@0.48.0':
+    resolution: {integrity: sha512-VMeyorjMXE9NrksmyOJ0zJRGxT7r7kDBBxshCxW+U1xgW+FqR8oE25RZaeDZZPDzUHapAly4ILZqjExLzAWVpw==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@dprint/linux-arm64-musl@0.48.0':
+    resolution: {integrity: sha512-1BUHQKEngrZv8F6wq2SVxdokyeUoHFXjz0xbYGwctlFPzXAVNLpDy9FROXsfIKmxZ0NsRqEpatETLmubtvWtcA==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@dprint/linux-riscv64-glibc@0.48.0':
+    resolution: {integrity: sha512-c8LktisPGbygyFf9wUg0trbAQDApawU017iPQXkZnGcV4QoCeGkFjnY8vltIKyy5DeP5gIp12KjlaT/wogMPkw==}
+    cpu: [riscv64]
+    os: [linux]
+
+  '@dprint/linux-x64-glibc@0.48.0':
+    resolution: {integrity: sha512-Am8rp4FqmkO4aFdmwxk+82g2csxPLTPIlNq0Fa9AZReU15yta3Pq0Pg4AXFq+KSso5L4WGmt09ciCitK5gmdOg==}
+    cpu: [x64]
+    os: [linux]
+
+  '@dprint/linux-x64-musl@0.48.0':
+    resolution: {integrity: sha512-0nzrZXOvblM/H4GVffNJ7YZn/Y4F/i+DNDZRT1hQmKuTQurB7a2MBJ91OpooLIWJoSn4q40crwM1Po4xnNXrdg==}
+    cpu: [x64]
+    os: [linux]
+
+  '@dprint/win32-arm64@0.48.0':
+    resolution: {integrity: sha512-bRcGLbhKEXmP7iXDir/vU6DqkA3XaMqBM6P2ACCJMHd+XKWsz3VJzZMn5hFWZ+oZpxUsS3Mg2RcgH5xVjaawgA==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@dprint/win32-x64@0.48.0':
+    resolution: {integrity: sha512-9JOKWWngo5vPBFxJgFogAS4rfFC2GaB9Yew6JZbRBUik7j5Num2muuw5p1tMYnl2NUBdS2W4EgsSLM3uUDyhBQ==}
+    cpu: [x64]
+    os: [win32]
 
   '@esbuild/aix-ppc64@0.24.2':
     resolution: {integrity: sha512-thpVCb/rhxE/BnMLQ7GReQLLN8q9qbHmI55F4489/ByVg2aQaQ6kbcLb6FHkocZzQhxc4gx0sCk0tJkKBFzDhA==}
@@ -3270,6 +3294,10 @@ packages:
   dotenv@16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
     engines: {node: '>=12'}
+
+  dprint@0.48.0:
+    resolution: {integrity: sha512-dmCrYTiubcsQklTLUimlO+p8wWgMtZBjpPVsOGiw4kPX7Dn41vwyE1R4qA8Px4xHgQtcX7WP9mJujF4C8vISIw==}
+    hasBin: true
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -8849,6 +8877,33 @@ snapshots:
       - uglify-js
       - webpack-cli
 
+  '@dprint/darwin-arm64@0.48.0':
+    optional: true
+
+  '@dprint/darwin-x64@0.48.0':
+    optional: true
+
+  '@dprint/linux-arm64-glibc@0.48.0':
+    optional: true
+
+  '@dprint/linux-arm64-musl@0.48.0':
+    optional: true
+
+  '@dprint/linux-riscv64-glibc@0.48.0':
+    optional: true
+
+  '@dprint/linux-x64-glibc@0.48.0':
+    optional: true
+
+  '@dprint/linux-x64-musl@0.48.0':
+    optional: true
+
+  '@dprint/win32-arm64@0.48.0':
+    optional: true
+
+  '@dprint/win32-x64@0.48.0':
+    optional: true
+
   '@esbuild/aix-ppc64@0.24.2':
     optional: true
 
@@ -10620,6 +10675,18 @@ snapshots:
       is-obj: 2.0.0
 
   dotenv@16.0.3: {}
+
+  dprint@0.48.0:
+    optionalDependencies:
+      '@dprint/darwin-arm64': 0.48.0
+      '@dprint/darwin-x64': 0.48.0
+      '@dprint/linux-arm64-glibc': 0.48.0
+      '@dprint/linux-arm64-musl': 0.48.0
+      '@dprint/linux-riscv64-glibc': 0.48.0
+      '@dprint/linux-x64-glibc': 0.48.0
+      '@dprint/linux-x64-musl': 0.48.0
+      '@dprint/win32-arm64': 0.48.0
+      '@dprint/win32-x64': 0.48.0
 
   dunder-proto@1.0.1:
     dependencies:

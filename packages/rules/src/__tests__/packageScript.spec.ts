@@ -6,10 +6,15 @@
  */
 
 // tslint:disable:no-console
-import { describe, expect, it, beforeEach, vi } from "vitest";
 import { Context, Failure } from "@monorepolint/config";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { packageScript } from "../packageScript.js";
-import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
+import {
+  AddErrorSpy,
+  createTestingWorkspace,
+  HOST_FACTORIES,
+  TestingWorkspace,
+} from "./utils.js";
 
 const json = (a: unknown) => JSON.stringify(a, undefined, 2) + "\n";
 
@@ -63,7 +68,7 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
           file: "package.json",
           hasFixer: true,
           message: "No scripts block in package.json",
-        })
+        }),
       );
     });
   });
@@ -102,10 +107,12 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
           file: "package.json",
           hasFixer: true,
           message: "No scripts block in package.json",
-        })
+        }),
       );
 
-      expect(JSON.parse(workspace.readFile("package.json")!).scripts).toEqual({});
+      expect(JSON.parse(workspace.readFile("package.json")!).scripts).toEqual(
+        {},
+      );
     });
 
     it("adds a script", () => {
@@ -127,13 +134,16 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
           file: "package.json",
           hasFixer: true,
           message: expect.stringContaining(
-            `Expected standardized script entry for '${MISSING_SCRIPT_NAME}'`
+            `Expected standardized script entry for '${MISSING_SCRIPT_NAME}'`,
           ) as unknown as string,
-        })
+        }),
       );
 
-      expect(JSON.parse(workspace.readFile("package.json")!).scripts[MISSING_SCRIPT_NAME]).toEqual(
-        MISSING_SCRIPT_VALUE
+      expect(
+        JSON.parse(workspace.readFile("package.json")!)
+          .scripts[MISSING_SCRIPT_NAME],
+      ).toEqual(
+        MISSING_SCRIPT_VALUE,
       );
     });
 
@@ -218,7 +228,9 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
       expect(errors.length).toBe(1);
       expect(errors[0][0].fixer).toBeDefined();
 
-      expect(JSON.parse(workspace.readFile("package.json")!).scripts).toEqual({});
+      expect(JSON.parse(workspace.readFile("package.json")!).scripts).toEqual(
+        {},
+      );
     });
 
     it("can allow only empty", () => {
@@ -240,7 +252,9 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
       expect(errors.length).toBe(1);
       expect(errors[0][0].fixer).toBeDefined();
 
-      expect(JSON.parse(workspace.readFile("package.json")!).scripts).toEqual({});
+      expect(JSON.parse(workspace.readFile("package.json")!).scripts).toEqual(
+        {},
+      );
     });
   });
 });

@@ -22,8 +22,7 @@ export default {
     packageEntry({
       options: {
         entries: {
-          author:
-            "Eric L Anderson (https://github.com/ericanderson)",
+          author: "Eric L Anderson (https://github.com/ericanderson)",
         },
         entriesExists: ["bugs"],
       },

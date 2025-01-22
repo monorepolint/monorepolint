@@ -6,7 +6,7 @@
  */
 
 export { check } from "./check.js";
-export { PackageContextImpl } from "./PackageContext.js";
-export { WorkspaceContextImpl } from "./WorkspaceContext.js";
-export { resolveConfig } from "./resolveConfig.js";
 export { createWorkspaceContext } from "./createWorkspaceContext.js";
+export { PackageContextImpl } from "./PackageContext.js";
+export { resolveConfig } from "./resolveConfig.js";
+export { WorkspaceContextImpl } from "./WorkspaceContext.js";

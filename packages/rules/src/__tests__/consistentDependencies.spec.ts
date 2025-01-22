@@ -9,10 +9,10 @@ import { SimpleHost } from "@monorepolint/utils";
 import { readFileSync, writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { consistentDependencies, Options } from "../consistentDependencies.js";
 import { makeDirectoryRecursively } from "../util/makeDirectory.js";
 import { jsonToString } from "./utils.js";
-import { describe, expect, it, afterEach, vi } from "vitest";
 
 const PACKAGE_ROOT = jsonToString({
   workspaces: {
@@ -71,11 +71,13 @@ describe("consistentDependencies", () => {
         verbose: false,
         silent: true,
       },
-      new SimpleHost()
+      new SimpleHost(),
     );
 
     function checkAndSpy(q: string, opts?: Options) {
-      const context = workspaceContext.createChildContext(path.resolve(dir.name, q));
+      const context = workspaceContext.createChildContext(
+        path.resolve(dir.name, q),
+      );
       const addErrorSpy = vi.spyOn(context, "addError");
       consistentDependencies({ options: opts }).check(context);
       return { context, addErrorSpy };
@@ -97,7 +99,9 @@ describe("consistentDependencies", () => {
   }
 
   it("checks correctly", () => {
-    const { addFile, workspaceContext, checkAndSpy } = makeWorkspace({ fix: false });
+    const { addFile, workspaceContext, checkAndSpy } = makeWorkspace({
+      fix: false,
+    });
     addFile("./package.json", PACKAGE_ROOT);
     addFile("./packages/star/package.json", PACKAGE_CHILD_WITH_STAR);
     addFile("./packages/latest/package.json", PACKAGE_CHILD_WITH_LATEST);
@@ -136,7 +140,9 @@ describe("consistentDependencies", () => {
     addFile("./package.json", PACKAGE_ROOT);
     addFile("./packages/wrong/package.json", PACKAGE_CHILD_WITH_WRONG_VERSION);
 
-    const ignored = checkAndSpy("./packages/wrong", { ignoredDependencies: ["foo"] });
+    const ignored = checkAndSpy("./packages/wrong", {
+      ignoredDependencies: ["foo"],
+    });
     expect(ignored.addErrorSpy).toHaveBeenCalledTimes(0);
   });
 });

@@ -19,7 +19,11 @@ export interface Host {
   writeJson(path: string, o: object): void;
 
   writeFile(path: string, buffer: Buffer): void;
-  writeFile(path: string, body: string, opts: { encoding: BufferEncoding }): void;
+  writeFile(
+    path: string,
+    body: string,
+    opts: { encoding: BufferEncoding },
+  ): void;
 
   readFile(path: string, opts?: undefined): Buffer;
   readFile(path: string, opts: { encoding: BufferEncoding }): string;

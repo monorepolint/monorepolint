@@ -26,8 +26,7 @@ export default {
     fileContents({
       options: {
         file: "jest.config.js",
-        templateFile:
-          "./templates/jest.config.js",
+        templateFile: "./templates/jest.config.js",
       },
     }),
     fileContents({

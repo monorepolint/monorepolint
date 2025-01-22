@@ -62,7 +62,7 @@ export class AggregateTiming {
         value.total,
         name,
         BigInt(value.count), // fixme this can be a number later
-        value.total / BigInt(value.count)
+        value.total / BigInt(value.count),
       );
     }
     table.print();

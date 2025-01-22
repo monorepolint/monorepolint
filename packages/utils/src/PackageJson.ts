@@ -14,9 +14,9 @@ export interface PackageJson {
   optionalDependencies?: Record<string, string>;
   workspaces?:
     | {
-        packages?: string[];
-        nohoist?: string[];
-      }
+      packages?: string[];
+      nohoist?: string[];
+    }
     | string[];
   [otherKey: string]: unknown;
 }

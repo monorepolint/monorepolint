@@ -10,7 +10,7 @@ import { diff } from "jest-diff";
 
 export function checkAlpha(
   context: Context,
-  block: "dependencies" | "devDependencies" | "peerDependencies" | "scripts"
+  block: "dependencies" | "devDependencies" | "peerDependencies" | "scripts",
 ) {
   const packageJson = context.getPackageJson();
   const packagePath = context.getPackageJsonPath();
@@ -54,6 +54,9 @@ function arrayOrderCompare(a: ReadonlyArray<string>, b: ReadonlyArray<string>) {
   return true;
 }
 
-export function createIncorrectOrderErrorMessage(block: string, packageName: string) {
+export function createIncorrectOrderErrorMessage(
+  block: string,
+  packageName: string,
+) {
   return `Incorrect order of ${block} in ${packageName}'s package.json`;
 }

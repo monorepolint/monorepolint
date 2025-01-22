@@ -6,36 +6,39 @@
  */
 
 // tslint:disable:no-console
-import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
 import { Context, Failure } from "@monorepolint/config";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { packageOrder } from "../packageOrder.js";
-import { describe, expect, it, beforeEach, vi } from "vitest";
+import {
+  AddErrorSpy,
+  createTestingWorkspace,
+  HOST_FACTORIES,
+  TestingWorkspace,
+} from "./utils.js";
 
-const PACKAGE_UNORDERED =
-  JSON.stringify(
-    {
-      scripts: {},
-      dependencies: {},
-      version: {},
-      name: "package",
-    },
-    undefined,
-    2
-  ) + "\n";
+const PACKAGE_UNORDERED = JSON.stringify(
+  {
+    scripts: {},
+    dependencies: {},
+    version: {},
+    name: "package",
+  },
+  undefined,
+  2,
+) + "\n";
 
-const PACKAGE_UNORDERED_UNKOWN_KEYS =
-  JSON.stringify(
-    {
-      butter: false,
-      apple: false,
-      scripts: {},
-      dependencies: {},
-      version: {},
-      name: "package-unknown-keys",
-    },
-    undefined,
-    2
-  ) + "\n";
+const PACKAGE_UNORDERED_UNKOWN_KEYS = JSON.stringify(
+  {
+    butter: false,
+    apple: false,
+    scripts: {},
+    dependencies: {},
+    version: {},
+    name: "package-unknown-keys",
+  },
+  undefined,
+  2,
+) + "\n";
 
 const orderArray = ["name", "version", "scripts", "dependencies"];
 
@@ -44,43 +47,40 @@ const orderFunction = (_context: Context) => (a: string, b: string) => {
   return b.length - a.length || a.localeCompare(b);
 };
 
-const PACKAGE_ORDERED =
-  JSON.stringify(
-    {
-      name: "package",
-      version: {},
-      scripts: {},
-      dependencies: {},
-    },
-    undefined,
-    2
-  ) + "\n";
+const PACKAGE_ORDERED = JSON.stringify(
+  {
+    name: "package",
+    version: {},
+    scripts: {},
+    dependencies: {},
+  },
+  undefined,
+  2,
+) + "\n";
 
-const PACKAGE_ORDERED_BY_LENGTH =
-  JSON.stringify(
-    {
-      dependencies: {},
-      scripts: {},
-      version: {},
-      name: "package",
-    },
-    undefined,
-    2
-  ) + "\n";
+const PACKAGE_ORDERED_BY_LENGTH = JSON.stringify(
+  {
+    dependencies: {},
+    scripts: {},
+    version: {},
+    name: "package",
+  },
+  undefined,
+  2,
+) + "\n";
 
-const PACKAGE_ORDERED_UNKOWN_KEYS =
-  JSON.stringify(
-    {
-      name: "package-unknown-keys",
-      version: {},
-      scripts: {},
-      dependencies: {},
-      apple: false,
-      butter: false,
-    },
-    undefined,
-    2
-  ) + "\n";
+const PACKAGE_ORDERED_UNKOWN_KEYS = JSON.stringify(
+  {
+    name: "package-unknown-keys",
+    version: {},
+    scripts: {},
+    dependencies: {},
+    apple: false,
+    butter: false,
+  },
+  undefined,
+  2,
+) + "\n";
 
 describe.each(HOST_FACTORIES)("expectPackageOrder ($name)", (hostFactory) => {
   describe("fix: true", () => {
@@ -115,7 +115,7 @@ describe.each(HOST_FACTORIES)("expectPackageOrder ($name)", (hostFactory) => {
           file: "package.json",
           hasFixer: true,
           message: "Incorrect order of fields in package.json",
-        })
+        }),
       );
 
       expect(workspace.readFile("package.json")).toEqual(PACKAGE_ORDERED);
@@ -138,10 +138,12 @@ describe.each(HOST_FACTORIES)("expectPackageOrder ($name)", (hostFactory) => {
           file: "package.json",
           hasFixer: true,
           message: "Incorrect order of fields in package.json",
-        })
+        }),
       );
 
-      expect(workspace.readFile("package.json")).toEqual(PACKAGE_ORDERED_UNKOWN_KEYS);
+      expect(workspace.readFile("package.json")).toEqual(
+        PACKAGE_ORDERED_UNKOWN_KEYS,
+      );
     });
 
     it("fixes order using function", () => {
@@ -161,10 +163,12 @@ describe.each(HOST_FACTORIES)("expectPackageOrder ($name)", (hostFactory) => {
           file: "package.json",
           hasFixer: true,
           message: "Incorrect order of fields in package.json",
-        })
+        }),
       );
 
-      expect(workspace.readFile("package.json")).toEqual(PACKAGE_ORDERED_BY_LENGTH);
+      expect(workspace.readFile("package.json")).toEqual(
+        PACKAGE_ORDERED_BY_LENGTH,
+      );
     });
 
     it("does nothing if already order", () => {
@@ -178,7 +182,9 @@ describe.each(HOST_FACTORIES)("expectPackageOrder ($name)", (hostFactory) => {
 
       expect(spy).not.toHaveBeenCalled();
 
-      expect(workspace.readFile("package.json")).toEqual(PACKAGE_ORDERED_UNKOWN_KEYS);
+      expect(workspace.readFile("package.json")).toEqual(
+        PACKAGE_ORDERED_UNKOWN_KEYS,
+      );
     });
   });
 });

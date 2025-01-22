@@ -3,7 +3,6 @@ title: Getting Started with Monorepolint
 slug: /
 ---
 
-
 Monorepolint is a robust and versatile tool designed to maintain homogeneity and predictability within your monorepo. It streamlines the management of monorepo structures by ensuring proper configuration and consistent organization across your entire project.
 
 ## Key Features
@@ -23,7 +22,6 @@ Monorepolint (also known as MRL) is designed to be adaptable and unobtrusive. It
 - In conjunction with your preferred monorepo organization method
 
 MRL's primary objective is to enhance your monorepo experience without imposing any restrictive practices or behaviors.
-
 
 ## Installing Monorepolint (MRL)
 
@@ -45,10 +43,7 @@ pnpm install -W monorepolint
 Add an initial `.monorepolint.config.mjs` in the root folder of your monorepo.
 
 ```ts title=".monorepolint.config.mjs"
-import {
-  packageOrder,
-  alphabeticalDependencies,
-} from "@monorepolint/rules";
+import { alphabeticalDependencies, packageOrder } from "@monorepolint/rules";
 
 export default {
   rules: [

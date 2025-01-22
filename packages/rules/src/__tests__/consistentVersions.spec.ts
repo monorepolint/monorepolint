@@ -9,9 +9,9 @@ import { WorkspaceContextImpl } from "@monorepolint/core";
 import { Host, PackageJson, SimpleHost } from "@monorepolint/utils";
 import * as path from "path";
 import * as tmp from "tmp";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { consistentVersions, Options } from "../consistentVersions.js";
 import { makeDirectoryRecursively } from "../util/makeDirectory.js";
-import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 
 describe("consistentVersions", () => {
   tmp.setGracefulCleanup();
@@ -45,7 +45,7 @@ describe("consistentVersions", () => {
         verbose: false,
         silent: true,
       },
-      host
+      host,
     );
     const addErrorSpy = vi.spyOn(workspaceContext, "addError");
 
@@ -56,7 +56,11 @@ describe("consistentVersions", () => {
     return { addErrorSpy, check, host };
   }
 
-  function addPackageJson(host: Host, filePath: string, packageJson: PackageJson) {
+  function addPackageJson(
+    host: Host,
+    filePath: string,
+    packageJson: PackageJson,
+  ) {
     const dirPath = path.resolve(cwd!, path.dirname(filePath));
     const resolvedFilePath = path.resolve(cwd!, filePath);
 
@@ -99,15 +103,24 @@ describe("consistentVersions", () => {
 
     it("Fixes packages that have an incorrect dependency version", async () => {
       const { addErrorSpy, check, host } = makeWorkspace(true);
-      const readTestPackageJson = addPackageJson(host, "./package.json", testPackageJson);
+      const readTestPackageJson = addPackageJson(
+        host,
+        "./package.json",
+        testPackageJson,
+      );
 
       const requiredGreatLibVersion = "1.2.3";
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
       check({
-        matchDependencyVersions: { both: testPackageJson.dependencies!.both, greatLib: requiredGreatLibVersion },
+        matchDependencyVersions: {
+          both: testPackageJson.dependencies!.both,
+          greatLib: requiredGreatLibVersion,
+        },
       });
       expect(addErrorSpy).toHaveBeenCalledTimes(1);
-      expect(readTestPackageJson().dependencies!.greatLib).toEqual(requiredGreatLibVersion);
+      expect(readTestPackageJson().dependencies!.greatLib).toEqual(
+        requiredGreatLibVersion,
+      );
     });
 
     it("Ignores packages that have a correct dependency version", async () => {
@@ -126,13 +139,24 @@ describe("consistentVersions", () => {
 
     it("Fixes packages that have an incorrect devDependency version", async () => {
       const { addErrorSpy, check, host } = makeWorkspace(true);
-      const readTestPackageJson = addPackageJson(host, "./package.json", testPackageJson);
+      const readTestPackageJson = addPackageJson(
+        host,
+        "./package.json",
+        testPackageJson,
+      );
 
       const requiredElseLibVersion = "1.2.3";
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
-      check({ matchDependencyVersions: { both: testPackageJson.dependencies!.both, else: requiredElseLibVersion } });
+      check({
+        matchDependencyVersions: {
+          both: testPackageJson.dependencies!.both,
+          else: requiredElseLibVersion,
+        },
+      });
       expect(addErrorSpy).toHaveBeenCalledTimes(1);
-      expect(readTestPackageJson().devDependencies!.else).toEqual(requiredElseLibVersion);
+      expect(readTestPackageJson().devDependencies!.else).toEqual(
+        requiredElseLibVersion,
+      );
     });
 
     it("Ignores packages that have a correct devDependency version", async () => {
@@ -151,14 +175,22 @@ describe("consistentVersions", () => {
 
     it("Fixes packages that have an incorrect dependency and devDependency versions", async () => {
       const { addErrorSpy, check, host } = makeWorkspace(true);
-      const readTestPackageJson = addPackageJson(host, "./package.json", testPackageJson);
+      const readTestPackageJson = addPackageJson(
+        host,
+        "./package.json",
+        testPackageJson,
+      );
 
       const requiredBothVersion = "1.2.3";
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
       check({ matchDependencyVersions: { both: requiredBothVersion } });
       expect(addErrorSpy).toHaveBeenCalledTimes(2);
-      expect(readTestPackageJson().dependencies!.both).toEqual(requiredBothVersion);
-      expect(readTestPackageJson().devDependencies!.both).toEqual(requiredBothVersion);
+      expect(readTestPackageJson().dependencies!.both).toEqual(
+        requiredBothVersion,
+      );
+      expect(readTestPackageJson().devDependencies!.both).toEqual(
+        requiredBothVersion,
+      );
     });
   });
 
@@ -187,13 +219,35 @@ describe("consistentVersions", () => {
       addPackageJson(host, "./package.json", testPackageJson);
 
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
-      check({ matchDependencyVersions: { greatLib: [testPackageJson.dependencies!.greatLib] } });
+      check({
+        matchDependencyVersions: {
+          greatLib: [testPackageJson.dependencies!.greatLib],
+        },
+      });
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
-      check({ matchDependencyVersions: { greatLib: ["1", "2", testPackageJson.dependencies!.greatLib] } });
+      check({
+        matchDependencyVersions: {
+          greatLib: ["1", "2", testPackageJson.dependencies!.greatLib],
+        },
+      });
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
-      check({ matchDependencyVersions: { greatLib: ["1", "2", testPackageJson.dependencies!.greatLib, "99", "100"] } });
+      check({
+        matchDependencyVersions: {
+          greatLib: [
+            "1",
+            "2",
+            testPackageJson.dependencies!.greatLib,
+            "99",
+            "100",
+          ],
+        },
+      });
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
-      check({ matchDependencyVersions: { greatLib: [testPackageJson.dependencies!.greatLib, "99", "100"] } });
+      check({
+        matchDependencyVersions: {
+          greatLib: [testPackageJson.dependencies!.greatLib, "99", "100"],
+        },
+      });
       expect(addErrorSpy).toHaveBeenCalledTimes(0);
     });
 
@@ -212,12 +266,12 @@ describe("consistentVersions", () => {
       expect(addErrorSpy.mock.calls[0][0].message).toEqual(
         `Expected dependency on both to match one of '["99","100"]', got '${
           testPackageJson.dependencies!.both
-        }' instead.`
+        }' instead.`,
       );
       expect(addErrorSpy.mock.calls[1][0].message).toEqual(
         `Expected devDependency on both to match one of '["99","100"]', got '${
           testPackageJson.devDependencies!.both
-        }' instead.`
+        }' instead.`,
       );
     });
   });

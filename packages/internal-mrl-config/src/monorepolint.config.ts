@@ -5,8 +5,8 @@
  *
  */
 
-import * as Rules from "@monorepolint/rules";
 import type { ConfigFn } from "@monorepolint/config";
+import * as Rules from "@monorepolint/rules";
 
 const META_PACKAGES = ["monorepolint"];
 
@@ -34,28 +34,32 @@ export const config: ConfigFn = (_context) => {
       Rules.fileContents({
         options: {
           file: "vitest.config.mjs",
-          template: `
-import { coverageConfigDefaults, defineProject, defaultExclude } from 'vitest/config'
+          template: `import {
+  coverageConfigDefaults,
+  defaultExclude,
+  defineProject,
+} from "vitest/config";
 
 export default defineProject({
   test: {
-   exclude: [...defaultExclude, "**/build/**"],
+    exclude: [...defaultExclude, "**/build/**"],
     coverage: {
       provider: "v8",
       enabled: true,
       pool: "forks",
-      exclude: [...coverageConfigDefaults.exclude, "vitest.config.*"]
-    }
+      exclude: [...coverageConfigDefaults.exclude, "vitest.config.*"],
+    },
   },
-})
-          `,
+});
+`,
         },
         excludePackages: [DOCS],
       }),
       Rules.packageScript({
         options: {
           scripts: {
-            clean: "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
+            clean:
+              "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
             "compile-typescript": "tsc --build",
             "lint:typescript": DELETE_SCRIPT_ENTRTY,
             jest: DELETE_SCRIPT_ENTRTY, // this syntax needs work :(

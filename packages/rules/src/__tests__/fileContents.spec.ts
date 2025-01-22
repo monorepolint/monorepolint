@@ -6,10 +6,14 @@
  */
 
 // tslint:disable:no-console
-import { createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
 import { AddErrorOptions, Failure } from "@monorepolint/config";
+import { beforeEach, describe, expect, it, MockInstance, vi } from "vitest";
 import { fileContents } from "../fileContents.js";
-import { describe, expect, it, beforeEach, vi, MockInstance } from "vitest";
+import {
+  createTestingWorkspace,
+  HOST_FACTORIES,
+  TestingWorkspace,
+} from "./utils.js";
 
 const EXPECTED_FOO_FILE = "hello world";
 
@@ -44,7 +48,7 @@ describe.each(HOST_FACTORIES)("fileContents ($name)", (hostFactory) => {
           file: "foo.txt",
           hasFixer: true,
           message: "Expect file contents to match",
-        })
+        }),
       );
 
       expect(workspace.readFile("foo.txt")).toEqual(EXPECTED_FOO_FILE);
@@ -68,7 +72,7 @@ describe.each(HOST_FACTORIES)("fileContents ($name)", (hostFactory) => {
           file: "foo.txt",
           hasFixer: true,
           message: "Expect file contents to match",
-        })
+        }),
       );
 
       expect(workspace.readFile("foo.txt")).toEqual(EXPECTED_FOO_FILE);
@@ -92,7 +96,7 @@ describe.each(HOST_FACTORIES)("fileContents ($name)", (hostFactory) => {
           file: "nested/foo.txt",
           hasFixer: true,
           message: "Expect file contents to match",
-        })
+        }),
       );
 
       expect(workspace.readFile("nested/foo.txt")).toEqual(EXPECTED_FOO_FILE);

@@ -4,12 +4,12 @@
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
-import { describe, expect, it, beforeEach, vi, afterEach } from "vitest";
 import { WorkspaceContextImpl } from "@monorepolint/core";
 import { SimpleHost } from "@monorepolint/utils";
 import { writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { bannedDependencies, Options } from "../bannedDependencies.js";
 import { makeDirectoryRecursively } from "../util/makeDirectory.js";
 import { jsonToString } from "./utils.js";
@@ -46,7 +46,7 @@ describe("bannedDependencies", () => {
         verbose: false,
         silent: true,
       },
-      new SimpleHost()
+      new SimpleHost(),
     );
 
     function checkAndSpy(options: Options) {
@@ -77,15 +77,21 @@ describe("bannedDependencies", () => {
     });
     addFile("./package.json", rootPackageJson);
 
-    const { addErrorSpy: addErrorSpy1 } = checkAndSpy({ bannedDependencies: ["ccc"] });
+    const { addErrorSpy: addErrorSpy1 } = checkAndSpy({
+      bannedDependencies: ["ccc"],
+    });
     expect(addErrorSpy1).toHaveBeenCalledTimes(1);
     addErrorSpy1.mockReset();
 
-    const { addErrorSpy: addErrorSpy2 } = checkAndSpy({ bannedDependencies: ["ddd"] });
+    const { addErrorSpy: addErrorSpy2 } = checkAndSpy({
+      bannedDependencies: ["ddd"],
+    });
     expect(addErrorSpy2).toHaveBeenCalledTimes(0);
     addErrorSpy2.mockReset();
 
-    const { addErrorSpy: addErrorSpy3 } = checkAndSpy({ bannedDependencies: ["ccc", "ddd"] });
+    const { addErrorSpy: addErrorSpy3 } = checkAndSpy({
+      bannedDependencies: ["ccc", "ddd"],
+    });
     expect(addErrorSpy3).toHaveBeenCalledTimes(1);
     addErrorSpy3.mockReset();
   });
@@ -100,15 +106,21 @@ describe("bannedDependencies", () => {
     });
     addFile("./package.json", rootPackageJson);
 
-    const { addErrorSpy: addErrorSpy1 } = checkAndSpy({ bannedDependencies: ["c*c"] });
+    const { addErrorSpy: addErrorSpy1 } = checkAndSpy({
+      bannedDependencies: ["c*c"],
+    });
     expect(addErrorSpy1).toHaveBeenCalledTimes(1);
     addErrorSpy1.mockReset();
 
-    const { addErrorSpy: addErrorSpy2 } = checkAndSpy({ bannedDependencies: ["d*d"] });
+    const { addErrorSpy: addErrorSpy2 } = checkAndSpy({
+      bannedDependencies: ["d*d"],
+    });
     expect(addErrorSpy2).toHaveBeenCalledTimes(0);
     addErrorSpy2.mockReset();
 
-    const { addErrorSpy: addErrorSpy3 } = checkAndSpy({ bannedDependencies: ["c*c", "d*d"] });
+    const { addErrorSpy: addErrorSpy3 } = checkAndSpy({
+      bannedDependencies: ["c*c", "d*d"],
+    });
     expect(addErrorSpy3).toHaveBeenCalledTimes(1);
     addErrorSpy3.mockReset();
   });
@@ -123,15 +135,21 @@ describe("bannedDependencies", () => {
     });
     addFile("./package.json", rootPackageJson);
 
-    const { addErrorSpy: addErrorSpy1 } = checkAndSpy({ bannedDependencies: { glob: ["c*c"] } });
+    const { addErrorSpy: addErrorSpy1 } = checkAndSpy({
+      bannedDependencies: { glob: ["c*c"] },
+    });
     expect(addErrorSpy1).toHaveBeenCalledTimes(1);
     addErrorSpy1.mockReset();
 
-    const { addErrorSpy: addErrorSpy2 } = checkAndSpy({ bannedDependencies: { glob: ["d*d"] } });
+    const { addErrorSpy: addErrorSpy2 } = checkAndSpy({
+      bannedDependencies: { glob: ["d*d"] },
+    });
     expect(addErrorSpy2).toHaveBeenCalledTimes(0);
     addErrorSpy2.mockReset();
 
-    const { addErrorSpy: addErrorSpy3 } = checkAndSpy({ bannedDependencies: { glob: ["c*c", "d*d"] } });
+    const { addErrorSpy: addErrorSpy3 } = checkAndSpy({
+      bannedDependencies: { glob: ["c*c", "d*d"] },
+    });
     expect(addErrorSpy3).toHaveBeenCalledTimes(1);
     addErrorSpy3.mockReset();
   });
@@ -146,15 +164,21 @@ describe("bannedDependencies", () => {
     });
     addFile("./package.json", rootPackageJson);
 
-    const { addErrorSpy: addErrorSpy1 } = checkAndSpy({ bannedDependencies: { exact: ["ccc"] } });
+    const { addErrorSpy: addErrorSpy1 } = checkAndSpy({
+      bannedDependencies: { exact: ["ccc"] },
+    });
     expect(addErrorSpy1).toHaveBeenCalledTimes(1);
     addErrorSpy1.mockReset();
 
-    const { addErrorSpy: addErrorSpy2 } = checkAndSpy({ bannedDependencies: { exact: ["ddd"] } });
+    const { addErrorSpy: addErrorSpy2 } = checkAndSpy({
+      bannedDependencies: { exact: ["ddd"] },
+    });
     expect(addErrorSpy2).toHaveBeenCalledTimes(0);
     addErrorSpy2.mockReset();
 
-    const { addErrorSpy: addErrorSpy3 } = checkAndSpy({ bannedDependencies: { exact: ["ccc", "ddd"] } });
+    const { addErrorSpy: addErrorSpy3 } = checkAndSpy({
+      bannedDependencies: { exact: ["ccc", "ddd"] },
+    });
     expect(addErrorSpy3).toHaveBeenCalledTimes(1);
     addErrorSpy3.mockReset();
   });
@@ -181,9 +205,14 @@ describe("bannedDependencies", () => {
       },
     });
     addFile("./node_modules/aaa/node_modules/bbb/package.json", bbbPackageJson);
-    addFile("./node_modules/aaa/node_modules/bbb/node_modules/ddd/package.json", EMPTY_PACKAGE);
+    addFile(
+      "./node_modules/aaa/node_modules/bbb/node_modules/ddd/package.json",
+      EMPTY_PACKAGE,
+    );
     addFile("./node_modules/aaa/node_modules/ccc/package.json", EMPTY_PACKAGE);
 
-    expect(checkAndSpy({ bannedTransitiveDependencies: ["ccc", "ddd"] }).addErrorSpy).toHaveBeenCalledTimes(2);
+    expect(
+      checkAndSpy({ bannedTransitiveDependencies: ["ccc", "ddd"] }).addErrorSpy,
+    ).toHaveBeenCalledTimes(2);
   });
 });

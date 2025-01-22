@@ -2,7 +2,11 @@ import { Context, RuleEntry, RuleModule } from "@monorepolint/config";
 
 export type ValidateOptionsFn<X> = (options: unknown) => asserts options is X;
 export type RuleFactoryFn<T> = (ruleEntry: RuleEntry<T>) => RuleModule<T>;
-export type RuleCheckFn<O> = (context: Context, options: O, extra: { id: string }) => Promise<unknown> | unknown;
+export type RuleCheckFn<O> = (
+  context: Context,
+  options: O,
+  extra: { id: string },
+) => Promise<unknown> | unknown;
 
 export interface RuleFactoryOptions<X> {
   name: string;
@@ -18,7 +22,7 @@ export function createRuleFactory<X>({
   validateOptions,
   printStats,
 }: RuleFactoryOptions<X>): RuleFactoryFn<X> {
-  return function (ruleEntry) {
+  return function(ruleEntry) {
     const id = ruleEntry.id ?? `${name} :: ${globalId++}`;
     return {
       id,

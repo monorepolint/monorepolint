@@ -4,7 +4,12 @@ export default defineProject({
     coverage: {
       provider: "v8",
       enabled: true,
-      exclude: [...coverageConfigDefaults.exclude, "vitest.config.*", "**/build/**", "packages/docs/**"],
+      exclude: [
+        ...coverageConfigDefaults.exclude,
+        "vitest.config.*",
+        "**/build/**",
+        "packages/docs/**",
+      ],
     },
   },
 });

@@ -22,10 +22,8 @@ export default {
     packageScript({
       options: {
         scripts: {
-          clean:
-            "rm -rf build lib node_modules *.tgz",
-          compile:
-            "../../node_modules/.bin/tsc",
+          clean: "rm -rf build lib node_modules *.tgz",
+          compile: "../../node_modules/.bin/tsc",
           goodbye: {
             options: [undefined],
             fixValue: undefined, // fix removes value
@@ -33,11 +31,10 @@ export default {
           "any-of-these-no-auto-fix": {
             options: ["a", "b", "c"],
           },
-          "any-of-these-auto-fix-to-c":
-            {
-              options: ["a", "b", "c"],
-              fixValue: "c",
-            },
+          "any-of-these-auto-fix-to-c": {
+            options: ["a", "b", "c"],
+            fixValue: "c",
+          },
         },
       },
     }),

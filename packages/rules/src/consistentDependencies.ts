@@ -28,7 +28,11 @@ export const consistentDependencies = createRuleFactory<Options>({
   validateOptions: Options.check,
 });
 
-function checkDeps(context: Context, args: Options, block: "dependencies" | "devDependencies" | "peerDependencies") {
+function checkDeps(
+  context: Context,
+  args: Options,
+  block: "dependencies" | "devDependencies" | "peerDependencies",
+) {
   const packageJson = context.getPackageJson();
   const packagePath = context.getPackageJsonPath();
   const dependencies = packageJson[block];
@@ -37,10 +41,9 @@ function checkDeps(context: Context, args: Options, block: "dependencies" | "dev
   const workspaceDependencies = workspacePackageJson[block];
 
   const ignoredDeps = args?.ignoredDependencies ?? [];
-  const depsToCheck =
-    workspaceDependencies == null || ignoredDeps.length === 0
-      ? workspaceDependencies
-      : omit(workspaceDependencies, ignoredDeps);
+  const depsToCheck = workspaceDependencies == null || ignoredDeps.length === 0
+    ? workspaceDependencies
+    : omit(workspaceDependencies, ignoredDeps);
 
   if (dependencies === undefined || depsToCheck === undefined) {
     return;
@@ -65,12 +68,17 @@ function checkDeps(context: Context, args: Options, block: "dependencies" | "dev
   }
 }
 
-function filterKeys(ob: Record<string, string>, filterOb: Record<string, string>) {
+function filterKeys(
+  ob: Record<string, string>,
+  filterOb: Record<string, string>,
+) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const newOb: Record<string, any> = {};
 
   for (const key of Object.keys(filterOb)) {
-    if (ob[key] !== undefined && skippedVersions.indexOf(filterOb[key]) === -1) {
+    if (
+      ob[key] !== undefined && skippedVersions.indexOf(filterOb[key]) === -1
+    ) {
       newOb[key] = ob[key];
     }
   }
@@ -78,10 +86,15 @@ function filterKeys(ob: Record<string, string>, filterOb: Record<string, string>
   return newOb;
 }
 
-function omit<T>(obj: Record<string, T>, keysToOmit: readonly string[]): Record<string, T> {
+function omit<T>(
+  obj: Record<string, T>,
+  keysToOmit: readonly string[],
+): Record<string, T> {
   const newObj: Record<string, T> = {};
 
-  const filtered = Object.entries(obj).filter(([key]) => !keysToOmit.includes(key));
+  const filtered = Object.entries(obj).filter(([key]) =>
+    !keysToOmit.includes(key)
+  );
   for (const [key, value] of filtered) {
     newObj[key] = value;
   }

@@ -13,8 +13,11 @@
     ]
   },
   "lint-staged": {
-    "packages/*/src/**/*.{ts,tsx}": [
-      "prettier --write"
+    "packages/*/**/*.{ts,tsx,mjs}": [
+      "dprint fmt"
+    ],
+    "**/*.{json,md,yaml,yml,cjs,js,mjs}": [
+      "dprint fmt"
     ]
   },
   "scripts": {
@@ -26,11 +29,11 @@
     "clean": "turbo clean && rm -rf node_modules && pnpm install",
     "compile:fast": "cd packages/all; tsc --build",
     "compile:watch": "cd packages/all; tsc --build --watch",
+    "fix:lint:format": "dprint fmt 'packages/*/src/**/*.{ts,tsx,less}'",
     "fix:lint:monorepolint": "pnpm exec monorepolint fix",
-    "fix:lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' --write",
     "lint": "pnpm run --workspace-concurrency 1 '/^lint:.*/'",
+    "lint:format": "dprint check 'packages/*/src/**/*.{ts,tsx,less}'",
     "lint:monorepolint": "monorepolint check --verbose",
-    "lint:prettier": "prettier 'packages/*/src/**/*.{ts,tsx,less}' -l",
     "prepack": "turbo clean && pnpm install && turbo check",
     "prepare": "husky",
     "test": "turbo test"
@@ -46,6 +49,7 @@
     "@typescript-eslint/eslint-plugin": "^8.20.0",
     "@typescript-eslint/parser": "^8.20.0",
     "@vitest/coverage-v8": "^2.1.8",
+    "dprint": "^0.48.0",
     "eslint": "^9.18.0",
     "eslint-config-turbo": "^2.3.3",
     "gh-pages": "^6.3.0",
@@ -53,7 +57,6 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.3.0",
     "mock-fs": "^5.4.1",
-    "prettier": "^3.4.2",
     "semver": "^7.6.3",
     "turbo": "^2.3.3",
     "typescript": "^5.7.3",

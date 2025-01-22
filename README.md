@@ -45,7 +45,6 @@ mrl check --verbose
 mrl check --fix
 ```
 
-
 ## Configuration
 
 For now, look at [.monorepolint.config.ts](./packages/internal-mrl-config/src/monorepolint.config.ts) in this repo.
@@ -79,14 +78,17 @@ export default {
     Rules.packageScript({
       options: {
         scripts: {
-          clean: "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
+          clean:
+            "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
           "compile-typescript": "tsc --build",
           "lint:typescript": DELETE_SCRIPT_ENTRTY,
           jest: DELETE_SCRIPT_ENTRTY, // this syntax needs work :(
           "jest:watch": DELETE_SCRIPT_ENTRTY,
           lint: "eslint .",
-          "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --colors --passWithNoTests --watch",
-          test: "NODE_OPTIONS=--experimental-vm-modules jest --colors --passWithNoTests",
+          "test:watch":
+            "NODE_OPTIONS=--experimental-vm-modules jest --colors --passWithNoTests --watch",
+          test:
+            "NODE_OPTIONS=--experimental-vm-modules jest --colors --passWithNoTests",
         },
       },
       excludePackages: [DOCS, ...META_PACKAGES],
@@ -161,10 +163,10 @@ export default {
 
 2. Run this command:
 
-  ```shell
-  sudo gem install --pre github_changelog_generator
-  pnpm run changelog
-  ```
+```shell
+sudo gem install --pre github_changelog_generator
+pnpm run changelog
+```
 
 3. Submit a pull request
 

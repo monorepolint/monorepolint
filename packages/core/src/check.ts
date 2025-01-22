@@ -5,10 +5,15 @@
  *
  */
 
-import { Host, matchesAnyGlob, nanosecondsToSanity, Table } from "@monorepolint/utils";
-import { dirname as pathDirname, resolve as pathResolve } from "path";
 import { ResolvedConfig, ResolvedRule } from "@monorepolint/config";
 import { Context } from "@monorepolint/config";
+import {
+  Host,
+  matchesAnyGlob,
+  nanosecondsToSanity,
+  Table,
+} from "@monorepolint/utils";
+import { dirname as pathDirname, resolve as pathResolve } from "path";
 import { createWorkspaceContext } from "./createWorkspaceContext.js";
 
 export async function check(
@@ -16,10 +21,14 @@ export async function check(
   host: Host,
   cwd = process.cwd(),
   paths?: ReadonlyArray<string>,
-  reportStats?: boolean
+  reportStats?: boolean,
 ): Promise<boolean> {
   const checkStart = process.hrtime.bigint();
-  const workspaceContext = await createWorkspaceContext(host, cwd, resolvedConfig);
+  const workspaceContext = await createWorkspaceContext(
+    host,
+    cwd,
+    resolvedConfig,
+  );
 
   const workspaceDir = workspaceContext.packageDir;
   // Validate config once
@@ -37,7 +46,10 @@ export async function check(
 
   let packagesChecked = BigInt(0);
   const stats = {
-    perRule: new Map<string, { name: string; totalTime: bigint; executions: bigint }>(),
+    perRule: new Map<
+      string,
+      { name: string; totalTime: bigint; executions: bigint }
+    >(),
   };
 
   if (paths !== undefined) {
@@ -56,10 +68,14 @@ export async function check(
     packagesChecked++;
     await checkPackage(workspaceContext, stats);
 
-    const workspacePackageDirs = await workspaceContext.getWorkspacePackageDirs();
+    const workspacePackageDirs = await workspaceContext
+      .getWorkspacePackageDirs();
     for (const packageDir of workspacePackageDirs) {
       packagesChecked++;
-      await checkPackage(workspaceContext.createChildContext(packageDir), stats);
+      await checkPackage(
+        workspaceContext.createChildContext(packageDir),
+        stats,
+      );
     }
   } else {
     packagesChecked++;
@@ -106,7 +122,7 @@ export async function check(
           result.totalTime,
           result.name,
           result.executions,
-          result.totalTime / result.executions
+          result.totalTime / result.executions,
         );
       }
       checkDetailsTable.print();
@@ -123,15 +139,24 @@ export async function check(
         columns: [{ type: "string", alignment: "left" }, { type: "string" }],
       });
       table.addRow("Packages Checked", "" + packagesChecked);
-      table.addRow("Config Valiation", nanosecondsToSanity(checkConfigEnd - checkConfigStart, 4));
+      table.addRow(
+        "Config Valiation",
+        nanosecondsToSanity(checkConfigEnd - checkConfigStart, 4),
+      );
 
       // We used to validate config for every package even though its the same
       table.addRow(
         "Old Config Validation",
-        nanosecondsToSanity((checkConfigEnd - checkConfigStart) * (packagesChecked - BigInt(1)), 4)
+        nanosecondsToSanity(
+          (checkConfigEnd - checkConfigStart) * (packagesChecked - BigInt(1)),
+          4,
+        ),
       );
 
-      table.addRow("Total check() time", nanosecondsToSanity(checkEnd - checkStart, 3));
+      table.addRow(
+        "Total check() time",
+        nanosecondsToSanity(checkEnd - checkStart, 3),
+      );
       table.print();
     }
 
@@ -140,7 +165,10 @@ export async function check(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const executed = new Set<(...args: any[]) => any>();
     for (const resolvedRule of workspaceContext.resolvedConfig.rules) {
-      if (resolvedRule && resolvedRule.printStats && !executed.has(resolvedRule.printStats)) {
+      if (
+        resolvedRule && resolvedRule.printStats
+        && !executed.has(resolvedRule.printStats)
+      ) {
         executed.add(resolvedRule.printStats);
         resolvedRule.printStats();
       }
@@ -153,8 +181,11 @@ export async function check(
 async function checkPackage(
   context: Context,
   stats: {
-    perRule: Map<string, { name: string; totalTime: bigint; executions: bigint }>;
-  }
+    perRule: Map<
+      string,
+      { name: string; totalTime: bigint; executions: bigint }
+    >;
+  },
 ): Promise<void> {
   if (context.resolvedConfig.verbose) {
     // tslint:disable-next-line:no-console
@@ -189,7 +220,11 @@ const printIncludesExcludesCosts = function printIncludesExcludesCostsFunc() {
     title: "Total Includes/Excludes Glob Cost",
     showFooter: false,
     showHeader: false,
-    columns: [{ type: "string" }, { type: "bigint", renderAs: "nanoseconds", precision: 3 }],
+    columns: [{ type: "string" }, {
+      type: "bigint",
+      renderAs: "nanoseconds",
+      precision: 3,
+    }],
   });
   table.addRow("includePackages cost:", includesCost);
   table.addRow("excludePackages cost:", excludesCost);
@@ -200,7 +235,6 @@ let includesCost = BigInt(0);
 let excludesCost = BigInt(0);
 
 /**
- *
  * @internal
  * @param context
  * @param ruleConfig
@@ -208,26 +242,24 @@ let excludesCost = BigInt(0);
 export function shouldSkipPackage(context: Context, ruleConfig: ResolvedRule) {
   // Short circuit the expensive globs
   if (
-    !ruleConfig.ruleEntry.includeWorkspaceRoot && // run cheaper checks first
-    context.getWorkspaceContext() === context
+    !ruleConfig.ruleEntry.includeWorkspaceRoot // run cheaper checks first
+    && context.getWorkspaceContext() === context
   ) {
     return true;
   }
 
   excludesCost -= process.hrtime.bigint();
-  const exclude =
-    ruleConfig.ruleEntry.excludePackages !== undefined
-      ? matchesAnyGlob(context.getName(), ruleConfig.ruleEntry.excludePackages)
-      : false;
+  const exclude = ruleConfig.ruleEntry.excludePackages !== undefined
+    ? matchesAnyGlob(context.getName(), ruleConfig.ruleEntry.excludePackages)
+    : false;
   excludesCost += process.hrtime.bigint();
 
   if (exclude) return true;
 
   includesCost -= process.hrtime.bigint();
-  const include =
-    ruleConfig.ruleEntry.includePackages === undefined
-      ? true
-      : matchesAnyGlob(context.getName(), ruleConfig.ruleEntry.includePackages);
+  const include = ruleConfig.ruleEntry.includePackages === undefined
+    ? true
+    : matchesAnyGlob(context.getName(), ruleConfig.ruleEntry.includePackages);
   includesCost += process.hrtime.bigint();
 
   if (!include) return true;

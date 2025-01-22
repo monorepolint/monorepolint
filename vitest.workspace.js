@@ -1,5 +1,5 @@
-import { defineWorkspace, defaultExclude } from "vitest/config";
 import { getPackagesSync } from "@manypkg/get-packages";
+import { defaultExclude, defineWorkspace } from "vitest/config";
 
 export default defineWorkspace(["packages/*/vitest.config.mjs"]);
 

@@ -84,11 +84,23 @@ function getGenerator(context: Context, opts: Options) {
   } else if (opts.templateFile) {
     const { packageDir: workspacePackageDir } = context.getWorkspaceContext();
     const fullPath = path.resolve(workspacePackageDir, opts.templateFile);
-    const template = JSON.parse(context.host.readFile(fullPath, { encoding: "utf-8" }));
+    const template = JSON.parse(
+      context.host.readFile(fullPath, { encoding: "utf-8" }),
+    );
 
-    return makeGenerator(template, opts.excludedReferences, opts.additionalReferences, opts.tsconfigReferenceFile);
+    return makeGenerator(
+      template,
+      opts.excludedReferences,
+      opts.additionalReferences,
+      opts.tsconfigReferenceFile,
+    );
   } else if (opts.template) {
-    return makeGenerator(opts.template, opts.excludedReferences, opts.additionalReferences, opts.tsconfigReferenceFile);
+    return makeGenerator(
+      opts.template,
+      opts.excludedReferences,
+      opts.additionalReferences,
+      opts.tsconfigReferenceFile,
+    );
   } else {
     throw new Error("Unable to make generator");
   }
@@ -99,7 +111,7 @@ function makeGenerator(
   template: any,
   excludedReferences: ReadonlyArray<string> | undefined,
   additionalReferences: ReadonlyArray<string> | undefined,
-  tsconfigReferenceFile?: string
+  tsconfigReferenceFile?: string,
 ) {
   return async function generator(context: Context) {
     template = {
@@ -107,15 +119,24 @@ function makeGenerator(
       references: [],
     }; // make a copy and ensure we have a references array
 
-    const nameToDirectory = await context.getWorkspaceContext().getPackageNameToDir();
+    const nameToDirectory = await context.getWorkspaceContext()
+      .getPackageNameToDir();
 
     const packageJson = context.getPackageJson();
-    const deps = [...Object.keys(packageJson.dependencies || {}), ...Object.keys(packageJson.devDependencies || {})];
+    const deps = [
+      ...Object.keys(packageJson.dependencies || {}),
+      ...Object.keys(packageJson.devDependencies || {}),
+    ];
     for (const dep of deps) {
       const packageDir = nameToDirectory.get(dep);
-      if (packageDir !== undefined && (excludedReferences === undefined || !matchesAnyGlob(dep, excludedReferences))) {
-        const absoluteReferencePath =
-          tsconfigReferenceFile !== undefined ? path.join(packageDir, tsconfigReferenceFile) : packageDir;
+      if (
+        packageDir !== undefined
+        && (excludedReferences === undefined
+          || !matchesAnyGlob(dep, excludedReferences))
+      ) {
+        const absoluteReferencePath = tsconfigReferenceFile !== undefined
+          ? path.join(packageDir, tsconfigReferenceFile)
+          : packageDir;
         template.references.push({
           path: path.relative(context.packageDir, absoluteReferencePath),
         });

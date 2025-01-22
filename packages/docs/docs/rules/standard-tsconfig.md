@@ -31,8 +31,7 @@ export default {
   rules: [
     standardTsconfig({
       options: {
-        templateFile:
-          "./templates/tsconfig.json",
+        templateFile: "./templates/tsconfig.json",
       },
     }),
   ],

@@ -4,10 +4,10 @@
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
-import { vi, describe, expect, it } from "vitest";
-import { SimpleHost } from "@monorepolint/utils";
-import { shouldSkipPackage } from "../check.js";
 import { ResolvedConfig } from "@monorepolint/config";
+import { SimpleHost } from "@monorepolint/utils";
+import { describe, expect, it, vi } from "vitest";
+import { shouldSkipPackage } from "../check.js";
 import { WorkspaceContextImpl } from "../WorkspaceContext.js";
 
 describe("shouldSkipPackage", () => {
@@ -16,7 +16,11 @@ describe("shouldSkipPackage", () => {
     verbose: false,
     fix: false,
   };
-  const workspaceContext = new WorkspaceContextImpl(".", resolvedConfig, new SimpleHost());
+  const workspaceContext = new WorkspaceContextImpl(
+    ".",
+    resolvedConfig,
+    new SimpleHost(),
+  );
   vi.spyOn(workspaceContext, "getName").mockImplementation(() => "root");
 
   const fooContext = createChild(workspaceContext, "packages/foo", "@foo/bar");
