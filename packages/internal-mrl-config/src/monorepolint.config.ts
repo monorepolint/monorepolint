@@ -43,6 +43,7 @@ export default defineProject({
     coverage: {
       provider: "v8",
       enabled: true,
+      pool: "forks",
       exclude: [...coverageConfigDefaults.exclude, "vitest.config.*"]
     }
   },
