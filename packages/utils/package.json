@@ -32,7 +32,7 @@
   "dependencies": {
     "find-packages": "^10.0.4",
     "find-up": "^7.0.0",
-    "glob": "^10.3.12",
+    "glob": "^11.0.1",
     "micromatch": "^4.0.8",
     "read-yaml-file": "^2.1.0",
     "tslib": "^2.8.1"
