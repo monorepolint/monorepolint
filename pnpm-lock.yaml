@@ -330,8 +330,8 @@ importers:
         specifier: ^4.0.3
         version: 4.0.3
       runtypes:
-        specifier: ^6.7.0
-        version: 6.7.0
+        specifier: ^7.0.0
+        version: 7.0.0
       semver:
         specifier: ^7.6.3
         version: 7.6.3
@@ -5869,8 +5869,8 @@ packages:
   run-parallel@1.1.9:
     resolution: {integrity: sha512-DEqnSRTDw/Tc3FXf49zedI638Z9onwUotBMiUFKmrO2sdFKIbXamXGQ3Axd4qgphxKB4kw/qP1w5kTxnfU1B9Q==}
 
-  runtypes@6.7.0:
-    resolution: {integrity: sha512-3TLdfFX8YHNFOhwHrSJza6uxVBmBrEjnNQlNXvXCdItS0Pdskfg5vVXUTWIN+Y23QR09jWpSl99UHkA83m4uWA==}
+  runtypes@7.0.0:
+    resolution: {integrity: sha512-gZ2qGZGlbT5tBswjAHaUERRXMfHjgZugWl5jhyv4Z1RCRdwWM5GI9+R8oVENYkgGHyG59iy2LQyJp3wbzHRxbg==}
 
   safe-buffer@5.1.2:
     resolution: {integrity: sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==}
@@ -13773,7 +13773,7 @@ snapshots:
 
   run-parallel@1.1.9: {}
 
-  runtypes@6.7.0: {}
+  runtypes@7.0.0: {}
 
   safe-buffer@5.1.2: {}
 
