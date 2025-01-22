@@ -14,6 +14,7 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { readResolvedConfig } from "./readResolvedConfig.js";
 import { timing } from "./timing.js";
+import { getRunCommand } from "./getRunCommand.js";
 
 export default function run() {
   yargs(hideBin(process.argv))
@@ -95,19 +96,4 @@ async function handleCheck(args: Options) {
     console.error();
     process.exit(101);
   }
-}
-
-function getRunCommand() {
-  const execPath = process.env.npm_execpath;
-
-  const npmAgent =
-    typeof execPath === "string"
-      ? execPath.includes("yarn")
-        ? "yarn"
-        : execPath.includes("npm")
-          ? "npm"
-          : undefined
-      : undefined;
-
-  return npmAgent === "yarn" ? "yarn mrl" : npmAgent === "npm" ? "npm run mrl" : "mrl";
 }
