@@ -57,9 +57,13 @@ export const packageOrder = createRuleFactory<Options>({
     const packageJson = context.getPackageJson();
     const packagePath = context.getPackageJsonPath();
 
-    const order: string[] | OrderFunction = opts === undefined ? defaultKeyOrder : opts.order;
+    const order: string[] | OrderFunction = opts === undefined
+      ? defaultKeyOrder
+      : opts.order;
 
-    const comparator = isOrderFunction(order) ? order(context) : createComparator(order);
+    const comparator = isOrderFunction(order)
+      ? order(context)
+      : createComparator(order);
 
     const actualOrder = Object.keys(packageJson);
     const expectedOrder = actualOrder.slice().sort(comparator); // sort mutates, so we need to copy the previous result
@@ -118,6 +122,8 @@ function createComparator(order: ReadonlyArray<string>) {
   };
 }
 
-function isOrderFunction(order: ReadonlyArray<string> | OrderFunction): order is OrderFunction {
+function isOrderFunction(
+  order: ReadonlyArray<string> | OrderFunction,
+): order is OrderFunction {
   return !Array.isArray(order);
 }

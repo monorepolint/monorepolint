@@ -8,9 +8,9 @@
 import { Context } from "@monorepolint/config";
 import { Host, mutateJson, PackageJson } from "@monorepolint/utils";
 import * as path from "node:path";
+import resolvePackagePath from "resolve-package-path";
 import * as r from "runtypes";
 import { coerce } from "semver";
-import resolvePackagePath from "resolve-package-path";
 import { createRuleFactory } from "./util/createRuleFactory.js";
 
 const Options = r.Union(
@@ -29,7 +29,7 @@ const Options = r.Union(
         dependencyWhitelist: r.Undefined,
         dependencyBlacklist: r.Undefined,
         enforceForDevDependencies: r.Undefined,
-      })
+      }),
     ),
   r
     .Record({
@@ -40,7 +40,7 @@ const Options = r.Union(
         skipUnparseableRanges: r.Undefined,
         dependencyBlacklist: r.Undefined,
         enforceForDevDependencies: r.Undefined,
-      })
+      }),
     ),
   r
     .Record({
@@ -51,7 +51,7 @@ const Options = r.Union(
         skipUnparseableRanges: r.Undefined,
         dependencyWhitelist: r.Undefined,
         enforceForDevDependencies: r.Undefined,
-      })
+      }),
     ),
   r
     .Record({
@@ -62,7 +62,7 @@ const Options = r.Union(
         skipUnparseableRanges: r.Undefined,
         dependencyWhitelist: r.Undefined,
         dependencyBlacklist: r.Undefined,
-      })
+      }),
     ),
   r
     .Record({
@@ -73,7 +73,7 @@ const Options = r.Union(
       r.Partial({
         dependencyBlacklist: r.Undefined,
         enforceForDevDependencies: r.Undefined,
-      })
+      }),
     ),
   r
     .Record({
@@ -84,7 +84,7 @@ const Options = r.Union(
       r.Partial({
         dependencyWhitelist: r.Undefined,
         enforceForDevDependencies: r.Undefined,
-      })
+      }),
     ),
   r
     .Record({
@@ -95,7 +95,7 @@ const Options = r.Union(
       r.Partial({
         dependencyWhitelist: r.Undefined,
         dependencyBlacklist: r.Undefined,
-      })
+      }),
     ),
   r
     .Record({
@@ -106,7 +106,7 @@ const Options = r.Union(
       r.Partial({
         skipUnparseableRanges: r.Undefined,
         enforceForDevDependencies: r.Undefined,
-      })
+      }),
     ),
   r
     .Record({
@@ -117,7 +117,7 @@ const Options = r.Union(
       r.Partial({
         skipUnparseableRanges: r.Undefined,
         dependencyBlacklist: r.Undefined,
-      })
+      }),
     ),
   r
     .Record({
@@ -128,7 +128,7 @@ const Options = r.Union(
       r.Partial({
         skipUnparseableRanges: r.Undefined,
         dependencyWhitelist: r.Undefined,
-      })
+      }),
     ),
   r
     .Record({
@@ -139,7 +139,7 @@ const Options = r.Union(
     .And(
       r.Partial({
         enforceForDevDependencies: r.Undefined,
-      })
+      }),
     ),
   r
     .Record({
@@ -150,7 +150,7 @@ const Options = r.Union(
     .And(
       r.Partial({
         dependencyBlacklist: r.Undefined,
-      })
+      }),
     ),
   r
     .Record({
@@ -161,7 +161,7 @@ const Options = r.Union(
     .And(
       r.Partial({
         dependencyWhitelist: r.Undefined,
-      })
+      }),
     ),
   r
     .Record({
@@ -172,14 +172,14 @@ const Options = r.Union(
     .And(
       r.Partial({
         skipUnparseableRanges: r.Undefined,
-      })
+      }),
     ),
   r.Record({
     skipUnparseableRanges: r.Boolean,
     dependencyWhitelist: r.Array(r.String),
     dependencyBlacklist: r.Array(r.String),
     enforceForDevDependencies: r.Boolean,
-  })
+  }),
 );
 
 export type Options = r.Static<typeof Options>;
@@ -270,7 +270,12 @@ interface IResolvedPeerDependencyRequirement {
 }
 
 function checkSatisfyPeerDependencies(context: Context, opts: Options) {
-  const { dependencyBlacklist, dependencyWhitelist, enforceForDevDependencies, skipUnparseableRanges } = opts;
+  const {
+    dependencyBlacklist,
+    dependencyWhitelist,
+    enforceForDevDependencies,
+    skipUnparseableRanges,
+  } = opts;
   const packageJsonPath = path.resolve(context.getPackageJsonPath());
   const packageJson = context.host.readJson(packageJsonPath) as PackageJson;
   const packageDependencies = packageJson.dependencies || {};
@@ -279,8 +284,18 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
   const packageName = packageJson.name || packageJsonPath;
 
   // check that no peer dependencies are also declared as regular dependencies
-  for (const [peerDependencyName, peerDependencyRange] of Object.entries(packagePeerDependencies)) {
-    if (shouldSkipPackage({ dependencyBlacklist, dependencyWhitelist, packageName: peerDependencyName })) {
+  for (
+    const [peerDependencyName, peerDependencyRange] of Object.entries(
+      packagePeerDependencies,
+    )
+  ) {
+    if (
+      shouldSkipPackage({
+        dependencyBlacklist,
+        dependencyWhitelist,
+        packageName: peerDependencyName,
+      })
+    ) {
       continue;
     }
 
@@ -289,36 +304,59 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
       context.addError({
         file: packageJsonPath,
         message:
-          `[0] Package ${packageName} has overloaded ${peerDependencyName} dependencies.\n\t` +
-          `Peer dependency '${peerDependencyRange}' and regular dependency '${dependencyRange}'.`,
+          `[0] Package ${packageName} has overloaded ${peerDependencyName} dependencies.\n\t`
+          + `Peer dependency '${peerDependencyRange}' and regular dependency '${dependencyRange}'.`,
       });
     }
   }
 
   // map of all inherited peer dependency requirements
-  const allRequiredPeerDependencies: { [peerDependencyName: string]: IPeerDependencyRequirement[] } = {};
+  const allRequiredPeerDependencies: {
+    [peerDependencyName: string]: IPeerDependencyRequirement[];
+  } = {};
 
   // for each of this package's dependencies, add the dependency's peer requirements into `allRequiredPeerDependencies`
   const allDependencies = enforceForDevDependencies
-    ? [...Object.keys(packageDependencies), ...Object.keys(packageDevDependencies)]
+    ? [
+      ...Object.keys(packageDependencies),
+      ...Object.keys(packageDevDependencies),
+    ]
     : Object.keys(packageDependencies);
   for (const dependency of allDependencies) {
-    const dependencyPackageJsonPath = resolvePackagePath(dependency, path.dirname(packageJsonPath));
+    const dependencyPackageJsonPath = resolvePackagePath(
+      dependency,
+      path.dirname(packageJsonPath),
+    );
     if (dependencyPackageJsonPath == null) {
-      throw new Error(`Could not resolve ${dependency} from ${path.dirname(packageJsonPath)}`);
+      throw new Error(
+        `Could not resolve ${dependency} from ${path.dirname(packageJsonPath)}`,
+      );
     }
-    const dependencyPackageJson = context.host.readJson(dependencyPackageJsonPath) as PackageJson;
+    const dependencyPackageJson = context.host.readJson(
+      dependencyPackageJsonPath,
+    ) as PackageJson;
     const requiredPeerDependencies = dependencyPackageJson.peerDependencies;
     if (requiredPeerDependencies == null) {
       continue;
     }
-    for (const [peerDependencyName, range] of Object.entries(requiredPeerDependencies)) {
-      if (shouldSkipPackage({ dependencyBlacklist, dependencyWhitelist, packageName: peerDependencyName })) {
+    for (
+      const [peerDependencyName, range] of Object.entries(
+        requiredPeerDependencies,
+      )
+    ) {
+      if (
+        shouldSkipPackage({
+          dependencyBlacklist,
+          dependencyWhitelist,
+          packageName: peerDependencyName,
+        })
+      ) {
         continue;
       }
 
       if (!isValidRange(range)) {
-        const message = `Unable to parse ${dependencyPackageJson.name}'s ${peerDependencyName} peer dependency range '${range}'.`;
+        const message =
+          `Unable to parse ${dependencyPackageJson.name}'s ${peerDependencyName} peer dependency range '${range}'.`;
         if (skipUnparseableRanges) {
           context.addWarning({ file: dependencyPackageJsonPath, message });
           continue;
@@ -328,26 +366,40 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
       if (allRequiredPeerDependencies[peerDependencyName] == null) {
         allRequiredPeerDependencies[peerDependencyName] = [];
       }
-      allRequiredPeerDependencies[peerDependencyName].push({ fromPackageName: dependencyPackageJson.name!, range });
+      allRequiredPeerDependencies[peerDependencyName].push({
+        fromPackageName: dependencyPackageJson.name!,
+        range,
+      });
     }
   }
 
-  for (const [peerDependencyName, peerDependencyRequirements] of Object.entries(allRequiredPeerDependencies)) {
+  for (
+    const [peerDependencyName, peerDependencyRequirements] of Object.entries(
+      allRequiredPeerDependencies,
+    )
+  ) {
     // for each inherited peer dependency, determine the strictest range
     let mostStrictPeerRequirement: IResolvedPeerDependencyRequirement = {
       fromPeerDependencyRequirements: [peerDependencyRequirements[0]],
       range: peerDependencyRequirements[0].range,
     };
     for (const peerRequirement of peerDependencyRequirements) {
-      if (doesASatisfyB(mostStrictPeerRequirement.range, peerRequirement.range)) {
+      if (
+        doesASatisfyB(mostStrictPeerRequirement.range, peerRequirement.range)
+      ) {
         continue;
-      } else if (doesASatisfyB(peerRequirement.range, mostStrictPeerRequirement.range)) {
+      } else if (
+        doesASatisfyB(peerRequirement.range, mostStrictPeerRequirement.range)
+      ) {
         mostStrictPeerRequirement = {
           fromPeerDependencyRequirements: [peerRequirement],
           range: peerRequirement.range,
         };
       } else {
-        const maybeIntersection = findIntersection(peerRequirement.range, mostStrictPeerRequirement.range);
+        const maybeIntersection = findIntersection(
+          peerRequirement.range,
+          mostStrictPeerRequirement.range,
+        );
         if (maybeIntersection !== undefined) {
           mostStrictPeerRequirement = {
             fromPeerDependencyRequirements: [
@@ -360,9 +412,9 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
           context.addError({
             file: packageJsonPath,
             message:
-              `[1] Package ${packageName} has conflicting inherited ${peerDependencyName} peer dependencies.\n\t` +
-              `Dependency ${peerRequirement.fromPackageName} requires '${peerRequirement.range}' but\n\t` +
-              getMostStrictStatement(mostStrictPeerRequirement),
+              `[1] Package ${packageName} has conflicting inherited ${peerDependencyName} peer dependencies.\n\t`
+              + `Dependency ${peerRequirement.fromPackageName} requires '${peerRequirement.range}' but\n\t`
+              + getMostStrictStatement(mostStrictPeerRequirement),
           });
         }
       }
@@ -373,31 +425,35 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
     const packageDependencyRange = packageDependencies[peerDependencyName];
     if (packageDependencyRange != null) {
       if (!isValidRange(packageDependencyRange)) {
-        const message = `Unable to parse ${packageName}'s ${peerDependencyName} dependency range '${packageDependencyRange}'.`;
+        const message =
+          `Unable to parse ${packageName}'s ${peerDependencyName} dependency range '${packageDependencyRange}'.`;
         if (skipUnparseableRanges) {
           context.addWarning({ file: packageJsonPath, message });
         } else {
           throw new Error(message);
         }
-      } else if (!doesASatisfyB(packageDependencyRange, mostStrictPeerRequirement.range)) {
+      } else if (
+        !doesASatisfyB(packageDependencyRange, mostStrictPeerRequirement.range)
+      ) {
         context.addError({
           file: packageJsonPath,
           message:
-            `[2] Package ${packageName} dependency on ${peerDependencyName} '${packageDependencyRange}' does not satisfy inherited peer dependencies.\n\t` +
-            getMostStrictStatement(mostStrictPeerRequirement),
+            `[2] Package ${packageName} dependency on ${peerDependencyName} '${packageDependencyRange}' does not satisfy inherited peer dependencies.\n\t`
+            + getMostStrictStatement(mostStrictPeerRequirement),
         });
       }
     }
 
     // for every inherited peer dependency, this package must declare a dependency or peer dependency
     // equal to or stricter than `mostStrictPeerRequirement`
-    const packagePeerDependencyRange = packagePeerDependencies[peerDependencyName];
+    const packagePeerDependencyRange =
+      packagePeerDependencies[peerDependencyName];
     if (packageDependencyRange == null && packagePeerDependencyRange == null) {
       context.addError({
         file: packageJsonPath,
         message:
-          `[3] Package ${packageName} is missing required ${peerDependencyName} dependency.\n\t` +
-          getMostStrictStatement(mostStrictPeerRequirement),
+          `[3] Package ${packageName} is missing required ${peerDependencyName} dependency.\n\t`
+          + getMostStrictStatement(mostStrictPeerRequirement),
         fixer: getAddDependencyTypeFixer({
           packageJsonPath,
           dependencyType: "peerDependencies",
@@ -412,18 +468,24 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
     // the range must be equal to or stricter than `mostStrictPeerRequirement`
     if (packagePeerDependencyRange != null) {
       if (!isValidRange(packagePeerDependencyRange)) {
-        const message = `Unable to parse ${packageName}'s ${peerDependencyName} peer dependency range '${packagePeerDependencyRange}'.`;
+        const message =
+          `Unable to parse ${packageName}'s ${peerDependencyName} peer dependency range '${packagePeerDependencyRange}'.`;
         if (skipUnparseableRanges) {
           context.addWarning({ file: packageJsonPath, message });
         } else {
           throw new Error(message);
         }
-      } else if (!doesASatisfyB(packagePeerDependencyRange, mostStrictPeerRequirement.range)) {
+      } else if (
+        !doesASatisfyB(
+          packagePeerDependencyRange,
+          mostStrictPeerRequirement.range,
+        )
+      ) {
         context.addError({
           file: packageJsonPath,
           message:
-            `[4] Package ${packageName} peer dependency on ${peerDependencyName} '${packagePeerDependencyRange}' is not strict enough.\n\t` +
-            getMostStrictStatement(mostStrictPeerRequirement),
+            `[4] Package ${packageName} peer dependency on ${peerDependencyName} '${packagePeerDependencyRange}' is not strict enough.\n\t`
+            + getMostStrictStatement(mostStrictPeerRequirement),
           fixer: getAddDependencyTypeFixer({
             packageJsonPath,
             dependencyType: "peerDependencies",
@@ -448,28 +510,39 @@ function shouldSkipPackage({
 }) {
   // blacklist should take precedance
   if (
-    (dependencyBlacklist != null && dependencyBlacklist.includes(packageName)) ||
-    (dependencyWhitelist != null && !dependencyWhitelist.includes(packageName))
+    (dependencyBlacklist != null && dependencyBlacklist.includes(packageName))
+    || (dependencyWhitelist != null
+      && !dependencyWhitelist.includes(packageName))
   ) {
     return true;
   }
   return false;
 }
 
-function getMostStrictStatement(mostStrictPeerRequirement: IResolvedPeerDependencyRequirement) {
+function getMostStrictStatement(
+  mostStrictPeerRequirement: IResolvedPeerDependencyRequirement,
+) {
   if (mostStrictPeerRequirement.fromPeerDependencyRequirements.length === 1) {
-    const dependencyName = mostStrictPeerRequirement.fromPeerDependencyRequirements[0].fromPackageName;
+    const dependencyName =
+      mostStrictPeerRequirement.fromPeerDependencyRequirements[0]
+        .fromPackageName;
     return `Dependency ${dependencyName} requires '${mostStrictPeerRequirement.range}'.`;
   } else {
-    const dependencyNames = mostStrictPeerRequirement.fromPeerDependencyRequirements
-      .map((peerDependencyRequirement) => peerDependencyRequirement.fromPackageName)
+    const dependencyNames = mostStrictPeerRequirement
+      .fromPeerDependencyRequirements
+      .map((peerDependencyRequirement) =>
+        peerDependencyRequirement.fromPackageName
+      )
       .join(", ");
-    const dependencyRequirements = mostStrictPeerRequirement.fromPeerDependencyRequirements
-      .map((peerDependencyRequirement) => `'${peerDependencyRequirement.range}'`)
+    const dependencyRequirements = mostStrictPeerRequirement
+      .fromPeerDependencyRequirements
+      .map((peerDependencyRequirement) =>
+        `'${peerDependencyRequirement.range}'`
+      )
       .join(", ");
     return (
-      `Dependencies [${dependencyNames}] require [${dependencyRequirements}] respectively, ` +
-      `resolving to '${mostStrictPeerRequirement.range}'.`
+      `Dependencies [${dependencyNames}] require [${dependencyRequirements}] respectively, `
+      + `resolving to '${mostStrictPeerRequirement.range}'.`
     );
   }
 }
@@ -503,7 +576,10 @@ function getMostStrictStatement(mostStrictPeerRequirement: IResolvedPeerDependen
  * @param b version range that matches `RANGE_REGEX`
  * @returns the maximum intersecting `ValidRange`, or `undefined` if there is no intersection
  */
-export function findIntersection(a: ValidRange, b: ValidRange): ValidRange | undefined {
+export function findIntersection(
+  a: ValidRange,
+  b: ValidRange,
+): ValidRange | undefined {
   if (doesASatisfyB(a, b)) {
     return a;
   } else if (doesASatisfyB(b, a)) {
@@ -536,7 +612,9 @@ export function findIntersection(a: ValidRange, b: ValidRange): ValidRange | und
       .map((bVersion) => {
         const bSemVer = coerce(bVersion)!;
         if (bVersion.startsWith("^") && bSemVer.major >= aSemVer.major) {
-          return `^${bSemVer.compare(aSemVer) >= 0 ? bSemVer.raw : aSemVer.raw}`;
+          return `^${
+            bSemVer.compare(aSemVer) >= 0 ? bSemVer.raw : aSemVer.raw
+          }`;
         }
         return bSemVer.compare(aSemVer) !== -1 ? bVersion : undefined;
       })
@@ -555,7 +633,9 @@ export function findIntersection(a: ValidRange, b: ValidRange): ValidRange | und
       .map((aVersion) => {
         const aSemVer = coerce(aVersion)!;
         if (aVersion.startsWith("^") && aSemVer.major >= bSemVer.major) {
-          return `^${aSemVer.compare(bSemVer) >= 0 ? aSemVer.raw : bSemVer.raw}`;
+          return `^${
+            aSemVer.compare(bSemVer) >= 0 ? aSemVer.raw : bSemVer.raw
+          }`;
         }
         return aSemVer.compare(bSemVer) !== -1 ? aVersion : undefined;
       })
@@ -569,14 +649,26 @@ export function findIntersection(a: ValidRange, b: ValidRange): ValidRange | und
   const compatibleVersions = aVersions
     .map((aVersion) => {
       const aSemVer = coerce(aVersion)!;
-      const majorMatchingBVersion = bVersions.find((m) => coerce(m)!.major === aSemVer.major);
+      const majorMatchingBVersion = bVersions.find((m) =>
+        coerce(m)!.major === aSemVer.major
+      );
       if (majorMatchingBVersion === undefined) {
         // there is no intersecting `b` major version for this `a` major version
         return undefined;
       }
-      if (doesASatisfyB(aVersion as ValidRange, majorMatchingBVersion as ValidRange)) {
+      if (
+        doesASatisfyB(
+          aVersion as ValidRange,
+          majorMatchingBVersion as ValidRange,
+        )
+      ) {
         return aVersion;
-      } else if (doesASatisfyB(majorMatchingBVersion as ValidRange, aVersion as ValidRange)) {
+      } else if (
+        doesASatisfyB(
+          majorMatchingBVersion as ValidRange,
+          aVersion as ValidRange,
+        )
+      ) {
         return majorMatchingBVersion;
       } else {
         return undefined;
@@ -665,7 +757,9 @@ export function doesASatisfyB(a: ValidRange, b: ValidRange): boolean {
 
   return aVersions.every((aVersion) => {
     const aSemVer = coerce(aVersion)!;
-    const majorMatchingBVersion = bVersions.find((m) => coerce(m)!.major === aSemVer.major);
+    const majorMatchingBVersion = bVersions.find((m) =>
+      coerce(m)!.major === aSemVer.major
+    );
     if (majorMatchingBVersion === undefined) {
       // `a` permits a major version that is not permitted by `b`, therefore `a` is "less strict"
       return false;
@@ -673,7 +767,9 @@ export function doesASatisfyB(a: ValidRange, b: ValidRange): boolean {
 
     const aVersionIsRange = isMajorVersionRange(aVersion);
     const majorMatchingBSemVer = coerce(majorMatchingBVersion)!;
-    const majorMatchingBVersionIsRange = isMajorVersionRange(majorMatchingBVersion);
+    const majorMatchingBVersionIsRange = isMajorVersionRange(
+      majorMatchingBVersion,
+    );
 
     if (majorMatchingBVersionIsRange) {
       // `a` satisfies `b` so long as `aSemVer` is greater than or equal to `majorMatchingBSemVer`

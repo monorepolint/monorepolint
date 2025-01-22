@@ -5,9 +5,6 @@
  *
  */
 
-import { PackageJson, Host } from "@monorepolint/utils";
-import chalk from "chalk";
-import * as path from "path";
 import {
   AddErrorAsyncOptions,
   AddErrorOptions,
@@ -18,6 +15,9 @@ import {
   ResolvedConfig,
   WorkspaceContext,
 } from "@monorepolint/config";
+import { Host, PackageJson } from "@monorepolint/utils";
+import chalk from "chalk";
+import * as path from "path";
 
 // Right now, this stuff is done serially so we are writing less code to support that. Later we may want to redo this.
 export class PackageContextImpl implements PackageContext {
@@ -30,7 +30,7 @@ export class PackageContextImpl implements PackageContext {
     public readonly packageDir: string,
     public readonly resolvedConfig: ResolvedConfig,
     public readonly host: Host,
-    public readonly parent?: Context
+    public readonly parent?: Context,
   ) {
     this.depth = this.parent ? this.parent.depth + 1 : 0;
   }
@@ -72,17 +72,23 @@ export class PackageContextImpl implements PackageContext {
     this.addErrorSyncOrAsync(options);
   }
 
-  private async addErrorSyncOrAsync({ file, message, longMessage, fixer }: AddErrorSyncOrAsyncOptions): Promise<void> {
+  private async addErrorSyncOrAsync(
+    { file, message, longMessage, fixer }: AddErrorSyncOrAsyncOptions,
+  ): Promise<void> {
     this.printName();
 
     const shortFile = path.relative(this.packageDir, file);
 
     if (this.resolvedConfig.fix && fixer) {
       await fixer();
-      this.print(`${chalk.green("Fixed!")} ${chalk.magenta(shortFile)}: ${message}`);
+      this.print(
+        `${chalk.green("Fixed!")} ${chalk.magenta(shortFile)}: ${message}`,
+      );
     } else {
       this.setFailed();
-      this.printError(`${chalk.red("Error!")} ${chalk.magenta(shortFile)}: ${message}`);
+      this.printError(
+        `${chalk.red("Error!")} ${chalk.magenta(shortFile)}: ${message}`,
+      );
 
       if (this.resolvedConfig.verbose && longMessage) {
         for (let i = 0; i <= this.depth + 1; i++) {
@@ -162,7 +168,10 @@ export class PackageContextImpl implements PackageContext {
     if (this.printedName) {
       return;
     }
-    this.print(`${chalk.blue(this.getName())} (${this.packageDir})`, this.depth);
+    this.print(
+      `${chalk.blue(this.getName())} (${this.packageDir})`,
+      this.depth,
+    );
     this.printedName = true;
   }
 }

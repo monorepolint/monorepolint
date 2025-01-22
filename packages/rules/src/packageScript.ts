@@ -17,8 +17,8 @@ export const Options = r.Record({
       r.Record({
         options: r.Array(r.String.Or(r.Undefined)),
         fixValue: r.Union(r.String, r.Undefined, r.Literal(false)).optional(),
-      })
-    )
+      }),
+    ),
   ), // string => string
 });
 
@@ -35,10 +35,14 @@ export const packageScript = createRuleFactory<Options>({
         file: context.getPackageJsonPath(),
         message: MSG_NO_SCRIPTS_BLOCK,
         fixer: () => {
-          mutateJson<PackageJson>(context.getPackageJsonPath(), context.host, (input) => {
-            input.scripts = {};
-            return input;
-          });
+          mutateJson<PackageJson>(
+            context.getPackageJsonPath(),
+            context.host,
+            (input) => {
+              input.scripts = {};
+              return input;
+            },
+          );
         },
       });
       return;
@@ -59,26 +63,36 @@ export const packageScript = createRuleFactory<Options>({
           }
           allowedValues.add(q);
         }
-        fixToEmpty = Object.prototype.hasOwnProperty.call(value, "fixValue") && value.fixValue === undefined;
+        fixToEmpty = Object.prototype.hasOwnProperty.call(value, "fixValue")
+          && value.fixValue === undefined;
         fixValue = value.fixValue;
       }
 
       const actualValue = packageJson.scripts[name];
 
-      if (!allowedValues.has(actualValue) && !(allowEmpty === true && actualValue === undefined)) {
+      if (
+        !allowedValues.has(actualValue)
+        && !(allowEmpty === true && actualValue === undefined)
+      ) {
         let fixer;
 
-        if (fixValue !== false && (fixValue !== undefined || fixToEmpty === true)) {
+        if (
+          fixValue !== false && (fixValue !== undefined || fixToEmpty === true)
+        ) {
           const q = fixValue;
           fixer = () => {
-            mutateJson<PackageJson>(context.getPackageJsonPath(), context.host, (input) => {
-              if (fixToEmpty && q === undefined) {
-                delete input.scripts![name];
-              } else {
-                input.scripts![name] = q!;
-              }
-              return input;
-            });
+            mutateJson<PackageJson>(
+              context.getPackageJsonPath(),
+              context.host,
+              (input) => {
+                if (fixToEmpty && q === undefined) {
+                  delete input.scripts![name];
+                } else {
+                  input.scripts![name] = q!;
+                }
+                return input;
+              },
+            );
           };
         }
 
@@ -88,8 +102,12 @@ export const packageScript = createRuleFactory<Options>({
 
         context.addError({
           file: context.getPackageJsonPath(),
-          message: `Expected standardized script entry for '${name}'. Valid options: ${validOptionsString}`,
-          longMessage: diff(validOptionsString + "\n", (packageJson.scripts[name] || "") + "\n"),
+          message:
+            `Expected standardized script entry for '${name}'. Valid options: ${validOptionsString}`,
+          longMessage: diff(
+            validOptionsString + "\n",
+            (packageJson.scripts[name] || "") + "\n",
+          ),
           fixer,
         });
       }

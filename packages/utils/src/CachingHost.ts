@@ -6,10 +6,12 @@
  */
 
 import * as realFs from "node:fs";
-import { Host } from "./Host.js";
 import * as path from "node:path";
+import { Host } from "./Host.js";
 
-function assertNoTombstone(node: Node): asserts node is Node & { tombstone?: false } {
+function assertNoTombstone(
+  node: Node,
+): asserts node is Node & { tombstone?: false } {
   if (node.tombstone) {
     throw new Error(`Unexpected tombstone ${JSON.stringify(node)}`);
   }
@@ -17,14 +19,17 @@ function assertNoTombstone(node: Node): asserts node is Node & { tombstone?: fal
 
 function assertNotType<N extends Node, T extends Node["type"]>(
   node: N,
-  type: T
+  type: T,
 ): asserts node is N & { type: Exclude<N["type"], T> } {
   if (node.type === type) {
     throw new Error(`Unexpected node type ${JSON.stringify(node)}`);
   }
 }
 
-function assertType<N extends Node, T extends Node["type"]>(node: N, type: T): asserts node is N & { type: T } {
+function assertType<N extends Node, T extends Node["type"]>(
+  node: N,
+  type: T,
+): asserts node is N & { type: T } {
   if (node.type !== type) {
     throw new Error(`Unexpected node type ${JSON.stringify(node)}`);
   }
@@ -90,7 +95,14 @@ interface SymlinkNode extends BaseNode<"symlink"> {
   symlink: string;
 }
 
-type Node = DirNode | FileNode | SymlinkNode | DirTombstoneNode | FileTombstoneNode | DirStubNode | FileStubNode;
+type Node =
+  | DirNode
+  | FileNode
+  | SymlinkNode
+  | DirTombstoneNode
+  | FileTombstoneNode
+  | DirStubNode
+  | FileStubNode;
 
 export class CachingHost implements Host {
   // We need many trees because of windows, key is the `root`
@@ -111,23 +123,29 @@ export class CachingHost implements Host {
       | "statSync"
       | "unlinkSync"
       | "writeFileSync"
-    > = realFs
+    > = realFs,
   ) {}
 
   #replaceNode(
     node: FileNode | FileStubNode | SymlinkNode,
-    newNode: Omit<FileTombstoneNode, "fullPath" | "parent">
+    newNode: Omit<FileTombstoneNode, "fullPath" | "parent">,
   ): FileTombstoneNode;
   #replaceNode(
     node: FileNode | FileStubNode | FileTombstoneNode,
-    newNode: Omit<FileNode, "fullPath" | "parent">
+    newNode: Omit<FileNode, "fullPath" | "parent">,
   ): FileNode;
   #replaceNode(
     node: DirTombstoneNode | DirStubNode,
-    newNode: Omit<DirNode, "fullPath" | "parent" | "dir">
+    newNode: Omit<DirNode, "fullPath" | "parent" | "dir">,
   ): DirStubNode;
-  #replaceNode(node: DirNode, newNode: Omit<DirTombstoneNode, "fullPath" | "parent" | "dir">): DirTombstoneNode;
-  #replaceNode(node: Node, partialNewNode: Omit<Node, "fullPath" | "parent">): Node {
+  #replaceNode(
+    node: DirNode,
+    newNode: Omit<DirTombstoneNode, "fullPath" | "parent" | "dir">,
+  ): DirTombstoneNode;
+  #replaceNode(
+    node: Node,
+    partialNewNode: Omit<Node, "fullPath" | "parent">,
+  ): Node {
     if (!node.parent) throw new Error("Cannot replace root node");
     const newNode: Node = {
       ...partialNewNode,
@@ -156,15 +174,22 @@ export class CachingHost implements Host {
    * Throws if the path doesnt exist!
    */
   #stubify(filePath: string, parent: undefined): DirStubNode;
-  #stubify(filePath: string, parent: DirNode | DirStubNode | undefined): DirStubNode | SymlinkNode | FileStubNode;
   #stubify(
     filePath: string,
-    parent: DirNode | DirStubNode | undefined
-  ): typeof parent extends undefined ? DirNode | DirStubNode : DirNode | DirStubNode | SymlinkNode | FileStubNode {
+    parent: DirNode | DirStubNode | undefined,
+  ): DirStubNode | SymlinkNode | FileStubNode;
+  #stubify(
+    filePath: string,
+    parent: DirNode | DirStubNode | undefined,
+  ): typeof parent extends undefined ? DirNode | DirStubNode
+    : DirNode | DirStubNode | SymlinkNode | FileStubNode
+  {
     const canonicalPath = path.resolve(filePath);
 
     if (!parent && canonicalPath !== path.parse(canonicalPath).root) {
-      throw new Error(`parent can only be null if path is root. Instead got: ${canonicalPath}`);
+      throw new Error(
+        `parent can only be null if path is root. Instead got: ${canonicalPath}`,
+      );
     }
     const stat = this.fs.lstatSync(canonicalPath); // may throw
 
@@ -196,7 +221,9 @@ export class CachingHost implements Host {
         needsFlush: false,
       };
     } else {
-      throw new Error(`what is not a file nor symlink nor directory? nothing we care about: ${canonicalPath}`);
+      throw new Error(
+        `what is not a file nor symlink nor directory? nothing we care about: ${canonicalPath}`,
+      );
     }
 
     if (!parent && node.type === "dir") {
@@ -205,7 +232,11 @@ export class CachingHost implements Host {
     } else if (parent) {
       parent.dir.set(path.basename(canonicalPath), node);
     } else {
-      throw new Error(`root can only be a dir, got ${JSON.stringify(node)} for path: ${canonicalPath}`);
+      throw new Error(
+        `root can only be a dir, got ${
+          JSON.stringify(node)
+        } for path: ${canonicalPath}`,
+      );
     }
     return node;
   }
@@ -226,13 +257,16 @@ export class CachingHost implements Host {
     }
 
     let curPath = root;
-    let curNode: Node = this.#trees.get(root) ?? this.#stubify(curPath, undefined); // its okay to throw if there is no root
+    let curNode: Node = this.#trees.get(root)
+      ?? this.#stubify(curPath, undefined); // its okay to throw if there is no root
     try {
       for (const part of parts) {
         assertNoTombstone(curNode);
         assertNotType(curNode, "file");
         if (curNode.type === "symlink") {
-          const linkedNode = this.#getNodeResolvingSymlinks(path.resolve(path.dirname(curPath), curNode.symlink));
+          const linkedNode = this.#getNodeResolvingSymlinks(
+            path.resolve(path.dirname(curPath), curNode.symlink),
+          );
           assertExists(linkedNode);
           assertNoTombstone(linkedNode);
           assertType(linkedNode, "dir");
@@ -240,7 +274,8 @@ export class CachingHost implements Host {
         }
         assertType(curNode, "dir");
         assertNoTombstone(curNode);
-        curNode = curNode.dir.get(part) ?? this.#stubify(path.join(curNode.fullPath, part), curNode);
+        curNode = curNode.dir.get(part)
+          ?? this.#stubify(path.join(curNode.fullPath, part), curNode);
         curPath = path.join(curPath, part);
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -253,14 +288,19 @@ export class CachingHost implements Host {
 
   #getNode(filePath: string) {
     const canonicalPath = path.resolve(filePath);
-    const { pathWithSymlinks, node } = this.#getNearestAncestorNode(canonicalPath);
+    const { pathWithSymlinks, node } = this.#getNearestAncestorNode(
+      canonicalPath,
+    );
     if (pathWithSymlinks === canonicalPath) {
       return node;
     }
     return undefined;
   }
 
-  #getNodeResolvingSymlinks(filePath: string, follows: number = 100): Exclude<Node, SymlinkNode> | undefined {
+  #getNodeResolvingSymlinks(
+    filePath: string,
+    follows: number = 100,
+  ): Exclude<Node, SymlinkNode> | undefined {
     const node = this.#getNode(filePath); // canonicalizes for us
     if (!node || node.type !== "symlink") return node;
     // this is a really poor mans way of doing this. but who has 100's of symlinks hanging around?
@@ -269,9 +309,14 @@ export class CachingHost implements Host {
     return this.#getNodeResolvingSymlinks(node.symlink, follows--);
   }
 
-  mkdir(filePath: string, opts: { recursive: boolean } = { recursive: false }): void {
+  mkdir(
+    filePath: string,
+    opts: { recursive: boolean } = { recursive: false },
+  ): void {
     const canonicalPath = path.resolve(filePath);
-    const { node, pathWithSymlinks } = this.#getNearestAncestorNode(canonicalPath);
+    const { node, pathWithSymlinks } = this.#getNearestAncestorNode(
+      canonicalPath,
+    );
     if (filePath === pathWithSymlinks) {
       assertType(node, "dir");
       assertHasParent(node);
@@ -297,7 +342,9 @@ export class CachingHost implements Host {
     let maybePath = canonicalPath;
     const toMake: string[] = [];
     while (maybePath !== rootPath) {
-      toMake.unshift(path.resolve(node.fullPath, path.relative(rootPath, maybePath)));
+      toMake.unshift(
+        path.resolve(node.fullPath, path.relative(rootPath, maybePath)),
+      );
       maybePath = path.dirname(maybePath);
     }
 
@@ -337,7 +384,10 @@ export class CachingHost implements Host {
   readFile(filePath: string, opts: { asJson: true }): object;
   readFile(
     filePath: string,
-    opts: undefined | { encoding: BufferEncoding; asJson?: false } | { encoding?: never; asJson: true }
+    opts: undefined | { encoding: BufferEncoding; asJson?: false } | {
+      encoding?: never;
+      asJson: true;
+    },
   ) {
     let node = this.#getNodeResolvingSymlinks(filePath); // canonicalizes for us
 
@@ -365,10 +415,24 @@ export class CachingHost implements Host {
   }
 
   writeFile(filePath: string, buffer: Buffer): void;
-  writeFile(filePath: string, body: string, opts: { encoding: BufferEncoding }): void;
-  writeFile(filePath: string, body: string, opts: { encoding: BufferEncoding }): void;
-  writeFile(filePath: string, body: string | Buffer, opts?: { encoding: BufferEncoding }) {
-    const fileContentsAsBuffer = typeof body === "string" ? Buffer.from(body, opts?.encoding) : Buffer.from(body);
+  writeFile(
+    filePath: string,
+    body: string,
+    opts: { encoding: BufferEncoding },
+  ): void;
+  writeFile(
+    filePath: string,
+    body: string,
+    opts: { encoding: BufferEncoding },
+  ): void;
+  writeFile(
+    filePath: string,
+    body: string | Buffer,
+    opts?: { encoding: BufferEncoding },
+  ) {
+    const fileContentsAsBuffer = typeof body === "string"
+      ? Buffer.from(body, opts?.encoding)
+      : Buffer.from(body);
 
     const canonicalPath = path.resolve(filePath);
     const existingNode = this.#getNodeResolvingSymlinks(canonicalPath);
@@ -384,7 +448,9 @@ export class CachingHost implements Host {
       return;
     }
 
-    const maybeDirNode = this.#getNodeResolvingSymlinks(path.dirname(canonicalPath));
+    const maybeDirNode = this.#getNodeResolvingSymlinks(
+      path.dirname(canonicalPath),
+    );
     assertExists(maybeDirNode);
     assertType(maybeDirNode, "dir");
     assertNoTombstone(maybeDirNode);
@@ -420,7 +486,9 @@ export class CachingHost implements Host {
     });
   }
 
-  async #flushFileNode(node: FileNode | FileStubNode | FileTombstoneNode): Promise<unknown> {
+  async #flushFileNode(
+    node: FileNode | FileStubNode | FileTombstoneNode,
+  ): Promise<unknown> {
     // FIXME all tombstones need a flush, so we can get rid of needsFlush for them
     if (node.tombstone) {
       try {
@@ -453,7 +521,9 @@ export class CachingHost implements Host {
     return this.fs.promises.symlink(node.symlink, node.fullPath);
   }
 
-  async #flushDirNode(node: DirNode | DirStubNode | DirTombstoneNode): Promise<unknown> {
+  async #flushDirNode(
+    node: DirNode | DirStubNode | DirTombstoneNode,
+  ): Promise<unknown> {
     if (!node.tombstone && node.needsFlush) {
       try {
         await this.fs.promises.access(node.fullPath); // throws if the file doesnt exist
@@ -466,7 +536,9 @@ export class CachingHost implements Host {
     const promises: Promise<unknown>[] = [];
     for (const child of node.dir.values()) {
       if (node.tombstone && !child.tombstone) {
-        throw new Error("Unexpected failure during sanity check. A non-deleted child is on a deleted dir");
+        throw new Error(
+          "Unexpected failure during sanity check. A non-deleted child is on a deleted dir",
+        );
       }
       if (child.type === "dir") {
         promises.push(this.#flushDirNode(child));

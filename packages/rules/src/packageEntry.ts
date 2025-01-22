@@ -18,7 +18,7 @@ export const Options = r.Union(
     .And(
       r.Partial({
         entriesExist: r.Undefined,
-      })
+      }),
     ),
   r
     .Record({
@@ -27,12 +27,12 @@ export const Options = r.Union(
     .And(
       r.Partial({
         entries: r.Undefined,
-      })
+      }),
     ),
   r.Record({
     entries: r.Dictionary(r.Unknown), // string => unknown, enforces existence of keys and their values
     entriesExist: r.Array(r.String),
-  })
+  }),
 );
 
 export type Options = r.Static<typeof Options>;
@@ -46,21 +46,28 @@ export const packageEntry = createRuleFactory<Options>({
       for (const key of Object.keys(options.entries)) {
         const value = options.entries[key];
 
-        const entryDiff = diff(JSON.stringify(value) + "\n", (JSON.stringify(packageJson[key]) || "") + "\n");
+        const entryDiff = diff(
+          JSON.stringify(value) + "\n",
+          (JSON.stringify(packageJson[key]) || "") + "\n",
+        );
         if (
-          (typeof value !== "object" && value !== packageJson[key]) ||
-          entryDiff == null ||
-          !entryDiff.includes("Compared values have no visual difference")
+          (typeof value !== "object" && value !== packageJson[key])
+          || entryDiff == null
+          || !entryDiff.includes("Compared values have no visual difference")
         ) {
           context.addError({
             file: context.getPackageJsonPath(),
             message: createStandardizedEntryErrorMessage(key),
             longMessage: entryDiff,
             fixer: () => {
-              mutateJson<PackageJson>(context.getPackageJsonPath(), context.host, (input) => {
-                input[key] = value;
-                return input;
-              });
+              mutateJson<PackageJson>(
+                context.getPackageJsonPath(),
+                context.host,
+                (input) => {
+                  input[key] = value;
+                  return input;
+                },
+              );
             },
           });
         }

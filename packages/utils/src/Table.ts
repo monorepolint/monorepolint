@@ -6,8 +6,9 @@
  */
 // tslint:disable:no-console
 import { nanosecondsToSanity } from "./nanosecondsToSanity.js";
-type HeaderFooterHelper<HB, FB, H, F> = (HB extends true ? { header: H } : { header?: H }) &
-  (FB extends true ? { footer: F } : { footer?: F });
+type HeaderFooterHelper<HB, FB, H, F> =
+  & (HB extends true ? { header: H } : { header?: H })
+  & (FB extends true ? { footer: F } : { footer?: F });
 
 type WithAlignemnt = { alignment?: "right" | "left" };
 type BaseCellConfig = WithAlignemnt & { type: "bigint" | "string" };
@@ -19,13 +20,20 @@ type BaseBigIntCellConfig = {
 } & WithAlignemnt;
 type BaseStringCellConfig = { type: "string" } & WithAlignemnt;
 
-type BigIntColumnConfig<H, F> = WithAlignemnt &
-  BaseBigIntCellConfig &
-  HeaderFooterHelper<H, F, string, AggregateFooterConfig | StaticFooterConfig>;
+type BigIntColumnConfig<H, F> =
+  & WithAlignemnt
+  & BaseBigIntCellConfig
+  & HeaderFooterHelper<
+    H,
+    F,
+    string,
+    AggregateFooterConfig | StaticFooterConfig
+  >;
 
-type StringColumnConfig<H, F> = WithAlignemnt &
-  BaseStringCellConfig &
-  HeaderFooterHelper<H, F, string, StaticFooterConfig>;
+type StringColumnConfig<H, F> =
+  & WithAlignemnt
+  & BaseStringCellConfig
+  & HeaderFooterHelper<H, F, string, StaticFooterConfig>;
 
 type AggregateFooterConfig = {
   aggregate: "sum" | "average";
@@ -47,7 +55,8 @@ type TableConfig<T extends any[], H extends boolean, F extends boolean> = {
   showHeader: H;
   showFooter: F;
   columns: {
-    [K in keyof T]: T[K] extends bigint ? BigIntColumnConfig<H, F> : StringColumnConfig<H, F>;
+    [K in keyof T]: T[K] extends bigint ? BigIntColumnConfig<H, F>
+      : StringColumnConfig<H, F>;
   };
   title: string;
 };
@@ -74,7 +83,7 @@ export class Table<T extends any[]> {
       | TableConfig<T, true, true>
       | TableConfig<T, true, false>
       | TableConfig<T, false, true>
-      | TableConfig<T, false, false>
+      | TableConfig<T, false, false>,
   ) {
     this.#config = {
       padding: 2,
@@ -101,7 +110,9 @@ export class Table<T extends any[]> {
             ...columnConfig.footer,
           });
         } else if ("aggregate" in columnConfig.footer) {
-          if (columnConfig.type !== "bigint") throw new Error("expecting bigint for aggregate");
+          if (columnConfig.type !== "bigint") {
+            throw new Error("expecting bigint for aggregate");
+          }
           this.#footerRowConfig.push({
             type: columnConfig.type,
             renderAs: columnConfig.renderAs,
@@ -155,10 +166,15 @@ export class Table<T extends any[]> {
       const colConfig = this.#config.columns[c];
       this.#columnWidths[c] = Math.max(
         (this.#config.columns[c].header ?? "").length,
-        ...this.#rows.map((a) => this.#getCellValueAsString(a[c], colConfig).length),
+        ...this.#rows.map((a) =>
+          this.#getCellValueAsString(a[c], colConfig).length
+        ),
         this.#footer && this.#footerRowConfig
-          ? this.#getCellValueAsString(this.#footer?.[c] ?? "", this.#footerRowConfig[c]).length
-          : 0
+          ? this.#getCellValueAsString(
+            this.#footer?.[c] ?? "",
+            this.#footerRowConfig[c],
+          ).length
+          : 0,
       );
     }
 
@@ -208,7 +224,9 @@ export class Table<T extends any[]> {
 
       let hr = "";
       for (let c = 0; c < footerRow.length; c++) {
-        hr += this.#getCellValueAligned(footerRow[c], this.#footerRowConfig![c], c) + paddingString; // .padEnd(this.#columnWidths[c], " ") + paddingString;
+        hr +=
+          this.#getCellValueAligned(footerRow[c], this.#footerRowConfig![c], c)
+          + paddingString; // .padEnd(this.#columnWidths[c], " ") + paddingString;
       }
       hr = hr.trimRight();
       console.log(hr);
@@ -246,7 +264,10 @@ export class Table<T extends any[]> {
     console.log();
   }
 
-  #getCellValueAsString(value: bigint | string, config: BaseBigIntCellConfig | BaseStringCellConfig) {
+  #getCellValueAsString(
+    value: bigint | string,
+    config: BaseBigIntCellConfig | BaseStringCellConfig,
+  ) {
     if (config.type === "bigint" && config.renderAs === "nanoseconds") {
       return nanosecondsToSanity(value as bigint, config.precision ?? 9);
     } else {
@@ -254,7 +275,11 @@ export class Table<T extends any[]> {
     }
   }
 
-  #getCellValueAligned(value: bigint | string, config: BaseBigIntCellConfig | BaseStringCellConfig, column: number) {
+  #getCellValueAligned(
+    value: bigint | string,
+    config: BaseBigIntCellConfig | BaseStringCellConfig,
+    column: number,
+  ) {
     let result: string;
     if (config.type === "bigint" && config.renderAs === "nanoseconds") {
       result = nanosecondsToSanity(value as bigint, config.precision ?? 9);
@@ -273,7 +298,10 @@ export class Table<T extends any[]> {
     const config = this.#config.columns[colNum];
 
     if (config.type === "bigint" && config.renderAs === "nanoseconds") {
-      return nanosecondsToSanity(this.#rows[rowNum][colNum], config.precision ?? 9);
+      return nanosecondsToSanity(
+        this.#rows[rowNum][colNum],
+        config.precision ?? 9,
+      );
     } else {
       return "" + this.#rows[rowNum][colNum];
     }
@@ -284,7 +312,10 @@ export class Table<T extends any[]> {
 
     let result: string;
     if (config.type === "bigint" && config.renderAs === "nanoseconds") {
-      result = nanosecondsToSanity(this.#rows[rowNum][colNum], config.precision ?? 9);
+      result = nanosecondsToSanity(
+        this.#rows[rowNum][colNum],
+        config.precision ?? 9,
+      );
     } else {
       result = "" + this.#rows[rowNum][colNum];
     }
@@ -296,12 +327,20 @@ export class Table<T extends any[]> {
     }
   }
 
-  getColumnWidth(colNum: number, config: BigIntColumnConfig<boolean, boolean> | StringColumnConfig<boolean, boolean>) {
+  getColumnWidth(
+    colNum: number,
+    config:
+      | BigIntColumnConfig<boolean, boolean>
+      | StringColumnConfig<boolean, boolean>,
+  ) {
     let maxWidth = Math.max(
       (config.header ?? "").length,
       this.#footer && this.#footerRowConfig
-        ? this.#getCellValueAsString(this.#footer[colNum], this.#footerRowConfig[colNum]).length
-        : 0
+        ? this.#getCellValueAsString(
+          this.#footer[colNum],
+          this.#footerRowConfig[colNum],
+        ).length
+        : 0,
     );
 
     for (let r = 0; r < this.#rows.length; r++) {

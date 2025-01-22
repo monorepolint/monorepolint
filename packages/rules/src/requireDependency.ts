@@ -44,7 +44,9 @@ export const requireDependency = createRuleFactory({
           fixer: () => {
             mutateJson<PackageJson>(packageJsonPath, context.host, (input) => {
               input[type] = Object.fromEntries(
-                Object.entries(expectedEntries).filter(([, v]) => v !== undefined)
+                Object.entries(expectedEntries).filter(([, v]) =>
+                  v !== undefined
+                ),
               ) as Record<string, string>;
               return input;
             });
@@ -58,17 +60,24 @@ export const requireDependency = createRuleFactory({
           context.addError({
             file: packageJsonPath,
             message: `Expected dependency ${dep}@${version}`,
-            longMessage: diff(`${dep}@${version}\n`, `${dep}@${packageJson[type]![dep] || "missing"}\n`)!,
+            longMessage: diff(
+              `${dep}@${version}\n`,
+              `${dep}@${packageJson[type]![dep] || "missing"}\n`,
+            )!,
             fixer: () => {
-              mutateJson<PackageJson>(packageJsonPath, context.host, (input) => {
-                if (version === undefined) {
-                  input[type] = { ...input[type] };
-                  delete input[type][dep];
-                } else {
-                  input[type] = { ...input[type], [dep]: version };
-                }
-                return input;
-              });
+              mutateJson<PackageJson>(
+                packageJsonPath,
+                context.host,
+                (input) => {
+                  if (version === undefined) {
+                    input[type] = { ...input[type] };
+                    delete input[type][dep];
+                  } else {
+                    input[type] = { ...input[type], [dep]: version };
+                  }
+                  return input;
+                },
+              );
             },
           });
         }

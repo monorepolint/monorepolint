@@ -14,7 +14,6 @@ It is possible to ban transitive dependencies with this rule, but given
 the current performance characteristics, it is not recommended and thus not
 documented.
 
-
 ### Options
 
 - `bannedDependencies: { glob: [], exact: []}`

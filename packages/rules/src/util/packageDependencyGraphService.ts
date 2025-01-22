@@ -19,7 +19,11 @@ export interface IPackageDependencyGraphNode {
 /** Service abstraction for constructing and traversing package dependency graphs. */
 export interface IPackageDependencyGraphService {
   /** Construct a graph of package dependencies. */
-  buildDependencyGraph(packageJsonPath: string, host: Host, maxDepth?: number): IPackageDependencyGraphNode;
+  buildDependencyGraph(
+    packageJsonPath: string,
+    host: Host,
+    maxDepth?: number,
+  ): IPackageDependencyGraphNode;
 
   /** Traverse a package dependency graph. */
   traverse(
@@ -27,20 +31,27 @@ export interface IPackageDependencyGraphService {
     opts?: {
       /** Traverse each unique path to a given package (potentially slow). */
       traverseAllPaths?: boolean;
-    }
-  ): IterableIterator<IPackageDependencyGraphNode & { importPath: IPackageDependencyGraphNode[] }>;
+    },
+  ): IterableIterator<
+    IPackageDependencyGraphNode & { importPath: IPackageDependencyGraphNode[] }
+  >;
 }
 
 /** Default implementation of the package dependency graph service. */
-export class PackageDependencyGraphService implements IPackageDependencyGraphService {
+export class PackageDependencyGraphService
+  implements IPackageDependencyGraphService
+{
   /** Construct a graph of package dependencies and return the root node. */
   public buildDependencyGraph(
     startPackageJsonPath: string,
     host: Host,
-    maxDepth?: number
+    maxDepth?: number,
   ): IPackageDependencyGraphNode {
     const nodes = new Map<string, IPackageDependencyGraphNode>();
-    const visit = (packageJsonPath: string, currentDepth: number): IPackageDependencyGraphNode => {
+    const visit = (
+      packageJsonPath: string,
+      currentDepth: number,
+    ): IPackageDependencyGraphNode => {
       if (nodes.has(packageJsonPath)) {
         return nodes.get(packageJsonPath)!;
       }
@@ -60,14 +71,24 @@ export class PackageDependencyGraphService implements IPackageDependencyGraphSer
 
       const nextDepth = currentDepth + 1;
       if (maxDepth == null || nextDepth <= maxDepth) {
-        const dependencies = packageJson.dependencies != null ? Object.keys(packageJson.dependencies) : [];
+        const dependencies = packageJson.dependencies != null
+          ? Object.keys(packageJson.dependencies)
+          : [];
         for (const dependency of dependencies) {
-          const dependencyPackageJsonPath = resolvePackagePath(dependency, node.paths.rootDirectory);
+          const dependencyPackageJsonPath = resolvePackagePath(
+            dependency,
+            node.paths.rootDirectory,
+          );
           if (dependencyPackageJsonPath == null) {
-            throw new Error(`Could not resolve ${dependency} from ${node.paths.rootDirectory}`);
+            throw new Error(
+              `Could not resolve ${dependency} from ${node.paths.rootDirectory}`,
+            );
           }
 
-          node.dependencies.set(dependency, visit(dependencyPackageJsonPath, nextDepth));
+          node.dependencies.set(
+            dependency,
+            visit(dependencyPackageJsonPath, nextDepth),
+          );
         }
       }
 
@@ -80,14 +101,20 @@ export class PackageDependencyGraphService implements IPackageDependencyGraphSer
   /** Traverse a package dependency graph with an iterator. */
   public *traverse(
     root: IPackageDependencyGraphNode,
-    opts = { traverseAllPaths: false }
-  ): IterableIterator<IPackageDependencyGraphNode & { importPath: IPackageDependencyGraphNode[] }> {
+    opts = { traverseAllPaths: false },
+  ): IterableIterator<
+    IPackageDependencyGraphNode & { importPath: IPackageDependencyGraphNode[] }
+  > {
     const visited = new Set<IPackageDependencyGraphNode>();
 
     function* visit(
       node: IPackageDependencyGraphNode,
-      importPath: IPackageDependencyGraphNode[] = []
-    ): IterableIterator<IPackageDependencyGraphNode & { importPath: IPackageDependencyGraphNode[] }> {
+      importPath: IPackageDependencyGraphNode[] = [],
+    ): IterableIterator<
+      IPackageDependencyGraphNode & {
+        importPath: IPackageDependencyGraphNode[];
+      }
+    > {
       // Don't visit a package more than once unless explicitly asked to traverse all paths
       if (!opts.traverseAllPaths && visited.has(node)) {
         return;

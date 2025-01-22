@@ -14,12 +14,18 @@ import { Table } from "./Table.js";
  * Multimap cache of whether a needle was found in the glob haystack. Short circuits many
  * individual checks against the globs.
  */
-const cache = new Map</* haystack */ readonly string[], Map</* needle */ string, /* result */ boolean>>();
+const cache = new Map<
+  /* haystack */ readonly string[],
+  Map</* needle */ string, /* result */ boolean>
+>();
 
 /**
  * Multimap cache of whether a needle matches a glob. Allows us to avoid regexp's.
  */
-const singleMatcherCache = new Map</* glob */ string, Map</* needle */ string, /* result*/ boolean>>();
+const singleMatcherCache = new Map<
+  /* glob */ string,
+  Map</* needle */ string, /* result*/ boolean>
+>();
 
 /**
  * Cache of glob to regular expression. Compiling the regular expression is expensive.
@@ -39,7 +45,10 @@ interface MatchesAnyGlob {
   (needle: string, haystack: readonly string[]): boolean | undefined;
   printStats?: () => void;
 }
-export const matchesAnyGlob: MatchesAnyGlob = function matchesAnyGlobFunc(needle: string, haystack: readonly string[]) {
+export const matchesAnyGlob: MatchesAnyGlob = function matchesAnyGlobFunc(
+  needle: string,
+  haystack: readonly string[],
+) {
   matchTime -= process.hrtime.bigint();
 
   let cacheForHaystack = cache.get(haystack);

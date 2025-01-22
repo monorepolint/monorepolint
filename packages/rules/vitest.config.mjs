@@ -1,15 +1,17 @@
-
-import { coverageConfigDefaults, defineProject, defaultExclude } from 'vitest/config'
+import {
+  coverageConfigDefaults,
+  defaultExclude,
+  defineProject,
+} from "vitest/config";
 
 export default defineProject({
   test: {
-   exclude: [...defaultExclude, "**/build/**"],
+    exclude: [...defaultExclude, "**/build/**"],
     coverage: {
       provider: "v8",
       enabled: true,
       pool: "forks",
-      exclude: [...coverageConfigDefaults.exclude, "vitest.config.*"]
-    }
+      exclude: [...coverageConfigDefaults.exclude, "vitest.config.*"],
+    },
   },
-})
-          
+});

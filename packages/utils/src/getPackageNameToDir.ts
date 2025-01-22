@@ -17,11 +17,15 @@ import { PackageJson } from "./PackageJson.js";
 export async function getPackageNameToDir(
   host: Pick<Host, "readJson" | "exists">,
   workspaceDir: string,
-  resolvePaths: boolean = false
+  resolvePaths: boolean = false,
 ) {
   const ret = new Map<string, string>();
 
-  const workspacePackages = await getWorkspacePackageDirs(host, workspaceDir, resolvePaths);
+  const workspacePackages = await getWorkspacePackageDirs(
+    host,
+    workspaceDir,
+    resolvePaths,
+  );
   for (const packageDir of workspacePackages) {
     const packagePath = pathJoin(packageDir, "package.json");
     const { name } = host.readJson(packagePath) as PackageJson;

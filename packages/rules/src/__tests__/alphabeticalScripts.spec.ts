@@ -6,11 +6,17 @@
  */
 
 // tslint:disable:no-console
-import { describe, expect, it, beforeEach, vi } from "vitest";
-import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, jsonToString, TestingWorkspace } from "./utils.js";
 import { Context, Failure } from "@monorepolint/config";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { alphabeticalScripts } from "../alphabeticalScripts.js";
 import { createIncorrectOrderErrorMessage } from "../util/checkAlpha.js";
+import {
+  AddErrorSpy,
+  createTestingWorkspace,
+  HOST_FACTORIES,
+  jsonToString,
+  TestingWorkspace,
+} from "./utils.js";
 
 const PACKAGE_SCRIPTS_SORTED = jsonToString({
   name: "foo-lib",
@@ -59,10 +65,12 @@ describe.each(HOST_FACTORIES)("alphabeticalScripts ($name)", (hostFactory) => {
           file: "package.json",
           hasFixer: true,
           message: createIncorrectOrderErrorMessage("scripts", "foo-lib"),
-        })
+        }),
       );
 
-      expect(workspace.readFile("package.json")).toEqual(PACKAGE_SCRIPTS_SORTED);
+      expect(workspace.readFile("package.json")).toEqual(
+        PACKAGE_SCRIPTS_SORTED,
+      );
     });
 
     it("does nothing if already sorted", () => {

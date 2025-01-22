@@ -12,12 +12,12 @@ export { consistentDependencies } from "./consistentDependencies.js";
 export { consistentVersions } from "./consistentVersions.js";
 export { fileContents } from "./fileContents.js";
 export { mustSatisfyPeerDependencies } from "./mustSatisfyPeerDependencies.js";
-export { packageOrder } from "./packageOrder.js";
-export { packageEntry } from "./packageEntry.js";
-export { packageScript } from "./packageScript.js";
-export { standardTsconfig } from "./standardTsconfig.js";
 export { nestedWorkspaces } from "./nestedWorkspaces.js";
+export { packageEntry } from "./packageEntry.js";
+export { packageOrder } from "./packageOrder.js";
+export { packageScript } from "./packageScript.js";
 export { requireDependency } from "./requireDependency.js";
+export { standardTsconfig } from "./standardTsconfig.js";
 
 export {
   createRuleFactory,

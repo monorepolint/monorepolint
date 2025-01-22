@@ -9,10 +9,10 @@ import { SimpleHost } from "@monorepolint/utils";
 import { readFileSync, writeFileSync } from "node:fs";
 import * as path from "node:path";
 import * as tmp from "tmp";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { requireDependency } from "../requireDependency.js";
 import { makeDirectoryRecursively } from "../util/makeDirectory.js";
 import { jsonToString } from "./utils.js";
-import { describe, expect, it, afterEach, vi } from "vitest";
 
 const PACKAGE_ROOT = jsonToString({
   workspaces: {
@@ -85,11 +85,13 @@ describe("requireDependency", () => {
         verbose: false,
         silent: true,
       },
-      new SimpleHost()
+      new SimpleHost(),
     );
 
     function checkAndSpy(q: string) {
-      const context = workspaceContext.createChildContext(path.resolve(dir.name, q));
+      const context = workspaceContext.createChildContext(
+        path.resolve(dir.name, q),
+      );
       const addErrorSpy = vi.spyOn(context, "addError");
       requireDependency({ options: OPTIONS }).check(context);
       return { context, addErrorSpy };
@@ -111,7 +113,9 @@ describe("requireDependency", () => {
   }
 
   it("checks correctly", () => {
-    const { addFile, workspaceContext, checkAndSpy } = makeWorkspace({ fix: false });
+    const { addFile, workspaceContext, checkAndSpy } = makeWorkspace({
+      fix: false,
+    });
     addFile("./package.json", PACKAGE_ROOT);
     addFile("./packages/none/package.json", PACKAGE_WITH_NO_ENTRIES);
     addFile("./packages/missing/package.json", PACKAGE_WITH_ENTRIES_MISSING);

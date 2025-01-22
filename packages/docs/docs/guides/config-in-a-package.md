@@ -18,8 +18,8 @@ Whatever your reason,
    it involves an index.ts file that roughly looks like:
 
    ```ts
-   import * as Rules from "@monorepolint/rules";
    import type { Config } from "@monorepolint/config";
+   import * as Rules from "@monorepolint/rules";
 
    export const config: Config = {
      rules: [

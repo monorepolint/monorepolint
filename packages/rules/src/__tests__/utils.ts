@@ -8,9 +8,9 @@
 import { AddErrorOptions, WorkspaceContext } from "@monorepolint/config";
 import { WorkspaceContextImpl } from "@monorepolint/core";
 import { CachingHost, Host, SimpleHost } from "@monorepolint/utils";
-import { expect, MockInstance } from "vitest";
 import * as path from "node:path";
 import * as tmp from "tmp";
+import { expect, MockInstance } from "vitest";
 
 export function jsonToString(obj: unknown) {
   return JSON.stringify(obj, undefined, 2) + "\n";
@@ -22,7 +22,9 @@ interface TestingWorkspaceOpts {
   fixFlag: boolean;
 }
 
-export async function createTestingWorkspace(inboundOpts: TestingWorkspaceOpts) {
+export async function createTestingWorkspace(
+  inboundOpts: TestingWorkspaceOpts,
+) {
   tmp.setGracefulCleanup();
   const tmpdir = tmp.dirSync();
   const opts = {
@@ -43,7 +45,11 @@ export async function createTestingWorkspace(inboundOpts: TestingWorkspaceOpts) 
 
   return new DefaultTestingWorkspace(
     { ...opts, rootPath },
-    new WorkspaceContextImpl(rootPath, { fix: opts.fixFlag, rules: [] }, opts.host)
+    new WorkspaceContextImpl(
+      rootPath,
+      { fix: opts.fixFlag, rules: [] },
+      opts.host,
+    ),
   );
 }
 
@@ -68,9 +74,10 @@ export interface TestingWorkspace {
 
   /**
    * Helper method for matching failures via vi `expect().toMatchObject
-   *
    */
-  failureMatcher(opts: { file: string; message: string; hasFixer: boolean }): any;
+  failureMatcher(
+    opts: { file: string; message: string; hasFixer: boolean },
+  ): any;
 
   readonly context: WorkspaceContext;
 }
@@ -78,7 +85,7 @@ export interface TestingWorkspace {
 class DefaultTestingWorkspace implements TestingWorkspace {
   constructor(
     private opts: RealTestingWorkspaceOpts,
-    public readonly context: WorkspaceContext
+    public readonly context: WorkspaceContext,
   ) {}
 
   addProject(name: string, fields: object) {
@@ -110,7 +117,9 @@ class DefaultTestingWorkspace implements TestingWorkspace {
   }
 
   readFile(filePath: string) {
-    return this.opts.host.readFile(this.getFilePath(filePath), { encoding: "utf-8" });
+    return this.opts.host.readFile(this.getFilePath(filePath), {
+      encoding: "utf-8",
+    });
   }
 
   failureMatcher(opts: { file: string; message: string; hasFixer: boolean }) {

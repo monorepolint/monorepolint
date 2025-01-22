@@ -9,10 +9,10 @@ import { SimpleHost } from "@monorepolint/utils";
 import { writeFileSync } from "fs";
 import * as path from "path";
 import * as tmp from "tmp";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nestedWorkspaces } from "../nestedWorkspaces.js";
 import { makeDirectoryRecursively } from "../util/makeDirectory.js";
 import { jsonToString } from "./utils.js";
-import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 
 const EMPTY_PACKAGE = jsonToString({});
 
@@ -66,7 +66,7 @@ describe("nestedWorkspaces", () => {
         verbose: false,
         silent: true,
       },
-      host
+      host,
     );
 
     async function checkAndSpy() {
@@ -112,7 +112,8 @@ describe("nestedWorkspaces", () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith({
       file: packageJsonPath,
-      message: 'The "workspace" field is missing, even though there are workspaces in the repository.',
+      message:
+        "The \"workspace\" field is missing, even though there are workspaces in the repository.",
     });
   });
 
@@ -127,7 +128,10 @@ describe("nestedWorkspaces", () => {
 
   it("checks fail when two level packages with one level workspaces field", async () => {
     const { addFile, checkAndSpy } = makeWorkspace();
-    const packageJsonPath = addFile("./package.json", PACKAGE_ROOT_WITH_PACKAGES_STAR);
+    const packageJsonPath = addFile(
+      "./package.json",
+      PACKAGE_ROOT_WITH_PACKAGES_STAR,
+    );
     addFile("./packages/star/package.json", EMPTY_PACKAGE);
     addFile("./packages/deep/star/package.json", EMPTY_PACKAGE);
 
@@ -136,8 +140,8 @@ describe("nestedWorkspaces", () => {
     expect(spy).toHaveBeenCalledWith({
       file: packageJsonPath,
       message:
-        'The "workspace" field is missing one or more values: packages/deep/star. ' +
-        'You may be able to use a glob to avoid listing each workspace individually, e.g. "packages/nested-workspace/*".',
+        "The \"workspace\" field is missing one or more values: packages/deep/star. "
+        + "You may be able to use a glob to avoid listing each workspace individually, e.g. \"packages/nested-workspace/*\".",
     });
   });
 

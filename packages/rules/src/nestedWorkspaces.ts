@@ -21,38 +21,51 @@ export const nestedWorkspaces = createRuleFactory({
     const rootPackageJson = context.getWorkspaceContext().getPackageJson();
 
     // Expand a set of globs covering all package.json files in the entire repo (except the root)
-    const packageJsonPaths = globby.globbySync(["*/**/package.json", "!**/node_modules/**"]);
+    const packageJsonPaths = globby.globbySync([
+      "*/**/package.json",
+      "!**/node_modules/**",
+    ]);
 
     const workspaces = Array.isArray(rootPackageJson.workspaces)
       ? rootPackageJson.workspaces
       : rootPackageJson.workspaces !== undefined
-        ? rootPackageJson.workspaces.packages
-        : undefined;
+      ? rootPackageJson.workspaces.packages
+      : undefined;
 
     if (workspaces === undefined && packageJsonPaths.length > 0) {
       context.addError({
         file: context.getPackageJsonPath(),
-        message: 'The "workspace" field is missing, even though there are workspaces in the repository.',
+        message:
+          "The \"workspace\" field is missing, even though there are workspaces in the repository.",
       });
       return;
     }
 
     // Build a set of globs for each package.json that exists in packages specified by a workspace.
-    const workspacePackageJsons = (workspaces || []).map((item) => `${item}/package.json`);
+    const workspacePackageJsons = (workspaces || []).map((item) =>
+      `${item}/package.json`
+    );
 
     // Expand the globs to get an array of all package.json files that are in packages specified by a workspace.
-    const expandedWorkspacesGlobs = globby.globbySync([...workspacePackageJsons, "!**/node_modules/**"]);
+    const expandedWorkspacesGlobs = globby.globbySync([
+      ...workspacePackageJsons,
+      "!**/node_modules/**",
+    ]);
 
     // Ensure there are no package.jsons which are not included in the globbed workspaces set
-    const difference = packageJsonPaths.filter((packageJsonPath) => !expandedWorkspacesGlobs.includes(packageJsonPath));
+    const difference = packageJsonPaths.filter((packageJsonPath) =>
+      !expandedWorkspacesGlobs.includes(packageJsonPath)
+    );
 
     if (difference.length !== 0) {
-      const differencesList = difference.map((packageJsonPath) => path.dirname(packageJsonPath)).join(", ");
+      const differencesList = difference.map((packageJsonPath) =>
+        path.dirname(packageJsonPath)
+      ).join(", ");
       context.addError({
         file: context.getPackageJsonPath(),
         message:
-          `The "workspace" field is missing one or more values: ${differencesList}. ` +
-          'You may be able to use a glob to avoid listing each workspace individually, e.g. "packages/nested-workspace/*".',
+          `The "workspace" field is missing one or more values: ${differencesList}. `
+          + "You may be able to use a glob to avoid listing each workspace individually, e.g. \"packages/nested-workspace/*\".",
       });
     }
   },

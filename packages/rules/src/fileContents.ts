@@ -13,24 +13,24 @@ import { createRuleFactory } from "./util/createRuleFactory.js";
 const Options = r.Union(
   r.Record({
     file: r.String,
-    generator: r.Function.withGuard((x): x is (context: Context) => string | Promise<string> => x != undefined),
+    generator: r.Function.withGuard((
+      x,
+    ): x is (context: Context) => string | Promise<string> => x != undefined),
     template: r.Undefined.optional(),
     templateFile: r.Undefined.optional(),
   }),
-
   r.Record({
     file: r.String,
     generator: r.Undefined.optional(),
     template: r.String.Or(r.Undefined),
     templateFile: r.Undefined.optional(),
   }),
-
   r.Record({
     file: r.String,
     generator: r.Undefined.optional(),
     template: r.Undefined.optional(),
     templateFile: r.String,
-  })
+  }),
 );
 
 type Options = r.Static<typeof Options>;
@@ -42,13 +42,17 @@ export const fileContents = createRuleFactory<Options>({
     const expectedContent = await getExpectedContents(context, opts);
 
     const pathExists = context.host.exists(fullPath);
-    const actualContent = pathExists ? context.host.readFile(fullPath, { encoding: "utf-8" }) : undefined;
+    const actualContent = pathExists
+      ? context.host.readFile(fullPath, { encoding: "utf-8" })
+      : undefined;
     if (actualContent !== expectedContent) {
-      const longMessage =
-        pathExists && expectedContent == undefined ? undefined : diff(expectedContent, actualContent, { expand: true });
+      const longMessage = pathExists && expectedContent == undefined
+        ? undefined
+        : diff(expectedContent, actualContent, { expand: true });
 
-      const message =
-        pathExists && expectedContent == undefined ? "File should not exist" : "Expect file contents to match";
+      const message = pathExists && expectedContent == undefined
+        ? "File should not exist"
+        : "Expect file contents to match";
 
       context.addError({
         file: fullPath,
@@ -59,7 +63,9 @@ export const fileContents = createRuleFactory<Options>({
             if (pathExists) context.host.deleteFile(fullPath);
           } else {
             context.host.mkdir(path.dirname(fullPath), { recursive: true });
-            context.host.writeFile(fullPath, expectedContent, { encoding: "utf-8" });
+            context.host.writeFile(fullPath, expectedContent, {
+              encoding: "utf-8",
+            });
           }
         },
       });
@@ -70,7 +76,9 @@ export const fileContents = createRuleFactory<Options>({
 
 const optionsCache = new Map<
   Options,
-  ((context: Context) => Promise<string> | string | undefined) | string | undefined
+  | ((context: Context) => Promise<string> | string | undefined)
+  | string
+  | undefined
 >();
 
 async function getExpectedContents(context: Context, opts: Options) {

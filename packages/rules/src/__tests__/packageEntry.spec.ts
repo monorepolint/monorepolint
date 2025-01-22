@@ -8,50 +8,56 @@
 // tslint:disable:no-console
 
 import { Context, Failure } from "@monorepolint/config";
-import { createExpectedEntryErrorMessage, createStandardizedEntryErrorMessage, packageEntry } from "../packageEntry.js";
-import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
-import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  createExpectedEntryErrorMessage,
+  createStandardizedEntryErrorMessage,
+  packageEntry,
+} from "../packageEntry.js";
+import {
+  AddErrorSpy,
+  createTestingWorkspace,
+  HOST_FACTORIES,
+  TestingWorkspace,
+} from "./utils.js";
 
-const PACKAGE_MISSING_ENTRY =
-  JSON.stringify(
-    {
-      name: "package",
-      version: {},
-      scripts: {},
-      dependencies: {},
-    },
-    undefined,
-    2
-  ) + "\n";
+const PACKAGE_MISSING_ENTRY = JSON.stringify(
+  {
+    name: "package",
+    version: {},
+    scripts: {},
+    dependencies: {},
+  },
+  undefined,
+  2,
+) + "\n";
 
-const PACKAGE_LICENSE =
-  JSON.stringify(
-    {
-      name: "package",
-      version: {},
-      scripts: {},
-      dependencies: {},
-      license: "UNLICENSED",
-    },
-    undefined,
-    2
-  ) + "\n";
+const PACKAGE_LICENSE = JSON.stringify(
+  {
+    name: "package",
+    version: {},
+    scripts: {},
+    dependencies: {},
+    license: "UNLICENSED",
+  },
+  undefined,
+  2,
+) + "\n";
 
-const PACKAGE_REPOSITORY =
-  JSON.stringify(
-    {
-      name: "package",
-      version: {},
-      scripts: {},
-      dependencies: {},
-      repository: {
-        type: "git",
-        url: "https://github.com:foo/foo",
-      },
+const PACKAGE_REPOSITORY = JSON.stringify(
+  {
+    name: "package",
+    version: {},
+    scripts: {},
+    dependencies: {},
+    repository: {
+      type: "git",
+      url: "https://github.com:foo/foo",
     },
-    undefined,
-    2
-  ) + "\n";
+  },
+  undefined,
+  2,
+) + "\n";
 
 describe.each(HOST_FACTORIES)("expectPackageEntries ($name)", (hostFactory) => {
   describe("fix: true", () => {
@@ -93,7 +99,7 @@ describe.each(HOST_FACTORIES)("expectPackageEntries ($name)", (hostFactory) => {
           file: "package.json",
           hasFixer: true,
           message: createStandardizedEntryErrorMessage("license"),
-        })
+        }),
       );
 
       expect(workspace.readFile("package.json")).toEqual(PACKAGE_LICENSE);
@@ -122,7 +128,7 @@ describe.each(HOST_FACTORIES)("expectPackageEntries ($name)", (hostFactory) => {
           file: "package.json",
           hasFixer: true,
           message: createStandardizedEntryErrorMessage("repository"),
-        })
+        }),
       );
 
       expect(workspace.readFile("package.json")).toEqual(PACKAGE_REPOSITORY);
@@ -165,7 +171,7 @@ describe.each(HOST_FACTORIES)("expectPackageEntries ($name)", (hostFactory) => {
           file: "package.json",
           hasFixer: false,
           message: createExpectedEntryErrorMessage("bugs"),
-        })
+        }),
       );
       expect(workspace.readFile("package.json")).toEqual(PACKAGE_REPOSITORY);
     });
@@ -193,7 +199,7 @@ describe.each(HOST_FACTORIES)("expectPackageEntries ($name)", (hostFactory) => {
           file: "package.json",
           hasFixer: true,
           message: createStandardizedEntryErrorMessage("repository"),
-        })
+        }),
       );
 
       const failure2: Failure = spy.mock.calls[1][0];
@@ -202,7 +208,7 @@ describe.each(HOST_FACTORIES)("expectPackageEntries ($name)", (hostFactory) => {
           file: "package.json",
           hasFixer: false,
           message: createExpectedEntryErrorMessage("bugs"),
-        })
+        }),
       );
 
       expect(workspace.readFile("package.json")).toEqual(PACKAGE_REPOSITORY);

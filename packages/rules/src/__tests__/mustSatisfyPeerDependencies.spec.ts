@@ -9,6 +9,7 @@ import { WorkspaceContextImpl } from "@monorepolint/core";
 import { Host, PackageJson, SimpleHost } from "@monorepolint/utils";
 import * as path from "path";
 import * as tmp from "tmp";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   doesASatisfyB as doesASatisfyBTyped,
   findIntersection as findIntersectionTyped,
@@ -21,7 +22,6 @@ import {
   RANGE_REGEX,
 } from "../mustSatisfyPeerDependencies.js";
 import { makeDirectoryRecursively } from "../util/makeDirectory.js";
-import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 
 const doesASatisfyB = (a: string, b: string) => {
   if (!isValidRange(a)) {
@@ -75,7 +75,7 @@ describe("mustSatisfyPeerDependencies", () => {
         verbose: false,
         silent: true,
       },
-      host
+      host,
     );
     const addErrorSpy = vi.spyOn(workspaceContext, "addError");
 
@@ -86,7 +86,11 @@ describe("mustSatisfyPeerDependencies", () => {
     return { addErrorSpy, check, host };
   }
 
-  function addPackageJson(host: Host, filePath: string, packageJson: PackageJson) {
+  function addPackageJson(
+    host: Host,
+    filePath: string,
+    packageJson: PackageJson,
+  ) {
     const dirPath = path.resolve(cwd!, path.dirname(filePath));
     const resolvedFilePath = path.resolve(cwd!, filePath);
 
@@ -226,7 +230,8 @@ describe("mustSatisfyPeerDependencies", () => {
     it("Properly matches greator or equal version range regex", async () => {
       const passTests = [...greaterOrEqualVersionRangePassTests];
       for (const passTest of passTests) {
-        expect(MATCH_GREATER_OR_EQUAL_VERSION_RANGE.test(passTest)).toBeTruthy();
+        expect(MATCH_GREATER_OR_EQUAL_VERSION_RANGE.test(passTest))
+          .toBeTruthy();
       }
       const failTests = [
         ...anyVersionRangePassTests,
@@ -682,13 +687,20 @@ describe("mustSatisfyPeerDependencies", () => {
   describe("Determines dependencies intersections correctly", () => {
     it("equivalence", () => {
       const exactVersion = "15.1.0";
-      expect(findIntersection(exactVersion, exactVersion)).toEqual(exactVersion);
+      expect(findIntersection(exactVersion, exactVersion)).toEqual(
+        exactVersion,
+      );
       const majorVersion1 = "^15";
-      expect(findIntersection(majorVersion1, majorVersion1)).toEqual(majorVersion1);
+      expect(findIntersection(majorVersion1, majorVersion1)).toEqual(
+        majorVersion1,
+      );
       const majorVersion2 = "^15.2";
-      expect(findIntersection(majorVersion2, majorVersion2)).toEqual(majorVersion2);
+      expect(findIntersection(majorVersion2, majorVersion2)).toEqual(
+        majorVersion2,
+      );
       const greaterOrEqualVersion = ">=1";
-      expect(findIntersection(greaterOrEqualVersion, greaterOrEqualVersion)).toEqual(greaterOrEqualVersion);
+      expect(findIntersection(greaterOrEqualVersion, greaterOrEqualVersion))
+        .toEqual(greaterOrEqualVersion);
     });
 
     it("exact vs any", () => {
@@ -708,8 +720,12 @@ describe("mustSatisfyPeerDependencies", () => {
     it("greater or equal vs any", () => {
       const greaterOrEqualVersion = ">=15";
       const anyVersion = "*";
-      expect(findIntersection(greaterOrEqualVersion, anyVersion)).toEqual(greaterOrEqualVersion);
-      expect(findIntersection(anyVersion, greaterOrEqualVersion)).toEqual(greaterOrEqualVersion);
+      expect(findIntersection(greaterOrEqualVersion, anyVersion)).toEqual(
+        greaterOrEqualVersion,
+      );
+      expect(findIntersection(anyVersion, greaterOrEqualVersion)).toEqual(
+        greaterOrEqualVersion,
+      );
     });
 
     it("any vs any", () => {
@@ -720,45 +736,75 @@ describe("mustSatisfyPeerDependencies", () => {
     it("exact vs greater or equal", () => {
       const exactVersion = "15.1.0";
       const greaterOrEqualVersion1 = ">=1";
-      expect(findIntersection(exactVersion, greaterOrEqualVersion1)).toEqual(exactVersion);
-      expect(findIntersection(greaterOrEqualVersion1, exactVersion)).toEqual(exactVersion);
+      expect(findIntersection(exactVersion, greaterOrEqualVersion1)).toEqual(
+        exactVersion,
+      );
+      expect(findIntersection(greaterOrEqualVersion1, exactVersion)).toEqual(
+        exactVersion,
+      );
       const greaterOrEqualVersion2 = ">=15";
-      expect(findIntersection(exactVersion, greaterOrEqualVersion2)).toEqual(exactVersion);
-      expect(findIntersection(greaterOrEqualVersion2, exactVersion)).toEqual(exactVersion);
+      expect(findIntersection(exactVersion, greaterOrEqualVersion2)).toEqual(
+        exactVersion,
+      );
+      expect(findIntersection(greaterOrEqualVersion2, exactVersion)).toEqual(
+        exactVersion,
+      );
       const greaterOrEqualVersion3 = ">=100";
-      expect(findIntersection(exactVersion, greaterOrEqualVersion3)).toBeUndefined();
-      expect(findIntersection(greaterOrEqualVersion3, exactVersion)).toBeUndefined();
+      expect(findIntersection(exactVersion, greaterOrEqualVersion3))
+        .toBeUndefined();
+      expect(findIntersection(greaterOrEqualVersion3, exactVersion))
+        .toBeUndefined();
     });
 
     it("major vs greater or equal", () => {
       const majorVersion = "^15";
       const greaterOrEqualVersion1 = ">=1";
-      expect(findIntersection(majorVersion, greaterOrEqualVersion1)).toEqual(majorVersion);
-      expect(findIntersection(greaterOrEqualVersion1, majorVersion)).toEqual(majorVersion);
+      expect(findIntersection(majorVersion, greaterOrEqualVersion1)).toEqual(
+        majorVersion,
+      );
+      expect(findIntersection(greaterOrEqualVersion1, majorVersion)).toEqual(
+        majorVersion,
+      );
       const greaterOrEqualVersion2 = ">=15";
-      expect(findIntersection(majorVersion, greaterOrEqualVersion2)).toEqual(majorVersion);
-      expect(findIntersection(greaterOrEqualVersion2, majorVersion)).toEqual(majorVersion);
+      expect(findIntersection(majorVersion, greaterOrEqualVersion2)).toEqual(
+        majorVersion,
+      );
+      expect(findIntersection(greaterOrEqualVersion2, majorVersion)).toEqual(
+        majorVersion,
+      );
       const greaterOrEqualVersion3 = ">=100";
-      expect(findIntersection(majorVersion, greaterOrEqualVersion3)).toBeUndefined();
-      expect(findIntersection(greaterOrEqualVersion3, majorVersion)).toBeUndefined();
+      expect(findIntersection(majorVersion, greaterOrEqualVersion3))
+        .toBeUndefined();
+      expect(findIntersection(greaterOrEqualVersion3, majorVersion))
+        .toBeUndefined();
       const greaterOrEqualVersion4 = ">=15.2.3";
-      expect(findIntersection(majorVersion, greaterOrEqualVersion4)).toEqual("^15.2.3");
-      expect(findIntersection(greaterOrEqualVersion4, majorVersion)).toEqual("^15.2.3");
+      expect(findIntersection(majorVersion, greaterOrEqualVersion4)).toEqual(
+        "^15.2.3",
+      );
+      expect(findIntersection(greaterOrEqualVersion4, majorVersion)).toEqual(
+        "^15.2.3",
+      );
     });
 
     it("greater or equal vs greater or equal", () => {
       const greaterOrEqualVersion1 = ">=1";
       const greaterOrEqualVersion2 = ">=15";
-      expect(findIntersection(greaterOrEqualVersion1, greaterOrEqualVersion2)).toEqual(greaterOrEqualVersion2);
-      expect(findIntersection(greaterOrEqualVersion2, greaterOrEqualVersion1)).toEqual(greaterOrEqualVersion2);
+      expect(findIntersection(greaterOrEqualVersion1, greaterOrEqualVersion2))
+        .toEqual(greaterOrEqualVersion2);
+      expect(findIntersection(greaterOrEqualVersion2, greaterOrEqualVersion1))
+        .toEqual(greaterOrEqualVersion2);
     });
 
     it("exact vs major", () => {
       expect(findIntersection("15.1.0", "^15")).toEqual("15.1.0");
       const exactVersion = "15.1.0";
       const majorVersion1 = "^15";
-      expect(findIntersection(exactVersion, majorVersion1)).toEqual(exactVersion);
-      expect(findIntersection(majorVersion1, exactVersion)).toEqual(exactVersion);
+      expect(findIntersection(exactVersion, majorVersion1)).toEqual(
+        exactVersion,
+      );
+      expect(findIntersection(majorVersion1, exactVersion)).toEqual(
+        exactVersion,
+      );
       const majorVersion2 = "^14";
       expect(findIntersection(exactVersion, majorVersion2)).toBeUndefined();
       expect(findIntersection(majorVersion2, exactVersion)).toBeUndefined();
@@ -770,11 +816,19 @@ describe("mustSatisfyPeerDependencies", () => {
     it("major vs major", () => {
       const majorVersion1 = "^15";
       const majorVersion2 = "^15.2";
-      expect(findIntersection(majorVersion1, majorVersion2)).toEqual(majorVersion2);
-      expect(findIntersection(majorVersion2, majorVersion1)).toEqual(majorVersion2);
+      expect(findIntersection(majorVersion1, majorVersion2)).toEqual(
+        majorVersion2,
+      );
+      expect(findIntersection(majorVersion2, majorVersion1)).toEqual(
+        majorVersion2,
+      );
       const majorVersion3 = "15";
-      expect(findIntersection(majorVersion3, majorVersion2)).toEqual(majorVersion2);
-      expect(findIntersection(majorVersion2, majorVersion3)).toEqual(majorVersion2);
+      expect(findIntersection(majorVersion3, majorVersion2)).toEqual(
+        majorVersion2,
+      );
+      expect(findIntersection(majorVersion2, majorVersion3)).toEqual(
+        majorVersion2,
+      );
       const majorVersion4 = "16";
       expect(findIntersection(majorVersion4, majorVersion2)).toBeUndefined();
       expect(findIntersection(majorVersion2, majorVersion4)).toBeUndefined();
@@ -783,11 +837,19 @@ describe("mustSatisfyPeerDependencies", () => {
     it("exact vs union", () => {
       const exactVersion = "15.1.0";
       const unionVersion1 = "^15 || ^16";
-      expect(findIntersection(exactVersion, unionVersion1)).toEqual(exactVersion);
-      expect(findIntersection(unionVersion1, exactVersion)).toEqual(exactVersion);
+      expect(findIntersection(exactVersion, unionVersion1)).toEqual(
+        exactVersion,
+      );
+      expect(findIntersection(unionVersion1, exactVersion)).toEqual(
+        exactVersion,
+      );
       const unionVersion2 = "^14 || ^15";
-      expect(findIntersection(exactVersion, unionVersion2)).toEqual(exactVersion);
-      expect(findIntersection(unionVersion2, exactVersion)).toEqual(exactVersion);
+      expect(findIntersection(exactVersion, unionVersion2)).toEqual(
+        exactVersion,
+      );
+      expect(findIntersection(unionVersion2, exactVersion)).toEqual(
+        exactVersion,
+      );
       const unionVersion3 = "^16 || ^17";
       expect(findIntersection(exactVersion, unionVersion3)).toBeUndefined();
       expect(findIntersection(unionVersion3, exactVersion)).toBeUndefined();
@@ -796,11 +858,19 @@ describe("mustSatisfyPeerDependencies", () => {
     it("major vs union", () => {
       const majorVersion = "^15.2";
       const unionVersion1 = "^15 || ^16";
-      expect(findIntersection(majorVersion, unionVersion1)).toEqual(majorVersion);
-      expect(findIntersection(unionVersion1, majorVersion)).toEqual(majorVersion);
+      expect(findIntersection(majorVersion, unionVersion1)).toEqual(
+        majorVersion,
+      );
+      expect(findIntersection(unionVersion1, majorVersion)).toEqual(
+        majorVersion,
+      );
       const unionVersion2 = "^14 || ^15";
-      expect(findIntersection(majorVersion, unionVersion2)).toEqual(majorVersion);
-      expect(findIntersection(unionVersion2, majorVersion)).toEqual(majorVersion);
+      expect(findIntersection(majorVersion, unionVersion2)).toEqual(
+        majorVersion,
+      );
+      expect(findIntersection(unionVersion2, majorVersion)).toEqual(
+        majorVersion,
+      );
       const unionVersion3 = "^16 || ^17";
       expect(findIntersection(majorVersion, unionVersion3)).toBeUndefined();
       expect(findIntersection(unionVersion3, majorVersion)).toBeUndefined();
@@ -809,11 +879,19 @@ describe("mustSatisfyPeerDependencies", () => {
     it("union vs union", () => {
       const unionVersion1 = "^15.2 || ^16";
       const unionVersion2 = "^15 || ^16";
-      expect(findIntersection(unionVersion1, unionVersion2)).toEqual("^15.2 || ^16");
-      expect(findIntersection(unionVersion2, unionVersion1)).toEqual("^15.2 || ^16");
+      expect(findIntersection(unionVersion1, unionVersion2)).toEqual(
+        "^15.2 || ^16",
+      );
+      expect(findIntersection(unionVersion2, unionVersion1)).toEqual(
+        "^15.2 || ^16",
+      );
       const unionVersion3 = "^15 || ^16.4";
-      expect(findIntersection(unionVersion1, unionVersion3)).toEqual("^15.2 || ^16.4");
-      expect(findIntersection(unionVersion3, unionVersion1)).toEqual("^15.2 || ^16.4");
+      expect(findIntersection(unionVersion1, unionVersion3)).toEqual(
+        "^15.2 || ^16.4",
+      );
+      expect(findIntersection(unionVersion3, unionVersion1)).toEqual(
+        "^15.2 || ^16.4",
+      );
       const unionVersion4 = "14 || 15";
       expect(findIntersection(unionVersion1, unionVersion4)).toEqual("^15.2");
       expect(findIntersection(unionVersion4, unionVersion1)).toEqual("^15.2");
@@ -843,13 +921,17 @@ describe("mustSatisfyPeerDependencies", () => {
     const greatLibPackageJson = {
       name: "greatLib",
     };
-    addPackageJson(host, "./node_modules/greatLib/package.json", greatLibPackageJson);
+    addPackageJson(
+      host,
+      "./node_modules/greatLib/package.json",
+      greatLibPackageJson,
+    );
 
     await check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[0] Package ${testPackageJson.name} has overloaded greatLib dependencies.\n\t` +
-        `Peer dependency '${testPackageJson.peerDependencies.greatLib}' and regular dependency '${testPackageJson.dependencies.greatLib}'.`
+      `[0] Package ${testPackageJson.name} has overloaded greatLib dependencies.\n\t`
+        + `Peer dependency '${testPackageJson.peerDependencies.greatLib}' and regular dependency '${testPackageJson.dependencies.greatLib}'.`,
     );
   });
 
@@ -898,18 +980,18 @@ describe("mustSatisfyPeerDependencies", () => {
     await check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[1] Package ${testPackageJson.name} has conflicting inherited greatLib peer dependencies.\n\t` +
-        `Dependency ${bbbPackageJson.name} requires '${bbbPackageJson.peerDependencies.greatLib}' but\n\t` +
-        `Dependency ${aaaPackageJson.name} requires '${aaaPackageJson.peerDependencies.greatLib}'.`
+      `[1] Package ${testPackageJson.name} has conflicting inherited greatLib peer dependencies.\n\t`
+        + `Dependency ${bbbPackageJson.name} requires '${bbbPackageJson.peerDependencies.greatLib}' but\n\t`
+        + `Dependency ${aaaPackageJson.name} requires '${aaaPackageJson.peerDependencies.greatLib}'.`,
     );
     addErrorSpy.mockReset();
 
     await check({ enforceForDevDependencies: true });
     expect(addErrorSpy).toHaveBeenCalledTimes(2);
     expect(addErrorSpy.mock.calls[1][0].message).toEqual(
-      `[1] Package ${testPackageJson.name} has conflicting inherited greatestLib peer dependencies.\n\t` +
-        `Dependency ${cccPackageJson.name} requires '${cccPackageJson.peerDependencies.greatestLib}' but\n\t` +
-        `Dependency ${aaaPackageJson.name} requires '${aaaPackageJson.peerDependencies.greatestLib}'.`
+      `[1] Package ${testPackageJson.name} has conflicting inherited greatestLib peer dependencies.\n\t`
+        + `Dependency ${cccPackageJson.name} requires '${cccPackageJson.peerDependencies.greatestLib}' but\n\t`
+        + `Dependency ${aaaPackageJson.name} requires '${aaaPackageJson.peerDependencies.greatestLib}'.`,
     );
     addErrorSpy.mockReset();
   });
@@ -933,7 +1015,11 @@ describe("mustSatisfyPeerDependencies", () => {
     const greatLibPackageJson = {
       name: "greatLib",
     };
-    addPackageJson(host, "./node_modules/greatLib/package.json", greatLibPackageJson);
+    addPackageJson(
+      host,
+      "./node_modules/greatLib/package.json",
+      greatLibPackageJson,
+    );
     const aaaPackageJson = {
       name: "a",
       peerDependencies: {
@@ -959,16 +1045,16 @@ describe("mustSatisfyPeerDependencies", () => {
     await check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[2] Package ${testPackageJson.name} dependency on greatLib '${testPackageJson.dependencies.greatLib}' does not satisfy inherited peer dependencies.\n\t` +
-        `Dependency ${bbbPackageJson.name} requires '${bbbPackageJson.peerDependencies.greatLib}'.`
+      `[2] Package ${testPackageJson.name} dependency on greatLib '${testPackageJson.dependencies.greatLib}' does not satisfy inherited peer dependencies.\n\t`
+        + `Dependency ${bbbPackageJson.name} requires '${bbbPackageJson.peerDependencies.greatLib}'.`,
     );
     addErrorSpy.mockReset();
 
     await check({ enforceForDevDependencies: true });
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[2] Package ${testPackageJson.name} dependency on greatLib '${testPackageJson.dependencies.greatLib}' does not satisfy inherited peer dependencies.\n\t` +
-        `Dependency ${cccPackageJson.name} requires '${cccPackageJson.peerDependencies.greatLib}'.`
+      `[2] Package ${testPackageJson.name} dependency on greatLib '${testPackageJson.dependencies.greatLib}' does not satisfy inherited peer dependencies.\n\t`
+        + `Dependency ${cccPackageJson.name} requires '${cccPackageJson.peerDependencies.greatLib}'.`,
     );
     addErrorSpy.mockReset();
   });
@@ -986,7 +1072,11 @@ describe("mustSatisfyPeerDependencies", () => {
         ccc: "0.0.1",
       },
     } as const;
-    const readTestPackageJson = addPackageJson(host, "./package.json", testPackageJson);
+    const readTestPackageJson = addPackageJson(
+      host,
+      "./package.json",
+      testPackageJson,
+    );
 
     const aaaPackageJson = {
       name: "aaa",
@@ -1013,10 +1103,10 @@ describe("mustSatisfyPeerDependencies", () => {
     await check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[3] Package ${testPackageJson.name} is missing required greatLib dependency.\n\t` +
-        `Dependencies [${aaaPackageJson.name}, ${bbbPackageJson.name}] require ` +
-        `['${aaaPackageJson.peerDependencies.greatLib}', '${bbbPackageJson.peerDependencies.greatLib}'] ` +
-        `respectively, resolving to '^16.2'.`
+      `[3] Package ${testPackageJson.name} is missing required greatLib dependency.\n\t`
+        + `Dependencies [${aaaPackageJson.name}, ${bbbPackageJson.name}] require `
+        + `['${aaaPackageJson.peerDependencies.greatLib}', '${bbbPackageJson.peerDependencies.greatLib}'] `
+        + `respectively, resolving to '^16.2'.`,
     );
     expect(readTestPackageJson().peerDependencies!.greatLib).toEqual("^16.2");
     addErrorSpy.mockReset();
@@ -1024,8 +1114,8 @@ describe("mustSatisfyPeerDependencies", () => {
     await check({ enforceForDevDependencies: true });
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[3] Package ${testPackageJson.name} is missing required greatestLib dependency.\n\t` +
-        `Dependency ${cccPackageJson.name} requires '${cccPackageJson.peerDependencies.greatestLib}'.`
+      `[3] Package ${testPackageJson.name} is missing required greatestLib dependency.\n\t`
+        + `Dependency ${cccPackageJson.name} requires '${cccPackageJson.peerDependencies.greatestLib}'.`,
     );
     addErrorSpy.mockReset();
   });
@@ -1046,7 +1136,11 @@ describe("mustSatisfyPeerDependencies", () => {
         ccc: "0.0.1",
       },
     } as const;
-    const readTestPackageJson = addPackageJson(host, "./package.json", testPackageJson);
+    const readTestPackageJson = addPackageJson(
+      host,
+      "./package.json",
+      testPackageJson,
+    );
 
     const aaaPackageJson = {
       name: "aaa",
@@ -1073,17 +1167,19 @@ describe("mustSatisfyPeerDependencies", () => {
     await check({});
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[4] Package ${testPackageJson.name} peer dependency on greatLib '${testPackageJson.peerDependencies.greatLib}' is not strict enough.\n\t` +
-        `Dependency ${bbbPackageJson.name} requires '${bbbPackageJson.peerDependencies.greatLib}'.`
+      `[4] Package ${testPackageJson.name} peer dependency on greatLib '${testPackageJson.peerDependencies.greatLib}' is not strict enough.\n\t`
+        + `Dependency ${bbbPackageJson.name} requires '${bbbPackageJson.peerDependencies.greatLib}'.`,
     );
-    expect(readTestPackageJson().peerDependencies!.greatLib).toEqual(bbbPackageJson.peerDependencies.greatLib);
+    expect(readTestPackageJson().peerDependencies!.greatLib).toEqual(
+      bbbPackageJson.peerDependencies.greatLib,
+    );
     addErrorSpy.mockReset();
 
     await check({ enforceForDevDependencies: true });
     expect(addErrorSpy).toHaveBeenCalledTimes(1);
     expect(addErrorSpy.mock.calls[0][0].message).toEqual(
-      `[4] Package ${testPackageJson.name} peer dependency on greatLib '${bbbPackageJson.peerDependencies.greatLib}' is not strict enough.\n\t` +
-        `Dependency ${cccPackageJson.name} requires '${cccPackageJson.peerDependencies.greatLib}'.`
+      `[4] Package ${testPackageJson.name} peer dependency on greatLib '${bbbPackageJson.peerDependencies.greatLib}' is not strict enough.\n\t`
+        + `Dependency ${cccPackageJson.name} requires '${cccPackageJson.peerDependencies.greatLib}'.`,
     );
     addErrorSpy.mockReset();
   });
@@ -1108,11 +1204,19 @@ describe("mustSatisfyPeerDependencies", () => {
     const startHerePackageJson = {
       name: "startHere",
     };
-    addPackageJson(host, "./node_modules/startHere/package.json", startHerePackageJson);
+    addPackageJson(
+      host,
+      "./node_modules/startHere/package.json",
+      startHerePackageJson,
+    );
     const greatLibPackageJson = {
       name: "greatLib",
     };
-    addPackageJson(host, "./node_modules/greatLib/package.json", greatLibPackageJson);
+    addPackageJson(
+      host,
+      "./node_modules/greatLib/package.json",
+      greatLibPackageJson,
+    );
     const aaaPackageJson = {
       name: "a",
       peerDependencies: {
@@ -1154,11 +1258,19 @@ describe("mustSatisfyPeerDependencies", () => {
     const startHerePackageJson = {
       name: "startHere",
     };
-    addPackageJson(host, "./node_modules/startHere/package.json", startHerePackageJson);
+    addPackageJson(
+      host,
+      "./node_modules/startHere/package.json",
+      startHerePackageJson,
+    );
     const greatLibPackageJson = {
       name: "greatLib",
     };
-    addPackageJson(host, "./node_modules/greatLib/package.json", greatLibPackageJson);
+    addPackageJson(
+      host,
+      "./node_modules/greatLib/package.json",
+      greatLibPackageJson,
+    );
     const aaaPackageJson = {
       name: "aaa",
       peerDependencies: {
@@ -1178,7 +1290,10 @@ describe("mustSatisfyPeerDependencies", () => {
     expect(addErrorSpy).toHaveBeenCalledTimes(0);
     addErrorSpy.mockReset();
 
-    await check({ dependencyBlacklist: ["greatLib"], dependencyWhitelist: ["greatLib"] });
+    await check({
+      dependencyBlacklist: ["greatLib"],
+      dependencyWhitelist: ["greatLib"],
+    });
     expect(addErrorSpy).toHaveBeenCalledTimes(0);
     addErrorSpy.mockReset();
 

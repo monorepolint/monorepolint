@@ -5,21 +5,32 @@
  *
  */
 
-import { getPackageNameToDir, getWorkspacePackageDirs, Host } from "@monorepolint/utils";
 import * as Config from "@monorepolint/config";
+import {
+  getPackageNameToDir,
+  getWorkspacePackageDirs,
+  Host,
+} from "@monorepolint/utils";
 import { PackageContextImpl } from "./PackageContext.js";
 // Right now, this stuff is done serially so we are writing less code to support that. Later we may want to redo this.
-export class WorkspaceContextImpl extends PackageContextImpl implements Config.WorkspaceContext {
+export class WorkspaceContextImpl extends PackageContextImpl
+  implements Config.WorkspaceContext
+{
   private packageNameToDir: Map<string, string> | undefined;
   private workspacePackageDirsCache: string[] | undefined;
 
-  constructor(packageDir: string, opts: Config.ResolvedConfig, host: Host, parent?: Config.Context) {
+  constructor(
+    packageDir: string,
+    opts: Config.ResolvedConfig,
+    host: Host,
+    parent?: Config.Context,
+  ) {
     super(packageDir, opts, host, parent);
   }
 
   public async getWorkspacePackageDirs() {
-    this.workspacePackageDirsCache =
-      this.workspacePackageDirsCache ?? (await getWorkspacePackageDirs(this.host, this.packageDir));
+    this.workspacePackageDirsCache = this.workspacePackageDirsCache
+      ?? (await getWorkspacePackageDirs(this.host, this.packageDir));
 
     return this.workspacePackageDirsCache;
   }
@@ -29,7 +40,8 @@ export class WorkspaceContextImpl extends PackageContextImpl implements Config.W
   }
 
   public async getPackageNameToDir() {
-    this.packageNameToDir = this.packageNameToDir ?? (await getPackageNameToDir(this.host, this.packageDir));
+    this.packageNameToDir = this.packageNameToDir
+      ?? (await getPackageNameToDir(this.host, this.packageDir));
     return this.packageNameToDir;
   }
 }

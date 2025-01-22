@@ -1,17 +1,18 @@
-import React from 'react';
-import classnames from 'classnames';
-import Layout from '@theme/Layout';
-import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import useBaseUrl from '@docusaurus/useBaseUrl';
-import styles from './styles.module.css';
+import Link from "@docusaurus/Link";
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import Layout from "@theme/Layout";
+import classnames from "classnames";
+import React from "react";
+import styles from "./styles.module.css";
 
 const features = [
   {
     title: <>Easy to Use</>,
     description: (
       <>
-        Designed to support your workflow, not define it. Easy to add. Add complexity over time as you need it.
+        Designed to support your workflow, not define it. Easy to add. Add
+        complexity over time as you need it.
       </>
     ),
   },
@@ -25,10 +26,10 @@ const features = [
   },
 ];
 
-function Feature({imageUrl, title, description}) {
+function Feature({ imageUrl, title, description }) {
   const imgUrl = useBaseUrl(imageUrl);
   return (
-    <div className={classnames('col col--4', styles.feature)}>
+    <div className={classnames("col col--4", styles.feature)}>
       {imgUrl && (
         <div className="text--center">
           <img className={styles.featureImage} src={imgUrl} alt={title} />
@@ -42,22 +43,24 @@ function Feature({imageUrl, title, description}) {
 
 function Home() {
   const context = useDocusaurusContext();
-  const {siteConfig = {}} = context;
+  const { siteConfig = {} } = context;
   return (
     <Layout
       title={`${siteConfig.title}`}
-      description="Making monorepos consistent since 2019">
-      <header className={classnames('hero hero--primary', styles.heroBanner)}>
+      description="Making monorepos consistent since 2019"
+    >
+      <header className={classnames("hero hero--primary", styles.heroBanner)}>
         <div className="container">
           <h1 className="hero__title">{siteConfig.title}</h1>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
           <div className={styles.buttons}>
             <Link
               className={classnames(
-                'button button--outline button--secondary button--lg',
+                "button button--outline button--secondary button--lg",
                 styles.getStarted,
               )}
-              to={useBaseUrl('docs/')}>
+              to={useBaseUrl("docs/")}
+            >
               Get Started
             </Link>
           </div>
@@ -68,9 +71,7 @@ function Home() {
           <section className={styles.features}>
             <div className="container">
               <div className="row">
-                {features.map((props, idx) => (
-                  <Feature key={idx} {...props} />
-                ))}
+                {features.map((props, idx) => <Feature key={idx} {...props} />)}
               </div>
             </div>
           </section>
