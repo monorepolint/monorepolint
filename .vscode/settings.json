@@ -1,8 +1,11 @@
 {
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "dprint.dprint"
   },
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "eslint.experimental.useFlatConfig": true,
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "editor.defaultFormatter": "dprint.dprint",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "cSpell.words": [
+    "monorepolint",
+    "runtypes"
+  ]
 }

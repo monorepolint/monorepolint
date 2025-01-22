@@ -52,7 +52,7 @@ importers:
         version: 9.18.0(jiti@1.21.7)
       eslint-config-turbo:
         specifier: ^2.3.3
-        version: 2.3.4(eslint@9.18.0(jiti@1.21.7))(turbo@2.3.3)
+        version: 2.3.4(eslint@9.18.0(jiti@1.21.7))(turbo@2.3.4)
       gh-pages:
         specifier: ^6.3.0
         version: 6.3.0
@@ -114,9 +114,6 @@ importers:
       eslint:
         specifier: ^9.18.0
         version: 9.18.0(jiti@1.21.7)
-      prettier:
-        specifier: ^3.4.2
-        version: 3.4.2
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
@@ -5542,11 +5539,6 @@ packages:
     engines: {node: '>=10.13.0'}
     hasBin: true
 
-  prettier@3.4.2:
-    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
-    engines: {node: '>=14'}
-    hasBin: true
-
   pretty-error@4.0.0:
     resolution: {integrity: sha512-AoJ5YMAcXKYxKhuJGdcvse+Voc6v1RgnsR3nWcYU7q4t6z0Q6T86sv5Zq8VIRbOWWFpvdGE83LtdSMNd+6Y0xw==}
 
@@ -10818,17 +10810,17 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-config-turbo@2.3.4(eslint@9.18.0(jiti@1.21.7))(turbo@2.3.3):
+  eslint-config-turbo@2.3.4(eslint@9.18.0(jiti@1.21.7))(turbo@2.3.4):
     dependencies:
       eslint: 9.18.0(jiti@1.21.7)
-      eslint-plugin-turbo: 2.3.4(eslint@9.18.0(jiti@1.21.7))(turbo@2.3.3)
-      turbo: 2.3.3
+      eslint-plugin-turbo: 2.3.4(eslint@9.18.0(jiti@1.21.7))(turbo@2.3.4)
+      turbo: 2.3.4
 
-  eslint-plugin-turbo@2.3.4(eslint@9.18.0(jiti@1.21.7))(turbo@2.3.3):
+  eslint-plugin-turbo@2.3.4(eslint@9.18.0(jiti@1.21.7))(turbo@2.3.4):
     dependencies:
       dotenv: 16.0.3
       eslint: 9.18.0(jiti@1.21.7)
-      turbo: 2.3.3
+      turbo: 2.3.4
 
   eslint-scope@5.1.1:
     dependencies:
@@ -13336,8 +13328,6 @@ snapshots:
 
   prettier@2.8.8: {}
 
-  prettier@3.4.2: {}
-
   pretty-error@4.0.0:
     dependencies:
       lodash: 4.17.21
@@ -13592,7 +13582,7 @@ snapshots:
 
   regenerator-transform@0.15.2:
     dependencies:
-      '@babel/runtime': 7.26.0
+      '@babel/runtime': 7.26.7
 
   regexpu-core@6.2.0:
     dependencies:

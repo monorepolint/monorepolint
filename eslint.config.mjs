@@ -14,9 +14,18 @@ export default tseslint.config(
       "@typescript-eslint/no-empty-interface": "off", // this rule could make perf worse!
       "@typescript-eslint/no-inferrable-types": "off", // same.
       "@typescript-eslint/no-explicit-any": "warn", // bad rule
-      "@typescript-eslint/no-unused-vars": ["error", {
-        argsIgnorePattern: "^_",
-      }],
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          args: "all",
+          argsIgnorePattern: "^_",
+          caughtErrors: "all",
+          caughtErrorsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          ignoreRestSiblings: true,
+        },
+      ],
     },
   },
   {
@@ -44,4 +53,5 @@ export default tseslint.config(
     },
   },
   { ignores: ["**/build/"] },
+  { ignores: ["packages/docs/**/*.js"] },
 );
