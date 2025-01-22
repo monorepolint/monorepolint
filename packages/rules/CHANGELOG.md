@@ -1,5 +1,14 @@
 # @monorepolint/rules
 
+## 0.6.0-alpha.3
+
+### Patch Changes
+
+- 6a63a44: Feature: requireDependency now allows undefined for versions to remove the entry
+  - @monorepolint/config@0.6.0-alpha.3
+  - @monorepolint/core@0.6.0-alpha.3
+  - @monorepolint/utils@0.6.0-alpha.3
+
 ## 0.6.0-alpha.2
 
 ### Patch Changes

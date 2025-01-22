@@ -1,5 +1,14 @@
 # @monorepolint/cli
 
+## 0.6.0-alpha.3
+
+### Patch Changes
+
+- 505f6c2: mrl now suggests a better command when using pnpm
+  - @monorepolint/config@0.6.0-alpha.3
+  - @monorepolint/core@0.6.0-alpha.3
+  - @monorepolint/utils@0.6.0-alpha.3
+
 ## 0.6.0-alpha.2
 
 ### Patch Changes
