@@ -42,8 +42,8 @@ importers:
         specifier: ^8.20.0
         version: 8.21.0(eslint@9.18.0(jiti@1.21.7))(typescript@5.7.3)
       '@vitest/coverage-v8':
-        specifier: ^2.1.8
-        version: 2.1.8(vitest@3.0.3(@types/node@18.18.14)(jiti@1.21.7)(terser@5.37.0)(yaml@2.6.1))
+        specifier: ^3.0.3
+        version: 3.0.3(vitest@3.0.3(@types/node@18.18.14)(jiti@1.21.7)(terser@5.37.0)(yaml@2.6.1))
       dprint:
         specifier: ^0.48.0
         version: 0.48.0
@@ -1075,8 +1075,9 @@ packages:
     resolution: {integrity: sha512-L6mZmwFDK6Cjh1nRCLXpa6no13ZIioJDz7mdkzHv399pThrTa/k0nUlNaenOeh2kWu/iaOQYElEpKPUswUa9Vg==}
     engines: {node: '>=6.9.0'}
 
-  '@bcoe/v8-coverage@0.2.3':
-    resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
+  '@bcoe/v8-coverage@1.0.2':
+    resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
+    engines: {node: '>=18'}
 
   '@changesets/apply-release-plan@7.0.7':
     resolution: {integrity: sha512-qnPOcmmmnD0MfMg9DjU1/onORFyRpDXkMMl2IJg9mECY6RnxL3wN0TCCc92b2sXt1jt8DgjAUUsZYGUGTdYIXA==}
@@ -2403,11 +2404,11 @@ packages:
   '@ungap/structured-clone@1.2.1':
     resolution: {integrity: sha512-fEzPV3hSkSMltkw152tJKNARhOupqbH96MZWyRjNaYZOMIzbrTeQDG+MTc6Mr2pgzFQzFxAfmhGDNP5QK++2ZA==}
 
-  '@vitest/coverage-v8@2.1.8':
-    resolution: {integrity: sha512-2Y7BPlKH18mAZYAW1tYByudlCYrQyl5RGvnnDYJKW5tCiO5qg3KSAy3XAxcxKz900a0ZXxWtKrMuZLe3lKBpJw==}
+  '@vitest/coverage-v8@3.0.3':
+    resolution: {integrity: sha512-uVbJ/xhImdNtzPnLyxCZJMTeTIYdgcC2nWtBBBpR1H6z0w8m7D+9/zrDIx2nNxgMg9r+X8+RY2qVpUDeW2b3nw==}
     peerDependencies:
-      '@vitest/browser': 2.1.8
-      vitest: 2.1.8
+      '@vitest/browser': 3.0.3
+      vitest: 3.0.3
     peerDependenciesMeta:
       '@vitest/browser':
         optional: true
@@ -6283,10 +6284,6 @@ packages:
     resolution: {integrity: sha512-al6n+QEANGFOMf/dmUMsuS5/r9B06uwlyNjZZql/zv8J7ybHCgoihBNORZCY2mzUuAnomQa2JdhyHKzZxPCrFA==}
     engines: {node: ^18.0.0 || >=20.0.0}
 
-  tinyrainbow@1.2.0:
-    resolution: {integrity: sha512-weEDEq7Z5eTHPDh4xjX789+fHfF+P8boiFB+0vbWzpbnbsEr/GRaohi/uMKxg8RZMXnl1ItAi/IUHWMsjDV7kQ==}
-    engines: {node: '>=14.0.0'}
-
   tinyrainbow@2.0.0:
     resolution: {integrity: sha512-op4nsTR47R6p0vMUUoYl/a+ljLFVtlfaXkLQmqfLR1qHma1h/ysYk4hEXZ880bf2CYgTskvTa/e196Vd5dDQXw==}
     engines: {node: '>=14.0.0'}
@@ -7689,7 +7686,7 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  '@bcoe/v8-coverage@0.2.3': {}
+  '@bcoe/v8-coverage@1.0.2': {}
 
   '@changesets/apply-release-plan@7.0.7':
     dependencies:
@@ -9699,10 +9696,10 @@ snapshots:
 
   '@ungap/structured-clone@1.2.1': {}
 
-  '@vitest/coverage-v8@2.1.8(vitest@3.0.3(@types/node@18.18.14)(jiti@1.21.7)(terser@5.37.0)(yaml@2.6.1))':
+  '@vitest/coverage-v8@3.0.3(vitest@3.0.3(@types/node@18.18.14)(jiti@1.21.7)(terser@5.37.0)(yaml@2.6.1))':
     dependencies:
       '@ampproject/remapping': 2.3.0
-      '@bcoe/v8-coverage': 0.2.3
+      '@bcoe/v8-coverage': 1.0.2
       debug: 4.4.0
       istanbul-lib-coverage: 3.2.2
       istanbul-lib-report: 3.0.1
@@ -9712,7 +9709,7 @@ snapshots:
       magicast: 0.3.5
       std-env: 3.8.0
       test-exclude: 7.0.1
-      tinyrainbow: 1.2.0
+      tinyrainbow: 2.0.0
       vitest: 3.0.3(@types/node@18.18.14)(jiti@1.21.7)(terser@5.37.0)(yaml@2.6.1)
     transitivePeerDependencies:
       - supports-color
@@ -14216,8 +14213,6 @@ snapshots:
       picomatch: 4.0.2
 
   tinypool@1.0.2: {}
-
-  tinyrainbow@1.2.0: {}
 
   tinyrainbow@2.0.0: {}
 
