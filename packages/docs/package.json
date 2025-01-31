@@ -1,6 +1,6 @@
 {
   "name": "@monorepolint/docs",
-  "version": "0.6.0-alpha.3",
+  "version": "0.6.0-alpha.4",
   "exports": {
     ".": {
       "types": "./build/types/index.d.ts",

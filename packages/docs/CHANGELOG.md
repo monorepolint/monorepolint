@@ -1,5 +1,11 @@
 # @monorepolint/docs
 
+## 0.6.0-alpha.4
+
+### Minor Changes
+
+- 7b6fd9d: Introduce @monorepolint/archetypes
+
 ## 0.6.0-alpha.3
 
 ## 0.6.0-alpha.2
