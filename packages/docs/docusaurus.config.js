@@ -89,9 +89,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${
-        new Date().getFullYear()
-      } Palantir Technologies. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Palantir Technologies.`,
     },
   },
   presets: [

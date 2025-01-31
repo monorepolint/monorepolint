@@ -124,6 +124,58 @@ importers:
         specifier: ^5.7.3
         version: 5.7.3
 
+  packages/archetypes:
+    dependencies:
+      '@monorepolint/config':
+        specifier: workspace:^
+        version: link:../config
+      '@monorepolint/rules':
+        specifier: workspace:^
+        version: link:../rules
+      find-packages:
+        specifier: ^10.0.4
+        version: 10.0.4
+      find-up:
+        specifier: ^7.0.0
+        version: 7.0.0
+      glob:
+        specifier: ^10.3.12
+        version: 10.4.5
+      micromatch:
+        specifier: ^4.0.8
+        version: 4.0.8
+      read-yaml-file:
+        specifier: ^2.1.0
+        version: 2.1.0
+      tslib:
+        specifier: ^2.8.1
+        version: 2.8.1
+    devDependencies:
+      '@types/glob':
+        specifier: ^8.1.0
+        version: 8.1.0
+      '@types/micromatch':
+        specifier: ^4.0.9
+        version: 4.0.9
+      '@types/node':
+        specifier: ^18.18.14
+        version: 18.18.14
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^8.20.0
+        version: 8.21.0(@typescript-eslint/parser@8.21.0(eslint@9.18.0(jiti@1.21.7))(typescript@5.7.3))(eslint@9.18.0(jiti@1.21.7))(typescript@5.7.3)
+      '@typescript-eslint/parser':
+        specifier: ^8.20.0
+        version: 8.21.0(eslint@9.18.0(jiti@1.21.7))(typescript@5.7.3)
+      eslint:
+        specifier: ^9.18.0
+        version: 9.18.0(jiti@1.21.7)
+      tsup:
+        specifier: ^8.3.5
+        version: 8.3.5(jiti@1.21.7)(postcss@8.5.1)(typescript@5.7.3)(yaml@2.7.0)
+      typescript:
+        specifier: ^5.7.3
+        version: 5.7.3
+
   packages/cli:
     dependencies:
       '@monorepolint/config':

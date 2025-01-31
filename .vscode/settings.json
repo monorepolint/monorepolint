@@ -5,7 +5,11 @@
   "editor.defaultFormatter": "dprint.dprint",
   "typescript.tsdk": "node_modules/typescript/lib",
   "cSpell.words": [
+    "dprint",
     "monorepolint",
     "runtypes"
-  ]
+  ],
+  "[markdown]": {
+    "editor.defaultFormatter": "dprint.dprint"
+  }
 }

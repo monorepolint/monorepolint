@@ -7,6 +7,7 @@
 
 import type { ConfigFn } from "@monorepolint/config";
 import * as Rules from "@monorepolint/rules";
+import { spawnSync } from "node:child_process";
 
 const META_PACKAGES = ["monorepolint"];
 
@@ -14,6 +15,22 @@ const DOCS = "@monorepolint/docs";
 
 // FIXME: This is still suboptimal
 const DELETE_SCRIPT_ENTRTY = { options: [undefined], fixValue: undefined };
+
+const formatWithDprint = (contents: string, ext: string) => {
+  const result = spawnSync(
+    `pnpm exec dprint fmt --stdin foo.${ext}`,
+    {
+      input: contents,
+      encoding: "utf8",
+      shell: true,
+    },
+  );
+
+  if (result.error) {
+    throw result.error;
+  }
+  return result.stdout;
+};
 
 export const config: ConfigFn = (_context) => {
   return {
@@ -34,7 +51,8 @@ export const config: ConfigFn = (_context) => {
       Rules.fileContents({
         options: {
           file: "vitest.config.mjs",
-          template: `import {
+          template: formatWithDprint(
+            `import {
   coverageConfigDefaults,
   defaultExclude,
   defineProject,
@@ -52,6 +70,8 @@ export default defineProject({
   },
 });
 `,
+            "mjs",
+          ),
         },
         excludePackages: [DOCS],
       }),

@@ -1,0 +1,54 @@
+{
+  "name": "@monorepolint/archetypes",
+  "version": "0.6.0-alpha.2",
+  "author": "Eric L Anderson (https://github.com/ericanderson)",
+  "url": "https://github.com/monorepolint/monorepolint",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./build/types/index.d.ts",
+      "import": "./build/js/index.js"
+    },
+    "./*": {
+      "types": "./build/types/public/*.d.ts",
+      "import": "./build/js/public/*.js"
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "clean": "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
+    "compile-typescript": "tsc --build",
+    "lint": "eslint .",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest --passWithNoTests",
+    "transpile-typescript": "tsup --config ../../tsup.config.cjs"
+  },
+  "dependencies": {
+    "@monorepolint/config": "workspace:^",
+    "@monorepolint/rules": "workspace:^",
+    "find-packages": "^10.0.4",
+    "find-up": "^7.0.0",
+    "glob": "^10.3.12",
+    "micromatch": "^4.0.8",
+    "read-yaml-file": "^2.1.0",
+    "tslib": "^2.8.1"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/micromatch": "^4.0.9",
+    "@types/node": "^18.18.14",
+    "@typescript-eslint/eslint-plugin": "^8.20.0",
+    "@typescript-eslint/parser": "^8.20.0",
+    "eslint": "^9.18.0",
+    "tslib": "^2.8.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "74320e31cfce7555aece7a98d71d01d2f329be0f"
+}

@@ -10,7 +10,7 @@ module.exports = {
       type: "category",
       label: "Guides",
       collapsed: false,
-      items: ["guides/config-in-a-package", "tips-and-tricks"],
+      items: ["guides/archetypes", "guides/config-in-a-package", "tips-and-tricks"],
     },
     {
       type: "category",
