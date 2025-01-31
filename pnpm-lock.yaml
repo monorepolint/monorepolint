@@ -52,7 +52,7 @@ importers:
         version: 9.18.0(jiti@1.21.7)
       eslint-config-turbo:
         specifier: ^2.3.3
-        version: 2.3.3(eslint@9.18.0(jiti@1.21.7))
+        version: 2.3.4(eslint@9.18.0(jiti@1.21.7))(turbo@2.3.3)
       gh-pages:
         specifier: ^6.3.0
         version: 6.3.0
@@ -3424,15 +3424,17 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-config-turbo@2.3.3:
-    resolution: {integrity: sha512-cM9wSBYowQIrjx2MPCzFE6jTnG4vpTPJKZ/O+Ps3CqrmGK/wtNOsY6WHGMwLtKY/nNbgRahAJH6jGVF6k2coOg==}
+  eslint-config-turbo@2.3.4:
+    resolution: {integrity: sha512-MxPl+IKkR7mRGcHoiZAMHYl+RZnjqBsxTLf+IGnx8BrJQe9/CoLT7oBlUxXGvh9bsd5MTaqCxly5h8BE1v/7AA==}
     peerDependencies:
       eslint: '>6.6.0'
+      turbo: '>2.0.0'
 
-  eslint-plugin-turbo@2.3.3:
-    resolution: {integrity: sha512-j8UEA0Z+NNCsjZep9G5u5soDQHcXq/x4amrwulk6eHF1U91H2qAjp5I4jQcvJewmccCJbVp734PkHHTRnosjpg==}
+  eslint-plugin-turbo@2.3.4:
+    resolution: {integrity: sha512-9ncoUJkQGkC28NmlQiS17oB9mrE8XaSulRZiB5pv9vmRbYjOfUwyGhY3EIcoBRdww81igxOzXmAmvNNd6GFBPg==}
     peerDependencies:
       eslint: '>6.6.0'
+      turbo: '>2.0.0'
 
   eslint-scope@5.1.1:
     resolution: {integrity: sha512-2NxwbF/hZ0KpepYN0cNbo+FN6XoK7GaHlQhgx/hIZl6Va0bF45RQOOwhLIy8lQDbuCiadSLCBnH2CFYquit5bw==}
@@ -10816,15 +10818,17 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-config-turbo@2.3.3(eslint@9.18.0(jiti@1.21.7)):
+  eslint-config-turbo@2.3.4(eslint@9.18.0(jiti@1.21.7))(turbo@2.3.3):
     dependencies:
       eslint: 9.18.0(jiti@1.21.7)
-      eslint-plugin-turbo: 2.3.3(eslint@9.18.0(jiti@1.21.7))
+      eslint-plugin-turbo: 2.3.4(eslint@9.18.0(jiti@1.21.7))(turbo@2.3.3)
+      turbo: 2.3.3
 
-  eslint-plugin-turbo@2.3.3(eslint@9.18.0(jiti@1.21.7)):
+  eslint-plugin-turbo@2.3.4(eslint@9.18.0(jiti@1.21.7))(turbo@2.3.3):
     dependencies:
       dotenv: 16.0.3
       eslint: 9.18.0(jiti@1.21.7)
+      turbo: 2.3.3
 
   eslint-scope@5.1.1:
     dependencies:
