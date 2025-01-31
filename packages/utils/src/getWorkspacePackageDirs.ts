@@ -44,9 +44,7 @@ export async function getWorkspacePackageDirs(
     if (workspacePackages.length === 0) {
       throw new Error("Invalid workspaceDir: " + workspaceDir);
     }
-    return workspacePackages.map((project) => project.dir).filter((d) =>
-      d !== workspaceDir
-    );
+    return workspacePackages.map((project) => project.dir).filter((d) => d !== workspaceDir);
   }
 
   if (!packageJson.workspaces) {

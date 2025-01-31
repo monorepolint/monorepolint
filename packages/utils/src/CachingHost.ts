@@ -233,9 +233,7 @@ export class CachingHost implements Host {
       parent.dir.set(path.basename(canonicalPath), node);
     } else {
       throw new Error(
-        `root can only be a dir, got ${
-          JSON.stringify(node)
-        } for path: ${canonicalPath}`,
+        `root can only be a dir, got ${JSON.stringify(node)} for path: ${canonicalPath}`,
       );
     }
     return node;

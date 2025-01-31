@@ -9,11 +9,7 @@
 import { AddErrorOptions, Failure } from "@monorepolint/config";
 import { beforeEach, describe, expect, it, MockInstance, vi } from "vitest";
 import { fileContents } from "../fileContents.js";
-import {
-  createTestingWorkspace,
-  HOST_FACTORIES,
-  TestingWorkspace,
-} from "./utils.js";
+import { createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
 
 const EXPECTED_FOO_FILE = "hello world";
 

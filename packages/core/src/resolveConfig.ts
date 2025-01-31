@@ -4,12 +4,7 @@
  * Licensed under the MIT license. See LICENSE file in the project root for details.
  *
  */
-import {
-  Config,
-  Options,
-  ResolvedConfig,
-  ResolvedRule,
-} from "@monorepolint/config";
+import { Config, Options, ResolvedConfig, ResolvedRule } from "@monorepolint/config";
 
 export function resolveConfig(
   config: Config,

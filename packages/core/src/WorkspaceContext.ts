@@ -6,16 +6,10 @@
  */
 
 import * as Config from "@monorepolint/config";
-import {
-  getPackageNameToDir,
-  getWorkspacePackageDirs,
-  Host,
-} from "@monorepolint/utils";
+import { getPackageNameToDir, getWorkspacePackageDirs, Host } from "@monorepolint/utils";
 import { PackageContextImpl } from "./PackageContext.js";
 // Right now, this stuff is done serially so we are writing less code to support that. Later we may want to redo this.
-export class WorkspaceContextImpl extends PackageContextImpl
-  implements Config.WorkspaceContext
-{
+export class WorkspaceContextImpl extends PackageContextImpl implements Config.WorkspaceContext {
   private packageNameToDir: Map<string, string> | undefined;
   private workspacePackageDirsCache: string[] | undefined;
 

@@ -92,9 +92,7 @@ function omit<T>(
 ): Record<string, T> {
   const newObj: Record<string, T> = {};
 
-  const filtered = Object.entries(obj).filter(([key]) =>
-    !keysToOmit.includes(key)
-  );
+  const filtered = Object.entries(obj).filter(([key]) => !keysToOmit.includes(key));
   for (const [key, value] of filtered) {
     newObj[key] = value;
   }

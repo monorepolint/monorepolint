@@ -7,12 +7,7 @@
 
 import { ResolvedConfig, ResolvedRule } from "@monorepolint/config";
 import { Context } from "@monorepolint/config";
-import {
-  Host,
-  matchesAnyGlob,
-  nanosecondsToSanity,
-  Table,
-} from "@monorepolint/utils";
+import { Host, matchesAnyGlob, nanosecondsToSanity, Table } from "@monorepolint/utils";
 import { dirname as pathDirname, resolve as pathResolve } from "path";
 import { createWorkspaceContext } from "./createWorkspaceContext.js";
 

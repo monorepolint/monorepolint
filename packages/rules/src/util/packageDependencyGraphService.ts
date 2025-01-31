@@ -38,9 +38,7 @@ export interface IPackageDependencyGraphService {
 }
 
 /** Default implementation of the package dependency graph service. */
-export class PackageDependencyGraphService
-  implements IPackageDependencyGraphService
-{
+export class PackageDependencyGraphService implements IPackageDependencyGraphService {
   /** Construct a graph of package dependencies and return the root node. */
   public buildDependencyGraph(
     startPackageJsonPath: string,

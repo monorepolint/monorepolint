@@ -9,12 +9,7 @@
 import { Context, Failure } from "@monorepolint/config";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { packageScript } from "../packageScript.js";
-import {
-  AddErrorSpy,
-  createTestingWorkspace,
-  HOST_FACTORIES,
-  TestingWorkspace,
-} from "./utils.js";
+import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
 
 const json = (a: unknown) => JSON.stringify(a, undefined, 2) + "\n";
 

@@ -11,8 +11,8 @@ const features = [
     title: <>Easy to Use</>,
     description: (
       <>
-        Designed to support your workflow, not define it. Easy to add. Add
-        complexity over time as you need it.
+        Designed to support your workflow, not define it. Easy to add. Add complexity over time as
+        you need it.
       </>
     ),
   },

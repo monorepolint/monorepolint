@@ -166,9 +166,7 @@ export class Table<T extends any[]> {
       const colConfig = this.#config.columns[c];
       this.#columnWidths[c] = Math.max(
         (this.#config.columns[c].header ?? "").length,
-        ...this.#rows.map((a) =>
-          this.#getCellValueAsString(a[c], colConfig).length
-        ),
+        ...this.#rows.map((a) => this.#getCellValueAsString(a[c], colConfig).length),
         this.#footer && this.#footerRowConfig
           ? this.#getCellValueAsString(
             this.#footer?.[c] ?? "",
@@ -224,8 +222,7 @@ export class Table<T extends any[]> {
 
       let hr = "";
       for (let c = 0; c < footerRow.length; c++) {
-        hr +=
-          this.#getCellValueAligned(footerRow[c], this.#footerRowConfig![c], c)
+        hr += this.#getCellValueAligned(footerRow[c], this.#footerRowConfig![c], c)
           + paddingString; // .padEnd(this.#columnWidths[c], " ") + paddingString;
       }
       hr = hr.trimRight();

@@ -1,8 +1,4 @@
-import {
-  coverageConfigDefaults,
-  defaultExclude,
-  defineProject,
-} from "vitest/config";
+import { coverageConfigDefaults, defaultExclude, defineProject } from "vitest/config";
 
 export default defineProject({
   test: {

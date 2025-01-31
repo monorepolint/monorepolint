@@ -14,12 +14,7 @@ import {
   createStandardizedEntryErrorMessage,
   packageEntry,
 } from "../packageEntry.js";
-import {
-  AddErrorSpy,
-  createTestingWorkspace,
-  HOST_FACTORIES,
-  TestingWorkspace,
-} from "./utils.js";
+import { AddErrorSpy, createTestingWorkspace, HOST_FACTORIES, TestingWorkspace } from "./utils.js";
 
 const PACKAGE_MISSING_ENTRY = JSON.stringify(
   {

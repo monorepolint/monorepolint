@@ -1,7 +1,7 @@
 {
   "typescript": {
     "indentWidth": 2,
-    "lineWidth": 80,
+    "lineWidth": 100,
     "conditionalExpression.operatorPosition": "nextLine"
   },
   "json": {},

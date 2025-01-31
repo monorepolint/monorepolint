@@ -95,8 +95,7 @@ export const bannedDependencies = createRuleFactory<Options>({
     if (violations.size > 0) {
       context.addError({
         file: packagePath,
-        message:
-          `Found ${violations.size} banned dependencies of package.json:\n\t`
+        message: `Found ${violations.size} banned dependencies of package.json:\n\t`
           + Array.from(violations)
             .map((v) => `'${v}'`)
             .join(", "),

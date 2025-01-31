@@ -44,9 +44,7 @@ export const requireDependency = createRuleFactory({
           fixer: () => {
             mutateJson<PackageJson>(packageJsonPath, context.host, (input) => {
               input[type] = Object.fromEntries(
-                Object.entries(expectedEntries).filter(([, v]) =>
-                  v !== undefined
-                ),
+                Object.entries(expectedEntries).filter(([, v]) => v !== undefined),
               ) as Record<string, string>;
               return input;
             });

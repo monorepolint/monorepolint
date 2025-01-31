@@ -90,14 +90,10 @@ async function handleCheck(args: Options) {
       console.error("monorepolint (mrl) failed 1 or more checks");
       console.error();
       console.error(
-        `For more information, run ${
-          chalk.blue(`${runCommand} check --verbose`)
-        }`,
+        `For more information, run ${chalk.blue(`${runCommand} check --verbose`)}`,
       );
       console.error(
-        `To automatically fix errors, run ${
-          chalk.blue(`${runCommand} check --fix`)
-        }`,
+        `To automatically fix errors, run ${chalk.blue(`${runCommand} check --fix`)}`,
       );
       console.error();
       process.exit(100);
@@ -111,9 +107,7 @@ async function handleCheck(args: Options) {
     console.error(e);
     console.error();
     console.error(
-      `More information may be available; run ${
-        chalk.blue(`${runCommand} check --verbose`)
-      }`,
+      `More information may be available; run ${chalk.blue(`${runCommand} check --verbose`)}`,
     );
     console.error();
     process.exit(101);

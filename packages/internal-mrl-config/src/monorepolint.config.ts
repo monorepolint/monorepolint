@@ -58,8 +58,7 @@ export default defineProject({
       Rules.packageScript({
         options: {
           scripts: {
-            clean:
-              "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
+            clean: "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
             "compile-typescript": "tsc --build",
             "lint:typescript": DELETE_SCRIPT_ENTRTY,
             jest: DELETE_SCRIPT_ENTRTY, // this syntax needs work :(

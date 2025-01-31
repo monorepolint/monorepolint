@@ -139,8 +139,7 @@ describe("nestedWorkspaces", () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith({
       file: packageJsonPath,
-      message:
-        "The \"workspace\" field is missing one or more values: packages/deep/star. "
+      message: "The \"workspace\" field is missing one or more values: packages/deep/star. "
         + "You may be able to use a glob to avoid listing each workspace individually, e.g. \"packages/nested-workspace/*\".",
     });
   });

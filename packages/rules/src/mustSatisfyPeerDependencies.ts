@@ -303,8 +303,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
     if (dependencyRange != null) {
       context.addError({
         file: packageJsonPath,
-        message:
-          `[0] Package ${packageName} has overloaded ${peerDependencyName} dependencies.\n\t`
+        message: `[0] Package ${packageName} has overloaded ${peerDependencyName} dependencies.\n\t`
           + `Peer dependency '${peerDependencyRange}' and regular dependency '${dependencyRange}'.`,
       });
     }
@@ -446,8 +445,7 @@ function checkSatisfyPeerDependencies(context: Context, opts: Options) {
 
     // for every inherited peer dependency, this package must declare a dependency or peer dependency
     // equal to or stricter than `mostStrictPeerRequirement`
-    const packagePeerDependencyRange =
-      packagePeerDependencies[peerDependencyName];
+    const packagePeerDependencyRange = packagePeerDependencies[peerDependencyName];
     if (packageDependencyRange == null && packagePeerDependencyRange == null) {
       context.addError({
         file: packageJsonPath,
@@ -523,22 +521,17 @@ function getMostStrictStatement(
   mostStrictPeerRequirement: IResolvedPeerDependencyRequirement,
 ) {
   if (mostStrictPeerRequirement.fromPeerDependencyRequirements.length === 1) {
-    const dependencyName =
-      mostStrictPeerRequirement.fromPeerDependencyRequirements[0]
-        .fromPackageName;
+    const dependencyName = mostStrictPeerRequirement.fromPeerDependencyRequirements[0]
+      .fromPackageName;
     return `Dependency ${dependencyName} requires '${mostStrictPeerRequirement.range}'.`;
   } else {
     const dependencyNames = mostStrictPeerRequirement
       .fromPeerDependencyRequirements
-      .map((peerDependencyRequirement) =>
-        peerDependencyRequirement.fromPackageName
-      )
+      .map((peerDependencyRequirement) => peerDependencyRequirement.fromPackageName)
       .join(", ");
     const dependencyRequirements = mostStrictPeerRequirement
       .fromPeerDependencyRequirements
-      .map((peerDependencyRequirement) =>
-        `'${peerDependencyRequirement.range}'`
-      )
+      .map((peerDependencyRequirement) => `'${peerDependencyRequirement.range}'`)
       .join(", ");
     return (
       `Dependencies [${dependencyNames}] require [${dependencyRequirements}] respectively, `
@@ -612,9 +605,7 @@ export function findIntersection(
       .map((bVersion) => {
         const bSemVer = coerce(bVersion)!;
         if (bVersion.startsWith("^") && bSemVer.major >= aSemVer.major) {
-          return `^${
-            bSemVer.compare(aSemVer) >= 0 ? bSemVer.raw : aSemVer.raw
-          }`;
+          return `^${bSemVer.compare(aSemVer) >= 0 ? bSemVer.raw : aSemVer.raw}`;
         }
         return bSemVer.compare(aSemVer) !== -1 ? bVersion : undefined;
       })
@@ -633,9 +624,7 @@ export function findIntersection(
       .map((aVersion) => {
         const aSemVer = coerce(aVersion)!;
         if (aVersion.startsWith("^") && aSemVer.major >= bSemVer.major) {
-          return `^${
-            aSemVer.compare(bSemVer) >= 0 ? aSemVer.raw : bSemVer.raw
-          }`;
+          return `^${aSemVer.compare(bSemVer) >= 0 ? aSemVer.raw : bSemVer.raw}`;
         }
         return aSemVer.compare(bSemVer) !== -1 ? aVersion : undefined;
       })
@@ -649,9 +638,7 @@ export function findIntersection(
   const compatibleVersions = aVersions
     .map((aVersion) => {
       const aSemVer = coerce(aVersion)!;
-      const majorMatchingBVersion = bVersions.find((m) =>
-        coerce(m)!.major === aSemVer.major
-      );
+      const majorMatchingBVersion = bVersions.find((m) => coerce(m)!.major === aSemVer.major);
       if (majorMatchingBVersion === undefined) {
         // there is no intersecting `b` major version for this `a` major version
         return undefined;
@@ -757,9 +744,7 @@ export function doesASatisfyB(a: ValidRange, b: ValidRange): boolean {
 
   return aVersions.every((aVersion) => {
     const aSemVer = coerce(aVersion)!;
-    const majorMatchingBVersion = bVersions.find((m) =>
-      coerce(m)!.major === aSemVer.major
-    );
+    const majorMatchingBVersion = bVersions.find((m) => coerce(m)!.major === aSemVer.major);
     if (majorMatchingBVersion === undefined) {
       // `a` permits a major version that is not permitted by `b`, therefore `a` is "less strict"
       return false;
