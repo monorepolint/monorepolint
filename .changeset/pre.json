@@ -9,16 +9,20 @@
     "@monorepolint/docs": "0.5.0",
     "@monorepolint/internal-mrl-config": "0.5.0",
     "@monorepolint/rules": "0.5.0",
-    "@monorepolint/utils": "0.5.0"
+    "@monorepolint/utils": "0.5.0",
+    "@monorepolint/archetypes": "0.6.0-alpha.2"
   },
   "changesets": [
     "big-ways-confess",
     "curvy-pears-learn",
     "fluffy-elephants-march",
+    "four-trains-cover",
     "late-zoos-watch",
     "little-parents-bathe",
     "small-llamas-pretend",
+    "smooth-bags-shake",
     "thick-brooms-occur",
-    "thick-pugs-pull"
+    "thick-pugs-pull",
+    "weak-walls-rescue"
   ]
 }

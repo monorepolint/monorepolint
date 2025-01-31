@@ -1,5 +1,15 @@
 # @monorepolint/rules
 
+## 0.6.0-alpha.4
+
+### Patch Changes
+
+- 50b64ed: Introduces a new rule: forceError
+- 3883483: Introduces new rule: oncePerPackage
+  - @monorepolint/config@0.6.0-alpha.4
+  - @monorepolint/core@0.6.0-alpha.4
+  - @monorepolint/utils@0.6.0-alpha.4
+
 ## 0.6.0-alpha.3
 
 ### Patch Changes

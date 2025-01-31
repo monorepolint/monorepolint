@@ -1,5 +1,7 @@
 # @monorepolint/utils
 
+## 0.6.0-alpha.4
+
 ## 0.6.0-alpha.3
 
 ## 0.6.0-alpha.2

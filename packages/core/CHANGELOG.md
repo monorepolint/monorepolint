@@ -1,5 +1,12 @@
 # @monorepolint/core
 
+## 0.6.0-alpha.4
+
+### Patch Changes
+
+- @monorepolint/config@0.6.0-alpha.4
+- @monorepolint/utils@0.6.0-alpha.4
+
 ## 0.6.0-alpha.3
 
 ### Patch Changes
