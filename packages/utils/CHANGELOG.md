@@ -1,5 +1,11 @@
 # @monorepolint/utils
 
+## 0.6.0-alpha.5
+
+### Patch Changes
+
+- 9f6fea7: Upgraded versions to minor bumps
+
 ## 0.6.0-alpha.4
 
 ## 0.6.0-alpha.3
