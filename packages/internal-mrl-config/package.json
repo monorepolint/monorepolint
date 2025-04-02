@@ -1,6 +1,6 @@
 {
   "name": "@monorepolint/internal-mrl-config",
-  "version": "0.6.0-alpha.4",
+  "version": "0.6.0-alpha.5",
   "author": "Eric L Anderson (https://github.com/ericanderson)",
   "license": "MIT",
   "type": "module",

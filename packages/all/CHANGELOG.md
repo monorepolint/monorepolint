@@ -1,5 +1,18 @@
 # monorepolint
 
+## 0.6.0-alpha.5
+
+### Patch Changes
+
+- 9f6fea7: Upgraded versions to minor bumps
+- Updated dependencies [9f6fea7]
+  - @monorepolint/internal-mrl-config@0.6.0-alpha.5
+  - @monorepolint/config@0.6.0-alpha.5
+  - @monorepolint/rules@0.6.0-alpha.5
+  - @monorepolint/utils@0.6.0-alpha.5
+  - @monorepolint/core@0.6.0-alpha.5
+  - @monorepolint/cli@0.6.0-alpha.5
+
 ## 0.6.0-alpha.4
 
 ### Patch Changes
