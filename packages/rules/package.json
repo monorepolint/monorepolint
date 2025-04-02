@@ -33,23 +33,23 @@
     "@monorepolint/config": "workspace:^",
     "@monorepolint/core": "workspace:^",
     "@monorepolint/utils": "workspace:^",
-    "globby": "^14.0.2",
+    "globby": "^14.1.0",
     "jest-diff": "^29.7.0",
     "resolve-package-path": "^4.0.3",
     "runtypes": "^6.7.0",
-    "semver": "^7.6.3",
+    "semver": "^7.7.1",
     "tslib": "^2.8.1"
   },
   "devDependencies": {
-    "@types/semver": "^7.5.8",
+    "@types/semver": "^7.7.0",
     "@types/tmp": "^0.2.6",
-    "@typescript-eslint/eslint-plugin": "^8.20.0",
-    "@typescript-eslint/parser": "^8.20.0",
-    "eslint": "^9.18.0",
+    "@typescript-eslint/eslint-plugin": "^8.29.0",
+    "@typescript-eslint/parser": "^8.29.0",
+    "eslint": "^9.23.0",
     "tmp": "^0.2.3",
     "tslib": "^2.8.1",
-    "tsup": "^8.3.5",
-    "typescript": "^5.7.3"
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2"
   },
   "publishConfig": {
     "access": "public"
