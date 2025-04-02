@@ -32,7 +32,7 @@
   "dependencies": {
     "find-packages": "^10.0.4",
     "find-up": "^7.0.0",
-    "glob": "^10.3.12",
+    "glob": "^10.4.5",
     "micromatch": "^4.0.8",
     "read-yaml-file": "^2.1.0",
     "tslib": "^2.8.1"
@@ -40,13 +40,13 @@
   "devDependencies": {
     "@types/glob": "^8.1.0",
     "@types/micromatch": "^4.0.9",
-    "@types/node": "^22.13.10",
-    "@typescript-eslint/eslint-plugin": "^8.20.0",
-    "@typescript-eslint/parser": "^8.20.0",
-    "eslint": "^9.18.0",
+    "@types/node": "^22.14.0",
+    "@typescript-eslint/eslint-plugin": "^8.29.0",
+    "@typescript-eslint/parser": "^8.29.0",
+    "eslint": "^9.23.0",
     "tslib": "^2.8.1",
-    "tsup": "^8.3.5",
-    "typescript": "^5.7.3"
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2"
   },
   "publishConfig": {
     "access": "public"
