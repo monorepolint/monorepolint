@@ -43,13 +43,13 @@
   "devDependencies": {
     "@types/semver": "^7.7.0",
     "@types/tmp": "^0.2.6",
-    "@typescript-eslint/eslint-plugin": "^8.29.0",
-    "@typescript-eslint/parser": "^8.29.0",
-    "eslint": "^9.23.0",
+    "@typescript-eslint/eslint-plugin": "^8.31.0",
+    "@typescript-eslint/parser": "^8.31.0",
+    "eslint": "^9.25.1",
     "tmp": "^0.2.3",
     "tslib": "^2.8.1",
     "tsup": "^8.4.0",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "publishConfig": {
     "access": "public"
