@@ -52,7 +52,7 @@ importers:
         version: 9.23.0(jiti@1.21.7)
       eslint-config-turbo:
         specifier: ^2.4.4
-        version: 2.4.4(eslint@9.23.0(jiti@1.21.7))(turbo@2.5.0)
+        version: 2.5.2(eslint@9.23.0(jiti@1.21.7))(turbo@2.5.0)
       gh-pages:
         specifier: ^6.3.0
         version: 6.3.0
@@ -3476,14 +3476,14 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-config-turbo@2.4.4:
-    resolution: {integrity: sha512-4w/heWywWkFw09a5MY5lCvb9suJlhBSkzNtGTwM5+zRif4rksubaMYy1pD0++5rqoDVcQax25jCrtii9ptsNDw==}
+  eslint-config-turbo@2.5.2:
+    resolution: {integrity: sha512-aZdMUCJE5sC9UHZPOu6GiqCijw0HzlcxTbGZeESMFanYShhxrO6mAZy02zYOYK+y184HnxAngcfmtgDt8cIUxw==}
     peerDependencies:
       eslint: '>6.6.0'
       turbo: '>2.0.0'
 
-  eslint-plugin-turbo@2.4.4:
-    resolution: {integrity: sha512-myEnQTjr3FkI0j1Fu0Mqnv1z8n0JW5iFTOUNzHaEevjzl+1uzMSsFwks/x8i3rGmI3EYtC1BY8K2B2pS0Vfx6w==}
+  eslint-plugin-turbo@2.5.2:
+    resolution: {integrity: sha512-B+vdgOtBuDbRI3sIRayV3HZK1XcwlNuksmJJIgggkXTsNehMEbreJBkIda4qvA/STHnGAl2bUGev0Jx8Rijiwg==}
     peerDependencies:
       eslint: '>6.6.0'
       turbo: '>2.0.0'
@@ -10892,13 +10892,13 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-config-turbo@2.4.4(eslint@9.23.0(jiti@1.21.7))(turbo@2.5.0):
+  eslint-config-turbo@2.5.2(eslint@9.23.0(jiti@1.21.7))(turbo@2.5.0):
     dependencies:
       eslint: 9.23.0(jiti@1.21.7)
-      eslint-plugin-turbo: 2.4.4(eslint@9.23.0(jiti@1.21.7))(turbo@2.5.0)
+      eslint-plugin-turbo: 2.5.2(eslint@9.23.0(jiti@1.21.7))(turbo@2.5.0)
       turbo: 2.5.0
 
-  eslint-plugin-turbo@2.4.4(eslint@9.23.0(jiti@1.21.7))(turbo@2.5.0):
+  eslint-plugin-turbo@2.5.2(eslint@9.23.0(jiti@1.21.7))(turbo@2.5.0):
     dependencies:
       dotenv: 16.0.3
       eslint: 9.23.0(jiti@1.21.7)
