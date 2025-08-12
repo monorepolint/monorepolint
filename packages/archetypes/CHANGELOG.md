@@ -1,5 +1,17 @@
 # @monorepolint/archetypes
 
+## 0.6.0-alpha.6
+
+### Minor Changes
+
+- c1914bd: Dropping support for anything less than node 20
+
+### Patch Changes
+
+- Updated dependencies [c1914bd]
+  - @monorepolint/config@0.6.0-alpha.6
+  - @monorepolint/rules@0.6.0-alpha.6
+
 ## 0.6.0-alpha.5
 
 ### Patch Changes
