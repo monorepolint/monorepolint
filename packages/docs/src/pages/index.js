@@ -3,7 +3,6 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import classnames from "classnames";
-import React from "react";
 import styles from "./styles.module.css";
 
 const features = [
@@ -51,18 +50,29 @@ function Home() {
     >
       <header className={classnames("hero hero--primary", styles.heroBanner)}>
         <div className="container">
-          <h1 className="hero__title">{siteConfig.title}</h1>
-          <p className="hero__subtitle">{siteConfig.tagline}</p>
-          <div className={styles.buttons}>
-            <Link
-              className={classnames(
-                "button button--outline button--secondary button--lg",
-                styles.getStarted,
-              )}
-              to={useBaseUrl("docs/")}
-            >
-              Get Started
-            </Link>
+          <div className={styles.heroContent}>
+            <div className={styles.heroText}>
+              <h1 className="hero__title">{siteConfig.title}</h1>
+              <p className="hero__subtitle">{siteConfig.tagline}</p>
+              <div className={styles.buttons}>
+                <Link
+                  className={classnames(
+                    "button button--outline button--secondary button--lg",
+                    styles.getStarted,
+                  )}
+                  to={useBaseUrl("docs/")}
+                >
+                  Get Started
+                </Link>
+              </div>
+            </div>
+            <div className={styles.heroImage}>
+              <img
+                src={useBaseUrl("img/logo.jpg")}
+                alt="monorepolint logo - stacked washing machines representing lint cleaning"
+                className={styles.heroLogo}
+              />
+            </div>
           </div>
         </div>
       </header>
