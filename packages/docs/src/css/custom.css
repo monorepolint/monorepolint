@@ -7,14 +7,56 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: rgb(33, 175, 144);
-  --ifm-color-primary-darker: rgb(31, 165, 136);
-  --ifm-color-primary-darkest: rgb(26, 136, 112);
-  --ifm-color-primary-light: rgb(70, 203, 174);
-  --ifm-color-primary-lighter: rgb(102, 212, 189);
-  --ifm-color-primary-lightest: rgb(146, 224, 208);
+  --ea-beige: #f5e6d3;
+  --ea-blue: #3b4a6b;
+  --ea-blue2: #27395e;
+  --ea-blue3: #4776dc;
+
+  /* Brand colors based on logo theme */
+  --ifm-color-primary: var(--ea-blue);
+
+
+  /* Background and surface colors */
+  --ifm-background-color: var(--ea-beige);
+  --ifm-background-surface-color: var(--ea-blue);
+  /* Text colors */
+  --ifm-font-color-base: #3d3d3d;
+  --ifm-font-color-secondary: #6b7a8f;
+
+  --ifm-navbar-link-color: var(--ea-beige);
+
+  --ifm-navbar-link-hover-color: var(--ea-beige);
+
   --ifm-code-font-size: 95%;
+
+  .hero {
+    --ifm-hero-text-color: var(--ea-beige);
+    --ifm-hero-background-color: var(--ea-blue2);
+  }
+}
+
+html[data-theme='dark'] {
+  /* --ifm-navbar-link-color: #f5e6d3; */
+  --ifm-font-color-base: #f3efeb;
+  --ifm-color-primary: var(--ea-blue3);
+  --ifm-menu-color: var(--ea-beige);
+
+
+  /* --ifm-code-background: #f5e6d3; */
+
+  .hero {
+    --ifm-hero-background-color: var(--ea-blue);
+    --ifm-hero-text-color: #f5e6d3;
+  }
+
+}
+
+.hero {
+  .button.button--secondary.button--outline:not(.button--active):not(:hover) {
+    --ifm-font-color-base: var(--ifm-color-secondary-darker);
+  }
+
+
 }
 
 .docusaurus-highlight-code-line {

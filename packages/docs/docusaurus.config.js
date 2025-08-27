@@ -4,18 +4,52 @@ module.exports = {
   tagline: "monorepo consistency made easy",
   url: "https://monorepolint.com",
   baseUrl: "/",
-  favicon: "img/favicon.ico",
+  favicon: "img/favicon.svg",
   organizationName: "monorepolint", // Usually your GitHub org/user name.
   projectName: "monorepolint", // Usually your repo name.
+  headTags: [
+    {
+      tagName: "meta",
+      attributes: {
+        property: "og:image",
+        content: "https://monorepolint.com/img/logo.jpg",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        property: "og:image:alt",
+        content: "monorepolint logo - stacked washing machines representing lint cleaning",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        name: "twitter:image",
+        content: "https://monorepolint.com/img/logo.jpg",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        name: "twitter:image:alt",
+        content: "monorepolint logo - stacked washing machines representing lint cleaning",
+      },
+    },
+  ],
   themeConfig: {
     prism: {
-      theme: require("prism-react-renderer").themes.github,
+      theme: require("prism-react-renderer").themes.oneDark,
     },
     colorMode: {
       defaultMode: "light",
     },
     navbar: {
       title: "monorepolint",
+      logo: {
+        alt: "monorepolint logo",
+        src: "img/logo.jpg",
+      },
       items: [
         {
           to: "docs/",

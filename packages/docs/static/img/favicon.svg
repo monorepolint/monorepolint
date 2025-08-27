@@ -1,0 +1,26 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="32" height="32" fill="#F5E6D3" rx="4"/>
+  
+  <!-- Single washing machine -->
+  <g transform="translate(4, 8)">
+    <!-- Main body -->
+    <rect x="0" y="0" width="24" height="16" rx="2" fill="#FFFFFF" stroke="#2C2C2C" stroke-width="1.2"/>
+    <!-- Control panel -->
+    <rect x="1" y="1" width="22" height="4" fill="#3B4A6B"/>
+    <!-- Door -->
+    <circle cx="12" cy="10" r="4" fill="#FFFFFF" stroke="#2C2C2C" stroke-width="1.2"/>
+    <circle cx="12" cy="10" r="2.5" fill="none" stroke="#6B7A8F" stroke-width="0.8"/>
+    <!-- Control knobs -->
+    <circle cx="6" cy="3" r="1" fill="#FFFFFF"/>
+    <circle cx="18" cy="3" r="1" fill="#FFFFFF"/>
+  </g>
+  
+  <!-- Lint particles -->
+  <g fill="#3B4A6B" opacity="0.7">
+    <circle cx="6" cy="6" r="0.8"/>
+    <circle cx="26" cy="10" r="0.6"/>
+    <circle cx="8" cy="26" r="0.5"/>
+    <circle cx="24" cy="22" r="0.8"/>
+  </g>
+</svg>
