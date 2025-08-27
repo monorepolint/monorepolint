@@ -37,19 +37,19 @@
     "jest-diff": "^29.7.0",
     "resolve-package-path": "^4.0.3",
     "runtypes": "^6.7.0",
-    "semver": "^7.7.1",
+    "semver": "^7.7.2",
     "tslib": "^2.8.1"
   },
   "devDependencies": {
     "@types/semver": "^7.7.0",
     "@types/tmp": "^0.2.6",
-    "@typescript-eslint/eslint-plugin": "^8.31.0",
-    "@typescript-eslint/parser": "^8.31.0",
-    "eslint": "^9.25.1",
-    "tmp": "^0.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.41.0",
+    "@typescript-eslint/parser": "^8.41.0",
+    "eslint": "^9.34.0",
+    "tmp": "^0.2.5",
     "tslib": "^2.8.1",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3"
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2"
   },
   "publishConfig": {
     "access": "public"

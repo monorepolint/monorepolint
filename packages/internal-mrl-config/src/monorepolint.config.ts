@@ -137,13 +137,6 @@ export default defineProject({
           bannedDependencies: ["lodash"],
         },
       }),
-      Rules.requireDependency({
-        options: {
-          devDependencies: {
-            tslib: "^2.8.1",
-          },
-        },
-      }),
     ],
   };
 };
