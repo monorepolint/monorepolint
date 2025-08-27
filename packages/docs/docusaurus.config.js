@@ -54,13 +54,7 @@ module.exports = {
         {
           to: "docs/",
           activeBasePath: "docs",
-          label: "Getting Started",
-          position: "right",
-        },
-        {
-          to: "docs/",
-          activeBasePath: "docs",
-          label: "Docs",
+          label: "Documentation",
           position: "right",
         },
         {
@@ -70,7 +64,7 @@ module.exports = {
         },
         {
           to: "blog/",
-          label: "News",
+          label: "Blog",
           position: "right",
         },
         {
