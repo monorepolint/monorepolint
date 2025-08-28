@@ -153,4 +153,18 @@ describe("nestedWorkspaces", () => {
 
     expect((await checkAndSpy()).addErrorSpy).toHaveBeenCalledTimes(0);
   });
+
+  describe("Options Validation", () => {
+    it("should accept undefined options", () => {
+      const ruleModule = nestedWorkspaces({ options: undefined });
+      expect(() => ruleModule.validateOptions(undefined)).not.toThrow();
+    });
+
+    it("should reject non-undefined options", () => {
+      const ruleModule = nestedWorkspaces({ options: undefined });
+      expect(() => ruleModule.validateOptions({})).toThrow();
+      expect(() => ruleModule.validateOptions("string")).toThrow();
+      expect(() => ruleModule.validateOptions([])).toThrow();
+    });
+  });
 });

@@ -98,4 +98,74 @@ describe.each(HOST_FACTORIES)("fileContents ($name)", (hostFactory) => {
       expect(workspace.readFile("nested/foo.txt")).toEqual(EXPECTED_FOO_FILE);
     });
   });
+
+  describe("Options Validation", () => {
+    it("should accept valid options", () => {
+      const ruleModule1 = fileContents({
+        options: { file: "README.md", generator: () => "Generated content" },
+      });
+      const ruleModule2 = fileContents({
+        options: { file: "LICENSE", template: "MIT License content" },
+      });
+      const ruleModule3 = fileContents({
+        options: { file: ".gitignore", templateFile: "templates/gitignore.txt" },
+      });
+
+      // With generator function
+      expect(() =>
+        ruleModule1.validateOptions({
+          file: "README.md",
+          generator: () => "Generated content",
+        })
+      ).not.toThrow();
+
+      // With template string
+      expect(() =>
+        ruleModule2.validateOptions({
+          file: "LICENSE",
+          template: "MIT License content",
+        })
+      ).not.toThrow();
+
+      // With template file
+      expect(() =>
+        ruleModule3.validateOptions({
+          file: ".gitignore",
+          templateFile: "templates/gitignore.txt",
+        })
+      ).not.toThrow();
+
+      // With template undefined (delete file)
+      expect(() =>
+        ruleModule2.validateOptions({
+          file: "temp.txt",
+          template: undefined,
+        })
+      ).not.toThrow();
+    });
+
+    it("should reject invalid options", () => {
+      const ruleModule = fileContents({ options: { file: "test.txt", template: "content" } });
+
+      // Missing one of generator/template/templateFile
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({ file: "test.txt" })).toThrow();
+
+      // Multiple sources not allowed by union type structure
+      expect(() =>
+        ruleModule.validateOptions(
+          // @ts-expect-error testing invalid input
+          {
+            file: "test.txt",
+            generator: () => "",
+            template: "content",
+          },
+        )
+      ).toThrow();
+
+      // Missing file property
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({ template: "content" })).toThrow();
+    });
+  });
 });

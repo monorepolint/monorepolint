@@ -182,4 +182,26 @@ describe.each(HOST_FACTORIES)("expectPackageOrder ($name)", (hostFactory) => {
       );
     });
   });
+
+  describe("Options Validation", () => {
+    it("should accept valid options", () => {
+      const ruleModule = packageOrder({ options: undefined });
+
+      expect(() => ruleModule.validateOptions(undefined)).not.toThrow();
+      expect(() => ruleModule.validateOptions({ order: ["name", "version", "scripts"] })).not
+        .toThrow();
+      expect(() =>
+        ruleModule.validateOptions({ order: () => (a: string, b: string) => a.localeCompare(b) })
+      ).not.toThrow();
+    });
+
+    it("should reject invalid options", () => {
+      const ruleModule = packageOrder({ options: undefined });
+
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({ order: "name,version" })).toThrow();
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({ order: [123, "version"] })).toThrow();
+    });
+  });
 });

@@ -209,4 +209,32 @@ describe.each(HOST_FACTORIES)("expectPackageEntries ($name)", (hostFactory) => {
       expect(workspace.readFile("package.json")).toEqual(PACKAGE_REPOSITORY);
     });
   });
+
+  describe("Options Validation", () => {
+    it("should accept valid options", () => {
+      const ruleModule = packageEntry({ options: { entries: { name: "@scope/package" } } });
+
+      expect(() =>
+        ruleModule.validateOptions({ entries: { name: "@scope/package", version: "1.0.0" } })
+      ).not.toThrow();
+      expect(() => ruleModule.validateOptions({ entriesExist: ["name", "version"] })).not.toThrow();
+      expect(() =>
+        ruleModule.validateOptions({
+          entries: { license: "MIT" },
+          entriesExist: ["description"],
+        })
+      ).not.toThrow();
+    });
+
+    it("should reject invalid options", () => {
+      const ruleModule = packageEntry({ options: { entries: { name: "@scope/package" } } });
+
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({})).toThrow();
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({ entriesExist: "name" })).toThrow();
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({ entries: "invalid" })).toThrow();
+    });
+  });
 });

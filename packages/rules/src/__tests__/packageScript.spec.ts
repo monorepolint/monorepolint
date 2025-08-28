@@ -252,4 +252,43 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
       );
     });
   });
+
+  describe("Options Validation", () => {
+    it("should accept valid options", () => {
+      const ruleModule = packageScript({
+        options: { scripts: { "build": "tsc" } },
+      });
+
+      expect(() =>
+        ruleModule.validateOptions({
+          scripts: {
+            "build": "tsc",
+            "test": {
+              options: ["jest", "vitest", undefined],
+              fixValue: "jest",
+            },
+          },
+        })
+      ).not.toThrow();
+
+      expect(() =>
+        ruleModule.validateOptions({
+          scripts: {
+            "start": "node index.js",
+          },
+        })
+      ).not.toThrow();
+    });
+
+    it("should reject invalid options", () => {
+      const ruleModule = packageScript({ options: { scripts: { "build": "tsc" } } });
+
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({})).toThrow();
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({ scripts: { "build": 123 } })).toThrow();
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({ scripts: "invalid" })).toThrow();
+    });
+  });
 });

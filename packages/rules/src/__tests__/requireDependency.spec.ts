@@ -155,4 +155,38 @@ describe("requireDependency", () => {
     const contents = readFile("./packages/wrong/package.json");
     expect(contents).toEqual(CORRECT_OUTPUT);
   });
+
+  describe("Options Validation", () => {
+    it("should accept valid options", () => {
+      const ruleModule = requireDependency({ options: {} });
+
+      expect(() => ruleModule.validateOptions({})).not.toThrow();
+      expect(() => ruleModule.validateOptions({ dependencies: { "react": "^18.0.0" } })).not
+        .toThrow();
+      expect(() =>
+        ruleModule.validateOptions({
+          devDependencies: { "typescript": "^5.0.0" },
+          peerDependencies: { "react": ">=16.0.0" },
+        })
+      ).not.toThrow();
+
+      // Optional versions (undefined)
+      expect(() =>
+        ruleModule.validateOptions({
+          dependencies: { "react": undefined },
+        })
+      ).not.toThrow();
+    });
+
+    it("should reject invalid options", () => {
+      const ruleModule = requireDependency({ options: {} });
+
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({ dependencies: "react" })).toThrow();
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({ dependencies: { "react": 123 } })).toThrow();
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({ devDependencies: [] })).toThrow();
+    });
+  });
 });
