@@ -4,15 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-pnpmfileChecksum: uy5lpyrhe4ujk6e2gmxeid3x7a
+pnpmfileChecksum: sha256-TDEf/kRJWPKlGb+Ni6n1bktaoN4tYXPwe7DngoSxXPc=
 
 importers:
 
   .:
-    optionalDependencies:
-      fsevents:
-        specifier: ^2.3.3
-        version: 2.3.3
     devDependencies:
       '@changesets/cli':
         specifier: ^2.29.6
@@ -83,6 +79,10 @@ importers:
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.0)(jiti@1.21.7)(terser@5.43.1)(yaml@2.8.1)
+    optionalDependencies:
+      fsevents:
+        specifier: ^2.3.3
+        version: 2.3.3
 
   packages/all:
     dependencies:

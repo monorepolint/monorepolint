@@ -1,3 +1,10 @@
-prefer-workspace-packages: true
 packages:
-  - "packages/**"
+  - packages/**
+
+onlyBuiltDependencies:
+  - core-js
+  - core-js-pure
+  - dprint
+  - esbuild
+
+prefer-workspace-packages: true
