@@ -72,7 +72,10 @@ const quickStartExample = `# Install monorepolint
 npm install monorepolint
 
 # Add basic configuration
-echo 'import { alphabeticalDependencies, packageOrder } from "@monorepolint/rules";
+echo 'import {
+  alphabeticalDependencies,
+  packageOrder
+} from "@monorepolint/rules";
 
 export default {
   rules: [
