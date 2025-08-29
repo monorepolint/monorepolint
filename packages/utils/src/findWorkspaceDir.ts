@@ -11,7 +11,7 @@ import * as path from "path";
 import { Host } from "./Host.js";
 import { PackageJson } from "./PackageJson.js";
 
-export async function findPnpmWorkspaceDir(cwd: string) {
+async function findPnpmWorkspaceDir(cwd: string) {
   const workspaceManifestLocation = await findUp("pnpm-workspace.yaml", {
     cwd: await fs.promises.realpath(cwd),
   });

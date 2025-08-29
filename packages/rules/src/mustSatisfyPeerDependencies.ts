@@ -631,7 +631,7 @@ function isMajorVersionRange(version: string): boolean {
   return MATCH_MAJOR_VERSION_RANGE.test(version);
 }
 
-export type ValidRange = string & { _type: "valid range" };
+type ValidRange = string & { _type: "valid range" };
 export function isValidRange(version: string): version is ValidRange {
   return RANGE_REGEX.test(version);
 }

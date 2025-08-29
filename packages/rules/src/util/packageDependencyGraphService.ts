@@ -17,7 +17,7 @@ export interface IPackageDependencyGraphNode {
 }
 
 /** Service abstraction for constructing and traversing package dependency graphs. */
-export interface IPackageDependencyGraphService {
+interface IPackageDependencyGraphService {
   /** Construct a graph of package dependencies. */
   buildDependencyGraph(
     packageJsonPath: string,

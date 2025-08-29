@@ -40,7 +40,7 @@ const Options = z.object({
 });
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface Options extends z.infer<typeof Options> {}
+interface Options extends z.infer<typeof Options> {}
 
 export const standardTsconfig = createRuleFactory<Options>({
   name: "standardTsconfig",

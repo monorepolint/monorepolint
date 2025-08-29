@@ -12,7 +12,7 @@ import { REMOVE } from "./REMOVE.js";
 import { createRuleFactory } from "./util/createRuleFactory.js";
 import { ZodRemove } from "./util/zodSchemas.js";
 
-export const Options = z.object({
+const Options = z.object({
   entries: z.record(z.string(), z.union([z.unknown(), ZodRemove])).optional(), // string => unknown | REMOVE, enforces existence of keys and their values or removal
   entriesExist: z.array(z.string()).optional(), // enforces existence of keys, but not values
 }).refine(
@@ -20,7 +20,7 @@ export const Options = z.object({
   { message: "At least one of 'entries' or 'entriesExist' must be provided" },
 );
 
-export type Options = z.infer<typeof Options>;
+type Options = z.infer<typeof Options>;
 
 export const packageEntry = createRuleFactory<Options>({
   name: "packageEntry",
