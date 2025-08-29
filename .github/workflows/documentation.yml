@@ -5,16 +5,21 @@ on:
     branches: ["main"]
     paths: ["packages/docs/*", ".github/workflows/documentation.yml"]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   gh-release:
     if: github.event_name != 'pull_request'
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
 
-      - uses: pnpm/action-setup@v4.1.0
+      - uses: pnpm/action-setup@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: "20"
           registry-url: "https://registry.npmjs.org"
