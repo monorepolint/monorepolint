@@ -28,3 +28,5 @@ export {
   RuleFactoryOptions,
   ValidateOptionsFn,
 } from "./util/createRuleFactory.js";
+
+export { REMOVE } from "./REMOVE.js";

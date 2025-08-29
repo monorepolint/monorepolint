@@ -7,12 +7,12 @@
 
 import * as globby from "globby";
 import * as path from "node:path";
-import * as r from "runtypes";
+import { z } from "zod";
 import { createRuleFactory } from "./util/createRuleFactory.js";
 
-export const Options = r.Undefined;
+export const Options = z.undefined();
 
-type Options = r.Static<typeof Options>;
+type Options = z.infer<typeof Options>;
 
 // Enforce that the root package.json contains all of the workspaces in the repo (including nested packages)
 export const nestedWorkspaces = createRuleFactory({
@@ -65,5 +65,5 @@ export const nestedWorkspaces = createRuleFactory({
       });
     }
   },
-  validateOptions: Options.check,
+  validateOptions: Options.parse,
 });

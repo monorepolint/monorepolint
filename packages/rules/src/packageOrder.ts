@@ -7,17 +7,27 @@
 
 import { Context } from "@monorepolint/config";
 import { diff } from "jest-diff";
-import * as r from "runtypes";
+import { z } from "zod";
 import { createRuleFactory } from "./util/createRuleFactory.js";
 type OrderFunction = (context: Context) => (a: string, b: string) => number;
 
-const Options = r
-  .Record({
-    order: r.Union(r.Array(r.String), r.Function),
-  })
-  .Or(r.Undefined);
+const Options = z.union([
+  z.undefined(),
+  z.object({
+    order: z.union([
+      z.array(z.string()),
+      z.function({
+        input: [z.any()],
+        output: z.function({
+          input: [z.string(), z.string()],
+          output: z.number(),
+        }),
+      }),
+    ]),
+  }),
+]);
 
-type Options = r.Static<typeof Options>;
+type Options = z.infer<typeof Options>;
 
 const defaultKeyOrder = [
   "name",
@@ -86,7 +96,7 @@ export const packageOrder = createRuleFactory<Options>({
       });
     }
   },
-  validateOptions: Options.check,
+  validateOptions: Options.parse,
 });
 
 function arrayOrderCompare(a: ReadonlyArray<string>, b: ReadonlyArray<string>) {

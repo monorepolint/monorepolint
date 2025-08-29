@@ -6,10 +6,9 @@
  */
 
 import { Context } from "@monorepolint/config";
-import { matchesAnyGlob } from "@monorepolint/utils";
-import { AggregateTiming } from "@monorepolint/utils";
+import { AggregateTiming, matchesAnyGlob } from "@monorepolint/utils";
 import * as path from "node:path";
-import * as r from "runtypes";
+import { z } from "zod";
 import { createRuleFactory } from "./util/createRuleFactory.js";
 import {
   IPackageDependencyGraphNode,
@@ -17,30 +16,20 @@ import {
 } from "./util/packageDependencyGraphService.js";
 // FIXME: This rule is messed. bannedTransitiveDependencies doesnt glob
 
-const bannedDepGlobsField = r.Union(
-  r.Array(r.String),
-  r.Record({
-    glob: r.Array(r.String).optional(),
-    exact: r.Array(r.String).optional(),
+const bannedDepGlobsField = z.union([
+  z.array(z.string()),
+  z.object({
+    glob: z.array(z.string()).optional(),
+    exact: z.array(z.string()).optional(),
   }),
-);
+]);
 
-const Options = r.Union(
-  r.Record({
-    bannedDependencies: bannedDepGlobsField,
-    bannedTransitiveDependencies: r.Undefined.optional(),
-  }),
-  r.Record({
-    bannedDependencies: bannedDepGlobsField.optional(),
-    bannedTransitiveDependencies: r.Array(r.String),
-  }),
-  r.Record({
-    bannedDependencies: bannedDepGlobsField.optional(),
-    bannedTransitiveDependencies: r.Array(r.String).optional(),
-  }),
-);
+const Options = z.object({
+  bannedDependencies: bannedDepGlobsField.optional(),
+  bannedTransitiveDependencies: z.array(z.string()).optional(),
+});
 
-export type Options = r.Static<typeof Options>;
+export type Options = z.infer<typeof Options>;
 
 /**
  * We use this locally to avoid making a billion sets. Because check is called once per package
@@ -113,7 +102,7 @@ export const bannedDependencies = createRuleFactory<Options>({
 
     aggregateTiming.stop();
   },
-  validateOptions: Options.check,
+  validateOptions: Options.parse,
   printStats: () => {
     aggregateTiming.printResults();
   },

@@ -1,12 +1,12 @@
-import * as r from "runtypes";
+import { z } from "zod";
 import { createRuleFactory } from "./util/createRuleFactory.js";
 
-export const Options = r.Record({
-  singletonKey: r.String.Or(r.Symbol),
-  customMessage: r.String.optional(),
+export const Options = z.object({
+  singletonKey: z.union([z.string(), z.symbol()]),
+  customMessage: z.string().optional(),
 });
 
-export type Options = r.Static<typeof Options>;
+export type Options = z.infer<typeof Options>;
 
 const visitedMap = new Map<string | symbol, Set<string>>();
 
@@ -28,5 +28,5 @@ export const oncePerPackage = createRuleFactory<Options>({
     }
   },
 
-  validateOptions: Options.assert,
+  validateOptions: Options.parse,
 });

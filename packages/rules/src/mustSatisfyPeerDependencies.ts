@@ -9,185 +9,23 @@ import { Context } from "@monorepolint/config";
 import { Host, mutateJson, PackageJson } from "@monorepolint/utils";
 import * as path from "node:path";
 import resolvePackagePath from "resolve-package-path";
-import * as r from "runtypes";
 import { coerce } from "semver";
+import { z } from "zod";
 import { createRuleFactory } from "./util/createRuleFactory.js";
 
-const Options = r.Union(
-  r.Partial({
-    skipUnparseableRanges: r.Undefined,
-    dependencyWhitelist: r.Undefined,
-    dependencyBlacklist: r.Undefined,
-    enforceForDevDependencies: r.Undefined,
-  }),
-  r
-    .Record({
-      skipUnparseableRanges: r.Boolean,
-    })
-    .And(
-      r.Partial({
-        dependencyWhitelist: r.Undefined,
-        dependencyBlacklist: r.Undefined,
-        enforceForDevDependencies: r.Undefined,
-      }),
-    ),
-  r
-    .Record({
-      dependencyWhitelist: r.Array(r.String),
-    })
-    .And(
-      r.Partial({
-        skipUnparseableRanges: r.Undefined,
-        dependencyBlacklist: r.Undefined,
-        enforceForDevDependencies: r.Undefined,
-      }),
-    ),
-  r
-    .Record({
-      dependencyBlacklist: r.Array(r.String),
-    })
-    .And(
-      r.Partial({
-        skipUnparseableRanges: r.Undefined,
-        dependencyWhitelist: r.Undefined,
-        enforceForDevDependencies: r.Undefined,
-      }),
-    ),
-  r
-    .Record({
-      enforceForDevDependencies: r.Boolean,
-    })
-    .And(
-      r.Partial({
-        skipUnparseableRanges: r.Undefined,
-        dependencyWhitelist: r.Undefined,
-        dependencyBlacklist: r.Undefined,
-      }),
-    ),
-  r
-    .Record({
-      skipUnparseableRanges: r.Boolean,
-      dependencyWhitelist: r.Array(r.String),
-    })
-    .And(
-      r.Partial({
-        dependencyBlacklist: r.Undefined,
-        enforceForDevDependencies: r.Undefined,
-      }),
-    ),
-  r
-    .Record({
-      skipUnparseableRanges: r.Boolean,
-      dependencyBlacklist: r.Array(r.String),
-    })
-    .And(
-      r.Partial({
-        dependencyWhitelist: r.Undefined,
-        enforceForDevDependencies: r.Undefined,
-      }),
-    ),
-  r
-    .Record({
-      skipUnparseableRanges: r.Boolean,
-      enforceForDevDependencies: r.Boolean,
-    })
-    .And(
-      r.Partial({
-        dependencyWhitelist: r.Undefined,
-        dependencyBlacklist: r.Undefined,
-      }),
-    ),
-  r
-    .Record({
-      dependencyWhitelist: r.Array(r.String),
-      dependencyBlacklist: r.Array(r.String),
-    })
-    .And(
-      r.Partial({
-        skipUnparseableRanges: r.Undefined,
-        enforceForDevDependencies: r.Undefined,
-      }),
-    ),
-  r
-    .Record({
-      dependencyWhitelist: r.Array(r.String),
-      enforceForDevDependencies: r.Boolean,
-    })
-    .And(
-      r.Partial({
-        skipUnparseableRanges: r.Undefined,
-        dependencyBlacklist: r.Undefined,
-      }),
-    ),
-  r
-    .Record({
-      dependencyBlacklist: r.Array(r.String),
-      enforceForDevDependencies: r.Boolean,
-    })
-    .And(
-      r.Partial({
-        skipUnparseableRanges: r.Undefined,
-        dependencyWhitelist: r.Undefined,
-      }),
-    ),
-  r
-    .Record({
-      skipUnparseableRanges: r.Boolean,
-      dependencyWhitelist: r.Array(r.String),
-      dependencyBlacklist: r.Array(r.String),
-    })
-    .And(
-      r.Partial({
-        enforceForDevDependencies: r.Undefined,
-      }),
-    ),
-  r
-    .Record({
-      skipUnparseableRanges: r.Boolean,
-      dependencyWhitelist: r.Array(r.String),
-      enforceForDevDependencies: r.Boolean,
-    })
-    .And(
-      r.Partial({
-        dependencyBlacklist: r.Undefined,
-      }),
-    ),
-  r
-    .Record({
-      skipUnparseableRanges: r.Boolean,
-      dependencyBlacklist: r.Array(r.String),
-      enforceForDevDependencies: r.Boolean,
-    })
-    .And(
-      r.Partial({
-        dependencyWhitelist: r.Undefined,
-      }),
-    ),
-  r
-    .Record({
-      dependencyWhitelist: r.Array(r.String),
-      dependencyBlacklist: r.Array(r.String),
-      enforceForDevDependencies: r.Boolean,
-    })
-    .And(
-      r.Partial({
-        skipUnparseableRanges: r.Undefined,
-      }),
-    ),
-  r.Record({
-    skipUnparseableRanges: r.Boolean,
-    dependencyWhitelist: r.Array(r.String),
-    dependencyBlacklist: r.Array(r.String),
-    enforceForDevDependencies: r.Boolean,
-  }),
-);
+const Options = z.object({
+  skipUnparseableRanges: z.boolean().optional(),
+  dependencyWhitelist: z.array(z.string()).optional(),
+  dependencyBlacklist: z.array(z.string()).optional(),
+  enforceForDevDependencies: z.boolean().optional(),
+});
 
-export type Options = r.Static<typeof Options>;
+export type Options = z.infer<typeof Options>;
 
 export const mustSatisfyPeerDependencies = createRuleFactory({
   name: "mustSatisfyPeerDependencies",
   check: checkSatisfyPeerDependencies,
-  validateOptions: Options.check,
+  validateOptions: Options.parse,
 });
 
 /**

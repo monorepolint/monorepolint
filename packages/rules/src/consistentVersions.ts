@@ -7,19 +7,19 @@
 
 import { Context } from "@monorepolint/config";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
-import * as r from "runtypes";
 import { coerce, SemVer } from "semver";
+import { z } from "zod";
 import { createRuleFactory } from "./util/createRuleFactory.js";
-export const Options = r.Record({
-  matchDependencyVersions: r.Dictionary(r.Union(r.String, r.Array(r.String))),
+export const Options = z.object({
+  matchDependencyVersions: z.record(z.string(), z.union([z.string(), z.array(z.string())])),
 });
 
-export type Options = r.Static<typeof Options>;
+export type Options = z.infer<typeof Options>;
 
 export const consistentVersions = createRuleFactory({
   name: "consistentVersions",
   check: checkConsistentVersions,
-  validateOptions: Options.check,
+  validateOptions: Options.parse,
 });
 
 function checkConsistentVersions(context: Context, options: Options) {

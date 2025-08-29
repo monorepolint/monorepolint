@@ -153,13 +153,13 @@ describe("consistentDependencies", () => {
       expect(() => ruleModule.validateOptions(undefined)).not.toThrow();
       expect(() => ruleModule.validateOptions({ ignoredDependencies: ["react", "react-dom"] })).not
         .toThrow();
-      expect(() => ruleModule.validateOptions({ ignoredDependencies: undefined })).not.toThrow();
-      // Note: {} is NOT valid according to the runtypes definition - must have ignoredDependencies property
     });
 
     it("should reject invalid options", () => {
       const ruleModule = consistentDependencies({ options: undefined });
 
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({ ignoredDependencies: undefined })).toThrow();
       // @ts-expect-error testing invalid input
       expect(() => ruleModule.validateOptions({})).toThrow(); // Missing ignoredDependencies property
       // @ts-expect-error testing invalid input

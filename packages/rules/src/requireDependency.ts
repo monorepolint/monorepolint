@@ -8,17 +8,43 @@
 import { Context } from "@monorepolint/config";
 import { mutateJson, PackageJson } from "@monorepolint/utils";
 import { diff } from "jest-diff";
-import * as r from "runtypes";
+import { z } from "zod";
+import { REMOVE } from "./REMOVE.js";
 import { createRuleFactory } from "./util/createRuleFactory.js";
+import { ZodRemove } from "./util/zodSchemas.js";
 
-const Options = r.Partial({
-  dependencies: r.Dictionary(r.String.optional()),
-  devDependencies: r.Dictionary(r.String.optional()),
-  peerDependencies: r.Dictionary(r.String.optional()),
-  optionalDependencies: r.Dictionary(r.String.optional()),
-});
+const Options = z.object({
+  dependencies: z.record(
+    z.string(),
+    z.union([
+      z.string(),
+      ZodRemove,
+    ]).optional(),
+  ).optional(),
+  devDependencies: z.record(
+    z.string(),
+    z.union([
+      z.string(),
+      ZodRemove,
+    ]).optional(),
+  ).optional(),
+  peerDependencies: z.record(
+    z.string(),
+    z.union([
+      z.string(),
+      ZodRemove,
+    ]).optional(),
+  ).optional(),
+  optionalDependencies: z.record(
+    z.string(),
+    z.union([
+      z.string(),
+      ZodRemove,
+    ]).optional(),
+  ).optional(),
+}).partial();
 
-type Options = r.Static<typeof Options>;
+type Options = z.infer<typeof Options>;
 
 export const requireDependency = createRuleFactory({
   name: "requireDependency",
@@ -44,7 +70,7 @@ export const requireDependency = createRuleFactory({
           fixer: () => {
             mutateJson<PackageJson>(packageJsonPath, context.host, (input) => {
               input[type] = Object.fromEntries(
-                Object.entries(expectedEntries).filter(([, v]) => v !== undefined),
+                Object.entries(expectedEntries).filter(([, v]) => v !== undefined && v !== REMOVE),
               ) as Record<string, string>;
               return input;
             });
@@ -54,7 +80,26 @@ export const requireDependency = createRuleFactory({
       }
 
       for (const [dep, version] of Object.entries(options[type]!)) {
-        if (packageJson[type]?.[dep] !== version) {
+        if (version === REMOVE) {
+          // Handle removal: only add error if dependency exists
+          if (packageJson[type]?.[dep] !== undefined) {
+            context.addError({
+              file: packageJsonPath,
+              message: `Dependency ${dep} should be removed`,
+              fixer: () => {
+                mutateJson<PackageJson>(
+                  packageJsonPath,
+                  context.host,
+                  (input) => {
+                    input[type] = { ...input[type] };
+                    delete input[type][dep];
+                    return input;
+                  },
+                );
+              },
+            });
+          }
+        } else if (packageJson[type]?.[dep] !== version) {
           context.addError({
             file: packageJsonPath,
             message: `Expected dependency ${dep}@${version}`,
@@ -67,12 +112,7 @@ export const requireDependency = createRuleFactory({
                 packageJsonPath,
                 context.host,
                 (input) => {
-                  if (version === undefined) {
-                    input[type] = { ...input[type] };
-                    delete input[type][dep];
-                  } else {
-                    input[type] = { ...input[type], [dep]: version };
-                  }
+                  input[type] = { ...input[type], [dep]: version as string };
                   return input;
                 },
               );
@@ -82,5 +122,5 @@ export const requireDependency = createRuleFactory({
       }
     });
   },
-  validateOptions: Options.check,
+  validateOptions: Options.parse,
 });
