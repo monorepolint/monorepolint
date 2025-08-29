@@ -1,12 +1,12 @@
 import { z } from "zod";
 import { createRuleFactory } from "./util/createRuleFactory.js";
 
-export const Options = z.object({
+const Options = z.object({
   singletonKey: z.union([z.string(), z.symbol()]),
   customMessage: z.string().optional(),
 });
 
-export type Options = z.infer<typeof Options>;
+type Options = z.infer<typeof Options>;
 
 const visitedMap = new Map<string | symbol, Set<string>>();
 

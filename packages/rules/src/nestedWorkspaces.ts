@@ -10,7 +10,7 @@ import * as path from "node:path";
 import { z } from "zod";
 import { createRuleFactory } from "./util/createRuleFactory.js";
 
-export const Options = z.undefined();
+const Options = z.undefined();
 
 type Options = z.infer<typeof Options>;
 

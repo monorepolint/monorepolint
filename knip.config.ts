@@ -1,28 +1,28 @@
-import type { KnipConfig } from 'knip';
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { readFileSync } from "fs";
+import type { KnipConfig } from "knip";
+import { join } from "path";
 
 // Helper function to check if importHelpers is enabled in a tsconfig
 function hasTslibImportHelpers(configPath: string): boolean {
   try {
-    const content = readFileSync(configPath, 'utf-8');
+    const content = readFileSync(configPath, "utf-8");
     // Simple JSONC parsing - remove comments and trailing commas
     const cleanContent = content
-      .replace(/\/\/.*$/gm, '') // Remove single line comments
-      .replace(/\/\*[\s\S]*?\*\//g, '') // Remove multi-line comments
-      .replace(/,(\s*[}\]])/g, '$1'); // Remove trailing commas
-    
+      .replace(/\/\/.*$/gm, "") // Remove single line comments
+      .replace(/\/\*[\s\S]*?\*\//g, "") // Remove multi-line comments
+      .replace(/,(\s*[}\]])/g, "$1"); // Remove trailing commas
+
     const config = JSON.parse(cleanContent);
-    
+
     // Check direct importHelpers setting
     if (config.compilerOptions?.importHelpers === true) {
       return true;
     }
-    
+
     // Check extended config if present
     if (config.extends) {
       try {
-        const extendedPath = config.extends.startsWith('.') 
+        const extendedPath = config.extends.startsWith(".")
           ? join(process.cwd(), config.extends)
           : config.extends;
         return hasTslibImportHelpers(extendedPath);
@@ -31,7 +31,7 @@ function hasTslibImportHelpers(configPath: string): boolean {
         return false;
       }
     }
-    
+
     return false;
   } catch (error) {
     console.warn(`Could not parse ${configPath}:`, error.message);
@@ -40,50 +40,69 @@ function hasTslibImportHelpers(configPath: string): boolean {
 }
 
 // Check if any tsconfig has importHelpers enabled
-const shouldIgnoreTslib = hasTslibImportHelpers('tsconfig.base.json');
+const shouldIgnoreTslib = hasTslibImportHelpers("tsconfig.base.json");
 
 const config: KnipConfig = {
   workspaces: {
     ".": {
-      entry: ["tsup.config.cjs", "eslint.config.mjs", "vitest.workspace.js"]
+      entry: [
+        "tsup.config.cjs",
+        // "eslint.config.mjs",
+        // "vitest.workspace.js",
+        ".monorepolint.config.mjs",
+        ".pnpmfile.cjs",
+        "vitest.config.mjs",
+      ],
     },
     "packages/cli": {
-      entry: ["src/index.ts", "bin/*"]
+      entry: [
+        "bin/*",
+      ],
     },
     "packages/all": {
-      entry: []
+      entry: [],
+      ignoreDependencies: [
+        "@monorepolint/cli",
+        "@monorepolint/config",
+        "@monorepolint/core",
+        "@monorepolint/rules",
+        "@monorepolint/utils",
+      ],
     },
     "packages/docs": {},
-    "packages/*": {}
+    "packages/*": {},
   },
   ignore: [
     "**/coverage/**",
     "**/build/**",
     "**/node_modules/**",
-    "**/*.spec.ts", 
-    "**/*.test.ts"
+    "**/*.spec.ts",
+    "**/*.test.ts",
   ],
   ignoreDependencies: [
     "tsup",
     "@monorepolint/internal-mrl-config",
+    "@algolia/client-search",
+    "@typescript-eslint/eslint-plugin",
+    "@typescript-eslint/parser",
     // Conditionally ignore tslib if importHelpers is enabled
-    ...(shouldIgnoreTslib ? ["tslib"] : [])
+    ...(shouldIgnoreTslib ? ["tslib"] : []),
   ],
   ignoreBinaries: [
-    "github_changelog_generator"
+    "github_changelog_generator",
   ],
   eslint: {
-    config: ["eslint.config.mjs"]
+    config: ["eslint.config.mjs"],
   },
   vitest: {
-    config: ["packages/*/vitest.config.mjs", "vitest.workspace.js"]
+    config: ["packages/*/vitest.config.mjs", "vitest.workspace.js"],
   },
   typescript: {
-    config: ["packages/*/tsconfig.json"]
+    config: ["packages/*/tsconfig.json"],
   },
   rules: {
-    unresolved: "off"
-  }
+    unresolved: "off",
+  },
 };
 
 export default config;

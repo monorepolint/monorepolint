@@ -12,7 +12,7 @@ import { REMOVE } from "./REMOVE.js";
 import { createRuleFactory } from "./util/createRuleFactory.js";
 import { ZodRemove } from "./util/zodSchemas.js";
 
-export const Options = z.object({
+const Options = z.object({
   scripts: z.record(
     z.string(),
     z.union([
@@ -35,9 +35,9 @@ export const Options = z.object({
   ), // string => string | REMOVE | object
 });
 
-export type Options = z.infer<typeof Options>;
+type Options = z.infer<typeof Options>;
 
-export const MSG_NO_SCRIPTS_BLOCK = "No scripts block in package.json";
+const MSG_NO_SCRIPTS_BLOCK = "No scripts block in package.json";
 
 export const packageScript = createRuleFactory<Options>({
   name: "packageScript",

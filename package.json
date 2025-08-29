@@ -14,10 +14,10 @@
   },
   "lint-staged": {
     "packages/*/**/*.{ts,tsx,mjs}": [
-      "dprint fmt"
+      "dprint fmt --allow-no-files"
     ],
     "**/*.{json,md,yaml,yml,cjs,js,mjs}": [
-      "dprint fmt"
+      "dprint fmt --allow-no-files"
     ]
   },
   "scripts": {
@@ -47,7 +47,6 @@
     "@manypkg/get-packages": "^3.1.0",
     "@monorepolint/cli": "workspace:^",
     "@monorepolint/internal-mrl-config": "workspace:*",
-    "@types/mock-fs": "^4.13.4",
     "@types/node": "^22.18.0",
     "@typescript-eslint/eslint-plugin": "^8.41.0",
     "@typescript-eslint/parser": "^8.41.0",
@@ -55,13 +54,11 @@
     "dprint": "^0.50.1",
     "eslint": "^9.34.0",
     "eslint-config-turbo": "^2.5.6",
-    "gh-pages": "^6.3.0",
     "globals": "^16.3.0",
     "husky": "^9.1.7",
     "knip": "^5.63.0",
     "lint-staged": "^16.1.5",
-    "mock-fs": "^5.5.0",
-    "semver": "^7.7.2",
+
     "turbo": "^2.5.6",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.41.0",
