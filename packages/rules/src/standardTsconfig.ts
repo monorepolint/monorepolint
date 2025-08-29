@@ -9,38 +9,38 @@ import { Context } from "@monorepolint/config";
 import { matchesAnyGlob } from "@monorepolint/utils";
 import { diff } from "jest-diff";
 import * as path from "path";
-import * as r from "runtypes";
+import { z } from "zod";
 import { createRuleFactory } from "./util/createRuleFactory.js";
 
 const DEFAULT_TSCONFIG_FILENAME = "tsconfig.json";
 
-const Options = r
-  .Partial({
-    file: r.String,
-    generator: r.Function,
-    tsconfigReferenceFile: r.String,
-    template: r.Record({}).Or(r.String),
-    templateFile: r.String,
-    excludedReferences: r.Array(r.String).Or(r.Undefined),
-    additionalReferences: r.Array(r.String).Or(r.Undefined),
-  })
-  .withConstraint(({ generator, template, templateFile }) => {
-    let count = 0;
-    if (generator) {
-      count++;
-    }
-    if (template) {
-      count++;
-    }
-    if (templateFile) {
-      count++;
-    }
+const Options = z.object({
+  file: z.string().optional(),
+  generator: z.custom<(context: Context) => Promise<string> | string>().optional(),
+  tsconfigReferenceFile: z.string().optional(),
+  template: z.record(z.string(), z.unknown()).optional(),
+  templateFile: z.string().optional(),
+  excludedReferences: z.array(z.string()).optional(),
+  additionalReferences: z.array(z.string()).optional(),
+}).partial().refine(({ generator, template, templateFile }) => {
+  let count = 0;
+  if (generator) {
+    count++;
+  }
+  if (template) {
+    count++;
+  }
+  if (templateFile) {
+    count++;
+  }
 
-    return count === 1 || "Expect one of { generator, template, templateFile }";
-  });
+  return count === 1;
+}, {
+  message: "Expect one of { generator, template, templateFile }",
+});
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface Options extends r.Static<typeof Options> {}
+export interface Options extends z.infer<typeof Options> {}
 
 export const standardTsconfig = createRuleFactory<Options>({
   name: "standardTsconfig",
@@ -75,7 +75,7 @@ export const standardTsconfig = createRuleFactory<Options>({
       });
     }
   },
-  validateOptions: Options.check,
+  validateOptions: Options.parse,
 });
 
 function getGenerator(context: Context, opts: Options) {

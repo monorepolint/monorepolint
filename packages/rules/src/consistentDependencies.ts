@@ -7,14 +7,16 @@
 
 import { Context } from "@monorepolint/config";
 import { diff } from "jest-diff";
-import * as r from "runtypes";
+import { z } from "zod";
 import { createRuleFactory } from "./util/createRuleFactory.js";
-const Options = r
-  .Record({
-    ignoredDependencies: r.Array(r.String).Or(r.Undefined),
-  })
-  .Or(r.Undefined);
-export type Options = r.Static<typeof Options>;
+
+const Options = z.union([
+  z.undefined(),
+  z.object({
+    ignoredDependencies: z.array(z.string()),
+  }),
+]);
+export type Options = z.infer<typeof Options>;
 
 const skippedVersions = ["*", "latest"];
 
@@ -25,7 +27,7 @@ export const consistentDependencies = createRuleFactory<Options>({
     checkDeps(context, args, "devDependencies");
     // we don't check peer deps since they can be more lenient
   },
-  validateOptions: Options.check,
+  validateOptions: Options.parse,
 });
 
 function checkDeps(

@@ -1301,4 +1301,48 @@ describe("mustSatisfyPeerDependencies", () => {
     expect(addErrorSpy).toHaveBeenCalledTimes(2);
     addErrorSpy.mockReset();
   });
+
+  describe("Options Validation", () => {
+    it("should accept valid options", () => {
+      const ruleModule = mustSatisfyPeerDependencies({ options: {} });
+
+      // Based on the complex union type, {} with all undefined properties is valid
+      expect(() => ruleModule.validateOptions({})).not.toThrow();
+      expect(() =>
+        ruleModule.validateOptions({
+          skipUnparseableRanges: undefined,
+          dependencyWhitelist: undefined,
+          dependencyBlacklist: undefined,
+          enforceForDevDependencies: undefined,
+        })
+      ).not.toThrow();
+      expect(() => ruleModule.validateOptions({ skipUnparseableRanges: true })).not.toThrow();
+      expect(() => ruleModule.validateOptions({ dependencyWhitelist: ["react", "react-dom"] })).not
+        .toThrow();
+      expect(() => ruleModule.validateOptions({ dependencyBlacklist: ["lodash"] })).not.toThrow();
+      expect(() => ruleModule.validateOptions({ enforceForDevDependencies: true })).not.toThrow();
+
+      // Combinations
+      expect(() =>
+        ruleModule.validateOptions({
+          skipUnparseableRanges: true,
+          dependencyWhitelist: ["react"],
+        })
+      ).not.toThrow();
+    });
+
+    it("should reject invalid options", () => {
+      const ruleModule = mustSatisfyPeerDependencies({ options: {} });
+
+      // Note: undefined alone doesn't match any of the union variants
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions(undefined)).toThrow();
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({ skipUnparseableRanges: "true" })).toThrow();
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({ dependencyWhitelist: "react" })).toThrow();
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({ dependencyBlacklist: 123 })).toThrow();
+    });
+  });
 });

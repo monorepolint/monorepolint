@@ -390,7 +390,15 @@ export class CachingHost implements Host {
     let node = this.#getNodeResolvingSymlinks(filePath); // canonicalizes for us
 
     if (!node) {
-      return undefined;
+      // Match SimpleHost behavior by throwing ENOENT error
+      const error = new Error(
+        `ENOENT: no such file or directory, open '${filePath}'`,
+      ) as NodeJS.ErrnoException;
+      error.errno = -2;
+      error.code = "ENOENT";
+      error.syscall = "open";
+      error.path = filePath;
+      throw error;
     }
     assertNotType(node, "dir");
     assertNoTombstone(node);

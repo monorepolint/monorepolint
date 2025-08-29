@@ -275,4 +275,42 @@ describe("consistentVersions", () => {
       );
     });
   });
+
+  describe("Options Validation", () => {
+    it("should accept valid options", () => {
+      const ruleModule = consistentVersions({
+        options: { matchDependencyVersions: { "react": "^18.0.0" } },
+      });
+
+      expect(() =>
+        ruleModule.validateOptions({
+          matchDependencyVersions: {
+            "react": "^18.0.0",
+            "lodash": ["^4.17.0", "^4.18.0"],
+          },
+        })
+      ).not.toThrow();
+
+      expect(() =>
+        ruleModule.validateOptions({
+          matchDependencyVersions: {},
+        })
+      ).not.toThrow();
+    });
+
+    it("should reject invalid options", () => {
+      const ruleModule = consistentVersions({
+        options: { matchDependencyVersions: { "react": "^18.0.0" } },
+      });
+
+      // @ts-expect-error testing invalid input
+      expect(() => ruleModule.validateOptions({})).toThrow();
+      expect(() =>
+        ruleModule.validateOptions({
+          // @ts-expect-error testing invalid input
+          matchDependencyVersions: { "react": 123 },
+        })
+      ).toThrow();
+    });
+  });
 });

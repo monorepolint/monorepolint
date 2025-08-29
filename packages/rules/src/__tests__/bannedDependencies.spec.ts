@@ -215,4 +215,53 @@ describe("bannedDependencies", () => {
       checkAndSpy({ bannedTransitiveDependencies: ["ccc", "ddd"] }).addErrorSpy,
     ).toHaveBeenCalledTimes(2);
   });
+
+  describe("Options Validation", () => {
+    it("should accept valid options", () => {
+      const ruleModule = bannedDependencies({ options: { bannedDependencies: ["lodash"] } });
+
+      // Array format
+      expect(() => ruleModule.validateOptions({ bannedDependencies: ["lodash", "moment"] })).not
+        .toThrow();
+
+      // Object format with glob and exact
+      expect(() =>
+        ruleModule.validateOptions({
+          bannedDependencies: {
+            glob: ["@types/*"],
+            exact: ["lodash"],
+          },
+        })
+      ).not.toThrow();
+
+      // With transitive dependencies
+      expect(() =>
+        ruleModule.validateOptions({
+          bannedDependencies: ["lodash"],
+          bannedTransitiveDependencies: ["moment"],
+        })
+      ).not.toThrow();
+
+      // Empty arrays
+      expect(() => ruleModule.validateOptions({ bannedDependencies: [] })).not.toThrow();
+    });
+
+    it("should reject invalid options", () => {
+      const ruleModule = bannedDependencies({ options: { bannedDependencies: ["lodash"] } });
+
+      expect(() =>
+        ruleModule.validateOptions({
+          // @ts-expect-error testing invalid input
+          bannedDependencies: "string",
+        })
+      ).toThrow();
+      // Test a case that should definitely fail - non-object value
+      expect(() =>
+        ruleModule.validateOptions({
+          // @ts-expect-error testing invalid input
+          bannedDependencies: 123,
+        })
+      ).toThrow();
+    });
+  });
 });

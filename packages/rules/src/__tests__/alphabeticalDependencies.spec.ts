@@ -8,7 +8,7 @@
 // tslint:disable:no-console
 import { Context, Failure } from "@monorepolint/config";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { alphabeticalScripts } from "../alphabeticalScripts.js";
+import { alphabeticalDependencies } from "../alphabeticalDependencies.js";
 import { createIncorrectOrderErrorMessage } from "../util/checkAlpha.js";
 import {
   AddErrorSpy,
@@ -18,25 +18,25 @@ import {
   TestingWorkspace,
 } from "./utils.js";
 
-const PACKAGE_SCRIPTS_SORTED = jsonToString({
+const PACKAGE_DEPENDENCIES_SORTED = jsonToString({
   name: "foo-lib",
-  scripts: {
-    a: "a-",
-    b: "b-",
-    c: "c-",
+  dependencies: {
+    a: "^1.0.0",
+    b: "^2.0.0",
+    c: "^3.0.0",
   },
 });
 
-const PACKAGE_SCRIPTS_UNSORTED = jsonToString({
+const PACKAGE_DEPENDENCIES_UNSORTED = jsonToString({
   name: "foo-lib",
-  scripts: {
-    c: "c-",
-    a: "a-",
-    b: "b-",
+  dependencies: {
+    c: "^3.0.0",
+    a: "^1.0.0",
+    b: "^2.0.0",
   },
 });
 
-describe.each(HOST_FACTORIES)("alphabeticalScripts ($name)", (hostFactory) => {
+describe.each(HOST_FACTORIES)("alphabeticalDependencies ($name)", (hostFactory) => {
   describe("fix: true", () => {
     let workspace: TestingWorkspace;
     let spy: AddErrorSpy;
@@ -52,10 +52,10 @@ describe.each(HOST_FACTORIES)("alphabeticalScripts ($name)", (hostFactory) => {
       spy = vi.spyOn(workspace.context, "addError");
     });
 
-    it("fixes unsorted scripts", () => {
-      workspace.writeFile("package.json", PACKAGE_SCRIPTS_UNSORTED);
+    it("fixes unsorted dependencies", () => {
+      workspace.writeFile("package.json", PACKAGE_DEPENDENCIES_UNSORTED);
 
-      alphabeticalScripts({}).check(context);
+      alphabeticalDependencies({}).check(context);
 
       expect(spy).toHaveBeenCalledTimes(1);
 
@@ -64,19 +64,19 @@ describe.each(HOST_FACTORIES)("alphabeticalScripts ($name)", (hostFactory) => {
         workspace.failureMatcher({
           file: "package.json",
           hasFixer: true,
-          message: createIncorrectOrderErrorMessage("scripts", "foo-lib"),
+          message: createIncorrectOrderErrorMessage("dependencies", "foo-lib"),
         }),
       );
 
       expect(workspace.readFile("package.json")).toEqual(
-        PACKAGE_SCRIPTS_SORTED,
+        PACKAGE_DEPENDENCIES_SORTED,
       );
     });
 
     it("does nothing if already sorted", () => {
-      workspace.writeFile("package.json", PACKAGE_SCRIPTS_SORTED);
+      workspace.writeFile("package.json", PACKAGE_DEPENDENCIES_SORTED);
 
-      alphabeticalScripts({}).check(context);
+      alphabeticalDependencies({}).check(context);
 
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -84,12 +84,12 @@ describe.each(HOST_FACTORIES)("alphabeticalScripts ($name)", (hostFactory) => {
 
   describe("Options Validation", () => {
     it("should accept undefined options", () => {
-      const ruleModule = alphabeticalScripts({ options: undefined });
+      const ruleModule = alphabeticalDependencies({ options: undefined });
       expect(() => ruleModule.validateOptions(undefined)).not.toThrow();
     });
 
     it("has empty validation - accepts any input", () => {
-      const ruleModule = alphabeticalScripts({ options: undefined });
+      const ruleModule = alphabeticalDependencies({ options: undefined });
       // Note: This rule has an empty validation function, so it accepts anything
       // @ts-expect-error testing invalid input
       expect(() => ruleModule.validateOptions({})).not.toThrow();

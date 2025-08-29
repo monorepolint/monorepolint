@@ -7,6 +7,7 @@
 
 import type { ConfigFn } from "@monorepolint/config";
 import * as Rules from "@monorepolint/rules";
+import { REMOVE } from "@monorepolint/rules";
 import { spawnSync } from "node:child_process";
 
 const META_PACKAGES = ["monorepolint"];
@@ -44,7 +45,7 @@ export const config: ConfigFn = (_context) => {
       Rules.fileContents({
         options: {
           file: "jest.config.cjs",
-          template: undefined,
+          template: REMOVE,
         },
         excludePackages: [DOCS],
       }),
