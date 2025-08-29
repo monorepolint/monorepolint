@@ -302,9 +302,80 @@ describe("requireDependency", () => {
         },
       }).check(context);
 
-      // The rule will add an error for missing dependencies block since we require a dependency
-      // but want to REMOVE it - but since there's no block, it creates one (but filtered to exclude REMOVE)
+      // No error should be added since we're only trying to remove from a non-existent block
+      // This is the improved behavior - don't create dependency blocks just for removal
+      expect(addErrorSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it("handles mixed ADD and REMOVE when dependency section doesn't exist", () => {
+      const { addFile, readFile, workspaceContext } = makeWorkspace({ fix: true });
+      addFile("./package.json", PACKAGE_ROOT);
+      addFile(
+        "./packages/test/package.json",
+        jsonToString({
+          name: "test",
+          // No dependencies section at all
+        }),
+      );
+
+      const context = workspaceContext.createChildContext(
+        path.resolve(workspaceContext.packageDir, "packages/test"),
+      );
+      const addErrorSpy = vi.spyOn(context, "addError");
+
+      requireDependency({
+        options: {
+          dependencies: {
+            toAdd: "1.0.0",
+            nonExistent: REMOVE, // This shouldn't create the block
+          },
+        },
+      }).check(context);
+
+      // Should add error only for missing block needed for the ADD operation
       expect(addErrorSpy).toHaveBeenCalledTimes(1);
+
+      const updatedPackage = JSON.parse(readFile("./packages/test/package.json"));
+      expect(updatedPackage.dependencies).toEqual({ toAdd: "1.0.0" });
+    });
+
+    it("handles mixed ADD and REMOVE with existing dependencies", () => {
+      const { addFile, readFile, workspaceContext } = makeWorkspace({ fix: true });
+      addFile("./package.json", PACKAGE_ROOT);
+      addFile(
+        "./packages/test/package.json",
+        jsonToString({
+          name: "test",
+          dependencies: {
+            existing: "1.0.0",
+            toRemove: "2.0.0",
+          },
+        }),
+      );
+
+      const context = workspaceContext.createChildContext(
+        path.resolve(workspaceContext.packageDir, "packages/test"),
+      );
+      const addErrorSpy = vi.spyOn(context, "addError");
+
+      requireDependency({
+        options: {
+          dependencies: {
+            toAdd: "3.0.0",
+            existing: "1.0.0", // Correct version, no error
+            toRemove: REMOVE,
+          },
+        },
+      }).check(context);
+
+      // Should add errors for ADD and REMOVE operations
+      expect(addErrorSpy).toHaveBeenCalledTimes(2);
+
+      const updatedPackage = JSON.parse(readFile("./packages/test/package.json"));
+      expect(updatedPackage.dependencies).toEqual({
+        existing: "1.0.0",
+        toAdd: "3.0.0",
+      });
     });
   });
 

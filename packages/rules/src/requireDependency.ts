@@ -63,48 +63,40 @@ export const requireDependency = createRuleFactory({
         return;
       }
 
-      if (packageJson[type] === undefined) {
-        context.addError({
-          file: packageJsonPath,
-          message: `No ${type} block, cannot add required ${type}.`,
-          fixer: () => {
-            mutateJson<PackageJson>(packageJsonPath, context.host, (input) => {
-              input[type] = Object.fromEntries(
-                Object.entries(expectedEntries).filter(([, v]) => v !== undefined && v !== REMOVE),
-              ) as Record<string, string>;
-              return input;
-            });
-          },
-        });
-        return;
-      }
+      // Separate additions from removals upfront
+      const dependenciesToAdd = Object.entries(expectedEntries).filter(
+        ([, version]) => version !== REMOVE && version !== undefined,
+      );
+      const dependenciesToRemove = Object.entries(expectedEntries).filter(
+        ([, version]) => version === REMOVE,
+      );
 
-      for (const [dep, version] of Object.entries(options[type]!)) {
-        if (version === REMOVE) {
-          // Handle removal: only add error if dependency exists
-          if (packageJson[type]?.[dep] !== undefined) {
-            context.addError({
-              file: packageJsonPath,
-              message: `Dependency ${dep} should be removed`,
-              fixer: () => {
-                mutateJson<PackageJson>(
-                  packageJsonPath,
-                  context.host,
-                  (input) => {
-                    input[type] = { ...input[type] };
-                    delete input[type][dep];
-                    return input;
-                  },
-                );
-              },
-            });
-          }
-        } else if (packageJson[type]?.[dep] !== version) {
+      // Handle missing dependency block
+      if (packageJson[type] === undefined) {
+        // Only create block if there are dependencies to add (REMOVE entries shouldn't create blocks)
+        if (dependenciesToAdd.length > 0) {
           context.addError({
             file: packageJsonPath,
-            message: `Expected dependency ${dep}@${version}`,
+            message: `No ${type} block, cannot add required ${type}.`,
+            fixer: () => {
+              mutateJson<PackageJson>(packageJsonPath, context.host, (input) => {
+                input[type] = Object.fromEntries(dependenciesToAdd) as Record<string, string>;
+                return input;
+              });
+            },
+          });
+        }
+        return; // Can't remove from non-existent block
+      }
+
+      // Process additions
+      for (const [dep, version] of dependenciesToAdd) {
+        if (packageJson[type]?.[dep] !== version) {
+          context.addError({
+            file: packageJsonPath,
+            message: `Expected dependency ${dep}@${version as string}`,
             longMessage: diff(
-              `${dep}@${version}\n`,
+              `${dep}@${version as string}\n`,
               `${dep}@${packageJson[type]![dep] || "missing"}\n`,
             )!,
             fixer: () => {
@@ -113,6 +105,27 @@ export const requireDependency = createRuleFactory({
                 context.host,
                 (input) => {
                   input[type] = { ...input[type], [dep]: version as string };
+                  return input;
+                },
+              );
+            },
+          });
+        }
+      }
+
+      // Process removals
+      for (const [dep] of dependenciesToRemove) {
+        if (packageJson[type]?.[dep] !== undefined) {
+          context.addError({
+            file: packageJsonPath,
+            message: `Dependency ${dep} should be removed`,
+            fixer: () => {
+              mutateJson<PackageJson>(
+                packageJsonPath,
+                context.host,
+                (input) => {
+                  input[type] = { ...input[type] };
+                  delete input[type][dep];
                   return input;
                 },
               );

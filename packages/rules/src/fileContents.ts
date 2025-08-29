@@ -16,7 +16,9 @@ import { ZodRemove } from "./util/zodSchemas.js";
 const Options = z.union([
   z.object({
     file: z.string(),
-    generator: z.custom<(context: Context) => string | Promise<string>>((val) => {
+    generator: z.custom<
+      (context: Context) => string | typeof REMOVE | Promise<string | typeof REMOVE>
+    >((val) => {
       return typeof val === "function";
     }),
     template: z.undefined().optional(),
@@ -94,7 +96,7 @@ export const fileContents = createRuleFactory<Options>({
 
 const optionsCache = new Map<
   Options,
-  | ((context: Context) => Promise<string> | string | typeof REMOVE)
+  | ((context: Context) => Promise<string | typeof REMOVE> | string | typeof REMOVE)
   | string
   | typeof REMOVE
 >();
@@ -116,8 +118,8 @@ async function getExpectedContents(
     optionsCache.set(opts, opts.generator);
     try {
       const result = await opts.generator(context);
-      if (typeof result !== "string") {
-        throw new Error(`Generator function must return a string, got ${typeof result}`);
+      if (typeof result !== "string" && result !== REMOVE) {
+        throw new Error(`Generator function must return a string or REMOVE, got ${typeof result}`);
       }
       return result;
     } catch (error) {

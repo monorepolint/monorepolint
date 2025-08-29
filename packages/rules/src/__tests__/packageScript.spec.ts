@@ -526,6 +526,229 @@ describe.each(HOST_FACTORIES)("expectPackageScript ($name)", (hostFactory) => {
     });
   });
 
+  describe("Advanced allowedValues scenarios", () => {
+    let workspace: TestingWorkspace;
+    let spy: AddErrorSpy;
+    let context: Context;
+
+    beforeEach(async () => {
+      workspace = await createTestingWorkspace({
+        fixFlag: true,
+        host: hostFactory.make(),
+      });
+      spy = vi.spyOn(workspace.context, "addError");
+      context = workspace.context;
+    });
+
+    it("handles multiple options without fixValue (no fixer should be provided)", () => {
+      workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
+
+      packageScript({
+        options: {
+          scripts: {
+            [SCRIPT_NAME]: {
+              options: ["option-a", "option-b", "option-c"],
+              // No fixValue specified
+            },
+          },
+        },
+      }).check(context);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+
+      const failure: Failure = spy.mock.calls[0][0];
+      expect(failure.fixer).toBeUndefined(); // No fixer when no fixValue
+      expect(failure.message).toContain("Expected standardized script entry");
+      expect(failure.message).toContain("option-a");
+      expect(failure.message).toContain("option-b");
+      expect(failure.message).toContain("option-c");
+    });
+
+    it("handles mixed option types: string + undefined + REMOVE", () => {
+      workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
+
+      packageScript({
+        options: {
+          scripts: {
+            [SCRIPT_NAME]: {
+              options: ["build-cmd", undefined, REMOVE],
+              fixValue: "build-cmd",
+            },
+          },
+        },
+      }).check(context);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+
+      const failure: Failure = spy.mock.calls[0][0];
+      expect(failure.fixer).toBeDefined();
+      expect(failure.message).toContain("Expected standardized script entry");
+      expect(failure.message).toContain("build-cmd");
+      expect(failure.message).toContain("(empty)"); // Should show undefined/REMOVE as (empty)
+
+      // Verify it fixes to the fixValue
+      expect(JSON.parse(workspace.readFile("package.json")!).scripts[SCRIPT_NAME]).toBe(
+        "build-cmd",
+      );
+    });
+
+    it("allows empty when REMOVE is in options array", () => {
+      const packageWithoutSpecificScript = json({
+        name: "test-package",
+        scripts: {
+          "other-script": "other-value",
+        },
+      });
+      workspace.writeFile("package.json", packageWithoutSpecificScript);
+
+      packageScript({
+        options: {
+          scripts: {
+            "missing-script": {
+              options: ["some-value", REMOVE],
+              fixValue: "some-value",
+            },
+          },
+        },
+      }).check(context);
+
+      // When REMOVE is in options array, it sets allowEmpty=true
+      // So missing script (undefined) should NOT error - this is correct behavior
+      expect(spy).toHaveBeenCalledTimes(0);
+
+      // Original state should remain unchanged since no error occurred
+      const finalScripts = JSON.parse(workspace.readFile("package.json")!).scripts;
+      expect(finalScripts["missing-script"]).toBeUndefined();
+      expect(finalScripts["other-script"]).toBe("other-value");
+    });
+
+    it("handles existing script with REMOVE in options array", () => {
+      workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
+
+      packageScript({
+        options: {
+          scripts: {
+            [SCRIPT_NAME]: {
+              options: ["different-value", REMOVE], // Current value doesn't match "different-value"
+              fixValue: REMOVE, // Should fix by removing the script
+            },
+          },
+        },
+      }).check(context);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+
+      const failure: Failure = spy.mock.calls[0][0];
+      expect(failure.fixer).toBeDefined();
+      expect(failure.message).toContain("Expected standardized script entry");
+
+      // Should be removed since fixValue is REMOVE
+      expect(JSON.parse(workspace.readFile("package.json")!).scripts[SCRIPT_NAME]).toBeUndefined();
+    });
+
+    it("handles fixValue: false (prevents fixing)", () => {
+      workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
+
+      packageScript({
+        options: {
+          scripts: {
+            [SCRIPT_NAME]: {
+              options: ["different-value"],
+              fixValue: false,
+            },
+          },
+        },
+      }).check(context);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+
+      const failure: Failure = spy.mock.calls[0][0];
+      expect(failure.fixer).toBeUndefined(); // fixValue: false should prevent fixer
+      expect(failure.message).toContain("Expected standardized script entry");
+
+      // Original value should remain unchanged
+      expect(JSON.parse(workspace.readFile("package.json")!).scripts[SCRIPT_NAME]).toBe(
+        SCRIPT_VALUE,
+      );
+    });
+
+    it("formats error messages correctly for complex allowedValues", () => {
+      workspace.writeFile("package.json", PACKAGE_WITH_SCRIPTS);
+
+      packageScript({
+        options: {
+          scripts: {
+            [SCRIPT_NAME]: {
+              options: ["cmd-a", "cmd-b", undefined, REMOVE],
+              fixValue: "cmd-a",
+            },
+          },
+        },
+      }).check(context);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+
+      const failure: Failure = spy.mock.calls[0][0];
+      const message = failure.message;
+
+      // Should contain all allowed values in the main message
+      expect(message).toContain("'cmd-a'");
+      expect(message).toContain("'cmd-b'");
+      expect(message).toContain("(empty)"); // Both undefined and REMOVE should show as (empty)
+
+      // The longMessage contains a diff between expected and actual values
+      expect(failure.longMessage).toBeDefined();
+      expect(failure.longMessage).toContain("'cmd-a', 'cmd-b', (empty), (empty)"); // This is the expected part of the diff
+      expect(failure.longMessage).toContain(SCRIPT_VALUE); // This is the actual current value
+    });
+
+    it("processes multiple scripts with different allowedValues configurations", () => {
+      const complexPackage = json({
+        name: "complex-package",
+        scripts: {
+          "script-a": "wrong-value-a",
+          "script-b": "wrong-value-b",
+          "script-c": "correct-value-c",
+        },
+      });
+      workspace.writeFile("package.json", complexPackage);
+
+      packageScript({
+        options: {
+          scripts: {
+            "script-a": {
+              options: ["correct-a1", "correct-a2"],
+              fixValue: "correct-a1",
+            },
+            "script-b": {
+              options: ["correct-b", undefined],
+              fixValue: undefined, // Fix to empty (removal)
+            },
+            "script-c": "correct-value-c", // Already correct, should not error
+            "script-d": REMOVE, // Doesn't exist, should not error
+          },
+        },
+      }).check(context);
+
+      expect(spy).toHaveBeenCalledTimes(2); // Only script-a and script-b should error
+
+      const failures = spy.mock.calls.map(call => call[0]);
+      const messages = failures.map(f => f.message);
+
+      expect(messages.some(msg => msg.includes("script-a"))).toBe(true);
+      expect(messages.some(msg => msg.includes("script-b"))).toBe(true);
+      expect(messages.some(msg => msg.includes("script-c"))).toBe(false); // Should not error
+      expect(messages.some(msg => msg.includes("script-d"))).toBe(false); // Should not error
+
+      // Verify final state
+      const finalScripts = JSON.parse(workspace.readFile("package.json")!).scripts;
+      expect(finalScripts["script-a"]).toBe("correct-a1");
+      expect(finalScripts["script-b"]).toBeUndefined(); // Should be removed
+      expect(finalScripts["script-c"]).toBe("correct-value-c"); // Unchanged
+      expect(finalScripts["script-d"]).toBeUndefined(); // Still doesn't exist
+    });
+  });
+
   describe("Options Validation", () => {
     it("should accept valid options", () => {
       const ruleModule = packageScript({

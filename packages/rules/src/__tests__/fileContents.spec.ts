@@ -229,13 +229,16 @@ describe.each(HOST_FACTORIES)("fileContents ($name)", (hostFactory) => {
         workspace.failureMatcher({
           file: "test.txt",
           hasFixer: false, // This should be an unfixable error
-          message: "Generator function failed: Generator function must return a string, got number",
+          message:
+            "Generator function failed: Generator function must return a string or REMOVE, got number",
         }),
       );
       expect(failure.longMessage).toContain(
         `The generator function for file "test.txt" threw an error:`,
       );
-      expect(failure.longMessage).toContain("Generator function must return a string, got number");
+      expect(failure.longMessage).toContain(
+        "Generator function must return a string or REMOVE, got number",
+      );
     });
   });
 
