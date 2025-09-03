@@ -4,6 +4,7 @@ on: [pull_request]
 
 jobs:
   build:
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -18,12 +19,12 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: pnpm/action-setup@v4.1.0
+      - uses: pnpm/action-setup@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.node }}
           cache: "pnpm"
 
       - run: pnpm install
