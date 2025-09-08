@@ -10,6 +10,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   release:
     name: Release
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -17,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: pnpm/action-setup@v4.1.0
+      - uses: pnpm/action-setup@v4
 
       - name: Use Node.js 20
         uses: actions/setup-node@v4

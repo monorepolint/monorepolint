@@ -9,7 +9,7 @@ updates:
       timezone: "America/New_York"
     open-pull-requests-limit: 8
     allow:
-      - dependency-type: "security"
+      - dependency-type: "all"
     labels:
       - "dependencies"
       - "npm"
@@ -17,11 +17,10 @@ updates:
       prefix: "deps"
       prefix-development: "deps-dev"
     # Restrict @types/node to minor/patch updates only (prevents Node.js 23/24 type updates)
-    allowed-updates:
+    ignore:
       - dependency-name: "@types/node"
         update-types:
-          - "version-update:semver-minor"
-          - "version-update:semver-patch"
+          - "version-update:semver-major"
     groups:
       # TypeScript and ESLint related packages
       typescript-eslint:
