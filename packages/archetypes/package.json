@@ -38,10 +38,10 @@
   },
   "devDependencies": {
     "@types/micromatch": "^4.0.9",
-    "@types/node": "^22.18.0",
-    "@typescript-eslint/eslint-plugin": "^8.41.0",
-    "@typescript-eslint/parser": "^8.41.0",
-    "eslint": "^9.34.0",
+    "@types/node": "^22.18.1",
+    "@typescript-eslint/eslint-plugin": "^8.43.0",
+    "@typescript-eslint/parser": "^8.43.0",
+    "eslint": "^9.35.0",
     "tslib": "^2.8.1",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2"
