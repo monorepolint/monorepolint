@@ -45,6 +45,47 @@ function checkConsistentVersions(context: Context, options: Options) {
   }
 }
 
+/**
+ * Helper function to check if a version should be updated based on expected version type
+ */
+const shouldUpdateVersion = (
+  actualValue: string,
+  expectedValue: string,
+  isSpecialVersion: boolean,
+  expectedSemVer: SemVer | null,
+): boolean => {
+  if (isSpecialVersion) {
+    return actualValue !== expectedValue;
+  }
+
+  const actualSemVer = coerce(actualValue);
+  return actualSemVer != null && actualSemVer.raw !== expectedSemVer!.raw;
+};
+
+/**
+ * Helper function to check if a version matches any of the accepted versions
+ */
+const matchesAnyVersion = (
+  actualValue: string,
+  specialVersions: string[],
+  acceptedSemVerVersions: SemVer[],
+): boolean => {
+  // Check special versions first
+  if (specialVersions.includes(actualValue)) {
+    return true;
+  }
+
+  // Check semver versions
+  const actualSemVer = coerce(actualValue);
+  if (actualSemVer == null) {
+    return false;
+  }
+
+  return acceptedSemVerVersions.some(
+    (acceptedSemVer) => actualSemVer.raw === acceptedSemVer.raw,
+  );
+};
+
 const ensurePackageIsCorrectVersion = (
   context: Context,
   dependencyPackageName: string,
@@ -70,13 +111,12 @@ const ensurePackageIsCorrectVersion = (
     && packageJson.dependencies[dependencyPackageName];
 
   if (actualPackageDependencyValue != null) {
-    const shouldUpdate = isSpecialVersion
-      ? actualPackageDependencyValue !== expectedPackageDependencyValue
-      : (() => {
-        const actualPackageDependencyVersion = coerce(actualPackageDependencyValue);
-        return actualPackageDependencyVersion != null
-          && actualPackageDependencyVersion.raw !== expectedPackageDependencyVersion!.raw;
-      })();
+    const shouldUpdate = shouldUpdateVersion(
+      actualPackageDependencyValue,
+      expectedPackageDependencyValue,
+      isSpecialVersion,
+      expectedPackageDependencyVersion,
+    );
 
     if (shouldUpdate) {
       context.addError({
@@ -96,13 +136,12 @@ const ensurePackageIsCorrectVersion = (
     && packageJson.devDependencies[dependencyPackageName];
 
   if (actualPackageDevDependencyValue != null) {
-    const shouldUpdateDev = isSpecialVersion
-      ? actualPackageDevDependencyValue !== expectedPackageDependencyValue
-      : (() => {
-        const actualPackageDevDependencyVersion = coerce(actualPackageDevDependencyValue);
-        return actualPackageDevDependencyVersion != null
-          && actualPackageDevDependencyVersion.raw !== expectedPackageDependencyVersion!.raw;
-      })();
+    const shouldUpdateDev = shouldUpdateVersion(
+      actualPackageDevDependencyValue,
+      expectedPackageDependencyValue,
+      isSpecialVersion,
+      expectedPackageDependencyVersion,
+    );
 
     if (shouldUpdateDev) {
       context.addError({
@@ -149,18 +188,13 @@ const ensurePackageMatchesSomeVersion = (
     && packageJson.dependencies[dependencyPackageName];
 
   if (actualPackageDependencyValue != null) {
-    // Check if actual version matches any special version or regular semver version
-    const matchesSpecialVersion = specialVersions.includes(actualPackageDependencyValue);
-    const matchesRegularVersion = (() => {
-      const actualPackageDependencyVersion = coerce(actualPackageDependencyValue);
-      return actualPackageDependencyVersion != null
-        && acceptedPackageDependencyVersions.some(
-          (acceptedPackageDependencyVersion) =>
-            actualPackageDependencyVersion.raw === acceptedPackageDependencyVersion.raw,
-        );
-    })();
+    const matches = matchesAnyVersion(
+      actualPackageDependencyValue,
+      specialVersions,
+      acceptedPackageDependencyVersions,
+    );
 
-    if (!matchesSpecialVersion && !matchesRegularVersion) {
+    if (!matches) {
       context.addError({
         file: packageJsonPath,
         message: `Expected dependency on ${dependencyPackageName} to match one of '${
@@ -176,18 +210,13 @@ const ensurePackageMatchesSomeVersion = (
     && packageJson.devDependencies[dependencyPackageName];
 
   if (actualPackageDevDependencyValue != null) {
-    // Check if actual dev version matches any special version or regular semver version
-    const matchesSpecialDevVersion = specialVersions.includes(actualPackageDevDependencyValue);
-    const matchesRegularDevVersion = (() => {
-      const actualPackageDevDependencyVersion = coerce(actualPackageDevDependencyValue);
-      return actualPackageDevDependencyVersion != null
-        && acceptedPackageDependencyVersions.some(
-          (acceptedPackageDependencyVersion) =>
-            actualPackageDevDependencyVersion.raw === acceptedPackageDependencyVersion.raw,
-        );
-    })();
+    const matches = matchesAnyVersion(
+      actualPackageDevDependencyValue,
+      specialVersions,
+      acceptedPackageDependencyVersions,
+    );
 
-    if (!matchesSpecialDevVersion && !matchesRegularDevVersion) {
+    if (!matches) {
       context.addError({
         file: packageJsonPath,
         message: `Expected devDependency on ${dependencyPackageName} to match one of '${
