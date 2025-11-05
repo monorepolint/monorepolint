@@ -45,16 +45,13 @@ function checkConsistentVersions(context: Context, options: Options) {
   }
 }
 
-/**
- * Helper function to check if a version should be updated based on expected version type
- */
 const shouldUpdateVersion = (
   actualValue: string,
   expectedValue: string,
-  isSpecialVersion: boolean,
+  isProtocolVersionString: boolean,
   expectedSemVer: SemVer | null,
 ): boolean => {
-  if (isSpecialVersion) {
+  if (isProtocolVersionString) {
     return actualValue !== expectedValue;
   }
 
@@ -62,20 +59,15 @@ const shouldUpdateVersion = (
   return actualSemVer != null && actualSemVer.raw !== expectedSemVer!.raw;
 };
 
-/**
- * Helper function to check if a version matches any of the accepted versions
- */
 const matchesAnyVersion = (
   actualValue: string,
-  specialVersions: string[],
+  protocolVersions: string[],
   acceptedSemVerVersions: SemVer[],
 ): boolean => {
-  // Check special versions first
-  if (specialVersions.includes(actualValue)) {
+  if (protocolVersions.includes(actualValue)) {
     return true;
   }
 
-  // Check semver versions
   const actualSemVer = coerce(actualValue);
   if (actualSemVer == null) {
     return false;
@@ -94,11 +86,11 @@ const ensurePackageIsCorrectVersion = (
   const packageJson = context.getPackageJson();
   const packageJsonPath = context.getPackageJsonPath();
 
-  // Allow special version strings like "catalog:", "workspace:", etc.
-  const isSpecialVersion = expectedPackageDependencyValue.endsWith(":");
+  // Allow protocol version strings like "catalog:", "workspace:", etc.
+  const isProtocolVersion = expectedPackageDependencyValue.endsWith(":");
   let expectedPackageDependencyVersion: SemVer | null = null;
 
-  if (!isSpecialVersion) {
+  if (!isProtocolVersion) {
     expectedPackageDependencyVersion = coerce(expectedPackageDependencyValue);
     if (expectedPackageDependencyVersion == null) {
       throw new Error(
@@ -114,7 +106,7 @@ const ensurePackageIsCorrectVersion = (
     const shouldUpdate = shouldUpdateVersion(
       actualPackageDependencyValue,
       expectedPackageDependencyValue,
-      isSpecialVersion,
+      isProtocolVersion,
       expectedPackageDependencyVersion,
     );
 
@@ -139,7 +131,7 @@ const ensurePackageIsCorrectVersion = (
     const shouldUpdateDev = shouldUpdateVersion(
       actualPackageDevDependencyValue,
       expectedPackageDependencyValue,
-      isSpecialVersion,
+      isProtocolVersion,
       expectedPackageDependencyVersion,
     );
 
@@ -166,8 +158,8 @@ const ensurePackageMatchesSomeVersion = (
   const packageJson = context.getPackageJson();
   const packageJsonPath = context.getPackageJsonPath();
 
-  // Separate special versions from regular semver versions
-  const specialVersions = acceptedPackageDependencyValues.filter(val => val.endsWith(":"));
+  // Separate protocol versions from regular semver versions
+  const protocolVersions = acceptedPackageDependencyValues.filter(val => val.endsWith(":"));
   const regularVersions = acceptedPackageDependencyValues.filter(val => !val.endsWith(":"));
 
   const acceptedPackageDependencyVersions: SemVer[] = regularVersions.map(
@@ -190,7 +182,7 @@ const ensurePackageMatchesSomeVersion = (
   if (actualPackageDependencyValue != null) {
     const matches = matchesAnyVersion(
       actualPackageDependencyValue,
-      specialVersions,
+      protocolVersions,
       acceptedPackageDependencyVersions,
     );
 
@@ -212,7 +204,7 @@ const ensurePackageMatchesSomeVersion = (
   if (actualPackageDevDependencyValue != null) {
     const matches = matchesAnyVersion(
       actualPackageDevDependencyValue,
-      specialVersions,
+      protocolVersions,
       acceptedPackageDependencyVersions,
     );
 
