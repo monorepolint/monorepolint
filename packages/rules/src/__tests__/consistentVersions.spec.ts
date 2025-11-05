@@ -276,6 +276,110 @@ describe("consistentVersions", () => {
     });
   });
 
+  describe("Special Version Strings", () => {
+    it("should support catalog: version strings", async () => {
+      const { addErrorSpy, check, host } = makeWorkspace();
+      const testPackageJsonWithCatalog = {
+        name: "test",
+        dependencies: {
+          "@osdk/api": "catalog:",
+          normalLib: "^1.2.3",
+        },
+        devDependencies: {
+          "@osdk/dev": "catalog:",
+        },
+      };
+
+      addPackageJson(host, "./package.json", testPackageJsonWithCatalog);
+
+      // Should not throw an error when using catalog: versions
+      expect(() => {
+        check({
+          matchDependencyVersions: {
+            "@osdk/api": "catalog:",
+            "@osdk/dev": "catalog:",
+            normalLib: "^1.2.3",
+          },
+        });
+      }).not.toThrow();
+
+      expect(addErrorSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it("should detect mismatched catalog: versions", async () => {
+      const { addErrorSpy, check, host } = makeWorkspace();
+      const testPackageJsonWithWrongCatalog = {
+        name: "test",
+        dependencies: {
+          "@osdk/api": "^1.2.3", // Should be catalog:
+        },
+      };
+
+      addPackageJson(host, "./package.json", testPackageJsonWithWrongCatalog);
+
+      check({
+        matchDependencyVersions: {
+          "@osdk/api": "catalog:",
+        },
+      });
+
+      expect(addErrorSpy).toHaveBeenCalledTimes(1);
+      expect(addErrorSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: expect.stringContaining(
+            "Expected dependency on @osdk/api to match version defined in monorepolint configuration 'catalog:', got '^1.2.3' instead",
+          ),
+        }),
+      );
+    });
+
+    it("should support workspace: and other special version strings", async () => {
+      const { addErrorSpy, check, host } = makeWorkspace();
+      const testPackageJsonWithSpecial = {
+        name: "test",
+        dependencies: {
+          "@workspace/lib": "workspace:",
+          "@link/lib": "link:",
+        },
+      };
+
+      addPackageJson(host, "./package.json", testPackageJsonWithSpecial);
+
+      expect(() => {
+        check({
+          matchDependencyVersions: {
+            "@workspace/lib": "workspace:",
+            "@link/lib": "link:",
+          },
+        });
+      }).not.toThrow();
+
+      expect(addErrorSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it("should support arrays with mixed special and regular versions", async () => {
+      const { addErrorSpy, check, host } = makeWorkspace();
+      const testPackageJsonWithMixed = {
+        name: "test",
+        dependencies: {
+          "@mixed/lib": "catalog:",
+        },
+      };
+
+      addPackageJson(host, "./package.json", testPackageJsonWithMixed);
+
+      expect(() => {
+        check({
+          matchDependencyVersions: {
+            "@mixed/lib": ["catalog:", "^1.2.3", "workspace:"],
+          },
+        });
+      }).not.toThrow();
+
+      expect(addErrorSpy).toHaveBeenCalledTimes(0);
+    });
+  });
+
   describe("Options Validation", () => {
     it("should accept valid options", () => {
       const ruleModule = consistentVersions({
