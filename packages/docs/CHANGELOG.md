@@ -1,5 +1,11 @@
 # @monorepolint/docs
 
+## 0.6.0-alpha.6
+
+### Minor Changes
+
+- c1914bd: Dropping support for anything less than node 20
+
 ## 0.6.0-alpha.5
 
 ### Patch Changes
