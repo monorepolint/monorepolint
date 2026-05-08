@@ -86,6 +86,66 @@ export default archetypes<MyRules>(
   );
 ```
 
+### Using archetype options in rule configuration
+
+The first argument passed to your `rulesProvider` contains the package selector
+for the current archetype. Spread it into each rule so the generated rule only
+applies to packages in that archetype. The second argument is the options object
+you passed to `.addArchetype(...)`, which lets each archetype parameterize the
+same rule template.
+
+For example, this complete configuration uses each archetype's `lint` and
+`build` commands to configure the `packageScript` rule:
+
+```ts
+import { archetypes } from "@monorepolint/archetypes";
+import { packageScript } from "@monorepolint/rules";
+
+interface ScriptRules {
+  build: string;
+  lint: string;
+}
+
+const config = archetypes<ScriptRules>(
+  (shared, rules) => [
+    packageScript({
+      ...shared,
+      options: {
+        scripts: {
+          build: {
+            options: [rules.build],
+            fixValue: rules.build,
+          },
+          lint: {
+            options: [rules.lint],
+            fixValue: rules.lint,
+          },
+        },
+      },
+    }),
+  ],
+  { unmatched: "error" },
+)
+  .addArchetype("vite libraries", ["@mine/vite-*"], {
+    build: "vite build",
+    lint: "eslint .",
+  })
+  .addArchetype("tsc libraries", ["@mine/tsc-*"], {
+    build: "tsc",
+    lint: "eslint .",
+  });
+
+export default {
+  rules: config.buildRules(),
+};
+```
+
+This produces a `packageScript` rule for each archetype. The `shared` spread
+sets `includePackages` for the packages registered with that archetype, and
+`rules.build` / `rules.lint` provide the allowed script values and autofix
+values for those packages. The final `config.buildRules()` call emits the
+`rules` array consumed by monorepolint.
+
 ### Using fallback configuration
 
 If in our earlier example we want all unmatched packages to use a default configuration instead of erroring we can do that as well:
