@@ -120,7 +120,7 @@ export default defineProject({
               },
             },
             engines: {
-              node: ">=18",
+              node: ">=20",
             },
           },
         },

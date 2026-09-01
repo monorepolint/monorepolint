@@ -30,7 +30,7 @@
     "compile:fast": "cd packages/all; tsc --build",
     "compile:watch": "cd packages/all; tsc --build --watch",
     "fix:lint:format": "dprint fmt 'packages/*/src/**/*.{ts,tsx,less}'",
-    "fix:lint:monorepolint": "pnpm exec monorepolint fix",
+    "fix:lint:monorepolint": "pnpm exec monorepolint check --fix",
     "lint": "pnpm run --workspace-concurrency 1 '/^lint:.*/'",
     "lint:format": "dprint check 'packages/*/src/**/*.{ts,tsx,less}'",
     "lint:monorepolint": "monorepolint check --verbose",
