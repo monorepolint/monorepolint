@@ -276,6 +276,19 @@ describe(CachingHost, () => {
           host.rmdir(FILE_JSON_PATH);
         }).toThrow();
       });
+
+      it("gives up on a symlink cycle instead of recursing forever", () => {
+        expect.assertions(1);
+        const a = path.resolve(baseDir, "cycle-a");
+        const b = path.resolve(baseDir, "cycle-b");
+        fs.symlinkSync(b, a);
+        fs.symlinkSync(a, b);
+
+        const host = new CachingHost(fs as any);
+        expect(() => {
+          host.readFile(a, { encoding: "utf-8" });
+        }).toThrow("Exhausted symlink follows");
+      });
     },
   );
 });
