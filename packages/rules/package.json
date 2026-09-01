@@ -34,22 +34,22 @@
     "@monorepolint/core": "workspace:^",
     "@monorepolint/utils": "workspace:^",
     "globby": "^14.1.0",
-    "jest-diff": "^30.1.2",
+    "jest-diff": "^30.5.1",
     "resolve-package-path": "^4.0.3",
-    "semver": "^7.7.2",
+    "semver": "^7.8.5",
     "tslib": "^2.8.1",
-    "zod": "^4.1.5"
+    "zod": "^4.5.4"
   },
   "devDependencies": {
-    "@types/semver": "^7.7.1",
+    "@types/semver": "^7.8.0",
     "@types/tmp": "^0.2.6",
-    "@typescript-eslint/eslint-plugin": "^8.43.0",
-    "@typescript-eslint/parser": "^8.43.0",
-    "eslint": "^9.35.0",
-    "tmp": "^0.2.5",
+    "@typescript-eslint/eslint-plugin": "^8.69.0",
+    "@typescript-eslint/parser": "^8.69.0",
+    "eslint": "^9.39.5",
+    "tmp": "^0.2.7",
     "tslib": "^2.8.1",
-    "tsup": "^8.5.0",
-    "typescript": "^5.9.2"
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
   },
   "publishConfig": {
     "access": "public"
