@@ -33,7 +33,7 @@
     "@monorepolint/config": "workspace:^",
     "@monorepolint/core": "workspace:^",
     "@monorepolint/utils": "workspace:^",
-    "globby": "^14.1.0",
+    "globby": "^16.2.4",
     "jest-diff": "^30.5.1",
     "resolve-package-path": "^4.0.3",
     "semver": "^7.8.5",
