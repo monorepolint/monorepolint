@@ -53,13 +53,35 @@ export async function getWorkspacePackageDirs(
     );
   }
 
-  const ret: string[] = [];
   const packageGlobs = Array.isArray(packageJson.workspaces)
     ? packageJson.workspaces
     : packageJson.workspaces.packages || [];
 
-  for (const pattern of packageGlobs) {
+  // Yarn and npm workspaces both support excluding a directory via a "!"-prefixed
+  // pattern (e.g. ["packages/*", "!packages/excluded"]). Negation like this is
+  // inherently cross-pattern, so we expand the positive and negative patterns
+  // separately and then filter the accumulated set, rather than passing each
+  // pattern to glob.sync() in isolation (which would treat "!packages/excluded"
+  // as a literal, unmatchable path).
+  const positivePatterns = packageGlobs.filter((pattern) => !pattern.startsWith("!"));
+  const negativePatterns = packageGlobs
+    .filter((pattern) => pattern.startsWith("!"))
+    .map((pattern) => pattern.slice(1));
+
+  const excludedPackagePaths = new Set<string>();
+  for (const pattern of negativePatterns) {
     for (const packagePath of glob.sync(pattern, { cwd: workspaceDir })) {
+      excludedPackagePaths.add(packagePath);
+    }
+  }
+
+  const ret: string[] = [];
+  for (const pattern of positivePatterns) {
+    for (const packagePath of glob.sync(pattern, { cwd: workspaceDir })) {
+      if (excludedPackagePaths.has(packagePath)) {
+        continue;
+      }
+
       const packageJsonPath = path.join(
         workspaceDir,
         packagePath,
