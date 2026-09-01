@@ -31,13 +31,10 @@
     "@monorepolint/rules": "workspace:^",
     "find-packages": "^10.0.4",
     "find-up": "^8.0.0",
-    "glob": "^13.0.6",
-    "micromatch": "^4.0.8",
     "read-yaml-file": "^2.1.0",
     "tslib": "^2.8.1"
   },
   "devDependencies": {
-    "@types/micromatch": "^4.0.10",
     "@types/node": "^22.20.1",
     "@typescript-eslint/eslint-plugin": "^8.69.0",
     "@typescript-eslint/parser": "^8.69.0",
