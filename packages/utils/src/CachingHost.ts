@@ -304,7 +304,7 @@ export class CachingHost implements Host {
     // this is a really poor mans way of doing this. but who has 100's of symlinks hanging around?
     if (follows === 0) throw new Error("Exhausted symlink follows");
 
-    return this.#getNodeResolvingSymlinks(node.symlink, follows--);
+    return this.#getNodeResolvingSymlinks(node.symlink, follows - 1);
   }
 
   mkdir(
