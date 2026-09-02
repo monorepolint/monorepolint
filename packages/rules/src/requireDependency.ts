@@ -19,28 +19,28 @@ const Options = z.object({
     z.union([
       z.string(),
       ZodRemove,
-    ]).optional(),
+    ]),
   ).optional(),
   devDependencies: z.record(
     z.string(),
     z.union([
       z.string(),
       ZodRemove,
-    ]).optional(),
+    ]),
   ).optional(),
   peerDependencies: z.record(
     z.string(),
     z.union([
       z.string(),
       ZodRemove,
-    ]).optional(),
+    ]),
   ).optional(),
   optionalDependencies: z.record(
     z.string(),
     z.union([
       z.string(),
       ZodRemove,
-    ]).optional(),
+    ]),
   ).optional(),
 }).partial();
 
