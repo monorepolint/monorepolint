@@ -164,6 +164,70 @@ describe("requireDependency", () => {
     expect(contents).toEqual(CORRECT_OUTPUT);
   });
 
+  describe("undefined as an alias for REMOVE", () => {
+    // `undefined` predates the REMOVE symbol. It is still accepted so that
+    // configs written before REMOVE existed keep working.
+
+    function runWith(
+      version: string | typeof REMOVE | undefined,
+      { fix }: { fix: boolean },
+    ) {
+      const { addFile, readFile, workspaceContext } = makeWorkspace({ fix });
+      addFile("./package.json", PACKAGE_ROOT);
+      addFile(
+        "./packages/a/package.json",
+        jsonToString({ dependencies: { lodash: "^4.17.21" } }),
+      );
+
+      const context = workspaceContext.createChildContext(
+        path.resolve(workspaceContext.packageDir, "./packages/a"),
+      );
+      const addErrorSpy = vi.spyOn(context, "addError");
+      requireDependency({ options: { dependencies: { lodash: version } } })
+        .check(context);
+
+      return {
+        errors: addErrorSpy.mock.calls.length,
+        dependencies: JSON.parse(readFile("./packages/a/package.json")).dependencies,
+      };
+    }
+
+    it("removes the dependency when fixing", () => {
+      const result = runWith(undefined, { fix: true });
+      expect(result.dependencies).toEqual({});
+    });
+
+    it("reports an error when not fixing", () => {
+      const result = runWith(undefined, { fix: false });
+      expect(result.errors).toBe(1);
+      expect(result.dependencies).toEqual({ lodash: "^4.17.21" });
+    });
+
+    it("behaves identically to REMOVE", () => {
+      expect(runWith(undefined, { fix: true })).toEqual(
+        runWith(REMOVE, { fix: true }),
+      );
+      expect(runWith(undefined, { fix: false })).toEqual(
+        runWith(REMOVE, { fix: false }),
+      );
+    });
+
+    it("is a no-op when the dependency is already absent", () => {
+      const { addFile, workspaceContext } = makeWorkspace({ fix: true });
+      addFile("./package.json", PACKAGE_ROOT);
+      addFile("./packages/a/package.json", jsonToString({ dependencies: {} }));
+
+      const context = workspaceContext.createChildContext(
+        path.resolve(workspaceContext.packageDir, "./packages/a"),
+      );
+      const addErrorSpy = vi.spyOn(context, "addError");
+      requireDependency({ options: { dependencies: { lodash: undefined } } })
+        .check(context);
+
+      expect(addErrorSpy).toHaveBeenCalledTimes(0);
+    });
+  });
+
   describe("Missing package.json handling", () => {
     it("handles gracefully when package.json does not exist", () => {
       const { workspaceContext } = makeWorkspace({ fix: false });

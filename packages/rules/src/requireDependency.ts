@@ -63,12 +63,14 @@ export const requireDependency = createRuleFactory({
         return;
       }
 
-      // Separate additions from removals upfront
+      // Separate additions from removals upfront.
+      // `undefined` is an alias for REMOVE, kept for configs written before
+      // REMOVE existed.
       const dependenciesToAdd = Object.entries(expectedEntries).filter(
         ([, version]) => version !== REMOVE && version !== undefined,
       );
       const dependenciesToRemove = Object.entries(expectedEntries).filter(
-        ([, version]) => version === REMOVE,
+        ([, version]) => version === REMOVE || version === undefined,
       );
 
       // Handle missing dependency block
