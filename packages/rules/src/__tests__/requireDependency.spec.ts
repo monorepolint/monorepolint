@@ -401,6 +401,24 @@ describe("requireDependency", () => {
       ).not.toThrow();
     });
 
+    it("should reject undefined as a version", () => {
+      // Use REMOVE to drop a dependency. `undefined` is rejected rather than
+      // accepted-and-ignored, so a config that means to remove something fails
+      // loudly instead of silently doing nothing.
+      const ruleModule = requireDependency({ options: {} });
+
+      for (
+        const type of [
+          "dependencies",
+          "devDependencies",
+          "peerDependencies",
+          "optionalDependencies",
+        ]
+      ) {
+        expect(() => ruleModule.validateOptions({ [type]: { react: undefined } })).toThrow();
+      }
+    });
+
     it("should reject invalid options", () => {
       const ruleModule = requireDependency({ options: {} });
 
