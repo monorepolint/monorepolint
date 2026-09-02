@@ -1,6 +1,6 @@
 # Archetypes and Large Monorepos
 
-After a monorepo grows in complexity, managing your rules can be quite complex. You may have a lot of different types of packages which can make applying consistent rules across classes of packages especially challenging. For that we build `@osdk/archetypes`.
+After a monorepo grows in complexity, managing your rules can be quite complex. You may have a lot of different types of packages which can make applying consistent rules across classes of packages especially challenging. For that we build `@monorepolint/archetypes`.
 
 Instead of creating complex rule chains with include/exclude patterns that are hard to follow, you can instead define different archetypes and know that your rules are only applied consistently and only once per package.
 
@@ -19,6 +19,7 @@ Additionally, we will configure our archetypes builder to error if it finds any 
 
 ```ts
 import { archetypes, ifTrue } from "@monorepolint/archetypes";
+import { packageEntry, standardTsconfig } from "@monorepolint/rules";
 
 interface MyRules {
   react?: boolean;
@@ -26,64 +27,72 @@ interface MyRules {
   jsOnly?: boolean;
 }
 
-export default archetypes<MyRules>(
-  (shared, rules) => {
-    return [
-      ...ifTrue(
-        !rules.jsOnly,
-        standardTsConfig({
-          template: {
-            compilerOptions: {
-              rootDir: "src",
-              outDir: "lib",
-              ...(rules.react
-                ? { jsx: "react" }
-                : {}),
+export default {
+  rules: archetypes<MyRules>(
+    (shared, rules) => {
+      return [
+        ...ifTrue(
+          !rules.jsOnly,
+          [
+            standardTsconfig({
+              ...shared,
+              options: {
+                template: {
+                  compilerOptions: {
+                    rootDir: "src",
+                    outDir: "lib",
+                    ...(rules.react
+                      ? { jsx: "react" }
+                      : {}),
+                  },
+                  include: ["./src/**/*"],
+                },
+              },
+            }),
+          ],
+        ),
+        packageEntry({
+          ...shared,
+          options: {
+            entries: {
+              private: !!rules.private,
             },
-            include: ["./src/**/*"],
           },
         }),
-      ),
-      packageEntry({
-        ...shared,
-        options: {
-          entries: {
-            private: !!rules.private,
-          },
-        },
-      }),
-    ];
-  },
-  { unmatched: "error" },
-)
-  .addArchetype(
-    "tests",
-    ["@mine/tests.*"],
-    {
-      private: true,
+      ];
     },
+    { unmatched: "error" },
   )
-  .addArchetype(
-    "benchmarks",
-    ["@mine/benchmarks.*"],
-    {
-      private: true,
-      jsOnly: true,
-    },
-  )
-  .addArchetype(
-    "sample apps",
-    ["@mine/examples.*"],
-    {
-      private: true,
-      react: true,
-    },
-  )
-  .addArchetype(
-    "libraries",
-    ["@mine/a", "@mine/b"],
-    {},
-  );
+    .addArchetype(
+      "tests",
+      ["@mine/tests.*"],
+      {
+        private: true,
+      },
+    )
+    .addArchetype(
+      "benchmarks",
+      ["@mine/benchmarks.*"],
+      {
+        private: true,
+        jsOnly: true,
+      },
+    )
+    .addArchetype(
+      "sample apps",
+      ["@mine/examples.*"],
+      {
+        private: true,
+        react: true,
+      },
+    )
+    .addArchetype(
+      "libraries",
+      ["@mine/a", "@mine/b"],
+      {},
+    )
+    .buildRules(),
+};
 ```
 
 ### Using fallback configuration
@@ -95,20 +104,22 @@ const rulesForUnmatchedPackages: {
   private: true;
 };
 
-export default archetypes<MyRules>(
-  (shared, rules) => {
-    return [
-      // ... our rules here
-    ];
-  },
-  {
-    unmatched: rulesForUnmatchedPackages,
-  },
-).addArchetype(
-  "libraries",
-  ["@mine/a", "@mine/b"],
-  {},
-);
+export default {
+  rules: archetypes<MyRules>(
+    (shared, rules) => {
+      return [
+        // ... our rules here
+      ];
+    },
+    {
+      unmatched: rulesForUnmatchedPackages,
+    },
+  ).addArchetype(
+    "libraries",
+    ["@mine/a", "@mine/b"],
+    {},
+  ).buildRules(),
+};
 ```
 
 ### Catching packages declared as two different archetypes
@@ -138,18 +149,20 @@ export default [
 Here, `@mine/react-lib` will be triggered by both rules creating a hard to debug situation. But with archetypes, we get a clean error:
 
 ```ts
-export default archetypes<MyRules>(
-  myCustomRuleFunc,
-  { unmatched: rulesForUnmatchedPackages },
-).addArchetype(
-  "uses react",
-  ["@mine/docs", "@mine/example", "@mine/react-*"],
-  { react: true },
-).addArchetype(
-  "public packages",
-  ["@mine/react-lib"],
-  {},
-);
+export default {
+  rules: archetypes<MyRules>(
+    myCustomRuleFunc,
+    { unmatched: rulesForUnmatchedPackages },
+  ).addArchetype(
+    "uses react",
+    ["@mine/docs", "@mine/example", "@mine/react-*"],
+    { react: true },
+  ).addArchetype(
+    "public packages",
+    ["@mine/react-lib"],
+    {},
+  ).buildRules(),
+};
 ```
 
-With this configuration, you would get an error that `@osdk/react-lib` was already included in the archetype `"uses react"` allowing you to fix your conflict much quicker.
+With this configuration, you would get an error that `@mine/react-lib` was already included in the archetype `"uses react"` allowing you to fix your conflict much quicker.
