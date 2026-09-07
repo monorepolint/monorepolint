@@ -31,7 +31,7 @@
     "@monorepolint/rules": "workspace:^",
     "find-packages": "^10.0.4",
     "find-up": "^8.0.0",
-    "read-yaml-file": "^2.1.0",
+    "read-yaml-file": "^3.0.0",
     "tslib": "^2.8.1"
   },
   "devDependencies": {
