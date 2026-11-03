@@ -10,7 +10,7 @@ jobs:
       matrix:
         node:
           - 22
-          - 20
+          - 24
         platform:
           - ubuntu-latest
     name: "${{matrix.platform}} / Node.js ${{ matrix.node }}"
