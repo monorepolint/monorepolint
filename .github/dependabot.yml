@@ -21,6 +21,11 @@ updates:
       - dependency-name: "@types/node"
         update-types:
           - "version-update:semver-major"
+      # typescript-eslint has no TS 7 support yet (lint fails with TS 7, see #513).
+      # Remove when typescript-eslint declares typescript ^7 in its peerDependencies.
+      - dependency-name: "typescript"
+        update-types:
+          - "version-update:semver-major"
     groups:
       # TypeScript and ESLint related packages
       typescript-eslint:
