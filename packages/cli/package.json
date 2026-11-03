@@ -36,7 +36,7 @@
     "@monorepolint/config": "workspace:^",
     "@monorepolint/core": "workspace:^",
     "@monorepolint/utils": "workspace:^",
-    "chalk": "^5.6.2",
+    "chalk": "^6.0.0",
     "tslib": "^2.8.1",
     "yargs": "^18.1.0"
   },
