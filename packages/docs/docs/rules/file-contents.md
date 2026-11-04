@@ -31,13 +31,9 @@ When `template: REMOVE` is specified:
 - Fixing will delete the file from the package
 - No error is reported if the file already doesn't exist
 
-### Path Validation and Security
+### Path Validation
 
-The rule includes path validation to prevent directory traversal attacks:
-
-- Paths containing `..` are rejected
-- Absolute paths are rejected
-- Only relative paths within the package are allowed
+The `file` option is joined to the package directory with `path.join`. The only validation is that the resulting path must not contain null bytes; if it does, the rule throws an error. Nothing else is rejected: a path containing `..` can resolve outside the package directory, and an absolute path such as `/foo.txt` is treated as relative to the package directory (`path.join` keeps the leading `/` only as a separator).
 
 ### Generator Error Handling
 
@@ -84,7 +80,7 @@ export default {
       options: {
         file: "generated.txt",
         generator: (context) => {
-          return `Package: ${context.packageJson.name}\nVersion: ${context.packageJson.version}`;
+          return `Package: ${context.getPackageJson().name}\nVersion: ${context.getPackageJson().version}`;
         },
       },
     }),
@@ -94,7 +90,7 @@ export default {
         file: "conditional.txt",
         generator: (context) => {
           // Remove file for certain packages
-          if (context.packageJson.name?.startsWith("@internal/")) {
+          if (context.getPackageJson().name?.startsWith("@internal/")) {
             return REMOVE;
           }
           return "This is a public package";
@@ -127,10 +123,10 @@ fileContents({
   options: {
     file: "README.md",
     generator: (context) => {
-      if (context.packageJson.private) {
+      if (context.getPackageJson().private) {
         return REMOVE;
       }
-      return `# ${context.packageJson.name}\n\n${context.packageJson.description}`;
+      return `# ${context.getPackageJson().name}\n\n${context.getPackageJson().description}`;
     },
   },
 });
