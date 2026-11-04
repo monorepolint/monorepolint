@@ -25,7 +25,7 @@
     "changelog": "rm -rf '/tmp/github-changelog-http-cache' && github_changelog_generator",
     "check-mrl": "mrl check --verbose",
     "ci": "pnpm clean && turbo check",
-    "ci:publish": "pnpm prepack && pnpm publish -r && changeset tag",
+    "ci:publish": "node -e \"if (!process.env.CHANGESETS_OUTPUT) { console.error('CHANGESETS_OUTPUT is unset: run ci:publish via changesets/action@v2 so tags and GitHub releases get created'); process.exit(1); }\" && pnpm prepack && pnpm publish -r && changeset git-tag",
     "clean": "turbo clean && rm -rf node_modules && pnpm install",
     "compile:fast": "cd packages/all; tsc --build",
     "compile:watch": "cd packages/all; tsc --build --watch",
@@ -39,7 +39,7 @@
     "test": "turbo test"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.31.1",
+    "@changesets/cli": "^3.0.3",
     "@eslint/js": "^10.0.1",
     "@manypkg/get-packages": "^3.1.0",
     "@monorepolint/cli": "workspace:^",
@@ -55,7 +55,7 @@
     "gh-pages": "^6.3.0",
     "globals": "^17.12.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.4.0",
+    "lint-staged": "^17.6.0",
     "mock-fs": "^5.5.0",
     "semver": "^7.8.5",
     "turbo": "^2.11.10",

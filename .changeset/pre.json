@@ -1,33 +1,4 @@
 {
   "mode": "pre",
-  "tag": "alpha",
-  "initialVersions": {
-    "monorepolint": "0.5.0",
-    "@monorepolint/cli": "0.5.0",
-    "@monorepolint/config": "0.5.0",
-    "@monorepolint/core": "0.5.0",
-    "@monorepolint/docs": "0.5.0",
-    "@monorepolint/internal-mrl-config": "0.5.0",
-    "@monorepolint/rules": "0.5.0",
-    "@monorepolint/utils": "0.5.0",
-    "@monorepolint/archetypes": "0.6.0-alpha.2"
-  },
-  "changesets": [
-    "big-ways-confess",
-    "curvy-pears-learn",
-    "deep-women-clap",
-    "dry-doodles-clap",
-    "flat-spoons-scream",
-    "fluffy-elephants-march",
-    "four-trains-cover",
-    "huge-kids-throw",
-    "late-zoos-watch",
-    "little-parents-bathe",
-    "radical-remove-symbol",
-    "small-llamas-pretend",
-    "smooth-bags-shake",
-    "thick-brooms-occur",
-    "thick-pugs-pull",
-    "weak-walls-rescue"
-  ]
+  "tag": "alpha"
 }
