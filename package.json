@@ -24,8 +24,8 @@
     "build": "turbo build",
     "changelog": "rm -rf '/tmp/github-changelog-http-cache' && github_changelog_generator",
     "check-mrl": "mrl check --verbose",
-    "ci": "pnpm clean && turbo check",
-    "ci:publish": "node -e \"if (!process.env.CHANGESETS_OUTPUT) { console.error('CHANGESETS_OUTPUT is unset: run ci:publish via changesets/action@v2 so tags and GitHub releases get created'); process.exit(1); }\" && pnpm prepack && pnpm publish -r && changeset git-tag",
+    "ci": "pnpm clean && turbo check && pnpm test:scripts",
+    "ci:publish": "node -e \"if (!process.env.CHANGESETS_OUTPUT) { console.error('CHANGESETS_OUTPUT is unset: run ci:publish via changesets/action@v2 so tags and GitHub releases get created'); process.exit(1); }\" && pnpm prepack && node scripts/publish-tag.mjs && changeset git-tag",
     "clean": "turbo clean && rm -rf node_modules && pnpm install",
     "compile:fast": "cd packages/all; tsc --build",
     "compile:watch": "cd packages/all; tsc --build --watch",
@@ -36,7 +36,8 @@
     "lint:monorepolint": "monorepolint check --verbose",
     "prepack": "turbo clean && pnpm install && turbo check",
     "prepare": "husky",
-    "test": "turbo test"
+    "test": "turbo test",
+    "test:scripts": "node --test 'scripts/*.test.mjs'"
   },
   "devDependencies": {
     "@changesets/cli": "^3.0.3",
