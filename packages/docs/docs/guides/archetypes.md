@@ -100,8 +100,8 @@ export default {
 If in our earlier example we want all unmatched packages to use a default configuration instead of erroring we can do that as well:
 
 ```ts
-const rulesForUnmatchedPackages: {
-  private: true;
+const rulesForUnmatchedPackages: MyRules = {
+  private: true,
 };
 
 export default {
@@ -129,26 +129,48 @@ One thing that can be challenging about using monorepolint is that rules can acc
 Take plain monorepolint configuration for example:
 
 ```ts
+import { standardTsconfig } from "@monorepolint/rules";
+
 const REACT = ["@mine/docs", "@mine/example", "@mine/react-*"];
 const PUBLIC = ["@mine/react-lib"];
 
-export default [
-  [
-    Rules.standardTsconfig({
+export default {
+  rules: [
+    standardTsconfig({
       options: { templateFile: "./tmpl/tsconfig.react.json" },
       includePackages: REACT,
     }),
-    Rules.standardTsconfig({
+    standardTsconfig({
       options: { templateFile: "./tmpl/tsconfig.json" },
       includePackages: PUBLIC,
     }),
   ],
-];
+};
 ```
 
 Here, `@mine/react-lib` will be triggered by both rules creating a hard to debug situation. But with archetypes, we get a clean error:
 
 ```ts
+import { archetypes, RulesProvider } from "@monorepolint/archetypes";
+import { standardTsconfig } from "@monorepolint/rules";
+
+interface MyRules {
+  react?: boolean;
+}
+
+const myCustomRuleFunc: RulesProvider<MyRules> = (shared, rules) => [
+  standardTsconfig({
+    ...shared,
+    options: {
+      templateFile: rules.react
+        ? "./tmpl/tsconfig.react.json"
+        : "./tmpl/tsconfig.json",
+    },
+  }),
+];
+
+const rulesForUnmatchedPackages: MyRules = {};
+
 export default {
   rules: archetypes<MyRules>(
     myCustomRuleFunc,
@@ -165,4 +187,10 @@ export default {
 };
 ```
 
-With this configuration, you would get an error that `@mine/react-lib` was already included in the archetype `"uses react"` allowing you to fix your conflict much quicker.
+Each archetype adds a `oncePerPackage` check for its packages, and all of them share one key. Because `@mine/react-lib` matches both archetypes, linting it reports an error on its `package.json`:
+
+```
+This package has already been visited for this key: Symbol(archetypeManagerSingletonKey)
+```
+
+The message doesn't say which archetypes overlap, but it points at the exact package that matched more than one, so you can find the conflict quickly.
