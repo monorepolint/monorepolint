@@ -10,13 +10,13 @@ import { existsSync } from "fs";
 import * as glob from "glob";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import readYamlFile from "read-yaml-file";
+import { readYamlFile } from "read-yaml-file";
 import { Host } from "./Host.js";
 import { PackageJson } from "./PackageJson.js";
 
 async function findPNPMWorkspacePackages(workspaceRoot: string) {
   workspaceRoot = fs.realpathSync(workspaceRoot);
-  const workspaceManifest = await readYamlFile.default<{ packages?: string[] }>(
+  const workspaceManifest = await readYamlFile<{ packages?: string[] }>(
     path.join(workspaceRoot, "pnpm-workspace.yaml"),
   );
 

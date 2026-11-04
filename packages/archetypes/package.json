@@ -16,7 +16,7 @@
     }
   },
   "engines": {
-    "node": ">=22.12"
+    "node": ">=22.13"
   },
   "scripts": {
     "clean": "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
@@ -31,7 +31,6 @@
     "@monorepolint/rules": "workspace:^",
     "find-packages": "^10.0.4",
     "find-up": "^8.0.0",
-    "read-yaml-file": "^2.1.0",
     "tslib": "^2.8.1"
   },
   "devDependencies": {
