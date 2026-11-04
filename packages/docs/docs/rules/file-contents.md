@@ -72,11 +72,11 @@ export default {
         template: REMOVE,
       },
     }),
-    // Delete file (legacy syntax - still supported)
+    // Delete file
     fileContents({
       options: {
         file: "old-config.js",
-        template: undefined, // delete file
+        template: REMOVE,
       },
     }),
     // Generator example
