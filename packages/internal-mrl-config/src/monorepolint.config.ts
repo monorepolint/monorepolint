@@ -14,6 +14,8 @@ const META_PACKAGES = ["monorepolint"];
 
 const DOCS = "@monorepolint/docs";
 
+const CLI = "@monorepolint/cli";
+
 // FIXME: This is still suboptimal
 const DELETE_SCRIPT_ENTRTY = { options: [undefined], fixValue: undefined };
 
@@ -124,6 +126,24 @@ export default defineProject({
             },
           },
         },
+      }),
+      // Allowlist what ships to npm: build output plus CHANGELOG.md.
+      // package.json, README and LICENSE are always included by the packer.
+      Rules.packageEntry({
+        options: {
+          entries: {
+            files: ["build/js", "build/types", "CHANGELOG.md"],
+          },
+        },
+        excludePackages: [DOCS, CLI],
+      }),
+      Rules.packageEntry({
+        options: {
+          entries: {
+            files: ["bin", "build/js", "build/types", "CHANGELOG.md"],
+          },
+        },
+        includePackages: [CLI],
       }),
       Rules.packageOrder({}),
       Rules.alphabeticalDependencies({

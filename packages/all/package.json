@@ -15,6 +15,11 @@
   "engines": {
     "node": ">=22.13"
   },
+  "files": [
+    "build/js",
+    "build/types",
+    "CHANGELOG.md"
+  ],
   "scripts": {},
   "dependencies": {
     "@monorepolint/cli": "workspace:^",
