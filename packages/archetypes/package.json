@@ -16,7 +16,7 @@
     }
   },
   "engines": {
-    "node": ">=22.12"
+    "node": ">=22.13"
   },
   "scripts": {
     "clean": "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
