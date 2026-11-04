@@ -17,7 +17,7 @@
     "version": true,
     "tag": false
   },
-  "format": "prettier",
+  "format": "dprint",
   "bumpVersionsWithWorkspaceProtocolOnly": true,
   "snapshot": {
     "useCalculatedVersion": true

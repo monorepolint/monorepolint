@@ -57,7 +57,6 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
     "mock-fs": "^5.5.0",
-    "prettier": "^3.9.10",
     "semver": "^7.8.5",
     "turbo": "^2.11.10",
     "typescript": "^5.9.3",
