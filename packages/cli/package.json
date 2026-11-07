@@ -24,6 +24,12 @@
     "monorepolint": "./bin/monorepolint.mjs",
     "mrl": "./bin/mrl.mjs"
   },
+  "files": [
+    "bin",
+    "build/js",
+    "build/types",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "clean": "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
     "compile-typescript": "tsc --build",

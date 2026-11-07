@@ -21,6 +21,11 @@
   "engines": {
     "node": ">=22.13"
   },
+  "files": [
+    "build/js",
+    "build/types",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "clean": "rm -rf build dist lib node_modules *.tgz tsconfig.tsbuildinfo",
     "compile-typescript": "tsc --build",
