@@ -1,3 +1,5 @@
-#!/usr/bin/env node --enable-source-maps
+#!/usr/bin/env node
+import process from "node:process";
 
+process.setSourceMapsEnabled(true);
 import("@monorepolint/cli").then((i) => i.default());
