@@ -53,5 +53,6 @@ export default tseslint.config(
     },
   },
   { ignores: ["**/build/"] },
+  { ignores: ["**/coverage/"] },
   { ignores: ["packages/docs/**/*.js"] },
 );
