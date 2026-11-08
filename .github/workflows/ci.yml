@@ -31,3 +31,6 @@ jobs:
 
       - name: run ci
         run: pnpm run ci
+
+      - name: smoke test packed CLI
+        run: node scripts/smoke-packed-cli.mjs
