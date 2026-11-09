@@ -8,4 +8,4 @@
 "monorepolint": minor
 ---
 
-Raise the declared Node requirement from `>=20` to `>=22.13`. Node 20 reached end-of-life on 2026-04-30. `22.13` matches the lower bound `read-yaml-file@3` (used by `@monorepolint/utils`) declares in its `engines` field. That is also above the `>=22.12` that `yargs@18` (used by the CLI) declares for the Node 22 line.
+All packages now require Node `>=22.13` (0.5.0 declared `>=18`). Node 18 and 20 are end-of-life, and several runtime dependencies already required newer Node: `find-up@8` and `globby@16` (Node 20), `yargs@18` (`>=22.12` on the Node 22 line), `chalk@6` (Node 22) and `read-yaml-file@3` (`>=22.13`). Upgrade Node before upgrading monorepolint.
