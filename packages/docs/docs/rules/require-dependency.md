@@ -10,13 +10,13 @@ local entry.
 ### Options
 
 - `dependencies` (Optional)
-  - Map of dependency name to version string, undefined, or REMOVE
+  - Map of dependency name to version string or `REMOVE`
 - `devDependencies` (Optional)
-  - Map of dependency name to version string, undefined, or REMOVE
+  - Map of dependency name to version string or `REMOVE`
 - `peerDependencies` (Optional)
-  - Map of dependency name to version string, undefined, or REMOVE
+  - Map of dependency name to version string or `REMOVE`
 - `optionalDependencies` (Optional)
-  - Map of dependency name to version string, undefined, or REMOVE
+  - Map of dependency name to version string or `REMOVE`
 
 ### REMOVE Symbol Support
 
@@ -32,6 +32,8 @@ When using `REMOVE`:
 - Fixing will remove the dependency from package.json
 - No error is reported if the dependency is already missing
 
+`REMOVE` is the only way to require that an entry is absent. An `undefined` value fails options validation.
+
 ### Example
 
 ```javascript
@@ -45,9 +47,6 @@ export default {
 
           // Remove deprecated dependencies using REMOVE symbol
           lodash: REMOVE,
-
-          // Remove using legacy syntax (still supported)
-          jquery: undefined,
         },
         dependencies: {
           // Ensure specific runtime dependencies

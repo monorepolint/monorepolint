@@ -3,4 +3,4 @@
 "@monorepolint/docs": patch
 ---
 
-Updated docs with example of removing a file with fileContents rule
+Docs: example of removing a file with `fileContents` using `REMOVE`
